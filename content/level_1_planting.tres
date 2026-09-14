@@ -1,11 +1,84 @@
 [gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dl63c4m1i6qv0"]
 
-[ext_resource type="Script" uid="uid://bkvhax4wfwr0m" path="res://scripts/data/challenge_data.gd" id="1_baln7"]
-[ext_resource type="Script" uid="uid://c0mh8vu14p4se" path="res://scripts/data/option_data.gd" id="2_cowrd"]
-[ext_resource type="Script" uid="uid://bx4qndoi4eqxr" path="res://scripts/data/level_data.gd" id="3_i3mc2"]
+[sub_resource type="GDScript" id="GDScript_aitmd"]
+script/source = "class_name ChallengeData
+extends Resource
+
+## One \"turn\" of the game. Every stage in all four levels fits this shape:
+##   show a prompt -> learner picks/drags one of N options -> right or wrong.
+## Levels differ only in presentation, not in logic.
+
+enum Interaction {
+	TAP,           ## Level 3: tap an answer card.
+	DRAG_TO_ZONE,  ## Levels 1, 2, 4: drag an item onto a target area.
+}
+
+@export var id: StringName = &\"\"
+@export_multiline var prompt: String = \"\"
+@export var interaction: Interaction = Interaction.DRAG_TO_ZONE
+
+@export var options: Array[OptionData] = []
+@export var correct_option_id: StringName = &\"\"
+
+## Extra answers that should also count as correct (e.g. Level 2 situation 3
+## is fair to solve with either \"Watering Can\" or \"Water\").
+@export var alternate_correct_ids: Array[StringName] = []
+
+@export_multiline var fun_fact: String = \"\"
+
+## Which drop zone accepts the answer: \"soil\", \"plant\", \"roots\", \"stem\"...
+@export var zone_id: StringName = &\"main\"
+
+## Which visual state the scene should show: \"empty_bed\", \"hole_dug\",
+## \"dry_soil\", \"brown_leaves\", \"highlight_roots\"... The art team maps
+## one image (or one animation) to each of these strings.
+@export var scene_state: StringName = &\"\"
+
+## Optional: art/animation to play after a correct answer (\"hole_dug\",
+## \"seed_covered\", \"sprout\"). Leave empty if the state change is enough.
+@export var success_state: StringName = &\"\"
+
+
+func get_option(option_id: StringName) -> OptionData:
+	for option in options:
+		if option.id == option_id:
+			return option
+	return null
+
+
+func is_correct(option_id: StringName) -> bool:
+	return option_id == correct_option_id or option_id in alternate_correct_ids
+"
+
+[sub_resource type="GDScript" id="GDScript_2qhiq"]
+script/source = "class_name OptionData
+extends Resource
+
+## One selectable / draggable item shown to the learner
+## (a tool, a basic need, a multiple-choice answer, or a function card).
+##
+## `icon` stays null until real art exists. OptionCard draws a labelled
+## colour block in its place, so the whole game is playable with zero assets.
+
+@export var id: StringName = &\"\"
+@export var label: String = \"\"
+
+## Drop the final art here later. Nothing else has to change.
+@export var icon: Texture2D
+
+## Used only while `icon` is null.
+@export var placeholder_color: Color = Color(0.45, 0.62, 0.35)
+
+## Shown when this item is chosen for a challenge where it is not the answer.
+## Write one per item, not one per (item x challenge) pair.
+@export_multiline var wrong_hint: String = \"Oops, let's try again!\"
+
+## Optional voice-over line key for this item's label (see localisation notes).
+@export var vo_key: StringName = &\"\"
+"
 
 [sub_resource type="Resource" id="Resource_al3yq"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"shovel"
 label = "Shovel"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
@@ -13,7 +86,7 @@ wrong_hint = "The shovel digs in the soil. Is that what we need right now?"
 vo_key = &"item_shovel"
 
 [sub_resource type="Resource" id="Resource_lsh1c"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"watering_can"
 label = "Watering Can"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
@@ -21,7 +94,7 @@ wrong_hint = "Water is important, but not for this step yet!"
 vo_key = &"item_watering_can"
 
 [sub_resource type="Resource" id="Resource_5sf6u"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"flower"
 label = "Flower"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -29,10 +102,10 @@ wrong_hint = "A flower is lovely, but it can't do this job."
 vo_key = &"item_flower"
 
 [sub_resource type="Resource" id="Resource_r1rbg"]
-script = ExtResource("1_baln7")
+script = SubResource("GDScript_aitmd")
 id = &"l1_dig"
 prompt = "First, we need a little hole in the soil for our seed. Which tool do we use?"
-options = Array[ExtResource("2_cowrd")]([SubResource("Resource_al3yq"), SubResource("Resource_lsh1c"), SubResource("Resource_5sf6u")])
+options = Array[SubResource("GDScript_2qhiq")]([SubResource("Resource_al3yq"), SubResource("Resource_lsh1c"), SubResource("Resource_5sf6u")])
 correct_option_id = &"shovel"
 fun_fact = "Digging a small hole gives the seed a cozy place to rest and grow!"
 zone_id = &"soil"
@@ -40,14 +113,14 @@ scene_state = &"empty_bed"
 success_state = &"hole_dug"
 
 [sub_resource type="Resource" id="Resource_pl22c"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"seed_packet"
 label = "Seed Packet"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
 vo_key = &"item_seed_packet"
 
 [sub_resource type="Resource" id="Resource_05a30"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"rock"
 label = "Rock"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -55,7 +128,7 @@ wrong_hint = "A rock will never grow into a plant."
 vo_key = &"item_rock"
 
 [sub_resource type="Resource" id="Resource_xmt45"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"leaf"
 label = "Leaf"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -63,10 +136,10 @@ wrong_hint = "A leaf comes from a plant, but it can't start a new one."
 vo_key = &"item_leaf"
 
 [sub_resource type="Resource" id="Resource_nsnar"]
-script = ExtResource("1_baln7")
+script = SubResource("GDScript_aitmd")
 id = &"l1_seed"
 prompt = "Now, put one tiny seed into the hole. What goes inside?"
-options = Array[ExtResource("2_cowrd")]([SubResource("Resource_pl22c"), SubResource("Resource_05a30"), SubResource("Resource_xmt45")])
+options = Array[SubResource("GDScript_2qhiq")]([SubResource("Resource_pl22c"), SubResource("Resource_05a30"), SubResource("Resource_xmt45")])
 correct_option_id = &"seed_packet"
 fun_fact = "Inside every seed is a tiny baby plant just waiting to wake up!"
 zone_id = &"soil"
@@ -74,7 +147,7 @@ scene_state = &"hole_dug"
 success_state = &"seed_covered"
 
 [sub_resource type="Resource" id="Resource_0mlyh"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"sun"
 label = "Sun"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
@@ -82,7 +155,7 @@ wrong_hint = "The sun is up in the sky, not down in the soil."
 vo_key = &"item_sun"
 
 [sub_resource type="Resource" id="Resource_5oq3k"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"gloves"
 label = "Gloves"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -90,10 +163,10 @@ wrong_hint = "Gloves keep our hands clean, but the soil needs something else."
 vo_key = &"item_gloves"
 
 [sub_resource type="Resource" id="Resource_3exbu"]
-script = ExtResource("1_baln7")
+script = SubResource("GDScript_aitmd")
 id = &"l1_water"
 prompt = "The seed is thirsty! What do we pour gently over the soil?"
-options = Array[ExtResource("2_cowrd")]([SubResource("Resource_lsh1c"), SubResource("Resource_0mlyh"), SubResource("Resource_5oq3k")])
+options = Array[SubResource("GDScript_2qhiq")]([SubResource("Resource_lsh1c"), SubResource("Resource_0mlyh"), SubResource("Resource_5oq3k")])
 correct_option_id = &"watering_can"
 fun_fact = "Water helps the seed wake up and begin to grow!"
 zone_id = &"soil"
@@ -101,7 +174,7 @@ scene_state = &"seed_covered"
 success_state = &"soil_watered"
 
 [sub_resource type="Resource" id="Resource_2p7v4"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"cloud"
 label = "Cloud"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -109,7 +182,7 @@ wrong_hint = "A cloud hides the light. Plants want more light!"
 vo_key = &"item_cloud"
 
 [sub_resource type="Resource" id="Resource_krj0y"]
-script = ExtResource("2_cowrd")
+script = SubResource("GDScript_2qhiq")
 id = &"moon"
 label = "Moon"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -117,21 +190,50 @@ wrong_hint = "The moon glows at night, but plants need a stronger light."
 vo_key = &"item_moon"
 
 [sub_resource type="Resource" id="Resource_g8gxl"]
-script = ExtResource("1_baln7")
+script = SubResource("GDScript_aitmd")
 id = &"l1_sun"
 prompt = "Plants need light to help make food. What shines down to help the plant grow?"
-options = Array[ExtResource("2_cowrd")]([SubResource("Resource_0mlyh"), SubResource("Resource_2p7v4"), SubResource("Resource_krj0y")])
+options = Array[SubResource("GDScript_2qhiq")]([SubResource("Resource_0mlyh"), SubResource("Resource_2p7v4"), SubResource("Resource_krj0y")])
 correct_option_id = &"sun"
 fun_fact = "Plants use sunlight, water and air to help make their own food!"
 zone_id = &"sky"
 scene_state = &"soil_watered"
 success_state = &"sprout"
 
+[sub_resource type="GDScript" id="GDScript_u613u"]
+script/source = "class_name LevelData
+extends Resource
+
+## A whole level: framing text plus an ordered list of challenges.
+## One .tres file per level lives in res://content/.
+
+@export var id: StringName = &\"\"
+@export var title: String = \"\"
+@export_multiline var instruction: String = \"\"
+
+@export var challenges: Array[ChallengeData] = []
+
+## Randomise challenge order on each play (keep false for Level 1 - planting
+## is a real-world sequence and must stay in order).
+@export var shuffle_challenges: bool = false
+
+## Randomise the on-screen position of the options. Keep this TRUE for Level 3,
+## where the scripted answers sit at B, A, C, A, B - children memorise
+## positions faster than they learn content.
+@export var shuffle_options: bool = true
+
+@export_multiline var completion_message: String = \"Great job!\"
+@export_multiline var final_fun_fact: String = \"\"
+
+## Scene to load after this level (a video screen, the next level, the map).
+@export_file(\"*.tscn\") var next_scene_path: String = \"\"
+"
+
 [resource]
-script = ExtResource("3_i3mc2")
+script = SubResource("GDScript_u613u")
 id = &"level_1"
 title = "Level 1: Planting"
 instruction = "Let's plant a seed! Tap the correct tool or object, then drag it where it belongs."
-challenges = Array[ExtResource("1_baln7")]([SubResource("Resource_r1rbg"), SubResource("Resource_nsnar"), SubResource("Resource_3exbu"), SubResource("Resource_g8gxl")])
+challenges = Array[SubResource("GDScript_aitmd")]([SubResource("Resource_r1rbg"), SubResource("Resource_nsnar"), SubResource("Resource_3exbu"), SubResource("Resource_g8gxl")])
 completion_message = "You planted a seed all by yourself!"
 final_fun_fact = "A seed needs soil, water and sunlight to wake up and grow."
