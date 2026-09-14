@@ -1,0 +1,128 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://cy8jncr3f30ly"]
+
+[ext_resource type="Script" uid="uid://bkvhax4wfwr0m" path="res://scripts/data/challenge_data.gd" id="1_jucf2"]
+[ext_resource type="Script" uid="uid://c0mh8vu14p4se" path="res://scripts/data/option_data.gd" id="2_gqsdk"]
+[ext_resource type="Script" uid="uid://bx4qndoi4eqxr" path="res://scripts/data/level_data.gd" id="3_jjpff"]
+
+[sub_resource type="Resource" id="Resource_dfjcr"]
+script = ExtResource("2_gqsdk")
+id = &"fn_make_food"
+label = "Help make food using sunlight."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "Only one part catches the sunlight. Try another part."
+vo_key = &"item_fn_make_food"
+
+[sub_resource type="Resource" id="Resource_0x7nk"]
+script = ExtResource("2_gqsdk")
+id = &"fn_absorb_hold"
+label = "Absorb water and nutrients and hold the plant in the soil."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "That job happens underground. Try again!"
+vo_key = &"item_fn_absorb_hold"
+
+[sub_resource type="Resource" id="Resource_un6w3"]
+script = ExtResource("2_gqsdk")
+id = &"fn_protect"
+label = "Protect the seeds."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "Something does protect the seeds — but it isn't this part."
+vo_key = &"item_fn_protect"
+
+[sub_resource type="Resource" id="Resource_ro8s2"]
+script = ExtResource("1_jucf2")
+id = &"l4_roots"
+prompt = "What do the roots do?"
+options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_dfjcr"), SubResource("Resource_0x7nk"), SubResource("Resource_un6w3")])
+correct_option_id = &"fn_absorb_hold"
+fun_fact = "Roots hold the plant in the soil and absorb water and nutrients."
+zone_id = &"roots"
+scene_state = &"highlight_roots"
+
+[sub_resource type="Resource" id="Resource_84aeb"]
+script = ExtResource("2_gqsdk")
+id = &"fn_support"
+label = "Support the plant and carry water and nutrients."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "That's the job of the part in the middle of the plant."
+vo_key = &"item_fn_support"
+
+[sub_resource type="Resource" id="Resource_ltca7"]
+script = ExtResource("1_jucf2")
+id = &"l4_stem"
+prompt = "What does the stem do?"
+options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_84aeb"), SubResource("Resource_un6w3"), SubResource("Resource_dfjcr")])
+correct_option_id = &"fn_support"
+fun_fact = "The stem supports the plant and helps move water and nutrients to different parts."
+zone_id = &"stem"
+scene_state = &"highlight_stem"
+
+[sub_resource type="Resource" id="Resource_euefq"]
+script = ExtResource("2_gqsdk")
+id = &"fn_hold"
+label = "Hold the plant firmly in the soil."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "That job happens down in the soil."
+vo_key = &"item_fn_hold"
+
+[sub_resource type="Resource" id="Resource_psf8n"]
+script = ExtResource("1_jucf2")
+id = &"l4_leaves"
+prompt = "What do the leaves do?"
+options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_euefq"), SubResource("Resource_dfjcr"), SubResource("Resource_un6w3")])
+correct_option_id = &"fn_make_food"
+fun_fact = "Leaves use sunlight to help the plant make its own food."
+zone_id = &"leaves"
+scene_state = &"highlight_leaves"
+
+[sub_resource type="Resource" id="Resource_tgjmt"]
+script = ExtResource("2_gqsdk")
+id = &"fn_absorb_water"
+label = "Absorb water from the soil."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "That job happens down in the soil."
+vo_key = &"item_fn_absorb_water"
+
+[sub_resource type="Resource" id="Resource_xnxuv"]
+script = ExtResource("2_gqsdk")
+id = &"fn_reproduce"
+label = "Help the plant reproduce and make seeds."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "The colourful part does that one. Try again!"
+vo_key = &"item_fn_reproduce"
+
+[sub_resource type="Resource" id="Resource_cu20s"]
+script = ExtResource("2_gqsdk")
+id = &"fn_carry"
+label = "Carry water to the leaves."
+placeholder_color = Color(0.45, 0.55, 0.8, 1)
+wrong_hint = "That's the job of the part that holds the plant up."
+vo_key = &"item_fn_carry"
+
+[sub_resource type="Resource" id="Resource_8ux8p"]
+script = ExtResource("1_jucf2")
+id = &"l4_flower"
+prompt = "What does the flower do?"
+options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_tgjmt"), SubResource("Resource_xnxuv"), SubResource("Resource_cu20s")])
+correct_option_id = &"fn_reproduce"
+fun_fact = "Flowers help plants reproduce and produce seeds for new plants."
+zone_id = &"flower"
+scene_state = &"highlight_flower"
+
+[sub_resource type="Resource" id="Resource_035s3"]
+script = ExtResource("1_jucf2")
+id = &"l4_fruit"
+prompt = "What does the fruit do?"
+options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_dfjcr"), SubResource("Resource_un6w3"), SubResource("Resource_tgjmt")])
+correct_option_id = &"fn_protect"
+fun_fact = "Fruits protect the seeds inside and help them develop."
+zone_id = &"fruit"
+scene_state = &"highlight_fruit"
+
+[resource]
+script = ExtResource("3_jjpff")
+id = &"level_4"
+title = "Level 4: Functions"
+instruction = "Now let's discover what each part does. Drag each function to the correct plant part."
+challenges = Array[ExtResource("1_jucf2")]([SubResource("Resource_ro8s2"), SubResource("Resource_ltca7"), SubResource("Resource_psf8n"), SubResource("Resource_8ux8p"), SubResource("Resource_035s3")])
+completion_message = "Fantastic! You know the parts of a plant and what each part does!"
+final_fun_fact = "Every plant part has an important job. Together, they help the plant live, grow and reproduce!"

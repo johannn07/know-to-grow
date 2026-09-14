@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bb72wudmy6014"]
+
+[ext_resource type="Script" uid="uid://8n0c4jvmt43s" path="res://scripts/ui/challenge_screen.gd" id="1_chrfv"]
+[ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="2_mh4ud"]
+
+[node name="Node" type="Node" unique_id=138422417]
+
+[node name="Control" type="Control" parent="." unique_id=486724362]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_chrfv")
+level = ExtResource("2_mh4ud")

@@ -1,0 +1,114 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dkswoxvpud5gj"]
+
+[ext_resource type="Script" uid="uid://bkvhax4wfwr0m" path="res://scripts/data/challenge_data.gd" id="1_xkpm1"]
+[ext_resource type="Script" uid="uid://c0mh8vu14p4se" path="res://scripts/data/option_data.gd" id="2_h8fke"]
+[ext_resource type="Script" uid="uid://bx4qndoi4eqxr" path="res://scripts/data/level_data.gd" id="3_oevx5"]
+
+[sub_resource type="Resource" id="Resource_prcu2"]
+script = ExtResource("2_h8fke")
+id = &"shovel"
+label = "Shovel"
+placeholder_color = Color(0.62, 0.45, 0.3, 1)
+wrong_hint = "A shovel loosens hard soil. Look again at what this plant needs."
+vo_key = &"item_shovel"
+
+[sub_resource type="Resource" id="Resource_q2asy"]
+script = ExtResource("2_h8fke")
+id = &"pruning_shears"
+label = "Pruning Shears"
+placeholder_color = Color(0.62, 0.45, 0.3, 1)
+wrong_hint = "Shears trim away dead parts. Is anything dead or brown here?"
+vo_key = &"item_pruning_shears"
+
+[sub_resource type="Resource" id="Resource_p0f8u"]
+script = ExtResource("2_h8fke")
+id = &"watering_can"
+label = "Watering Can"
+placeholder_color = Color(0.62, 0.45, 0.3, 1)
+wrong_hint = "The watering can is for thirsty soil. Check the problem again."
+vo_key = &"item_watering_can"
+
+[sub_resource type="Resource" id="Resource_5jcoj"]
+script = ExtResource("2_h8fke")
+id = &"sunlight"
+label = "Sunlight"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+wrong_hint = "Not quite! This plant needs help with something other than light right now."
+vo_key = &"item_sunlight"
+
+[sub_resource type="Resource" id="Resource_gljak"]
+script = ExtResource("2_h8fke")
+id = &"water"
+label = "Water"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+wrong_hint = "Water is for a thirsty plant. Look closely at what is wrong."
+vo_key = &"item_water"
+
+[sub_resource type="Resource" id="Resource_w0imq"]
+script = ExtResource("2_h8fke")
+id = &"fertilizer"
+label = "Fertilizer"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+wrong_hint = "Fertilizer adds nutrients. Is that what this plant is asking for?"
+vo_key = &"item_fertilizer"
+
+[sub_resource type="Resource" id="Resource_72tqy"]
+script = ExtResource("1_xkpm1")
+id = &"l2_hard_soil"
+prompt = "The soil is hard and dry."
+options = Array[ExtResource("2_h8fke")]([SubResource("Resource_prcu2"), SubResource("Resource_q2asy"), SubResource("Resource_p0f8u"), SubResource("Resource_5jcoj"), SubResource("Resource_gljak"), SubResource("Resource_w0imq")])
+correct_option_id = &"shovel"
+fun_fact = "A shovel helps loosen hard soil so the plant's roots can grow."
+zone_id = &"plant"
+scene_state = &"hard_dry_soil"
+
+[sub_resource type="Resource" id="Resource_qphrj"]
+script = ExtResource("1_xkpm1")
+id = &"l2_dead_leaves"
+prompt = "The plant has dead, brown leaves."
+options = Array[ExtResource("2_h8fke")]([SubResource("Resource_prcu2"), SubResource("Resource_q2asy"), SubResource("Resource_p0f8u"), SubResource("Resource_5jcoj"), SubResource("Resource_gljak"), SubResource("Resource_w0imq")])
+correct_option_id = &"pruning_shears"
+fun_fact = "Pruning shears remove dead parts of a plant and keep it healthy."
+zone_id = &"plant"
+scene_state = &"brown_leaves"
+
+[sub_resource type="Resource" id="Resource_t7a6i"]
+script = ExtResource("1_xkpm1")
+id = &"l2_thirsty"
+prompt = "The soil is dry and the plant needs a drink."
+options = Array[ExtResource("2_h8fke")]([SubResource("Resource_prcu2"), SubResource("Resource_q2asy"), SubResource("Resource_p0f8u"), SubResource("Resource_5jcoj"), SubResource("Resource_gljak"), SubResource("Resource_w0imq")])
+correct_option_id = &"watering_can"
+alternate_correct_ids = Array[StringName]([&"water"])
+fun_fact = "Water gives the plant what it needs to stay hydrated and grow."
+zone_id = &"plant"
+scene_state = &"dry_soil"
+
+[sub_resource type="Resource" id="Resource_jqcrv"]
+script = ExtResource("1_xkpm1")
+id = &"l2_light"
+prompt = "The plant looks sad and needs light."
+options = Array[ExtResource("2_h8fke")]([SubResource("Resource_prcu2"), SubResource("Resource_q2asy"), SubResource("Resource_p0f8u"), SubResource("Resource_5jcoj"), SubResource("Resource_gljak"), SubResource("Resource_w0imq")])
+correct_option_id = &"sunlight"
+fun_fact = "Sunlight provides the energy plants need to help make food."
+zone_id = &"plant"
+scene_state = &"needs_light"
+
+[sub_resource type="Resource" id="Resource_aoxk1"]
+script = ExtResource("1_xkpm1")
+id = &"l2_nutrients"
+prompt = "The plant needs extra nutrients to grow."
+options = Array[ExtResource("2_h8fke")]([SubResource("Resource_prcu2"), SubResource("Resource_q2asy"), SubResource("Resource_p0f8u"), SubResource("Resource_5jcoj"), SubResource("Resource_gljak"), SubResource("Resource_w0imq")])
+correct_option_id = &"fertilizer"
+fun_fact = "Fertilizer provides nutrients that help plants grow."
+zone_id = &"plant"
+scene_state = &"needs_nutrients"
+
+[resource]
+script = ExtResource("3_oevx5")
+id = &"level_2"
+title = "Level 2: Monitoring"
+instruction = "Help the plant! Drag the correct tool or basic need to fix its situation."
+challenges = Array[ExtResource("1_xkpm1")]([SubResource("Resource_72tqy"), SubResource("Resource_qphrj"), SubResource("Resource_t7a6i"), SubResource("Resource_jqcrv"), SubResource("Resource_aoxk1")])
+shuffle_challenges = true
+completion_message = "You took great care of the plant!"
+final_fun_fact = "Plants tell us what they need — we just have to look closely."

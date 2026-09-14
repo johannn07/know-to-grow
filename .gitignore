@@ -1,2 +1,17 @@
-".godot/" 
-"*.translation" 
+# Godot 4
+.godot/
+/android/
+export_presets.cfg
+*.translation
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Builds
+/build/
+*.apk
+*.aab
+*.keystore

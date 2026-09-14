@@ -11,8 +11,18 @@ config_version=5
 [application]
 
 config/name="Know To Grow"
+run/main_scene="uid://bb72wudmy6014"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="uid://b1u1cpgmh3dwe"
+
+[autoload]
+
+GameState="*uid://d1ur2v2um6c7"
+AudioDirector="*uid://b36yc5dio1awk"
 
 [display]
 
