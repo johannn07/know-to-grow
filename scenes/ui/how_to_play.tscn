@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c1sll22nbsmcc"]
 
-[ext_resource type="Script" path="res://scripts/ui/sub_screen.gd" id="1_screen"]
-[ext_resource type="Script" path="res://scripts/ui/art_slot.gd" id="2_slot"]
-[ext_resource type="Theme" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://bg4qluthwx7dp" path="res://scripts/ui/sub_screen.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 bg_color = Color(0.99, 0.97, 0.9, 0.96)
@@ -16,7 +16,7 @@ corner_radius_top_right = 40
 corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
 
-[node name="HowToPlay" type="Control"]
+[node name="HowToPlay" type="Control" unique_id=2096281097]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,7 +26,7 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
 
-[node name="Sky" type="Control" parent="."]
+[node name="Sky" type="Control" parent="." unique_id=63774549]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -40,112 +40,102 @@ fit = 2
 slot_name = "bg_sky"
 placeholder_color = Color(0.52, 0.82, 0.95, 1)
 
-[node name="Foreground" type="MarginContainer" parent="."]
+[node name="Foreground" type="MarginContainer" parent="." unique_id=1644136369]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 90
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 90
 
-[node name="Column" type="VBoxContainer" parent="Foreground"]
+[node name="Column" type="VBoxContainer" parent="Foreground" unique_id=1373126424]
 layout_mode = 2
-mouse_filter = 1
 theme_override_constants/separation = 40
 
-[node name="Title" type="Label" parent="Foreground/Column"]
+[node name="Title" type="Label" parent="Foreground/Column" unique_id=603340409]
 layout_mode = 2
 theme_type_variation = &"ScreenTitle"
 text = "How To Play"
 horizontal_alignment = 1
 
-[node name="Panel" type="PanelContainer" parent="Foreground/Column"]
+[node name="Panel" type="PanelContainer" parent="Foreground/Column" unique_id=1727384169]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Padding" type="MarginContainer" parent="Foreground/Column/Panel"]
+[node name="Padding" type="MarginContainer" parent="Foreground/Column/Panel" unique_id=2007881114]
 layout_mode = 2
 theme_override_constants/margin_left = 44
 theme_override_constants/margin_top = 44
 theme_override_constants/margin_right = 44
 theme_override_constants/margin_bottom = 44
 
-[node name="Scroll" type="ScrollContainer" parent="Foreground/Column/Panel/Padding"]
+[node name="Scroll" type="ScrollContainer" parent="Foreground/Column/Panel/Padding" unique_id=1456318652]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Steps" type="VBoxContainer" parent="Foreground/Column/Panel/Padding/Scroll"]
+[node name="Steps" type="VBoxContainer" parent="Foreground/Column/Panel/Padding/Scroll" unique_id=325315074]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 34
 
-[node name="Level1Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level1Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1338999939]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 theme_override_colors/font_color = Color(0.19, 0.47, 0.13, 1)
 theme_override_font_sizes/font_size = 48
 text = "1 · Planting"
 
-[node name="Level1Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level1Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1542109033]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "Tap the correct tool or object, then drag it where it belongs."
 autowrap_mode = 3
 
-[node name="Level2Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level2Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=460170743]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 theme_override_colors/font_color = Color(0.19, 0.47, 0.13, 1)
 theme_override_font_sizes/font_size = 48
 text = "2 · Monitoring"
 
-[node name="Level2Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level2Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=164557214]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "Help the plant! Drag the correct tool or basic need to fix its situation."
 autowrap_mode = 3
 
-[node name="Level3Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level3Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1529689724]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 theme_override_colors/font_color = Color(0.19, 0.47, 0.13, 1)
 theme_override_font_sizes/font_size = 48
 text = "3 · Identifying"
 
-[node name="Level3Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level3Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1885376464]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "Look closely at the plant. Read the clue, then tap the part it describes."
 autowrap_mode = 3
 
-[node name="Level4Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level4Heading" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1234522773]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 theme_override_colors/font_color = Color(0.19, 0.47, 0.13, 1)
 theme_override_font_sizes/font_size = 48
 text = "4 · Functions"
 
-[node name="Level4Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Level4Body" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1100527765]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "Drag each function card onto the plant part that does that job."
 autowrap_mode = 3
 
-[node name="NoWorries" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
-layout_mode = 2
-theme_type_variation = &"BodyText"
-theme_override_colors/font_color = Color(0.44, 0.31, 0.19, 1)
-theme_override_font_sizes/font_size = 36
-text = "Nothing here is ever marked wrong. If a choice doesn't fit, it hops gently back so you can try again."
-autowrap_mode = 3
-
-[node name="BackButton" type="Button" parent="Foreground/Column"]
+[node name="BackButton" type="Button" parent="Foreground/Column" unique_id=874576744]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 160)
 layout_mode = 2

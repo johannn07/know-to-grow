@@ -1,14 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://b0kwudc4hjs1d"]
 
-; Placeholder destination for the main menu's Start Game button.
-;
-; It exists so the title screen's flow is walkable today and so nobody has to
-; guess what comes next. Replace it with the real level select (or wire Start
-; Game straight to Level 1) once the challenge screen is rebuilt — see
-; checklist.md, "Core gameplay".
-
-[ext_resource type="Script" path="res://scripts/ui/sub_screen.gd" id="1_screen"]
-[ext_resource type="Script" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Script" uid="uid://bg4qluthwx7dp" path="res://scripts/ui/sub_screen.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" path="res://themes/ktg_theme.tres" id="3_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
@@ -23,7 +16,7 @@ corner_radius_top_right = 40
 corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
 
-[node name="LevelSelectStub" type="Control"]
+[node name="LevelSelectStub" type="Control" unique_id=436885243]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,7 +26,7 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
 
-[node name="Sky" type="Control" parent="."]
+[node name="Sky" type="Control" parent="." unique_id=2134140961]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -47,98 +40,88 @@ fit = 2
 slot_name = "bg_sky"
 placeholder_color = Color(0.52, 0.82, 0.95, 1)
 
-[node name="Foreground" type="MarginContainer" parent="."]
+[node name="Foreground" type="MarginContainer" parent="." unique_id=218926812]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_override_constants/margin_left = 60
 theme_override_constants/margin_top = 90
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 90
 
-[node name="Column" type="VBoxContainer" parent="Foreground"]
+[node name="Column" type="VBoxContainer" parent="Foreground" unique_id=249601159]
 layout_mode = 2
-mouse_filter = 1
 theme_override_constants/separation = 40
 
-[node name="Title" type="Label" parent="Foreground/Column"]
+[node name="Title" type="Label" parent="Foreground/Column" unique_id=1917706867]
 layout_mode = 2
 theme_type_variation = &"ScreenTitle"
 text = "Coming Up"
 horizontal_alignment = 1
 
-[node name="Panel" type="PanelContainer" parent="Foreground/Column"]
+[node name="Panel" type="PanelContainer" parent="Foreground/Column" unique_id=304944229]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Padding" type="MarginContainer" parent="Foreground/Column/Panel"]
+[node name="Padding" type="MarginContainer" parent="Foreground/Column/Panel" unique_id=1498344173]
 layout_mode = 2
 theme_override_constants/margin_left = 44
 theme_override_constants/margin_top = 44
 theme_override_constants/margin_right = 44
 theme_override_constants/margin_bottom = 44
 
-[node name="Scroll" type="ScrollContainer" parent="Foreground/Column/Panel/Padding"]
+[node name="Scroll" type="ScrollContainer" parent="Foreground/Column/Panel/Padding" unique_id=1741037180]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="Steps" type="VBoxContainer" parent="Foreground/Column/Panel/Padding/Scroll"]
+[node name="Steps" type="VBoxContainer" parent="Foreground/Column/Panel/Padding/Scroll" unique_id=138802063]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 26
 
-[node name="Note" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
-layout_mode = 2
-theme_type_variation = &"BodyText"
-theme_override_colors/font_color = Color(0.44, 0.31, 0.19, 1)
-theme_override_font_sizes/font_size = 34
-text = "Placeholder screen. None of these are built yet — this is the running order from the design document."
-autowrap_mode = 3
-
-[node name="Step1" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Step1" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1106120094]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "1 · Level 1 — Planting"
 autowrap_mode = 3
 
-[node name="Step2" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Step2" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1179480923]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "2 · Level 2 — Monitoring"
 autowrap_mode = 3
 
-[node name="Step3" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Step3" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=971746034]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 theme_override_colors/font_color = Color(0.44, 0.31, 0.19, 1)
 text = "3 · Video — the parts of a plant"
 autowrap_mode = 3
 
-[node name="Step4" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Step4" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1740290629]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "4 · Level 3 — Identifying"
 autowrap_mode = 3
 
-[node name="Step5" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Step5" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=924748959]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 theme_override_colors/font_color = Color(0.44, 0.31, 0.19, 1)
 text = "5 · Video — what each part does"
 autowrap_mode = 3
 
-[node name="Step6" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps"]
+[node name="Step6" type="Label" parent="Foreground/Column/Panel/Padding/Scroll/Steps" unique_id=1710370253]
 layout_mode = 2
 theme_type_variation = &"BodyText"
 text = "6 · Level 4 — Functions"
 autowrap_mode = 3
 
-[node name="BackButton" type="Button" parent="Foreground/Column"]
+[node name="BackButton" type="Button" parent="Foreground/Column" unique_id=819865696]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 160)
 layout_mode = 2

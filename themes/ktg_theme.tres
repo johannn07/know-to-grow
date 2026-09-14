@@ -1,16 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=3]
-
-; Know To Grow — shared UI theme.
-;
-; Colours here stand in for the real art direction and are safe to restyle once
-; the illustrated button frames arrive: replace a StyleBoxFlat with a
-; StyleBoxTexture and every button in the game follows.
-;
-; Sizing rule (see Phase 8 of the setup guide): interactive controls are at
-; least 160 px tall at the 1080-wide design resolution — roughly 1 cm on a
-; phone, which is what a five-year-old's thumb actually needs.
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+[gd_resource type="Theme" format=3 uid="uid://ddiq5de3ppim6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secondary_normal"]
 content_margin_left = 44.0
@@ -30,6 +18,8 @@ corner_radius_bottom_left = 28
 shadow_color = Color(0, 0, 0, 0.16)
 shadow_size = 6
 shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secondary_pressed"]
 content_margin_left = 44.0
@@ -84,6 +74,10 @@ corner_radius_bottom_left = 40
 
 [resource]
 default_font_size = 44
+BodyText/base_type = &"Label"
+BodyText/colors/font_color = Color(0.29, 0.2, 0.12, 1)
+BodyText/constants/outline_size = 0
+BodyText/font_sizes/font_size = 40
 Button/colors/font_color = Color(0.32, 0.22, 0.13, 1)
 Button/colors/font_focus_color = Color(0.32, 0.22, 0.13, 1)
 Button/colors/font_hover_color = Color(0.32, 0.22, 0.13, 1)
@@ -113,7 +107,3 @@ PrimaryButton/styles/normal = SubResource("StyleBoxFlat_primary_normal")
 PrimaryButton/styles/pressed = SubResource("StyleBoxFlat_primary_pressed")
 ScreenTitle/base_type = &"Label"
 ScreenTitle/font_sizes/font_size = 96
-BodyText/base_type = &"Label"
-BodyText/colors/font_color = Color(0.29, 0.2, 0.12, 1)
-BodyText/constants/outline_size = 0
-BodyText/font_sizes/font_size = 40
