@@ -1,8 +1,12 @@
 # Godot 4
 .godot/
 /android/
-export_presets.cfg
 *.translation
+
+# export_presets.cfg is deliberately tracked: it holds the package name,
+# target architectures and SDK levels, which are worth versioning. The
+# keystore paths and passwords live in .godot/export_credentials.cfg,
+# which is ignored with the rest of .godot/.
 
 # OS / editor
 .DS_Store
