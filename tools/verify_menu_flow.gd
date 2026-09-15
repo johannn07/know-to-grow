@@ -50,6 +50,7 @@ func _initialize() -> void:
 		"res://scenes/ui/level_intro.tscn",
 		"res://scenes/ui/badge_unlocked.tscn",
 		"res://scenes/ui/level_complete.tscn",
+		"res://scenes/ui/stage_select.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -143,6 +144,34 @@ func _initialize() -> void:
 					action.art == button_art,
 					"%s %%ActionButton tints its own art" % path.get_file()
 				)
+
+		# The stage select's rows are hotspots over rows drawn into one picture.
+		# A rect that drifted off its row would still look fine and still fail.
+		if screen is StageSelect:
+			var select: StageSelect = screen
+			var live := 0
+			for i in StageSelect.ROW_RECTS.size():
+				var row: Button = select.get_node("%Rows").get_node("Row%d" % (i + 1))
+				_expect(
+					row.size.x >= 160.0 and row.size.y >= 160.0,
+					"stage_select Row%d clears 160 px (is %dx%d)" % [i + 1, row.size.x, row.size.y]
+				)
+				if not row.disabled:
+					live += 1
+					_expect(
+						row.pressed.get_connections().size() == 1,
+						"stage_select Row%d is connected" % (i + 1)
+					)
+			_expect(
+				live == select.unlocked_count,
+				"stage_select has %d live row(s), matching unlocked_count" % live
+			)
+			var close: Button = select.get_node("%CloseButton")
+			_expect(close.pressed.get_connections().size() == 1, "stage_select %CloseButton is connected")
+			_expect(
+				close.size.x >= 160.0 and close.size.y >= 160.0,
+				"stage_select %%CloseButton clears 160 px (is %dx%d)" % [close.size.x, close.size.y]
+			)
 
 		# How To Play is a single drawn image; its controls are invisible Buttons
 		# sitting over the painted ones, so their placement is only verifiable here.

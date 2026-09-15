@@ -132,12 +132,15 @@ unlocks **Little Planter**.
 
 - [x] **Level overlay** — the card that names the level before it starts.
       `Level 1 / "Ready to grow?"`, with Continue. Art delivered
-- [ ] **Stage select** — `Level 1 / Planting` with a row per stage, each row
-      carrying its item icon and three stars, locked rows greyed, and an X back
-      to the hub. Art delivered for the frame, both pill states, all four item
-      icons in locked and unlocked form, and both star states. **This is the
-      screen that needs `GameState`** — without it every row but Stage 1 is
-      locked forever and no star can ever fill
+- [x] **Stage select** — `Level 1 / Planting`, an X back to the hub, and a
+      hotspot over each drawn row. Stage 1 live, the rest disabled to match the
+      grey they are drawn in
+- [ ] **Stage select rows built from parts, not baked into the picture.** The
+      row states are currently part of the artwork, which is correct only while
+      nothing has been completed. The plates, labels, item icons and stars are
+      all cut and in the repo, unused. Doing this is also the only way those
+      rows can show they were pressed. **Belongs with `GameState`** — before it,
+      there is nothing to drive them
 - [x] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
       gardener!"` with three stars, after Stage 4. Art delivered
 - [x] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the

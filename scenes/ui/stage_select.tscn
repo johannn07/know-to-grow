@@ -1,0 +1,169 @@
+[gd_scene format=3 uid="uid://dn0q7wme5hxvb"]
+
+[ext_resource type="Script" uid="uid://4mr7i50nws1k" path="res://scripts/ui/stage_select.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://k1ruiahxqblq" path="res://assets/art/bg_garden_stump.png" id="4_bg"]
+[ext_resource type="Texture2D" uid="uid://bc8tgr37rx5x5" path="res://assets/art/ui_stage_select_l1.png" id="5_card"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
+
+[node name="StageSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_screen")
+back_scene_path = "res://scenes/ui/hub.tscn"
+
+[node name="Background" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_bg")
+fit = 2
+slot_name = "bg_garden_stump"
+placeholder_color = Color(0.52, 0.82, 0.95, 1)
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 120
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 120
+
+[node name="CardAspect" type="AspectRatioContainer" parent="Center"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+ratio = 0.6649
+
+[node name="Card" type="Control" parent="Center/CardAspect"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CardArt" type="Control" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("5_card")
+fit = 0
+slot_name = "ui_stage_select_l1"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="Rows" type="Control" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Row1" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1176
+anchor_top = 0.228
+anchor_right = 0.8757
+anchor_bottom = 0.4019
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row2" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1145
+anchor_top = 0.4092
+anchor_right = 0.8751
+anchor_bottom = 0.5774
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row3" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1121
+anchor_top = 0.5904
+anchor_right = 0.8849
+anchor_bottom = 0.7602
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row4" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1145
+anchor_top = 0.7671
+anchor_right = 0.8769
+anchor_bottom = 0.9401
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="CloseButton" type="Button" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85
+anchor_top = 0.1164
+anchor_right = 0.9816
+anchor_bottom = 0.1963
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")

@@ -274,6 +274,55 @@ dimmed screen with a button under it, built on
   **`bg_bed_sprout.png`** — the sprout the level was spent growing, and which
   had been left unused since stages stopped swapping their gardens.
 
+## Stage select — delivered
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_stage_select_l1.png` | 1633 x 2456 | 2.7 MB |
+
+Drawn 960 x 1444 at the design resolution, over the hub's garden dimmed to 45%.
+
+- **The whole screen is one picture** — frame, header, close, and all four rows
+  with their icons, labels and stars already in it. The interactive parts are
+  invisible hotspots over the drawn rows, the same as How To Play.
+
+| Target | Rect2 on the card | Drawn |
+|---|---|---|
+| Row 1 | `Rect2(0.1176, 0.2280, 0.7581, 0.1739)` | 727 x 251, live |
+| Row 2 | `Rect2(0.1145, 0.4092, 0.7606, 0.1682)` | 730 x 243, locked |
+| Row 3 | `Rect2(0.1121, 0.5904, 0.7728, 0.1698)` | 741 x 245, locked |
+| Row 4 | `Rect2(0.1145, 0.7671, 0.7624, 0.1730)` | 731 x 249, locked |
+| Close | `Rect2(0.8500, 0.1164, 0.1316, 0.0799)` | 126 x 115, grown to 160 x 160 |
+
+- **The row states are in the picture, not in code.** Stage 1 is drawn unlocked,
+  the rest grey, every star empty. That is right today because nothing has been
+  completed and there is no `GameState`. `unlocked_count` is a plain export for
+  the same reason: raising it lights up a row that still *looks* locked.
+- These rows are the one place in the game where a control cannot show it was
+  pressed, because there is no separate art under the hotspot to tint. Building
+  the rows from the parts below fixes that and makes the state real. Both belong
+  with `GameState`.
+
+### Row parts — delivered, not yet used
+
+Cut from the delivered sheets and sitting ready for the row rebuild. Nothing
+references them yet.
+
+| File | Size | Purpose |
+|---|---|---|
+| `ui_stage_row.png` | 1932 x 347 | the row plate, unlocked |
+| `ui_stage_row_locked.png` | 1923 x 349 | the row plate, locked |
+| `ui_stage_label_1..4.png` | ~362 x 71 | "Stage N", unlocked |
+| `ui_stage_label_1..4_locked.png` | ~362 x 71 | "Stage N", locked |
+| `icon_stage_shovel/seed/water/sun.png` | ~303 x 302 | the row's item, unlocked |
+| `icon_stage_*_locked.png` | ~303 x 302 | the same four, greyed |
+| `icon_star_filled.png` | 248 x 236 | earned star |
+| `icon_star_empty.png` | 249 x 233 | unearned star |
+
+These are separate from the stage item icons already in the game
+(`icon_shovel.png` and friends): those are the draggable cards, drawn without a
+disc behind them. These carry the coloured disc the stage select rows use.
+
 ## Buttons — delivered
 
 | File | Size | Weight | Drawn over |
