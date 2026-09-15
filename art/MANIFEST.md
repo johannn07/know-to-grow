@@ -67,24 +67,35 @@ the whole game. Spot-checked groups:
 | Buttons | Continue, Grow Now, Let's Go, Click Me, Choose Again | 2172 x 724 |
 | Tool trays | "Choose a Tool" with three item slots, four variants | 1672 x 941 |
 
-### The open problem with these
+### These carry their own text — and that is the agreed design
 
 **Most of them have their English text baked into the pixels.** A fun-fact
 banner is not a frame plus a string — it is one flat drawing with the sentence
 already rendered in it. The same is true of the stage headers, the feedback
 cards and several buttons.
 
-That collides with the data-driven design in `content/*.tres`, where every
-prompt, hint and fun fact lives as editable text — two sources of truth for the
-same sentence, which will drift.
+Decided: **keep it.** English only, no Filipino. The typography was checked at
+the 1080-wide design resolution first — the smallest body text lands around 30px
+cap height, comfortably readable for a five-to-nine-year-old — and rebuilding
+those curved, outlined, frame-fitted headings as live `Label` nodes would look
+worse for real work.
 
-It would also rule out Filipino localisation and complicate spoken prompts. Note
-that neither of those is a stated requirement: the design document says nothing
-about translation or spoken instructions beyond one "friendly voice/text" line on
-wrong answers. Both come from the setup guide as proposals. How much they matter
-is the project owner's call, not an assumption to build on.
+What follows from that:
 
-This needs a decision before any of the level art is wired up. See `checklist.md`.
+- **The art is the display layer.** `content/*.tres` holds `*_transcript`
+  fields that record what each asset says. They are never rendered. Rendering
+  one in a `Label` is a bug.
+- **A transcript must match its artwork exactly.** Re-render a banner with new
+  wording, update the transcript in the same change, and re-run
+  `tools/verify_content.gd`.
+- **Voice-over is planned.** Every spoken line has a `*_vo_key`, and
+  `audio/vo/en/SCRIPT.md` — 76 lines — is generated from the transcripts by
+  `tools/export_vo_script.gd`. Never hand-edit it.
+- **Wording changes are now expensive**: a re-render plus a re-record. Lock the
+  teaching content before commissioning voice-over.
+
+When wiring the level art, each `ChallengeData` has `header_art`, `prompt_art`
+and `fun_fact_art` slots waiting, and each `OptionData` has `icon`.
 
 ## Fonts
 
