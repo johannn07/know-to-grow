@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bp3kx7mv6ndsh"]
+[gd_scene format=3 uid="uid://bp3kx7mv6ndsh"]
 
 [ext_resource type="Script" uid="uid://cq10x06m6e0uc" path="res://scripts/levels/level_1/stage_2.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
@@ -17,7 +17,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
-[node name="Stage2" type="Control"]
+[node name="Stage2" type="Control" unique_id=1709108936]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,7 +32,7 @@ correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 next_stage_path = "res://scenes/levels/level_1/stage_3.tscn"
 
-[node name="Background" type="Control" parent="."]
+[node name="Background" type="Control" parent="." unique_id=688735562]
 unique_name_in_owner = true
 clip_contents = true
 layout_mode = 1
@@ -48,7 +48,7 @@ fit = 2
 slot_name = "bg_bed_hole"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
 
-[node name="Header" type="Control" parent="."]
+[node name="Header" type="Control" parent="." unique_id=936151590]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
@@ -62,11 +62,10 @@ grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("7_hdr")
-fit = 1
 slot_name = "ui_header_l1_s2"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
-[node name="Prompt" type="Control" parent="."]
+[node name="Prompt" type="Control" parent="." unique_id=1218018414]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
@@ -80,11 +79,10 @@ grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("8_prm")
-fit = 1
 slot_name = "ui_prompt_l1_s2"
 placeholder_color = Color(0.98, 0.96, 0.89, 1)
 
-[node name="DropZone" type="Control" parent="."]
+[node name="DropZone" type="Control" parent="." unique_id=280301733]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -98,30 +96,30 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TrayArea" type="MarginContainer" parent="."]
+[node name="TrayArea" type="MarginContainer" parent="." unique_id=1431719384]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = -800.0
-offset_right = -50.0
-offset_bottom = -310.0
+offset_left = 120.0
+offset_top = -740.0
+offset_right = -100.0
+offset_bottom = -320.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea"]
+[node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea" unique_id=76471614]
 layout_mode = 2
 mouse_filter = 2
 ratio = 2.0534
 
-[node name="Tray" type="Control" parent="TrayArea/TrayAspect"]
+[node name="Tray" type="Control" parent="TrayArea/TrayAspect" unique_id=1701136464]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="TrayArt" type="Control" parent="TrayArea/TrayAspect/Tray"]
+[node name="TrayArt" type="Control" parent="TrayArea/TrayAspect/Tray" unique_id=1764013768]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -135,7 +133,7 @@ fit = 0
 slot_name = "ui_tray_l1_s2"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
-[node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray"]
+[node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray" unique_id=1081590827]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -145,15 +143,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Leaf" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Leaf" parent="TrayArea/TrayAspect/Tray/Cards" unique_id=1159161169 instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0820
+anchor_left = 0.082
 anchor_top = 0.2649
-anchor_right = 0.3470
-anchor_bottom = 0.8090
-offset_left = 0.0
-offset_top = 0.0
+anchor_right = 0.347
+anchor_bottom = 0.809
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -161,15 +157,13 @@ grow_vertical = 2
 option_id = &"leaf"
 icon = ExtResource("13_leaf")
 
-[node name="SeedPacket" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="SeedPacket" parent="TrayArea/TrayAspect/Tray/Cards" unique_id=55578482 instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.3640
+anchor_left = 0.364
 anchor_top = 0.2649
-anchor_right = 0.6320
-anchor_bottom = 0.8090
-offset_left = 0.0
-offset_top = 0.0
+anchor_right = 0.632
+anchor_bottom = 0.809
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -177,15 +171,13 @@ grow_vertical = 2
 option_id = &"seed_packet"
 icon = ExtResource("14_seed_packet")
 
-[node name="Rock" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Rock" parent="TrayArea/TrayAspect/Tray/Cards" unique_id=191728684 instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.6490
+anchor_left = 0.649
 anchor_top = 0.2649
-anchor_right = 0.9140
-anchor_bottom = 0.8090
-offset_left = 0.0
-offset_top = 0.0
+anchor_right = 0.914
+anchor_bottom = 0.809
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -193,7 +185,7 @@ grow_vertical = 2
 option_id = &"rock"
 icon = ExtResource("15_rock")
 
-[node name="FunFact" type="Control" parent="."]
+[node name="FunFact" type="Control" parent="." unique_id=134298227]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -210,11 +202,10 @@ grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("12_fact")
-fit = 1
 slot_name = "ui_fact_l1_s2"
 placeholder_color = Color(0.85, 0.66, 0.33, 1)
 
-[node name="Overlay" type="Control" parent="."]
+[node name="Overlay" type="Control" parent="." unique_id=2101155400]
 unique_name_in_owner = true
 z_index = 100
 layout_mode = 1
@@ -224,7 +215,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Dim" type="ColorRect" parent="Overlay"]
+[node name="Dim" type="ColorRect" parent="Overlay" unique_id=1964351205]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -233,7 +224,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.45)
 
-[node name="Center" type="MarginContainer" parent="Overlay"]
+[node name="Center" type="MarginContainer" parent="Overlay" unique_id=1326156236]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -246,17 +237,17 @@ theme_override_constants/margin_top = 240
 theme_override_constants/margin_right = 90
 theme_override_constants/margin_bottom = 240
 
-[node name="OverlayAspect" type="AspectRatioContainer" parent="Overlay/Center"]
+[node name="OverlayAspect" type="AspectRatioContainer" parent="Overlay/Center" unique_id=1825969598]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 ratio = 0.788
 
-[node name="Card" type="Control" parent="Overlay/Center/OverlayAspect"]
+[node name="Card" type="Control" parent="Overlay/Center/OverlayAspect" unique_id=93770860]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="OverlayArt" type="Control" parent="Overlay/Center/OverlayAspect/Card"]
+[node name="OverlayArt" type="Control" parent="Overlay/Center/OverlayAspect/Card" unique_id=1498009356]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -270,7 +261,7 @@ fit = 0
 slot_name = "feedback_card"
 placeholder_color = Color(0.98, 0.96, 0.89, 1)
 
-[node name="OverlayButton" type="Button" parent="Overlay/Center/OverlayAspect/Card"]
+[node name="OverlayButton" type="Button" parent="Overlay/Center/OverlayAspect/Card" unique_id=999457069]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
