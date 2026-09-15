@@ -61,12 +61,26 @@ picks one of N options, it is right or it is wrong. Build that once.
       exist among their options, transcripts present, voice-over keys unique
 - [x] `tools/export_vo_script.gd` — generates `audio/vo/en/SCRIPT.md`, the
       76-line recording script, from the transcripts
-- [ ] `OptionCard` component — tappable and draggable, uses `ArtSlot` for its icon
-- [ ] `DropZone` component — `zone_id`, minimum 160 px target, highlight on hover
-- [ ] `ChallengeScreen` — reads a `LevelData` and plays it end to end
-- [ ] Correct answer: sparkle, ding, stage advances, fun fact appears
-- [ ] Wrong answer: gentle bounce-back, the item's own hint, arrow nudge, no
-      penalty and no "Wrong" label
+- [x] `OptionCard` component — draggable, uses `ArtSlot` for its icon, slides
+      home on a rejected drop
+- [x] `ChallengeScreen` — reads a `LevelData` + index and plays one stage.
+      Nothing in it knows it is Level 1; swap the resource to play another level
+- [x] **Level 1 Stage 1 playable** — drag a tool onto the soil, the garden
+      changes state, feedback cards appear. `tools/verify_level_1.gd` plays the
+      whole loop headlessly, 23 checks
+- [ ] `DropZone` component — currently a plain `Control` rect on the screen.
+      Promote it to a component with `zone_id` and hover highlight when a stage
+      needs more than one zone (Level 4 does)
+- [x] Correct answer: garden advances a state, "Correct Answer!" card with its
+      Continue button. **⚠** Still to decide: the card already explains the
+      answer, so does Level 1 also want the separate Fun Fact strip?
+- [ ] Correct answer polish: sparkle and ding
+- [x] Wrong answer: card slides back, "Oops!" card with Choose Again, no penalty
+      and no "Wrong" label
+- [ ] Wrong answer polish: the item's own `wrong_hint`, arrow nudge
+- [ ] Level 1 Stages 2-4 — art exists in the `.fig` ([59][82][111] for Stage 2,
+      [52] Stage 3, [56] Stage 4). `ChallengeScreen` advances to the next stage
+      automatically once its `prompt_art` is wired
 - [ ] Option shuffling (`shuffle_options`) — Level 3's scripted answers sit at
       B, A, C, A, B and children memorise positions faster than content
 - [ ] Level 1 stays in fixed order (`shuffle_challenges = false`) — planting is a

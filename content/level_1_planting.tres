@@ -1,11 +1,22 @@
-[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dl63c4m1i6qv0" load_steps=18]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dl63c4m1i6qv0" load_steps=28]
 
 [ext_resource type="Script" uid="uid://bkvhax4wfwr0m" path="res://scripts/data/challenge_data.gd" id="1_chal"]
 [ext_resource type="Script" uid="uid://c0mh8vu14p4se" path="res://scripts/data/option_data.gd" id="2_opt"]
 [ext_resource type="Script" uid="uid://bx4qndoi4eqxr" path="res://scripts/data/level_data.gd" id="3_lvl"]
+[ext_resource type="Texture2D" uid="uid://py6pm0kd0dqw" path="res://art/bg_bed_empty.png" id="4_bgempty"]
+[ext_resource type="Texture2D" uid="uid://dq41m47tam5bv" path="res://art/bg_bed_hole.png" id="5_bghole"]
+[ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://art/ui_oops_tool.png" id="6_oops"]
+[ext_resource type="Texture2D" uid="uid://cvs1pqtre86r0" path="res://art/ui_header_l1_s1.png" id="7_hdr1"]
+[ext_resource type="Texture2D" uid="uid://b87xriki8qspt" path="res://art/ui_prompt_l1_s1.png" id="8_prm1"]
+[ext_resource type="Texture2D" uid="uid://bvxiag6avsh6v" path="res://art/ui_correct_l1_s1.png" id="9_cor1"]
+[ext_resource type="Texture2D" uid="uid://xb807k37ve1j" path="res://art/ui_fact_l1_s1.png" id="10_fact1"]
+[ext_resource type="Texture2D" uid="uid://dwfmtdeopuw6y" path="res://art/icon_shovel.png" id="11_shovel"]
+[ext_resource type="Texture2D" uid="uid://rul31j51fqh7" path="res://art/icon_watering_can.png" id="12_can"]
+[ext_resource type="Texture2D" uid="uid://dlbe6nr8ti0f7" path="res://art/icon_flower.png" id="13_flower"]
 
 [sub_resource type="Resource" id="Resource_al3yq"]
 script = ExtResource("2_opt")
+icon = ExtResource("11_shovel")
 id = &"shovel"
 label = "Shovel"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
@@ -14,6 +25,7 @@ vo_key = &"item_shovel"
 
 [sub_resource type="Resource" id="Resource_lsh1c"]
 script = ExtResource("2_opt")
+icon = ExtResource("12_can")
 id = &"watering_can"
 label = "Watering Can"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
@@ -22,6 +34,7 @@ vo_key = &"item_watering_can"
 
 [sub_resource type="Resource" id="Resource_5sf6u"]
 script = ExtResource("2_opt")
+icon = ExtResource("13_flower")
 id = &"flower"
 label = "Flower"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -35,6 +48,10 @@ prompt_transcript = "First, we need a little hole in the soil for our seed. Whic
 options = Array[ExtResource("2_opt")]([SubResource("Resource_al3yq"), SubResource("Resource_lsh1c"), SubResource("Resource_5sf6u")])
 correct_option_id = &"shovel"
 fun_fact_transcript = "Digging a small hole gives the seed a cozy place to rest and grow!"
+header_art = ExtResource("7_hdr1")
+prompt_art = ExtResource("8_prm1")
+fun_fact_art = ExtResource("10_fact1")
+correct_art = ExtResource("9_cor1")
 prompt_vo_key = &"l1_dig_prompt"
 fun_fact_vo_key = &"l1_dig_fact"
 zone_id = &"soil"
@@ -139,6 +156,11 @@ success_state = &"sprout"
 script = ExtResource("3_lvl")
 id = &"level_1"
 title = "Level 1: Planting"
+scene_art = Dictionary[StringName, Texture2D]({
+&"empty_bed": ExtResource("4_bgempty"),
+&"hole_dug": ExtResource("5_bghole")
+})
+wrong_art = ExtResource("6_oops")
 instruction_transcript = "Let's plant a seed! Tap the correct tool or object, then drag it where it belongs."
 challenges = Array[ExtResource("1_chal")]([SubResource("Resource_r1rbg"), SubResource("Resource_nsnar"), SubResource("Resource_3exbu"), SubResource("Resource_g8gxl")])
 completion_transcript = "You planted a seed all by yourself!"

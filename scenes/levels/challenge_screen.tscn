@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://c7mkqvw3n2ptb"]
+
+[ext_resource type="Script" uid="uid://bftii72cfhh47" path="res://scripts/levels/challenge_screen.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
+[ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="5_level"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
+
+[node name="ChallengeScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_screen")
+level = ExtResource("5_level")
+option_card_scene = ExtResource("4_card")
+
+[node name="Background" type="Control" parent="."]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 2
+slot_name = "stage_background"
+placeholder_color = Color(0.56, 0.81, 0.35, 1)
+
+[node name="Header" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -330.0
+offset_top = 40.0
+offset_right = 330.0
+offset_bottom = 310.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 1
+slot_name = "stage_header"
+placeholder_color = Color(0.72, 0.5, 0.26, 1)
+
+[node name="Prompt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -470.0
+offset_top = 300.0
+offset_right = 470.0
+offset_bottom = 560.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 1
+slot_name = "stage_prompt"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="DropZone" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 110.0
+offset_top = 620.0
+offset_right = -110.0
+offset_bottom = -880.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Cards" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -500.0
+offset_right = -50.0
+offset_bottom = -140.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 45
+alignment = 1
+
+[node name="Overlay" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="MarginContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 90
+theme_override_constants/margin_top = 240
+theme_override_constants/margin_right = 90
+theme_override_constants/margin_bottom = 240
+
+[node name="OverlayAspect" type="AspectRatioContainer" parent="Overlay/Center"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+ratio = 0.788
+
+[node name="Card" type="Control" parent="Overlay/Center/OverlayAspect"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="OverlayArt" type="Control" parent="Overlay/Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "feedback_card"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="OverlayButton" type="Button" parent="Overlay/Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_top = 0.785
+anchor_right = 0.79
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")

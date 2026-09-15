@@ -17,7 +17,7 @@ extends SubScreen
 ## button itself is required, because without it the screen has no exit.
 
 @export_group("Destination")
-@export_file("*.tscn") var level_scene_path: String = "res://scenes/ui/level_select_stub.tscn"
+@export_file("*.tscn") var level_scene_path: String = "res://scenes/levels/challenge_screen.tscn"
 
 @export_group("Placeholder state")
 ## Greeting above the garden. The child is never asked to type a name.

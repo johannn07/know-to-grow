@@ -85,6 +85,48 @@ Notes:
 - The three tab icons are wired but their buttons are `disabled`: Lessons,
   Garden and Badges have nowhere to go yet.
 
+## Level 1 Stage 1 — delivered
+
+Wired into `content/level_1_planting.tres` and played by
+`scenes/levels/challenge_screen.tscn`. Nothing on this screen is a `Label`:
+every word the child reads is drawn into one of these files.
+
+| File | Size | Weight |
+|---|---|---|
+| `bg_bed_empty.png` | 852 x 1846 | 1.7 MB |
+| `bg_bed_hole.png` | 851 x 1849 | 1.7 MB |
+| `ui_header_l1_s1.png` | 900 x 367 | 342 KB |
+| `ui_prompt_l1_s1.png` | 1000 x 357 | 325 KB |
+| `icon_shovel.png` | 300 x 354 | 120 KB |
+| `icon_watering_can.png` | 300 x 334 | 121 KB |
+| `icon_flower.png` | 300 x 362 | 122 KB |
+| `ui_correct_l1_s1.png` | 800 x 1015 | 1.1 MB |
+| `ui_oops_tool.png` | 800 x 521 | 443 KB |
+| `ui_fact_l1_s1.png` | 900 x 295 | 275 KB |
+
+Notes:
+
+- **The two backgrounds are the same garden in two states.** They are keyed by
+  name in `LevelData.scene_art` (`empty_bed`, `hole_dug`) rather than attached to
+  a challenge, because one stage's `success_state` is the next stage's
+  `scene_state` — the pictures are shared, so the level owns them.
+- **Two feedback cards carry their own buttons.** `ui_correct_l1_s1.png` has
+  Continue drawn into it and `ui_oops_tool.png` has Choose Again. The screen
+  lays an invisible `Button` over each, positioned in fractions of the image and
+  then **padded out in code** until it clears the 160 px touch floor — the drawn
+  Continue is only 105 px tall and Choose Again only 68 px. Hand-tuned offsets
+  were how How To Play's hotspots silently fell under the floor; this cannot.
+- **The Oops card belongs to the level, not the stage.** Its wording is about
+  picking the wrong *tool*, which is true of all four Level 1 stages.
+- `ui_fact_l1_s1.png` is **wired but not yet displayed.** `ui_correct_l1_s1.png`
+  already explains why the shovel is right, and showing a second card would add
+  another tap. Whether Level 1 wants the Fun Fact strip as well is an open
+  question for the project owner.
+- The item icons are the individually framed cards, each with its own name drawn
+  on it, not the composed `Choose a Tool` tray. The tray exists ([49], [50],
+  [51], [58] — one per stage) but a baked tray cannot be dragged, and the design
+  document's Level 1 action is "tap the Shovel, drag it to the dirt".
+
 ## Still in the Figma file, not yet extracted
 
 The `.fig` contains roughly **170 unique full-resolution assets** — effectively

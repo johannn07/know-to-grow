@@ -30,6 +30,17 @@ extends Resource
 @export var title_art: Texture2D
 @export var completion_art: Texture2D
 
+## Backgrounds keyed by the state names the challenges refer to: "empty_bed",
+## "hole_dug", "seed_covered"... Consecutive challenges share these — one
+## challenge's [member ChallengeData.success_state] is usually the next one's
+## [member ChallengeData.scene_state] — so they live on the level rather than
+## being duplicated onto every challenge.
+@export var scene_art: Dictionary[StringName, Texture2D] = {}
+
+## The "Oops! That's not the right tool" card, with Choose Again drawn into it.
+## One per level: the wording is about the level's mechanic, not the stage.
+@export var wrong_art: Texture2D
+
 @export_group("Transcript")
 ## Never rendered. See [member ChallengeData.prompt_transcript].
 @export_multiline var instruction_transcript: String = ""

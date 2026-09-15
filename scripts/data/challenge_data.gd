@@ -43,6 +43,10 @@ enum Interaction {
 @export var prompt_art: Texture2D
 ## The fun-fact banner shown after a correct answer.
 @export var fun_fact_art: Texture2D
+## The "Correct Answer!" card for this stage. It explains why the answer is
+## right and carries its own Continue button drawn into it, so the screen puts
+## an invisible hotspot over that rather than adding a Button of its own.
+@export var correct_art: Texture2D
 
 @export_group("Transcript")
 ## What [member prompt_art] says. NEVER RENDERED — this is the voice-over script
