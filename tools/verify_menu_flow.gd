@@ -83,7 +83,16 @@ func _initialize() -> void:
 			}
 			var wired := 0
 			for label_name in expected:
+				var bare: String = label_name.substr(1)
 				if not screen.has_node(label_name):
+					# A label that is in the scene but not reachable by its unique
+					# name is the dangerous case: the lenient lookup skips it in
+					# silence, so the node keeps whatever text was typed into the
+					# editor and the exported value never reaches the screen.
+					_expect(
+						_find_by_name(screen, bare) == null,
+						"hub '%s' exists but has no Access as Unique Name, so nothing wires it" % bare
+					)
 					continue
 				var label: Label = screen.get_node(label_name)
 				_expect(
@@ -139,6 +148,18 @@ func _instantiate(path: String) -> Node:
 	await process_frame
 	await process_frame
 	return node
+
+
+## Depth-first search by node name, ignoring unique-name registration. Used to
+## tell "this label was deleted" apart from "this label is there but unreachable".
+func _find_by_name(from: Node, node_name: String) -> Node:
+	for child in from.get_children():
+		if child.name == node_name:
+			return child
+		var found: Node = _find_by_name(child, node_name)
+		if found != null:
+			return found
+	return null
 
 
 func _find_art_slots(from: Node) -> Array[ArtSlot]:
