@@ -49,6 +49,18 @@ func _initialize() -> void:
 			continue
 		_expect(screen.has_node("%BackButton"), "%s has %%BackButton" % path.get_file())
 		_expect_scene(screen.back_scene_path, "%s back_scene_path" % path.get_file())
+
+		# How To Play is a single drawn image; its controls are invisible Buttons
+		# sitting over the painted ones, so their placement is only verifiable here.
+		if screen.has_node("%LetsGoButton"):
+			_expect_scene(screen.start_scene_path, "how_to_play start_scene_path")
+			for name in ["%LetsGoButton", "%BackButton"]:
+				var b: Button = screen.get_node(name)
+				_expect(b.pressed.get_connections().size() == 1, "%s is connected" % name)
+				_expect(
+					b.size.x >= 160.0 and b.size.y >= 160.0,
+					"%s hit area clears 160 px (is %dx%d)" % [name, b.size.x, b.size.y]
+				)
 		screen.queue_free()
 
 	await process_frame

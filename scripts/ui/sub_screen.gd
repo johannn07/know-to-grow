@@ -1,3 +1,4 @@
+class_name SubScreen
 extends Control
 
 ## Shared behaviour for any screen reached from the main menu: one way back,

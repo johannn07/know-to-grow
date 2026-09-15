@@ -5,6 +5,26 @@ the parts of a plant. Godot 4, Android first, portrait only, offline, no
 accounts. The design document lives outside the repo; `checklist.md` tracks what
 is left to build and `art/MANIFEST.md` is the asset contract.
 
+## One thing at a time
+
+Do one task, finish it, report it, and stop. Wait for the next instruction
+before starting anything else.
+
+This means:
+
+- **No bundling.** If I ask for the How To Play screen, do that screen. Do not
+  also refactor the theme, update three docs and generate a tool in the same
+  turn, however related they look.
+- **No scope creep from discovery.** Finding something interesting mid-task is
+  a thing to mention at the end, not a licence to go and do it.
+- **Finish before flagging.** A half-built thing plus a list of observations is
+  worse than one finished thing.
+- If a task genuinely cannot be done without a second change, say so and ask,
+  rather than doing both and explaining afterwards.
+
+Large bundled turns are hard to review, hard to revert, and bury the thing I
+actually asked for.
+
 ## Ask before you change these
 
 Do not change any of the following without checking with me first, even if it
