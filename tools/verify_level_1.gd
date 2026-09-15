@@ -90,6 +90,12 @@ func _play(scene_path: String) -> String:
 	_expect(stage.correct_card != null, "%s has a Correct card" % label)
 	_expect(stage.wrong_card != null, "%s has an Oops card" % label)
 	_expect(stage.success_background != null, "%s has a garden to change to" % label)
+	_expect(
+		stage.get_node("%FunFact").texture != null,
+		"%s has its fun fact strip" % label
+	)
+	var tray: ArtSlot = stage.get_node("%Cards").get_parent().get_node("TrayArt")
+	_expect(tray.texture != null, "%s has its tool tray" % label)
 	_expect(cards.size() >= 2, "%s has cards (%d)" % [label, cards.size()])
 	for card in cards:
 		_expect(card.icon != null, "%s card '%s' has its artwork" % [label, card.option_id])

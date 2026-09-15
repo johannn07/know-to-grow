@@ -51,15 +51,12 @@ const CHOOSE_AGAIN_RECT := Rect2(0.315, 0.71, 0.41, 0.145)
 @export_file("*.tscn") var next_stage_path: String = ""
 ## Where to go when there is no next stage.
 @export_file("*.tscn") var done_scene_path: String = "res://scenes/ui/hub.tscn"
-## Shuffle the cards on open. Off by default: the scene decides the order, which
-## is the point of laying the cards out by hand.
-@export var shuffle_cards: bool = false
 
 var _answered := false
 
 @onready var _background: ArtSlot = %Background
 @onready var _drop_zone: Control = %DropZone
-@onready var _cards: Container = %Cards
+@onready var _cards: Control = %Cards
 @onready var _overlay: Control = %Overlay
 @onready var _overlay_aspect: AspectRatioContainer = %OverlayAspect
 @onready var _overlay_art: ArtSlot = %OverlayArt
@@ -72,11 +69,10 @@ func _ready() -> void:
 	_overlay_button.pressed.connect(_on_overlay_pressed)
 	for card in cards():
 		card.dropped.connect(_on_card_dropped)
-	if shuffle_cards:
-		_shuffle()
 
 
-## The stage's option cards, in the order they sit in the scene.
+## The stage's option cards. Each one is anchored over a slot drawn into the
+## tray artwork, so their order is fixed by the picture and must match it.
 func cards() -> Array[OptionCard]:
 	var found: Array[OptionCard] = []
 	for child in _cards.get_children():
@@ -87,13 +83,6 @@ func cards() -> Array[OptionCard]:
 
 func is_correct(option_id: StringName) -> bool:
 	return option_id == correct_option_id or option_id in alternate_correct_ids
-
-
-func _shuffle() -> void:
-	var order := cards()
-	order.shuffle()
-	for i in order.size():
-		_cards.move_child(order[i], i)
 
 
 func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:

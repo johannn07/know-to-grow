@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dn5qwe8ha2vbt"]
+[gd_scene load_steps=16 format=3 uid="uid://dn5qwe8ha2vbt"]
 
 [ext_resource type="Script" uid="uid://c8wfbvrt78mh4" path="res://scripts/levels/level_1/stage_3.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
@@ -10,9 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://cc7b44kdhns31" path="res://art/ui_prompt_l1_s3.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://hqfowfrwcvkp" path="res://art/ui_correct_l1_s3.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://art/ui_oops_tool.png" id="10_oops"]
-[ext_resource type="Texture2D" uid="uid://rul31j51fqh7" path="res://art/icon_watering_can.png" id="11_watering_can"]
-[ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://art/icon_sun.png" id="12_sun"]
-[ext_resource type="Texture2D" uid="uid://blarrhrcbnkgj" path="res://art/icon_gloves.png" id="13_gloves"]
+[ext_resource type="Texture2D" uid="uid://s4l0g371tcyg" path="res://art/ui_tray_l1_s3.png" id="11_tray"]
+[ext_resource type="Texture2D" uid="uid://ccmi07maroxx0" path="res://art/ui_fact_l1_s3.png" id="12_fact"]
+[ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://art/icon_sun.png" id="13_sun"]
+[ext_resource type="Texture2D" uid="uid://blarrhrcbnkgj" path="res://art/icon_gloves.png" id="14_gloves"]
+[ext_resource type="Texture2D" uid="uid://rul31j51fqh7" path="res://art/icon_watering_can.png" id="15_watering_can"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -55,9 +57,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -330.0
-offset_top = 40.0
+offset_top = 30.0
 offset_right = 330.0
-offset_bottom = 310.0
+offset_bottom = 280.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
@@ -73,9 +75,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -470.0
-offset_top = 300.0
+offset_top = 275.0
 offset_right = 470.0
-offset_bottom = 560.0
+offset_bottom = 520.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
@@ -91,43 +93,127 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 110.0
-offset_top = 620.0
+offset_top = 580.0
 offset_right = -110.0
 offset_bottom = -880.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Cards" type="HBoxContainer" parent="."]
-unique_name_in_owner = true
+[node name="TrayArea" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 50.0
-offset_top = -500.0
+offset_top = -800.0
 offset_right = -50.0
-offset_bottom = -140.0
+offset_bottom = -310.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 45
-alignment = 1
+mouse_filter = 2
 
-[node name="WateringCan" parent="Cards" instance=ExtResource("4_card")]
+[node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea"]
 layout_mode = 2
-option_id = &"watering_can"
-icon = ExtResource("11_watering_can")
+mouse_filter = 2
+ratio = 2.1277
 
-[node name="Sun" parent="Cards" instance=ExtResource("4_card")]
+[node name="Tray" type="Control" parent="TrayArea/TrayAspect"]
 layout_mode = 2
+mouse_filter = 2
+
+[node name="TrayArt" type="Control" parent="TrayArea/TrayAspect/Tray"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("11_tray")
+fit = 0
+slot_name = "ui_tray_l1_s3"
+placeholder_color = Color(0.72, 0.5, 0.26, 1)
+
+[node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Sun" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0950
+anchor_top = 0.3100
+anchor_right = 0.3450
+anchor_bottom = 0.8860
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 option_id = &"sun"
-icon = ExtResource("12_sun")
+icon = ExtResource("13_sun")
 
-[node name="Gloves" parent="Cards" instance=ExtResource("4_card")]
-layout_mode = 2
+[node name="Gloves" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3600
+anchor_top = 0.3100
+anchor_right = 0.6400
+anchor_bottom = 0.8860
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 option_id = &"gloves"
-icon = ExtResource("13_gloves")
+icon = ExtResource("14_gloves")
+
+[node name="WateringCan" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6550
+anchor_top = 0.3100
+anchor_right = 0.9050
+anchor_bottom = 0.8860
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+option_id = &"watering_can"
+icon = ExtResource("15_watering_can")
+
+[node name="FunFact" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -290.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("12_fact")
+fit = 1
+slot_name = "ui_fact_l1_s3"
+placeholder_color = Color(0.85, 0.66, 0.33, 1)
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bp3kx7mv6ndsh"]
+[gd_scene load_steps=16 format=3 uid="uid://bp3kx7mv6ndsh"]
 
 [ext_resource type="Script" uid="uid://cq10x06m6e0uc" path="res://scripts/levels/level_1/stage_2.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
@@ -10,9 +10,11 @@
 [ext_resource type="Texture2D" uid="uid://ibhy8gs5f80i" path="res://art/ui_prompt_l1_s2.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://d33royc7wdxbv" path="res://art/ui_correct_l1_s2.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://art/ui_oops_tool.png" id="10_oops"]
-[ext_resource type="Texture2D" uid="uid://dxv025a0t0ks7" path="res://art/icon_seed.png" id="11_seed_packet"]
-[ext_resource type="Texture2D" uid="uid://d72sxxsj2alo" path="res://art/icon_rock.png" id="12_rock"]
+[ext_resource type="Texture2D" uid="uid://sx2t1u1raan2" path="res://art/ui_tray_l1_s2.png" id="11_tray"]
+[ext_resource type="Texture2D" uid="uid://ba1d66fkeuf4e" path="res://art/ui_fact_l1_s2.png" id="12_fact"]
 [ext_resource type="Texture2D" uid="uid://cnsmcl0wb3pw2" path="res://art/icon_leaf.png" id="13_leaf"]
+[ext_resource type="Texture2D" uid="uid://dxv025a0t0ks7" path="res://art/icon_seed.png" id="14_seed_packet"]
+[ext_resource type="Texture2D" uid="uid://d72sxxsj2alo" path="res://art/icon_rock.png" id="15_rock"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -55,9 +57,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -330.0
-offset_top = 40.0
+offset_top = 30.0
 offset_right = 330.0
-offset_bottom = 310.0
+offset_bottom = 280.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
@@ -73,9 +75,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -470.0
-offset_top = 300.0
+offset_top = 275.0
 offset_right = 470.0
-offset_bottom = 560.0
+offset_bottom = 520.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
@@ -91,43 +93,127 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 110.0
-offset_top = 620.0
+offset_top = 580.0
 offset_right = -110.0
 offset_bottom = -880.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Cards" type="HBoxContainer" parent="."]
-unique_name_in_owner = true
+[node name="TrayArea" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 50.0
-offset_top = -500.0
+offset_top = -800.0
 offset_right = -50.0
-offset_bottom = -140.0
+offset_bottom = -310.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 45
-alignment = 1
+mouse_filter = 2
 
-[node name="SeedPacket" parent="Cards" instance=ExtResource("4_card")]
+[node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea"]
 layout_mode = 2
-option_id = &"seed_packet"
-icon = ExtResource("11_seed_packet")
+mouse_filter = 2
+ratio = 2.0534
 
-[node name="Rock" parent="Cards" instance=ExtResource("4_card")]
+[node name="Tray" type="Control" parent="TrayArea/TrayAspect"]
 layout_mode = 2
-option_id = &"rock"
-icon = ExtResource("12_rock")
+mouse_filter = 2
 
-[node name="Leaf" parent="Cards" instance=ExtResource("4_card")]
-layout_mode = 2
+[node name="TrayArt" type="Control" parent="TrayArea/TrayAspect/Tray"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("11_tray")
+fit = 0
+slot_name = "ui_tray_l1_s2"
+placeholder_color = Color(0.72, 0.5, 0.26, 1)
+
+[node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Leaf" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0950
+anchor_top = 0.2580
+anchor_right = 0.3450
+anchor_bottom = 0.8460
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 option_id = &"leaf"
 icon = ExtResource("13_leaf")
+
+[node name="SeedPacket" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3600
+anchor_top = 0.2580
+anchor_right = 0.6400
+anchor_bottom = 0.8460
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+option_id = &"seed_packet"
+icon = ExtResource("14_seed_packet")
+
+[node name="Rock" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6550
+anchor_top = 0.2580
+anchor_right = 0.9050
+anchor_bottom = 0.8460
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+option_id = &"rock"
+icon = ExtResource("15_rock")
+
+[node name="FunFact" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -290.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("12_fact")
+fit = 1
+slot_name = "ui_fact_l1_s2"
+placeholder_color = Color(0.85, 0.66, 0.33, 1)
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

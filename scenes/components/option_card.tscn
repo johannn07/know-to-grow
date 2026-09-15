@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 
 [node name="OptionCard" type="Control"]
-custom_minimum_size = Vector2(290, 340)
+custom_minimum_size = Vector2(160, 160)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 290.0
@@ -20,6 +20,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
-fit = 1
+fit = 0
 slot_name = "option"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)

@@ -76,8 +76,11 @@ picks one of N options, it is right or it is wrong. Build that once.
       Promote it to a component with `zone_id` and hover highlight when a stage
       needs more than one zone (Level 4 does)
 - [x] Correct answer: garden advances a state, "Correct Answer!" card with its
-      Continue button. **⚠** Still to decide: the card already explains the
-      answer, so does Level 1 also want the separate Fun Fact strip?
+      Continue button
+- [x] Fun fact strip at the bottom of every stage, visible while the child is
+      deciding rather than after the answer
+- [x] Tool tray behind the cards, with each card anchored over the slot drawn
+      into the tray art
 - [ ] Correct answer polish: sparkle and ding
 - [x] Wrong answer: card slides back, "Oops!" card with Choose Again, no penalty
       and no "Wrong" label
@@ -89,8 +92,10 @@ picks one of N options, it is right or it is wrong. Build that once.
       accept that its explanation is Level 2's wording. **⚠**
 - [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
       Planter" badge are drawn and unused
-- [ ] Option shuffling (`shuffle_options`) — Level 3's scripted answers sit at
-      B, A, C, A, B and children memorise positions faster than content
+- [ ] Option shuffling for **Level 3 only** — its scripted answers sit at
+      B, A, C, A, B and children memorise positions faster than content. Levels
+      1, 2 and 4 use drawn trays, so a card's position is fixed by the picture
+      behind it and cannot be shuffled
 - [ ] Level 1 stays in fixed order (`shuffle_challenges = false`) — planting is a
       real-world sequence
 - [ ] Progress indicator — the design document specifies `Score: 0/5` for Level 2;

@@ -118,10 +118,9 @@ Notes:
 - **The Oops card is shared by all four stages**, each of which points its
   `wrong_card` at the same file. Its wording is about picking the wrong *tool*,
   which is true of Stages 1, 3 and 4 but not Stage 2 — see below.
-- `ui_fact_l1_s1.png` is **extracted but not yet displayed.** `ui_correct_l1_s1.png`
-  already explains why the shovel is right, and showing a second card would add
-  another tap. Whether Level 1 wants the Fun Fact strip as well is an open
-  question for the project owner.
+- `ui_fact_l1_s1.png` sits at the bottom of the stage, visible the whole time
+  rather than shown after an answer. The Correct card explains the answer; the
+  fun fact is there to be read while the child is deciding.
 - The item icons are the individually framed cards, each with its own name drawn
   on it, not the composed `Choose a Tool` tray. The tray exists ([49], [50],
   [51], [58] — one per stage) but a baked tray cannot be dragged, and the design
@@ -186,6 +185,36 @@ Notes:
   Level 2's *"the plant looks sad and needs light"*, not Level 1's *"plants need
   light to help make food"*. Stage 4 needs either a new card rendered to match
   the other three, or a decision to reuse [85] and accept the mismatch.
+
+## Tool trays — delivered
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_tray_l1_s1.png` | 1000 x 476 | 522 KB |
+| `ui_tray_l1_s2.png` | 1000 x 487 | 504 KB |
+| `ui_tray_l1_s3.png` | 1000 x 470 | 549 KB |
+
+Each stage's "Choose a Tool" tray, with its three items **drawn into it**. The
+draggable cards are anchored exactly over those drawn slots, so the tray reads
+as one picture until a card is lifted — and then the drawn item underneath shows
+through, which is what marks the slot the card came from.
+
+Two things follow, and both are easy to break by accident:
+
+- **The cards must stay in the same order as the items in the tray.** Stage 2's
+  tray is Leaf / Seed / Rock, so its cards are in that order and not the order
+  the content file happens to list them in. Reordering the cards in the editor
+  would leave them covering the wrong labels. Each stage script says so at the
+  top.
+- **Card art fills its slot rather than fitting inside it.** The standalone card
+  and the tray's drawn panel are the same design exported on different canvases,
+  so fitting left the tray's own label pill peeking out below the card. Filling
+  covers it exactly; the small aspect difference is the export's, not a
+  distortion of the drawing.
+
+Option shuffling is gone as a result: a card's position is fixed by the picture
+behind it. That only ever mattered for Level 3, which is multiple choice and has
+no tray.
 
 ## Where the stage art is wired
 
