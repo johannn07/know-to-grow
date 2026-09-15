@@ -11,8 +11,8 @@ extends Control
 ## size and position. Drawing the card on top of it too only ever produced a rim
 ## inside a rim, because the standalone cards carry thicker frames than the tray's
 ## drawn slots — and by different amounts, so no single scaling lines them all up.
-## The card's own art appears the moment it is picked up, and again when it has
-## been tried and greyed out.
+## The card's own art appears only while it is being dragged. A tried-and-wrong
+## option is marked by tinting its slot instead — see [method mark_spent].
 ##
 ## Dragging sets [member Control.top_level] so the card escapes the container
 ## that laid it out, while the container keeps reserving its slot. That way a
@@ -27,10 +27,6 @@ signal dropped(card: OptionCard, at_global: Vector2)
 ## make a child wait, long enough to read as "that went back" rather than a
 ## glitch.
 const RETURN_TIME := 0.25
-
-## Tint for a card that has been tried and was wrong. It stays on screen, greyed
-## out, so the child can see what they have already ruled out.
-const SPENT_MODULATE := Color(0.52, 0.52, 0.58, 1.0)
 
 ## Matches an OptionData id in content/*.tres. The stage compares this against
 ## its own correct answer; the .tres keeps the item's name and hint as
@@ -53,6 +49,7 @@ var _home_local := Vector2.ZERO
 var _home_global := Vector2.ZERO
 
 @onready var _art: ArtSlot = $Art
+@onready var _spent_tint: Panel = $Spent
 
 
 var _spent := false
@@ -144,12 +141,19 @@ func freeze() -> void:
 	set_process_input(false)
 
 
-## Greys the card out and retires it. Used for an option that was tried on the
-## target and was wrong: removing it would erase the child's own attempt, and
-## leaving it live invites the same wrong answer again.
+## Retires this option: the slot it came from is tinted and stops responding.
+##
+## The tint is a rounded panel sized to the card's own rect, which is the tray's
+## drawn slot, so it dims that slot and nothing else. Showing the greyed card art
+## instead would put its thicker frame back over the slot, which is the mismatch
+## this whole arrangement exists to avoid.
+##
+## The option is dimmed rather than deleted: removing it would erase the child's
+## own attempt, and leaving it live invites the same wrong answer again.
 func mark_spent() -> void:
 	_spent = true
-	modulate = SPENT_MODULATE
 	if _art != null:
-		_art.show()
+		_art.hide()
+	if _spent_tint != null:
+		_spent_tint.show()
 	freeze()

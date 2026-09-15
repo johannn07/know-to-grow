@@ -216,9 +216,14 @@ Two things follow, and both are easy to break by accident:
   A card that has no artwork yet stays visible, so a missing asset is still a
   labelled blank rather than an invisible one.
 
-A card becomes visible when it is lifted, and again once it has been tried and
-greyed out — there the slight frame difference reads as "used" rather than as a
-misalignment.
+A card becomes visible only while it is being dragged. An option that has been
+tried and was wrong is marked by **tinting its slot** — a rounded translucent
+panel at exactly the card's rect, which is the slot — rather than by putting the
+greyed card back over it, which would reintroduce the same frame mismatch.
+
+The slot rectangles are measured off each tray rather than estimated; the
+measuring script lives beside the generated scenes' history in the commit that
+introduced them, and the numbers are baked into the scenes as anchors.
 
 Option shuffling is gone as a result: a card's position is fixed by the picture
 behind it. That only ever mattered for Level 3, which is multiple choice and has

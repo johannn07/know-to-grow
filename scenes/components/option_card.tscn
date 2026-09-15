@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bkq2v8nxhm7cw"]
+[gd_scene load_steps=4 format=3 uid="uid://bkq2v8nxhm7cw"]
 
 [ext_resource type="Script" uid="uid://dnga7op135pm1" path="res://scripts/ui/option_card.gd" id="1_card"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spent"]
+bg_color = Color(0.07, 0.06, 0.1, 0.42)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
 
 [node name="OptionCard" type="Control"]
 custom_minimum_size = Vector2(160, 160)
@@ -23,3 +30,14 @@ script = ExtResource("2_slot")
 fit = 0
 slot_name = "option"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
+
+[node name="Spent" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spent")

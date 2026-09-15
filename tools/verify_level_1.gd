@@ -106,6 +106,10 @@ func _play(scene_path: String) -> String:
 			"%s card '%s' lets the tray's own slot show through" % [label, card.option_id]
 		)
 		_expect(
+			not card.get_node("Spent").visible,
+			"%s card '%s' starts untried" % [label, card.option_id]
+		)
+		_expect(
 			card.size.x >= 160.0 and card.size.y >= 160.0,
 			"%s card '%s' clears 160 px" % [label, card.option_id]
 		)
@@ -124,7 +128,7 @@ func _play(scene_path: String) -> String:
 		stray.position.distance_to(stray_home) < 1.0,
 		"%s that card is back in its slot" % label
 	)
-	_expect(stray.modulate == Color.WHITE, "%s that card is not greyed out" % label)
+	_expect(not stray.get_node("Spent").visible, "%s that card is not marked used" % label)
 	_expect(
 		stray.mouse_filter != Control.MOUSE_FILTER_IGNORE,
 		"%s that card can still be picked up" % label
@@ -148,10 +152,16 @@ func _play(scene_path: String) -> String:
 		wrong.position.distance_to(wrong_home) < 1.0,
 		"%s wrong card is back in its slot" % label
 	)
-	_expect(wrong.modulate != Color.WHITE, "%s wrong card is greyed out" % label)
+	# A retired option tints its slot rather than drawing the greyed card over
+	# it: the card's frame is thicker than the drawn slot's, so putting it back
+	# reintroduces exactly the mismatch this arrangement avoids.
+	var tint: Panel = wrong.get_node("Spent")
+	_expect(tint.visible, "%s wrong card's slot is tinted" % label)
+	_expect(not wrong.get_node("Art").visible, "%s wrong card still draws no art" % label)
 	_expect(
-		wrong.get_node("Art").visible,
-		"%s wrong card draws itself once retired, so the slot reads as used" % label
+		tint.size.is_equal_approx(wrong.size),
+		"%s the tint covers the whole slot (%dx%d over %dx%d)"
+			% [label, tint.size.x, tint.size.y, wrong.size.x, wrong.size.y]
 	)
 	_expect(
 		wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
