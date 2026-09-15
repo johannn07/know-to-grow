@@ -122,6 +122,19 @@ which costs nothing against the quota.
 When the goal is simply "get these PNGs into the repo", exporting by hand from
 the Figma UI costs zero calls and is usually the better trade.
 
+## When the Figma and the PDF disagree, the Figma wins — decided
+
+`Untitled.fig` is the actual prototype, so it takes precedence over
+`Know To Grow.pdf`. The PDF is the earlier teaching brief; where a prompt, an
+item name or a fun fact is worded differently in the artwork, **the artwork is
+right and the transcript gets updated to match** in the same change.
+
+Two have come up so far, both in Level 1 Stage 2: the prompt bubble, and *Seed*
+rather than *Seed Packet*. Expect more. Correcting one is bookkeeping, not a
+design change, because transcripts are never rendered — but re-run
+`tools/export_vo_script.gd` afterwards, and keep a note in `checklist.md` so the
+teaching-content owner sees the whole list before voice-over is recorded.
+
 ## The artwork carries the words — decided
 
 The Figma artwork has its English text drawn into the pixels: prompt banners,

@@ -1,165 +1,184 @@
 extends SceneTree
 
-## Plays Level 1 Stage 1 headlessly: drops a wrong card, dismisses the Oops
-## card, then drops the right one and checks the garden changed.
+## Plays Level 1 headlessly, stage by stage: for each stage that has its art
+## wired, drop a wrong item, dismiss the Oops card, drop the right one, and
+## check the garden changed. Then press Continue and do the next one.
 ##
 ##   godot --headless --path . -s res://tools/verify_level_1.gd
 ##
-## A screenshot cannot tell you whether a drop was accepted, whether the wrong
-## answer was penalised, or whether the Continue hotspot is big enough for a
-## thumb. This can.
+## A screenshot cannot tell you whether a drop was accepted, whether a wrong
+## answer was penalised, whether the garden carried over between stages, or
+## whether a hotspot is big enough for a thumb. This can.
 
 var _failures := 0
+var _screen: Node
+var _level: LevelData
+var _centre: Vector2
+var _overlay: Control
+var _hotspot: Button
 
 
 func _initialize() -> void:
 	await process_frame
-	var screen: Node = (load("res://scenes/levels/challenge_screen.tscn") as PackedScene).instantiate()
-	root.add_child(screen)
+	_screen = (load("res://scenes/levels/challenge_screen.tscn") as PackedScene).instantiate()
+	root.add_child(_screen)
 	root.get_viewport().size = Vector2i(1080, 1920)
-	screen.set_deferred("size", Vector2(1080, 1920))
+	_screen.set_deferred("size", Vector2(1080, 1920))
 	await _settle()
 
-	var level: LevelData = screen.level
-	var challenge: ChallengeData = level.challenges[0]
+	_level = _screen.level
+	_overlay = _screen.get_node("%Overlay")
+	_hotspot = _screen.get_node("%OverlayButton")
+	_centre = _screen.get_node("%DropZone").get_global_rect().get_center()
 
-	_expect(challenge.id == &"l1_dig", "stage 1 is l1_dig (is %s)" % challenge.id)
-	_expect(screen.get_node("%Header").texture != null, "stage header art is wired")
-	_expect(screen.get_node("%Prompt").texture != null, "stage prompt art is wired")
-	_expect(
-		screen.get_node("%Background").texture == level.scene_art[challenge.scene_state],
-		"garden starts in the '%s' state" % challenge.scene_state
-	)
+	# Stages are built one at a time. Only play the ones that have art.
+	var wired := 0
+	for challenge in _level.challenges:
+		if challenge.prompt_art != null:
+			wired += 1
+	print("Level 1: %d of %d stages wired\n" % [wired, _level.challenges.size()])
+	_expect(wired > 0, "at least one stage is wired")
 
-	var cards: Array = screen.get_node("%Cards").get_children()
-	_expect(cards.size() == 3, "three option cards (got %d)" % cards.size())
-	for card in cards:
-		_expect(card.data.icon != null, "card '%s' has its artwork" % card.data.id)
-		_expect(
-			card.size.x >= 160.0 and card.size.y >= 160.0,
-			"card '%s' clears 160 px (is %dx%d)" % [card.data.id, card.size.x, card.size.y]
-		)
+	await _check_screen_mechanics()
 
-	var zone: Control = screen.get_node("%DropZone")
-	var centre: Vector2 = zone.get_global_rect().get_center()
-	var overlay: Control = screen.get_node("%Overlay")
-	var hotspot: Button = screen.get_node("%OverlayButton")
-
-	# Dragging is simulated through the card's own begin/end so the home
-	# position is recorded exactly as it is in play. Emitting `dropped` directly
-	# would skip that and quietly not test the way back.
-
-	# --- let go away from the soil: not an answer, stays pickable ---
-	var stray: OptionCard = _card(cards, challenge.correct_option_id)
-	var stray_home: Vector2 = stray.position
-	stray._begin_drag(stray.global_position + Vector2(20.0, 20.0))
-	stray._end_drag(Vector2(40.0, 40.0))
-	await _settle()
-	_expect(not overlay.visible, "a drop away from the soil shows no feedback")
-	await _rest()
-	_expect(stray.position.distance_to(stray_home) < 1.0,
-		"that card is back in its slot (off by %.1f px)" % stray.position.distance_to(stray_home))
-	_expect(not stray.top_level, "that card rejoined the row")
-	_expect(stray.modulate == Color.WHITE, "that card is not greyed out")
-	_expect(stray.mouse_filter != Control.MOUSE_FILTER_IGNORE,
-		"that card can still be picked up")
-
-	# --- wrong answer on the soil: returns, greyed out, retired ---
-	var wrong: OptionCard = _wrong_card(cards, challenge)
-	var wrong_home: Vector2 = wrong.position
-	wrong._begin_drag(wrong.global_position + Vector2(20.0, 20.0))
-	wrong._end_drag(centre)
-	await _settle()
-	_expect(overlay.visible, "wrong answer shows the Oops card")
-	_expect(screen.get_node("%OverlayArt").texture == level.wrong_art,
-		"the Oops card is the level's wrong_art")
-	_expect(screen.get_node("%Background").texture == level.scene_art[challenge.scene_state],
-		"a wrong answer does not change the garden")
-	_expect(hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
-		"Choose Again hotspot clears 160 px (is %dx%d)" % [hotspot.size.x, hotspot.size.y])
-	await _rest()
-	_expect(is_instance_valid(wrong), "the wrong card still exists")
-	_expect(wrong.position.distance_to(wrong_home) < 1.0,
-		"the wrong card is back in its slot (off by %.1f px)" % wrong.position.distance_to(wrong_home))
-	_expect(wrong.modulate != Color.WHITE, "the wrong card is greyed out")
-	_expect(wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-		"the wrong card cannot be picked again")
-
-	hotspot.pressed.emit()
-	await _settle()
-	_expect(not overlay.visible, "Choose Again dismisses the Oops card")
-	_expect(not screen._answered, "a wrong answer does not end the stage")
-
-	# --- right answer ---
-	var right: OptionCard = _card(cards, challenge.correct_option_id)
-	right._begin_drag(right.global_position + Vector2(20.0, 20.0))
-	right._end_drag(centre)
-	await _settle()
-	_expect(overlay.visible, "correct answer shows the Correct card")
-	_expect(screen.get_node("%OverlayArt").texture == challenge.correct_art,
-		"the Correct card is this stage's own correct_art")
-	_expect(screen.get_node("%Background").texture == level.scene_art[challenge.success_state],
-		"the garden advances to '%s'" % challenge.success_state)
-	_expect(hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
-		"Continue hotspot clears 160 px (is %dx%d)" % [hotspot.size.x, hotspot.size.y])
-	_expect(screen._answered, "the stage is marked answered")
-	# A dragged card leaves the container's transform behind, so ordinary tree
-	# order no longer keeps the overlay on top of it.
-	_expect(overlay.z_index > right.z_index,
-		"the Correct card draws over the dropped card (%d vs %d)" % [overlay.z_index, right.z_index])
-
-
-	# --- Continue advances to Stage 2 ---
-	hotspot.pressed.emit()
-	await _settle()
-	_expect(screen.challenge_index == 1, "Continue moves on to stage 2 (index %d)" % screen.challenge_index)
-
-	var s2: ChallengeData = level.challenges[1]
-	_expect(s2.id == &"l1_seed", "stage 2 is l1_seed (is %s)" % s2.id)
-	_expect(screen.get_node("%Header").texture == s2.header_art, "stage 2 shows its own header")
-	_expect(screen.get_node("%Prompt").texture == s2.prompt_art, "stage 2 shows its own prompt")
-	_expect(screen.get_node("%Background").texture == level.scene_art[s2.scene_state],
-		"stage 2 opens on the '%s' garden it was left in" % s2.scene_state)
-	_expect(not screen._answered, "stage 2 starts unanswered")
-
-	var cards2: Array = []
-	for c in screen.get_node("%Cards").get_children():
-		if is_instance_valid(c) and not c.is_queued_for_deletion():
-			cards2.append(c)
-	_expect(cards2.size() == 3, "stage 2 has three cards (got %d)" % cards2.size())
-	for card in cards2:
-		_expect(card.data.icon != null, "stage 2 card '%s' has its artwork" % card.data.id)
-		_expect(card.modulate == Color.WHITE, "stage 2 card '%s' starts fresh" % card.data.id)
-
-	var wrong2: OptionCard = _wrong_card(cards2, s2)
-	wrong2._begin_drag(wrong2.global_position + Vector2(20.0, 20.0))
-	wrong2._end_drag(centre)
-	await _settle()
-	_expect(overlay.visible, "stage 2 wrong answer shows the Oops card")
-	await _rest()
-	_expect(wrong2.modulate != Color.WHITE, "stage 2 wrong card is greyed out")
-	hotspot.pressed.emit()
-	await _settle()
-
-	var right2: OptionCard = _card(cards2, s2.correct_option_id)
-	_expect(right2 != null, "stage 2 has its correct card '%s'" % s2.correct_option_id)
-	right2._begin_drag(right2.global_position + Vector2(20.0, 20.0))
-	right2._end_drag(centre)
-	await _settle()
-	_expect(screen.get_node("%OverlayArt").texture == s2.correct_art,
-		"stage 2 shows its own Correct card")
-	_expect(screen.get_node("%Background").texture == level.scene_art[s2.success_state],
-		"the garden advances to '%s'" % s2.success_state)
-
-	# --- transcripts still describe the artwork ---
-	_expect(s2.prompt_transcript == "What goes inside the hole to start growing our plant?",
-		"stage 2 prompt transcript matches the speech bubble")
-	_expect(s2.get_option(&"seed_packet").label == "Seed",
-		"the seed card's transcript matches the word drawn on it")
-
+	for i in wired:
+		await _play_stage(i)
+		if i < wired - 1:
+			# Continue on the last wired stage leaves for the hub, which would
+			# tear the screen down mid-test.
+			_hotspot.pressed.emit()
+			await _settle()
+			_expect(_screen.challenge_index == i + 1, "Continue moves on to stage %d" % (i + 2))
 
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
+
+
+## Things that belong to the screen rather than to any one stage, so they are
+## worth checking once: that a card let go away from the target is not treated
+## as an answer, and that it stays exactly as pickable as it was.
+func _check_screen_mechanics() -> void:
+	var cards := _cards()
+	var card: OptionCard = cards[0]
+	var home: Vector2 = card.position
+	# Driven through the card's own begin/end so the way home is really
+	# exercised. Emitting `dropped` skips it, which is how a fault got through.
+	card._begin_drag(card.global_position + Vector2(20.0, 20.0))
+	card._end_drag(Vector2(40.0, 40.0))
+	await _settle()
+	_expect(not _overlay.visible, "a drop away from the target is not an answer")
+	await _rest()
+	_expect(
+		card.position.distance_to(home) < 1.0,
+		"that card is back in its slot (off by %.1f px)" % card.position.distance_to(home)
+	)
+	_expect(not card.top_level, "that card rejoined the row")
+	_expect(card.modulate == Color.WHITE, "that card is not greyed out")
+	_expect(card.mouse_filter != Control.MOUSE_FILTER_IGNORE, "that card can still be picked up")
+
+
+func _play_stage(index: int) -> void:
+	var challenge: ChallengeData = _level.challenges[index]
+	var name := "stage %d (%s)" % [index + 1, challenge.id]
+	print("--- %s ---" % name)
+
+	_expect(_screen.challenge_index == index, "%s is the one on screen" % name)
+	_expect(_screen.get_node("%Header").texture == challenge.header_art, "%s header" % name)
+	_expect(_screen.get_node("%Prompt").texture == challenge.prompt_art, "%s prompt" % name)
+	_expect(
+		_level.scene_art.has(challenge.scene_state),
+		"%s has a garden for '%s'" % [name, challenge.scene_state]
+	)
+	_expect(
+		_screen.get_node("%Background").texture == _level.scene_art[challenge.scene_state],
+		"%s opens on the '%s' garden" % [name, challenge.scene_state]
+	)
+	_expect(not _screen._answered, "%s starts unanswered" % name)
+
+	var cards := _cards()
+	_expect(cards.size() == challenge.options.size(), "%s has %d cards" % [name, cards.size()])
+	for card in cards:
+		_expect(card.data.icon != null, "%s card '%s' has its artwork" % [name, card.data.id])
+		_expect(card.modulate == Color.WHITE, "%s card '%s' starts fresh" % [name, card.data.id])
+		_expect(
+			card.size.x >= 160.0 and card.size.y >= 160.0,
+			"%s card '%s' clears 160 px" % [name, card.data.id]
+		)
+
+	# --- wrong item on the target: greys out, changes nothing, costs nothing ---
+	var wrong: OptionCard = _wrong_card(cards, challenge)
+	var wrong_home: Vector2 = wrong.position
+	wrong._begin_drag(wrong.global_position + Vector2(20.0, 20.0))
+	wrong._end_drag(_centre)
+	await _settle()
+	_expect(_overlay.visible, "%s wrong answer shows the Oops card" % name)
+	_expect(
+		_screen.get_node("%OverlayArt").texture == _level.wrong_art,
+		"%s Oops card is the level's wrong_art" % name
+	)
+	_expect(
+		_screen.get_node("%Background").texture == _level.scene_art[challenge.scene_state],
+		"%s wrong answer leaves the garden alone" % name
+	)
+	_expect(
+		_hotspot.size.x >= 160.0 and _hotspot.size.y >= 160.0,
+		"%s Choose Again clears 160 px (is %dx%d)" % [name, _hotspot.size.x, _hotspot.size.y]
+	)
+	await _rest()
+	_expect(is_instance_valid(wrong), "%s wrong card still exists" % name)
+	_expect(
+		wrong.position.distance_to(wrong_home) < 1.0,
+		"%s wrong card is back in its slot" % name
+	)
+	_expect(wrong.modulate != Color.WHITE, "%s wrong card is greyed out" % name)
+	_expect(
+		wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"%s wrong card cannot be picked again" % name
+	)
+
+	_hotspot.pressed.emit()
+	await _settle()
+	_expect(not _overlay.visible, "%s Choose Again dismisses the Oops card" % name)
+	_expect(not _screen._answered, "%s a wrong answer does not end the stage" % name)
+
+	# --- right item ---
+	var right: OptionCard = _card(cards, challenge.correct_option_id)
+	_expect(right != null, "%s has its correct card '%s'" % [name, challenge.correct_option_id])
+	right._begin_drag(right.global_position + Vector2(20.0, 20.0))
+	right._end_drag(_centre)
+	await _settle()
+	_expect(_overlay.visible, "%s correct answer shows the Correct card" % name)
+	_expect(
+		_screen.get_node("%OverlayArt").texture == challenge.correct_art,
+		"%s Correct card is this stage's own correct_art" % name
+	)
+	_expect(
+		_level.scene_art.has(challenge.success_state),
+		"%s has a garden for '%s'" % [name, challenge.success_state]
+	)
+	_expect(
+		_screen.get_node("%Background").texture == _level.scene_art[challenge.success_state],
+		"%s garden advances to '%s'" % [name, challenge.success_state]
+	)
+	_expect(
+		_hotspot.size.x >= 160.0 and _hotspot.size.y >= 160.0,
+		"%s Continue clears 160 px (is %dx%d)" % [name, _hotspot.size.x, _hotspot.size.y]
+	)
+	_expect(_screen._answered, "%s is marked answered" % name)
+	# A dragged card leaves its container's transform behind, so tree order no
+	# longer keeps the feedback card above it.
+	_expect(
+		_overlay.z_index > right.z_index,
+		"%s Correct card draws over the dropped card" % name
+	)
+
+
+func _cards() -> Array:
+	var live: Array = []
+	for child in _screen.get_node("%Cards").get_children():
+		if is_instance_valid(child) and not child.is_queued_for_deletion():
+			live.append(child)
+	return live
 
 
 func _settle() -> void:

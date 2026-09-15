@@ -159,6 +159,34 @@ Notes:
   remaining two, `soil_watered` and `sprout`, are already drawn — the same bed
   wet ([152]) and with a sprout in it ([166]).
 
+## Level 1 Stage 3 — delivered
+
+| File | Size | Weight |
+|---|---|---|
+| `bg_bed_watered.png` | 941 x 1672 | 1.8 MB |
+| `ui_header_l1_s3.png` | 900 x 442 | 365 KB |
+| `ui_prompt_l1_s3.png` | 1000 x 523 | 428 KB |
+| `icon_sun.png` | 300 x 284 | 113 KB |
+| `icon_gloves.png` | 300 x 315 | 114 KB |
+| `ui_correct_l1_s3.png` | 800 x 1016 | 1.1 MB |
+| `ui_fact_l1_s3.png` | 900 x 273 | 287 KB |
+
+Notes:
+
+- **No transcript needed correcting here.** The speech bubble and the fun-fact
+  strip both match the design document word for word. The Stage 2 divergence
+  looks like an exception rather than the rule.
+- `icon_watering_can.png` is reused, not re-extracted: it is a wrong answer in
+  Stage 1 and the right one here, and both stages already point at the same
+  `OptionData`.
+- **Stage 4 has no Correct Answer card.** The Figma file holds exactly three in
+  the Level 1 frame — shovel, seed and watering can ([117], [111], [125]). There
+  is nothing for "Sun". The `.fig` does have "Correct Answer! / Sunlight" ([85]),
+  but that is a Level 2 asset in a different frame, and its explanation is about
+  Level 2's *"the plant looks sad and needs light"*, not Level 1's *"plants need
+  light to help make food"*. Stage 4 needs either a new card rendered to match
+  the other three, or a decision to reuse [85] and accept the mismatch.
+
 ## Still in the Figma file, not yet extracted
 
 The `.fig` contains roughly **170 unique full-resolution assets** — effectively

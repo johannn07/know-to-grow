@@ -65,10 +65,10 @@ picks one of N options, it is right or it is wrong. Build that once.
       home on a rejected drop
 - [x] `ChallengeScreen` — reads a `LevelData` + index and plays one stage.
       Nothing in it knows it is Level 1; swap the resource to play another level
-- [x] **Level 1 Stages 1-2 playable** — drag an item onto the soil, the garden
+- [x] **Level 1 Stages 1-3 playable** — drag an item onto the soil, the garden
       changes state, feedback cards appear, Continue carries the garden into the
-      next stage. `tools/verify_level_1.gd` plays both stages headlessly, 57
-      checks
+      next stage. `tools/verify_level_1.gd` plays every wired stage headlessly
+      in a loop, 118 checks, and reports how many of the four are wired
 - [ ] `DropZone` component — currently a plain `Control` rect on the screen.
       Promote it to a component with `zone_id` and hover highlight when a stage
       needs more than one zone (Level 4 does)
@@ -79,9 +79,11 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [x] Wrong answer: card slides back, "Oops!" card with Choose Again, no penalty
       and no "Wrong" label
 - [ ] Wrong answer polish: the item's own `wrong_hint`, arrow nudge
-- [ ] Level 1 Stages 3-4 — art exists in the `.fig` ([52] "Water the Soil" and
-      [56] "Give Sunlight" headers, beds [152] and [166]). `ChallengeScreen`
-      advances to the next stage automatically once its `prompt_art` is wired
+- [ ] **Level 1 Stage 4 — blocked on art.** Everything exists except the Correct
+      Answer card: the `.fig` has exactly three in the Level 1 frame (shovel,
+      seed, watering can) and none for Sun. Either render a fourth to match, or
+      decide to reuse the Level 2 "Correct Answer! / Sunlight" card ([85]) and
+      accept that its explanation is Level 2's wording. **⚠**
 - [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
       Planter" badge are drawn and unused
 - [ ] Option shuffling (`shuffle_options`) — Level 3's scripted answers sit at
