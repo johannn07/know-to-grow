@@ -267,6 +267,20 @@ Option shuffling is gone as a result: a card's position is fixed by the picture
 behind it. That only ever mattered for Level 3, which is multiple choice and has
 no tray.
 
+## Prompt and fun fact are drawn at a fixed width
+
+The four prompt bubbles and the four fun-fact strips are not the same shape:
+the bubbles grow taller with longer wording, and the strips a little shorter.
+Fitting each into one shared box made the box's height the limit, so each
+rendered at its own width — stage 3's prompt came out 468 px against stage 1's
+686, a third smaller, and its text with it.
+
+So every stage draws its prompt at **686 px** wide and its fun fact at **763 px**
+wide, both taken from stage 1, with the box height following the image's own
+aspect. The compositions are consistent enough for width to be the right
+measure: exported at a common width, the mascot in the four bubbles agrees to
+within 9%. `tools/verify_level_1.gd` checks all four stages still match.
+
 ## Where the stage art is wired
 
 **In the stage scenes, not in `content/*.tres`.** Each stage is a hand-built

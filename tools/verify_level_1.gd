@@ -19,6 +19,12 @@ const CONTENT := "res://content/level_1_planting.tres"
 
 var _failures := 0
 var _level: LevelData
+# Prompt and fun fact must read at the same size on every stage. Their source
+# images differ in aspect, so a fixed box would render each at its own width -
+# stage 3's prompt came out a third narrower than stage 1's. Collected here and
+# compared once every stage has been seen.
+var _prompt_widths: Array[float] = []
+var _fact_widths: Array[float] = []
 
 
 func _initialize() -> void:
@@ -40,6 +46,8 @@ func _initialize() -> void:
 
 	print("\n%d stage(s) played" % seen)
 	_expect(seen > 0, "at least one stage was played")
+	_expect_same("prompt", _prompt_widths)
+	_expect_same("fun fact", _fact_widths)
 	print("%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
 
@@ -96,6 +104,8 @@ func _play(scene_path: String) -> String:
 	)
 	var tray: ArtSlot = stage.get_node("%Cards").get_parent().get_node("TrayArt")
 	_expect(tray.texture != null, "%s has its tool tray" % label)
+	_prompt_widths.append(stage.get_node("%Prompt").size.x)
+	_fact_widths.append(stage.get_node("%FunFact").size.x)
 	_expect(cards.size() >= 2, "%s has cards (%d)" % [label, cards.size()])
 	for card in cards:
 		_expect(card.icon != null, "%s card '%s' has its artwork" % [label, card.option_id])
@@ -201,6 +211,19 @@ func _play(scene_path: String) -> String:
 	stage.queue_free()
 	await process_frame
 	return next
+
+
+## Every stage should draw this element at the same width, so it reads at the
+## same size whatever the wording is.
+func _expect_same(what: String, widths: Array[float]) -> void:
+	if widths.is_empty():
+		return
+	var lo: float = widths[0]
+	var hi: float = widths[0]
+	for w in widths:
+		lo = minf(lo, w)
+		hi = maxf(hi, w)
+	_expect(hi - lo < 1.0, "every stage draws its %s at the same width (%d..%d)" % [what, lo, hi])
 
 
 func _challenge(id: StringName) -> ChallengeData:
