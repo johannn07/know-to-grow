@@ -137,6 +137,12 @@ is the part worth **not** copying nineteen times — every one of those was a bu
 at some point, and a fix should land once. Put anything a stage does differently
 in its own script; `on_correct` and `on_wrong` exist to be overridden.
 
+**The stage scenes are yours, not generated.** They were first written by a
+script, but they are hand-owned now: sizes and positions get nudged in the
+editor, and regenerating a scene wholesale throws that away. To make a change
+consistent across stages, edit each scene in place and take the numbers from the
+stage that is already right, rather than rebuilding them all from a template.
+
 `content/*.tres` no longer holds the stage art. It keeps the logic and the
 transcripts, which is what a teaching-content reviewer reads and what the
 voice-over is recorded from. `tools/verify_level_1.gd` checks the two have not
