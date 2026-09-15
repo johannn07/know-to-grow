@@ -241,6 +241,7 @@ dimmed screen with a button under it, built on
 | File | Size | Weight | Screen |
 |---|---|---|---|
 | `ui_level_intro_l1.png` | 1106 x 1366 | 1.4 MB | `scenes/ui/level_intro.tscn` |
+| `ui_level_complete_l1.png` | 1122 x 1385 | 1.4 MB | `scenes/ui/level_complete.tscn` |
 | `ui_badge_little_planter.png` | 1122 x 1389 | 1.7 MB | `scenes/ui/badge_unlocked.tscn` |
 | `ui_badge_unlock_banner.png` | 1698 x 808 | 1.2 MB | `scenes/ui/badge_unlocked.tscn` |
 
@@ -255,6 +256,7 @@ dimmed screen with a button under it, built on
 | Card | Button rect | Drawn |
 |---|---|---|
 | `ui_level_intro_l1` | `Rect2(0.265, 1.0405, 0.47, 0.1149)` | 423 x 128, 45 px under the card |
+| `ui_level_complete_l1` | `Rect2(0.265, 1.0405, 0.47, 0.1149)` | 423 x 128, 45 px under the card |
 | `ui_badge_little_planter` | `Rect2(0.2597, 1.0413, 0.4807, 0.1172)` | 423 x 128, 45 px under the card |
 
 - **A banner can sit above the card the same way**, with a negative y. The badge

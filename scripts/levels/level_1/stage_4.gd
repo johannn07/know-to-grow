@@ -12,11 +12,11 @@ extends StageScreen
 ## slot beneath it. Reorder the cards and they will cover the wrong labels.
 ##
 ## Two things are different here. The Correct card is borrowed from Level 2 —
-## the Figma file has no "Correct Answer! / Sun" in the Level 1 frame — and
-## Level 2's cards carry no Continue button, so `correct_button_rect` is set to
-## the whole card and the child taps anywhere on it. And there is no next stage:
-## finishing this one leaves for `done_scene_path`, which is the hub until the
-## Level 1 completion screen is built.
+## the Figma file has no "Correct Answer! / Sun" in the Level 1 frame — so it
+## carries no Continue, and one is drawn below the card instead. And there is no
+## next stage: finishing this one leaves for `done_scene_path`, which is the
+## Level 1 completion beat rather than the hub. From there the run is
+## level complete -> badge unlocked -> hub. See checklist.md §3.
 ##
 ## The drag, the feedback card and the 160 px hotspot are handled by
 ## [StageScreen]. Put anything this stage does differently here; `on_correct` and

@@ -37,6 +37,7 @@ continue_art = ExtResource("16_continue")
 choose_again_art = ExtResource("17_choose_again")
 correct_art_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
 correct_button_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
+done_scene_path = "res://scenes/ui/level_complete.tscn"
 
 [node name="Background" type="Control" parent="." unique_id=535290431]
 unique_name_in_owner = true

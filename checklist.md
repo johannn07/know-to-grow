@@ -138,7 +138,7 @@ unlocks **Little Planter**.
       icons in locked and unlocked form, and both star states. **This is the
       screen that needs `GameState`** — without it every row but Stage 1 is
       locked forever and no star can ever fill
-- [ ] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
+- [x] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
       gardener!"` with three stars, after Stage 4. Art delivered
 - [x] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the
       `Little Planter` badge, with Continue. Art delivered

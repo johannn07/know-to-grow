@@ -49,6 +49,7 @@ func _initialize() -> void:
 		"res://scenes/ui/level_select_stub.tscn",
 		"res://scenes/ui/level_intro.tscn",
 		"res://scenes/ui/badge_unlocked.tscn",
+		"res://scenes/ui/level_complete.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
