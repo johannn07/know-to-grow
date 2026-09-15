@@ -44,9 +44,11 @@ const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 const CONTINUE_ART_RECT := Rect2(0.1818, 0.7705, 0.6105, 0.1532)
 const CHOOSE_AGAIN_ART_RECT := Rect2(0.2736, 0.6849, 0.5130, 0.2345)
 
-## For a card with no button drawn on it, and so nothing to cover. A zero-sized
-## rect leaves the art hidden rather than stretching it across the whole card.
-const NO_BUTTON_ART := Rect2(0.0, 0.0, 0.0, 0.0)
+## A card with no Continue painted on it gets one drawn just below it instead,
+## which is where the y past 1.0 comes from — these are fractions of the card,
+## and the button sits outside its bottom edge. Stage 4's borrowed Level 2 card
+## is the one that needs this.
+const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 
 @export_group("Answer")
 ## Matches a ChallengeData in content/*.tres. Nothing reads it at runtime — it
@@ -74,8 +76,8 @@ const NO_BUTTON_ART := Rect2(0.0, 0.0, 0.0, 0.0)
 @export var correct_button_rect: Rect2 = CONTINUE_RECT
 ## Where Choose Again is drawn on [member wrong_card].
 @export var wrong_button_rect: Rect2 = CHOOSE_AGAIN_RECT
-## Where [member continue_art] is drawn. [constant NO_BUTTON_ART] hides it, for a
-## card with no painted button to cover.
+## Where [member continue_art] is drawn. Use [constant CONTINUE_BELOW_CARD_RECT]
+## for a card with no Continue painted on it; a zero-sized rect hides it.
 @export var correct_art_rect: Rect2 = CONTINUE_ART_RECT
 ## Where [member choose_again_art] is drawn.
 @export var wrong_art_rect: Rect2 = CHOOSE_AGAIN_ART_RECT
@@ -94,7 +96,7 @@ var _answered := false
 @onready var _overlay_aspect: AspectRatioContainer = %OverlayAspect
 @onready var _overlay_art: ArtSlot = %OverlayArt
 @onready var _overlay_button_art: ArtSlot = %OverlayButtonArt
-@onready var _overlay_button: Button = %OverlayButton
+@onready var _overlay_button: ArtButton = %OverlayButton
 
 
 func _ready() -> void:
@@ -171,6 +173,9 @@ func _show_feedback(
 		# The art is anchored but never padded: it has to stay exactly on the
 		# button painted into the card, while the hotspot over it does not.
 		anchor_to(_overlay_button_art, art_rect)
+	# Both cards share one hotspot and one art node, so a tint left over from the
+	# last answer would otherwise still be on them when the next card appears.
+	_overlay_button.clear_tint()
 	_overlay.show()
 	place_hotspot(_overlay_button, button_rect)
 

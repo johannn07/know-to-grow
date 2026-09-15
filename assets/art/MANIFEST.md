@@ -254,6 +254,7 @@ flowers the painted-in versions do not have.
 | Back / X | `Rect2(0.8055, 0.0574, 0.1628, 0.1276)` |
 | LET'S GO | `Rect2(0.1442, 0.8009, 0.6705, 0.1824)` |
 | Continue | `Rect2(0.1818, 0.7705, 0.6105, 0.1532)` |
+| Continue, Stage 4 | `Rect2(0.265, 1.06, 0.47, 0.1707)` |
 | Choose Again | `Rect2(0.2736, 0.6849, 0.5130, 0.2345)` |
 
 - **They are drawn `STRETCH`, not `KEEP_ASPECT`.** Covering the painted button
@@ -263,13 +264,22 @@ flowers the painted-in versions do not have.
 - The two feedback buttons are placed in code by `StageScreen`, from
   `CONTINUE_ART_RECT` and `CHOOSE_AGAIN_ART_RECT`, because the card underneath
   changes per stage. The two on How To Play are anchored in the scene.
-- **Stage 4 shows no Continue art.** Its Correct card is Level 2's, which has no
-  Continue painted on it, so there is nothing to cover — `correct_art_rect` is
-  zero-sized there and the whole card stays tappable. If that card is ever
-  replaced with one matching the other three, set the rect back to
-  `CONTINUE_ART_RECT` and the button appears.
+- **Stage 4's Continue sits below its card, not on it** — which is where the y
+  past 1.0 comes from: the rects are fractions of the card, and this one starts
+  past its bottom edge. Its Correct card is Level 2's and has no Continue
+  painted on it to cover, so the button is drawn as its own thing, 45 px under
+  the card and 128 px tall at the design resolution, with 413 px still clear
+  below it. That card is also the only one where the whole card used to be the
+  tap target; the target is now the button, like everywhere else.
 - The hotspot rects are **not** these rects. A hotspot is padded out to clear
-  the 160 px touch floor; the art is not, or it would no longer line up.
+  the 160 px touch floor; the art is not, or it would no longer line up. Stage
+  4's Continue is drawn 423 x 128 and tapped at 423 x 160.
+- **Pressing one tints the art, not the button.** These hotspots draw nothing,
+  so they cannot use the theme's pressed StyleBox the way the menu buttons do.
+  [`ArtButton`](../../scripts/ui/art_button.gd) darkens the art underneath to
+  `0.82` while held, the same value `PrimaryButton` uses in `ktg_theme.tres`,
+  and lifts it to `1.08` on hover — which only a mouse ever sees, since Android
+  has no hover state. Change one and change the other.
 
 ## Tool trays — delivered
 

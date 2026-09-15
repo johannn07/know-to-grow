@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cffsfhx2fx82y" path="res://assets/art/icon_moon.png" id="15_moon"]
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui_button_continue.png" id="16_continue"]
 [ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui_button_choose_again.png" id="17_choose_again"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="18_artbtn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -34,8 +35,8 @@ correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 continue_art = ExtResource("16_continue")
 choose_again_art = ExtResource("17_choose_again")
-correct_art_rect = Rect2(0, 0, 0, 0)
-correct_button_rect = Rect2(0, 0, 1, 1)
+correct_art_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
+correct_button_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
 
 [node name="Background" type="Control" parent="." unique_id=535290431]
 unique_name_in_owner = true
@@ -292,6 +293,8 @@ anchor_right = 0.79
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("18_artbtn")
+art_path = NodePath("../OverlayButtonArt")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")

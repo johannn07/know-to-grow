@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://du47v6vpydvdh" path="res://assets/art/ui_how_to_play.png" id="5_card"]
 [ext_resource type="Texture2D" uid="uid://37cnsxcc3k0v" path="res://assets/art/ui_button_back.png" id="6_back"]
 [ext_resource type="Texture2D" uid="uid://cq1xjpjbythmu" path="res://assets/art/ui_button_lets_go.png" id="7_go"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="8_artbtn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_invisible"]
 
@@ -111,6 +112,8 @@ anchor_right = 0.9683
 anchor_bottom = 0.1849
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../BackButtonArt")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_invisible")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_invisible")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_invisible")
@@ -127,6 +130,8 @@ anchor_right = 0.8147
 anchor_bottom = 0.9832
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../LetsGoButtonArt")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_invisible")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_invisible")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_invisible")
