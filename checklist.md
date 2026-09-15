@@ -63,8 +63,11 @@ picks one of N options, it is right or it is wrong. Build that once.
       76-line recording script, from the transcripts
 - [x] `OptionCard` component — draggable, uses `ArtSlot` for its icon, slides
       home on a rejected drop
-- [x] `ChallengeScreen` — reads a `LevelData` + index and plays one stage.
-      Nothing in it knows it is Level 1; swap the resource to play another level
+- [x] `StageScreen` base class — the drag, the feedback card, the 160 px hotspot
+      sizing and the wrong-card rule, shared by every stage script
+- [x] **Stages are hand-built scenes** — `scenes/levels/level_N/stage_M.tscn`
+      with a matching script, so a stage can be rearranged in the editor. The
+      generic data-driven `ChallengeScreen` was removed in favour of this
 - [x] **Level 1 Stages 1-3 playable** — drag an item onto the soil, the garden
       changes state, feedback cards appear, Continue carries the garden into the
       next stage. `tools/verify_level_1.gd` plays every wired stage headlessly

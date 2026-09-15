@@ -37,16 +37,15 @@ enum Interaction {
 @export var success_state: StringName = &""
 
 @export_group("Art")
+## Art slots for a screen that is driven from data. Level 1's stages are built
+## by hand instead — each stage scene holds its own art so it can be edited in
+## the editor — so these are empty there. See art/MANIFEST.md.
 ## The "Stage 1 — Dig the Hole" style header.
 @export var header_art: Texture2D
 ## The prompt banner, with the question already drawn on it.
 @export var prompt_art: Texture2D
 ## The fun-fact banner shown after a correct answer.
 @export var fun_fact_art: Texture2D
-## The "Correct Answer!" card for this stage. It explains why the answer is
-## right and carries its own Continue button drawn into it, so the screen puts
-## an invisible hotspot over that rather than adding a Button of its own.
-@export var correct_art: Texture2D
 
 @export_group("Transcript")
 ## What [member prompt_art] says. NEVER RENDERED — this is the voice-over script

@@ -1,37 +1,11 @@
-[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dl63c4m1i6qv0" load_steps=43]
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dl63c4m1i6qv0" load_steps=18]
 
 [ext_resource type="Script" uid="uid://bkvhax4wfwr0m" path="res://scripts/data/challenge_data.gd" id="1_chal"]
 [ext_resource type="Script" uid="uid://c0mh8vu14p4se" path="res://scripts/data/option_data.gd" id="2_opt"]
 [ext_resource type="Script" uid="uid://bx4qndoi4eqxr" path="res://scripts/data/level_data.gd" id="3_lvl"]
-[ext_resource type="Texture2D" uid="uid://py6pm0kd0dqw" path="res://art/bg_bed_empty.png" id="4_bgempty"]
-[ext_resource type="Texture2D" uid="uid://dq41m47tam5bv" path="res://art/bg_bed_hole.png" id="5_bghole"]
-[ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://art/ui_oops_tool.png" id="6_oops"]
-[ext_resource type="Texture2D" uid="uid://cvs1pqtre86r0" path="res://art/ui_header_l1_s1.png" id="7_hdr1"]
-[ext_resource type="Texture2D" uid="uid://b87xriki8qspt" path="res://art/ui_prompt_l1_s1.png" id="8_prm1"]
-[ext_resource type="Texture2D" uid="uid://bvxiag6avsh6v" path="res://art/ui_correct_l1_s1.png" id="9_cor1"]
-[ext_resource type="Texture2D" uid="uid://xb807k37ve1j" path="res://art/ui_fact_l1_s1.png" id="10_fact1"]
-[ext_resource type="Texture2D" uid="uid://dwfmtdeopuw6y" path="res://art/icon_shovel.png" id="11_shovel"]
-[ext_resource type="Texture2D" uid="uid://rul31j51fqh7" path="res://art/icon_watering_can.png" id="12_can"]
-[ext_resource type="Texture2D" uid="uid://dlbe6nr8ti0f7" path="res://art/icon_flower.png" id="13_flower"]
-[ext_resource type="Texture2D" uid="uid://8b100swdwyai" path="res://art/bg_bed_seed.png" id="14_bgseed"]
-[ext_resource type="Texture2D" uid="uid://bdwt86w8du412" path="res://art/ui_header_l1_s2.png" id="15_hdr2"]
-[ext_resource type="Texture2D" uid="uid://ibhy8gs5f80i" path="res://art/ui_prompt_l1_s2.png" id="16_prm2"]
-[ext_resource type="Texture2D" uid="uid://d33royc7wdxbv" path="res://art/ui_correct_l1_s2.png" id="17_cor2"]
-[ext_resource type="Texture2D" uid="uid://ba1d66fkeuf4e" path="res://art/ui_fact_l1_s2.png" id="18_fact2"]
-[ext_resource type="Texture2D" uid="uid://dxv025a0t0ks7" path="res://art/icon_seed.png" id="19_seed"]
-[ext_resource type="Texture2D" uid="uid://d72sxxsj2alo" path="res://art/icon_rock.png" id="20_rock"]
-[ext_resource type="Texture2D" uid="uid://cnsmcl0wb3pw2" path="res://art/icon_leaf.png" id="21_leaf"]
-[ext_resource type="Texture2D" uid="uid://cowbuyl1lm8os" path="res://art/bg_bed_watered.png" id="22_bgwater"]
-[ext_resource type="Texture2D" uid="uid://c0easxvxrtqrk" path="res://art/ui_header_l1_s3.png" id="23_hdr3"]
-[ext_resource type="Texture2D" uid="uid://cc7b44kdhns31" path="res://art/ui_prompt_l1_s3.png" id="24_prm3"]
-[ext_resource type="Texture2D" uid="uid://hqfowfrwcvkp" path="res://art/ui_correct_l1_s3.png" id="25_cor3"]
-[ext_resource type="Texture2D" uid="uid://ccmi07maroxx0" path="res://art/ui_fact_l1_s3.png" id="26_fact3"]
-[ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://art/icon_sun.png" id="27_sun"]
-[ext_resource type="Texture2D" uid="uid://blarrhrcbnkgj" path="res://art/icon_gloves.png" id="28_gloves"]
 
 [sub_resource type="Resource" id="Resource_al3yq"]
 script = ExtResource("2_opt")
-icon = ExtResource("11_shovel")
 id = &"shovel"
 label = "Shovel"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
@@ -40,7 +14,6 @@ vo_key = &"item_shovel"
 
 [sub_resource type="Resource" id="Resource_lsh1c"]
 script = ExtResource("2_opt")
-icon = ExtResource("12_can")
 id = &"watering_can"
 label = "Watering Can"
 placeholder_color = Color(0.62, 0.45, 0.3, 1)
@@ -49,7 +22,6 @@ vo_key = &"item_watering_can"
 
 [sub_resource type="Resource" id="Resource_5sf6u"]
 script = ExtResource("2_opt")
-icon = ExtResource("13_flower")
 id = &"flower"
 label = "Flower"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -63,10 +35,6 @@ prompt_transcript = "First, we need a little hole in the soil for our seed. Whic
 options = Array[ExtResource("2_opt")]([SubResource("Resource_al3yq"), SubResource("Resource_lsh1c"), SubResource("Resource_5sf6u")])
 correct_option_id = &"shovel"
 fun_fact_transcript = "Digging a small hole gives the seed a cozy place to rest and grow!"
-header_art = ExtResource("7_hdr1")
-prompt_art = ExtResource("8_prm1")
-fun_fact_art = ExtResource("10_fact1")
-correct_art = ExtResource("9_cor1")
 prompt_vo_key = &"l1_dig_prompt"
 fun_fact_vo_key = &"l1_dig_fact"
 zone_id = &"soil"
@@ -75,7 +43,6 @@ success_state = &"hole_dug"
 
 [sub_resource type="Resource" id="Resource_pl22c"]
 script = ExtResource("2_opt")
-icon = ExtResource("19_seed")
 id = &"seed_packet"
 label = "Seed"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
@@ -83,7 +50,6 @@ vo_key = &"item_seed_packet"
 
 [sub_resource type="Resource" id="Resource_05a30"]
 script = ExtResource("2_opt")
-icon = ExtResource("20_rock")
 id = &"rock"
 label = "Rock"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -92,7 +58,6 @@ vo_key = &"item_rock"
 
 [sub_resource type="Resource" id="Resource_xmt45"]
 script = ExtResource("2_opt")
-icon = ExtResource("21_leaf")
 id = &"leaf"
 label = "Leaf"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -106,10 +71,6 @@ prompt_transcript = "What goes inside the hole to start growing our plant?"
 options = Array[ExtResource("2_opt")]([SubResource("Resource_pl22c"), SubResource("Resource_05a30"), SubResource("Resource_xmt45")])
 correct_option_id = &"seed_packet"
 fun_fact_transcript = "Inside every seed is a tiny baby plant just waiting to wake up!"
-header_art = ExtResource("15_hdr2")
-prompt_art = ExtResource("16_prm2")
-fun_fact_art = ExtResource("18_fact2")
-correct_art = ExtResource("17_cor2")
 prompt_vo_key = &"l1_seed_prompt"
 fun_fact_vo_key = &"l1_seed_fact"
 zone_id = &"soil"
@@ -118,7 +79,6 @@ success_state = &"seed_covered"
 
 [sub_resource type="Resource" id="Resource_0mlyh"]
 script = ExtResource("2_opt")
-icon = ExtResource("27_sun")
 id = &"sun"
 label = "Sun"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
@@ -127,7 +87,6 @@ vo_key = &"item_sun"
 
 [sub_resource type="Resource" id="Resource_5oq3k"]
 script = ExtResource("2_opt")
-icon = ExtResource("28_gloves")
 id = &"gloves"
 label = "Gloves"
 placeholder_color = Color(0.55, 0.58, 0.62, 1)
@@ -141,10 +100,6 @@ prompt_transcript = "The seed is thirsty! What do we pour gently over the soil?"
 options = Array[ExtResource("2_opt")]([SubResource("Resource_lsh1c"), SubResource("Resource_0mlyh"), SubResource("Resource_5oq3k")])
 correct_option_id = &"watering_can"
 fun_fact_transcript = "Water helps the seed wake up and begin to grow!"
-header_art = ExtResource("23_hdr3")
-prompt_art = ExtResource("24_prm3")
-fun_fact_art = ExtResource("26_fact3")
-correct_art = ExtResource("25_cor3")
 prompt_vo_key = &"l1_water_prompt"
 fun_fact_vo_key = &"l1_water_fact"
 zone_id = &"soil"
@@ -184,13 +139,6 @@ success_state = &"sprout"
 script = ExtResource("3_lvl")
 id = &"level_1"
 title = "Level 1: Planting"
-scene_art = Dictionary[StringName, Texture2D]({
-&"empty_bed": ExtResource("4_bgempty"),
-&"hole_dug": ExtResource("5_bghole"),
-&"seed_covered": ExtResource("14_bgseed"),
-&"soil_watered": ExtResource("22_bgwater")
-})
-wrong_art = ExtResource("6_oops")
 instruction_transcript = "Let's plant a seed! Tap the correct tool or object, then drag it where it belongs."
 challenges = Array[ExtResource("1_chal")]([SubResource("Resource_r1rbg"), SubResource("Resource_nsnar"), SubResource("Resource_3exbu"), SubResource("Resource_g8gxl")])
 completion_transcript = "You planted a seed all by yourself!"

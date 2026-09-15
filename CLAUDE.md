@@ -60,10 +60,11 @@ res://
 ├── scripts/
 │   ├── core/       autoloads and game-wide services
 │   ├── data/       Resource definitions (LevelData, ChallengeData, OptionData)
+│   ├── levels/     stage_screen.gd, then level_N/stage_M.gd per stage
 │   └── ui/         screens and reusable UI pieces
 ├── scenes/
-│   ├── ui/         main menu, how to play, and other screens
-│   ├── levels/     one scene per level
+│   ├── ui/         main menu, hub, how to play
+│   ├── levels/     level_N/stage_M.tscn — one scene per stage
 │   └── components/ option card, drop zone, feedback popup
 ├── themes/         ktg_theme.tres — all button and label styling
 ├── art/            MANIFEST.md is the asset contract; images land here
@@ -121,6 +122,26 @@ which costs nothing against the quota.
 
 When the goal is simply "get these PNGs into the repo", exporting by hand from
 the Figma UI costs zero calls and is usually the better trade.
+
+## Stages are hand-built scenes
+
+Every stage is its own scene and its own script — `scenes/levels/level_1/
+stage_2.tscn` with `scripts/levels/level_1/stage_2.gd` — so a stage can be
+opened in the editor and rearranged without touching code. The art, the item
+cards and the answer all live in the scene.
+
+Shared behaviour lives in [`StageScreen`](scripts/levels/stage_screen.gd), which
+every stage script extends: the drag, the feedback card, the 160 px hotspot
+sizing, and the rule that a wrong card greys out rather than disappearing. That
+is the part worth **not** copying nineteen times — every one of those was a bug
+at some point, and a fix should land once. Put anything a stage does differently
+in its own script; `on_correct` and `on_wrong` exist to be overridden.
+
+`content/*.tres` no longer holds the stage art. It keeps the logic and the
+transcripts, which is what a teaching-content reviewer reads and what the
+voice-over is recorded from. `tools/verify_level_1.gd` checks the two have not
+drifted apart — that each scene's answer and its set of item cards still match
+the content file.
 
 ## When the Figma and the PDF disagree, the Figma wins — decided
 

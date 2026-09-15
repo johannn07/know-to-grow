@@ -87,9 +87,8 @@ Notes:
 
 ## Level 1 Stage 1 — delivered
 
-Wired into `content/level_1_planting.tres` and played by
-`scenes/levels/challenge_screen.tscn`. Nothing on this screen is a `Label`:
-every word the child reads is drawn into one of these files.
+Wired into `scenes/levels/level_1/stage_1.tscn`. Nothing on this screen is a
+`Label`: every word the child reads is drawn into one of these files.
 
 | File | Size | Weight |
 |---|---|---|
@@ -106,19 +105,20 @@ every word the child reads is drawn into one of these files.
 
 Notes:
 
-- **The two backgrounds are the same garden in two states.** They are keyed by
-  name in `LevelData.scene_art` (`empty_bed`, `hole_dug`) rather than attached to
-  a challenge, because one stage's `success_state` is the next stage's
-  `scene_state` — the pictures are shared, so the level owns them.
+- **The two backgrounds are the same garden in two states.** A stage scene holds
+  the one it opens on as its `Background` and the one it becomes as
+  `success_background`, so consecutive stages name the same file — Stage 1's
+  success garden is Stage 2's opening garden.
 - **Two feedback cards carry their own buttons.** `ui_correct_l1_s1.png` has
   Continue drawn into it and `ui_oops_tool.png` has Choose Again. The screen
   lays an invisible `Button` over each, positioned in fractions of the image and
   then **padded out in code** until it clears the 160 px touch floor — the drawn
   Continue is only 105 px tall and Choose Again only 68 px. Hand-tuned offsets
   were how How To Play's hotspots silently fell under the floor; this cannot.
-- **The Oops card belongs to the level, not the stage.** Its wording is about
-  picking the wrong *tool*, which is true of all four Level 1 stages.
-- `ui_fact_l1_s1.png` is **wired but not yet displayed.** `ui_correct_l1_s1.png`
+- **The Oops card is shared by all four stages**, each of which points its
+  `wrong_card` at the same file. Its wording is about picking the wrong *tool*,
+  which is true of Stages 1, 3 and 4 but not Stage 2 — see below.
+- `ui_fact_l1_s1.png` is **extracted but not yet displayed.** `ui_correct_l1_s1.png`
   already explains why the shovel is right, and showing a second card would add
   another tap. Whether Level 1 wants the Fun Fact strip as well is an open
   question for the project owner.
@@ -186,6 +186,19 @@ Notes:
   Level 2's *"the plant looks sad and needs light"*, not Level 1's *"plants need
   light to help make food"*. Stage 4 needs either a new card rendered to match
   the other three, or a decision to reuse [85] and accept the mismatch.
+
+## Where the stage art is wired
+
+**In the stage scenes, not in `content/*.tres`.** Each stage is a hand-built
+scene — `scenes/levels/level_1/stage_1.tscn` and so on — that holds its own
+background, header, prompt, item cards and both feedback cards, so all of it can
+be seen and moved in the editor.
+
+`content/*.tres` keeps the logic and the transcripts. Its `header_art`,
+`prompt_art`, `fun_fact_art` and `OptionData.icon` fields are left empty for
+Level 1; they remain in the schema for any screen that is driven from data
+instead. `tools/verify_level_1.gd` checks each scene's answer and item cards
+still match the content file, so the two cannot drift.
 
 ## Still in the Figma file, not yet extracted
 

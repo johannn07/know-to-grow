@@ -1,14 +1,22 @@
-[gd_scene format=3 uid="uid://c7mkqvw3n2ptb"]
+[gd_scene load_steps=14 format=3 uid="uid://bp3kx7mv6ndsh"]
 
-[ext_resource type="Script" uid="uid://bftii72cfhh47" path="res://scripts/levels/challenge_screen.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://cq10x06m6e0uc" path="res://scripts/levels/level_1/stage_2.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
-[ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="5_level"]
+[ext_resource type="Texture2D" uid="uid://dq41m47tam5bv" path="res://art/bg_bed_hole.png" id="5_bg"]
+[ext_resource type="Texture2D" uid="uid://8b100swdwyai" path="res://art/bg_bed_seed.png" id="6_bgok"]
+[ext_resource type="Texture2D" uid="uid://bdwt86w8du412" path="res://art/ui_header_l1_s2.png" id="7_hdr"]
+[ext_resource type="Texture2D" uid="uid://ibhy8gs5f80i" path="res://art/ui_prompt_l1_s2.png" id="8_prm"]
+[ext_resource type="Texture2D" uid="uid://d33royc7wdxbv" path="res://art/ui_correct_l1_s2.png" id="9_ok"]
+[ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://art/ui_oops_tool.png" id="10_oops"]
+[ext_resource type="Texture2D" uid="uid://dxv025a0t0ks7" path="res://art/icon_seed.png" id="11_seed_packet"]
+[ext_resource type="Texture2D" uid="uid://d72sxxsj2alo" path="res://art/icon_rock.png" id="12_rock"]
+[ext_resource type="Texture2D" uid="uid://cnsmcl0wb3pw2" path="res://art/icon_leaf.png" id="13_leaf"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
-[node name="ChallengeScreen" type="Control"]
+[node name="Stage2" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,9 +24,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
-script = ExtResource("1_screen")
-level = ExtResource("5_level")
-option_card_scene = ExtResource("4_card")
+script = ExtResource("1_stage")
+challenge_id = &"l1_seed"
+correct_option_id = &"seed_packet"
+success_background = ExtResource("6_bgok")
+correct_card = ExtResource("9_ok")
+wrong_card = ExtResource("10_oops")
+next_stage_path = "res://scenes/levels/level_1/stage_3.tscn"
 
 [node name="Background" type="Control" parent="."]
 unique_name_in_owner = true
@@ -31,8 +43,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("5_bg")
 fit = 2
-slot_name = "stage_background"
+slot_name = "bg_bed_hole"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
 
 [node name="Header" type="Control" parent="."]
@@ -48,8 +61,9 @@ offset_bottom = 310.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("7_hdr")
 fit = 1
-slot_name = "stage_header"
+slot_name = "ui_header_l1_s2"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
 [node name="Prompt" type="Control" parent="."]
@@ -65,8 +79,9 @@ offset_bottom = 560.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("8_prm")
 fit = 1
-slot_name = "stage_prompt"
+slot_name = "ui_prompt_l1_s2"
 placeholder_color = Color(0.98, 0.96, 0.89, 1)
 
 [node name="DropZone" type="Control" parent="."]
@@ -98,6 +113,21 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 45
 alignment = 1
+
+[node name="SeedPacket" parent="Cards" instance=ExtResource("4_card")]
+layout_mode = 2
+option_id = &"seed_packet"
+icon = ExtResource("11_seed_packet")
+
+[node name="Rock" parent="Cards" instance=ExtResource("4_card")]
+layout_mode = 2
+option_id = &"rock"
+icon = ExtResource("12_rock")
+
+[node name="Leaf" parent="Cards" instance=ExtResource("4_card")]
+layout_mode = 2
+option_id = &"leaf"
+icon = ExtResource("13_leaf")
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

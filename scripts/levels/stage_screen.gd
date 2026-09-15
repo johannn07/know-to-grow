@@ -1,0 +1,181 @@
+class_name StageScreen
+extends SubScreen
+
+## Shared behaviour for one stage of a level: drag an item onto the target, get
+## it right or wrong, move on.
+##
+## This holds only the parts that would otherwise be copied into all nineteen
+## stages — the drag handling, the feedback overlay, the hotspot sizing and the
+## rule about what a wrong card does. Everything a stage *shows* lives in that
+## stage's own scene, and anything a stage does differently belongs in its own
+## script, which extends this one.
+##
+## A stage scene is expected to have: %Background, %DropZone, %Cards holding
+## [OptionCard] children, and %Overlay / %OverlayAspect / %OverlayArt /
+## %OverlayButton for the feedback card.
+##
+## No wording is set here or in any stage scene. The header, the prompt, the
+## item names and both feedback cards carry their text in their own pixels, and
+## content/*.tres records that wording as a transcript for review and
+## voice-over. See art/MANIFEST.md.
+
+## Touch floor at the 1080-wide design resolution. Both feedback cards have
+## their button drawn smaller than this, so the hotspot over one is grown to
+## reach it — an invisible target can be generous without looking wrong.
+const MIN_TOUCH := 160.0
+
+## Where each feedback card's drawn button sits, as fractions of that card's own
+## image. Measured off the art, which is the only place these exist.
+const CONTINUE_RECT := Rect2(0.20, 0.785, 0.59, 0.115)
+const CHOOSE_AGAIN_RECT := Rect2(0.315, 0.71, 0.41, 0.145)
+
+@export_group("Answer")
+## Matches a ChallengeData in content/*.tres. Nothing reads it at runtime — it
+## is what lets the smoke test check this scene against the reviewed content.
+@export var challenge_id: StringName = &""
+## The [member OptionCard.option_id] that is correct here.
+@export var correct_option_id: StringName = &""
+## Answers that also count, for a stage with more than one good answer.
+@export var alternate_correct_ids: Array[StringName] = []
+
+@export_group("Art")
+## The garden after a correct answer. Leave empty to leave the scene as it is.
+@export var success_background: Texture2D
+## The "Correct Answer!" card for this stage, with Continue drawn into it.
+@export var correct_card: Texture2D
+## The "Oops!" card, with Choose Again drawn into it.
+@export var wrong_card: Texture2D
+
+@export_group("Flow")
+## The next stage. Empty means this is the last one built.
+@export_file("*.tscn") var next_stage_path: String = ""
+## Where to go when there is no next stage.
+@export_file("*.tscn") var done_scene_path: String = "res://scenes/ui/hub.tscn"
+## Shuffle the cards on open. Off by default: the scene decides the order, which
+## is the point of laying the cards out by hand.
+@export var shuffle_cards: bool = false
+
+var _answered := false
+
+@onready var _background: ArtSlot = %Background
+@onready var _drop_zone: Control = %DropZone
+@onready var _cards: Container = %Cards
+@onready var _overlay: Control = %Overlay
+@onready var _overlay_aspect: AspectRatioContainer = %OverlayAspect
+@onready var _overlay_art: ArtSlot = %OverlayArt
+@onready var _overlay_button: Button = %OverlayButton
+
+
+func _ready() -> void:
+	super()
+	_overlay.hide()
+	_overlay_button.pressed.connect(_on_overlay_pressed)
+	for card in cards():
+		card.dropped.connect(_on_card_dropped)
+	if shuffle_cards:
+		_shuffle()
+
+
+## The stage's option cards, in the order they sit in the scene.
+func cards() -> Array[OptionCard]:
+	var found: Array[OptionCard] = []
+	for child in _cards.get_children():
+		if child is OptionCard:
+			found.append(child)
+	return found
+
+
+func is_correct(option_id: StringName) -> bool:
+	return option_id == correct_option_id or option_id in alternate_correct_ids
+
+
+func _shuffle() -> void:
+	var order := cards()
+	order.shuffle()
+	for i in order.size():
+		_cards.move_child(order[i], i)
+
+
+func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
+	if _answered:
+		return
+	if not _drop_zone.get_global_rect().has_point(at_global):
+		# Let go somewhere that is not the target. That is not an answer — the
+		# child changed their mind or missed — so the card goes back and stays
+		# every bit as pickable as before.
+		card.return_home()
+		return
+	if is_correct(card.option_id):
+		_answered = true
+		card.freeze()
+		if success_background != null:
+			_background.texture = success_background
+		on_correct(card)
+		_show_feedback(correct_card, CONTINUE_RECT)
+	else:
+		# Actually tried on the target and wrong. The card returns to its slot
+		# greyed out: still visible, so the attempt is not erased, but no longer
+		# pickable, so the same wrong answer cannot be repeated.
+		card.return_home()
+		card.mark_spent()
+		on_wrong(card)
+		_show_feedback(wrong_card, CHOOSE_AGAIN_RECT)
+
+
+## Hooks for a stage that needs to do something of its own. Override in the
+## stage's script; there is no need to call super().
+func on_correct(_card: OptionCard) -> void:
+	pass
+
+
+func on_wrong(_card: OptionCard) -> void:
+	pass
+
+
+func _show_feedback(art: Texture2D, button_rect: Rect2) -> void:
+	if art == null:
+		push_warning("%s: no feedback art assigned in the scene" % name)
+		return
+	_overlay_art.texture = art
+	# The hotspot is placed in fractions of the image, so the node it sits in
+	# has to be exactly the image's shape — no letterboxing.
+	_overlay_aspect.ratio = float(art.get_width()) / float(art.get_height())
+	_overlay.show()
+	_place_hotspot(_overlay_button, button_rect)
+
+
+## Anchors a hotspot over a button drawn into the artwork, then pads it out
+## until it clears [constant MIN_TOUCH] in both directions.
+func _place_hotspot(button: Button, frac: Rect2) -> void:
+	button.anchor_left = frac.position.x
+	button.anchor_top = frac.position.y
+	button.anchor_right = frac.end.x
+	button.anchor_bottom = frac.end.y
+	button.offset_left = 0.0
+	button.offset_top = 0.0
+	button.offset_right = 0.0
+	button.offset_bottom = 0.0
+	await get_tree().process_frame
+	var pad_x: float = maxf(0.0, (MIN_TOUCH - button.size.x) * 0.5)
+	var pad_y: float = maxf(0.0, (MIN_TOUCH - button.size.y) * 0.5)
+	button.offset_left = -pad_x
+	button.offset_right = pad_x
+	button.offset_top = -pad_y
+	button.offset_bottom = pad_y
+
+
+func _on_overlay_pressed() -> void:
+	_overlay.hide()
+	if not _answered:
+		# "Choose Again" — the card has already slid back, so there is nothing
+		# to undo. No penalty, no score, no "Wrong" label.
+		return
+	advance()
+
+
+func advance() -> void:
+	var target := next_stage_path if not next_stage_path.is_empty() else done_scene_path
+	if target.is_empty() or not ResourceLoader.exists(target):
+		push_warning("%s: nowhere to go — '%s' is unset or missing" % [name, target])
+		return
+	get_tree().change_scene_to_file(target)

@@ -24,10 +24,20 @@ const RETURN_TIME := 0.25
 ## out, so the child can see what they have already ruled out.
 const SPENT_MODULATE := Color(0.52, 0.52, 0.58, 1.0)
 
-var data: OptionData:
+## Matches an OptionData id in content/*.tres. The stage compares this against
+## its own correct answer; the .tres keeps the item's name and hint as
+## transcripts for review and voice-over.
+@export var option_id: StringName = &"":
 	set(value):
-		data = value
-		_apply_data()
+		option_id = value
+		_apply()
+
+## The item card, with its name already drawn on it. Set per stage in the
+## stage's scene, so a card can be seen and moved in the editor.
+@export var icon: Texture2D:
+	set(value):
+		icon = value
+		_apply()
 
 var _dragging := false
 var _grab_offset := Vector2.ZERO
@@ -38,15 +48,14 @@ var _home_global := Vector2.ZERO
 
 
 func _ready() -> void:
-	_apply_data()
+	_apply()
 
 
-func _apply_data() -> void:
-	if _art == null or data == null:
+func _apply() -> void:
+	if _art == null:
 		return
-	_art.texture = data.icon
-	_art.slot_name = data.label
-	_art.placeholder_color = data.placeholder_color
+	_art.texture = icon
+	_art.slot_name = String(option_id)
 
 
 func _gui_input(event: InputEvent) -> void:
