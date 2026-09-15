@@ -9,6 +9,13 @@ extends Control
 ## artwork draws no back control (the hub, for instance) still gets the Android
 ## back gesture, which on a phone is the gesture children actually use.
 
+## Touch floor at the 1080-wide design resolution. Several screens are a single
+## drawn image with their controls painted into it, and a painted control is
+## routinely smaller than a small thumb needs — the How To Play card's button is
+## 104 px tall. The hit area over one is grown to reach this, which an invisible
+## target can do without looking wrong.
+const MIN_TOUCH := 160.0
+
 @export_file("*.tscn") var back_scene_path: String = "res://scenes/ui/main_menu.tscn"
 
 @onready var _back_button: Button = get_node_or_null("%BackButton") as Button
@@ -29,3 +36,42 @@ func go_back() -> void:
 		push_warning("SubScreen: back scene is unset or missing: '%s'" % back_scene_path)
 		return
 	get_tree().change_scene_to_file(back_scene_path)
+
+
+## Anchors a control over a region of its parent, in fractions of that parent.
+func anchor_to(control: Control, frac: Rect2) -> void:
+	control.anchor_left = frac.position.x
+	control.anchor_top = frac.position.y
+	control.anchor_right = frac.end.x
+	control.anchor_bottom = frac.end.y
+	control.offset_left = 0.0
+	control.offset_top = 0.0
+	control.offset_right = 0.0
+	control.offset_bottom = 0.0
+
+
+## Grows a control's hit area outwards, evenly, until it clears [constant
+## MIN_TOUCH] in both directions. A control already over the floor is left alone.
+##
+## This is done in code rather than with offsets typed into the scene on purpose.
+## A hand-tuned offset is right only for the layout it was measured against, and
+## falls under the floor silently the next time anything near it moves — which is
+## exactly how this screen's two buttons ended up at 510x154 and 142x136 and
+## stayed that way through several sessions. Padding computed from the control's
+## own size cannot drift.
+func pad_to_touch_floor(control: Control) -> void:
+	# Anchors do not become a size until the parent has had a layout pass.
+	await get_tree().process_frame
+	var pad_x: float = maxf(0.0, (MIN_TOUCH - control.size.x) * 0.5)
+	var pad_y: float = maxf(0.0, (MIN_TOUCH - control.size.y) * 0.5)
+	control.offset_left = -pad_x
+	control.offset_right = pad_x
+	control.offset_top = -pad_y
+	control.offset_bottom = pad_y
+
+
+## Anchors a hotspot over a control drawn into the artwork, then pads it out to
+## the touch floor.
+func place_hotspot(control: Control, frac: Rect2) -> void:
+	anchor_to(control, frac)
+	await pad_to_touch_floor(control)

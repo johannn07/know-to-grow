@@ -5,9 +5,12 @@ extends SubScreen
 ## interactive nodes are two invisible Buttons sitting exactly over the drawn
 ## controls: the X, which SubScreen handles as BackButton, and LET'S GO.
 ##
-## Their hit areas are deliberately larger than the drawn controls — the art's
-## button is 104 px tall at the design resolution, short of the 160 px a small
-## thumb needs, and an invisible button can be generous without looking wrong.
+## Both are anchored over the button *art* that now sits on top of the painted
+## controls, then grown to the touch floor by [method SubScreen.pad_to_touch_floor]
+## — so the hit area always covers at least what the child can see, and never
+## less than a thumb needs. Anchoring them by hand is what previously left them
+## at 510x154 and 142x136, under the floor and narrower than the buttons drawn
+## under them.
 
 @export_file("*.tscn") var start_scene_path: String = "res://scenes/ui/hub.tscn"
 
@@ -17,6 +20,9 @@ extends SubScreen
 func _ready() -> void:
 	super()
 	_lets_go_button.pressed.connect(_on_lets_go_pressed)
+	pad_to_touch_floor(_lets_go_button)
+	if _back_button != null:
+		pad_to_touch_floor(_back_button)
 
 
 func _on_lets_go_pressed() -> void:

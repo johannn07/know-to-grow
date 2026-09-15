@@ -25,11 +25,6 @@ extends SubScreen
 ## content/*.tres records that wording as a transcript for review and
 ## voice-over. See art/MANIFEST.md.
 
-## Touch floor at the 1080-wide design resolution. Both feedback cards have
-## their button drawn smaller than this, so the hotspot over one is grown to
-## reach it — an invisible target can be generous without looking wrong.
-const MIN_TOUCH := 160.0
-
 ## Where the drawn button sits on the Level 1 feedback cards, as fractions of
 ## the card's own image. Measured off the art, which is the only place these
 ## exist. A card with no button drawn on it uses [constant WHOLE_CARD] instead.
@@ -173,34 +168,11 @@ func _show_feedback(
 	_overlay_button_art.texture = button_art
 	_overlay_button_art.visible = button_art != null and art_rect.has_area()
 	if _overlay_button_art.visible:
-		_anchor_to(_overlay_button_art, art_rect)
+		# The art is anchored but never padded: it has to stay exactly on the
+		# button painted into the card, while the hotspot over it does not.
+		anchor_to(_overlay_button_art, art_rect)
 	_overlay.show()
-	_place_hotspot(_overlay_button, button_rect)
-
-
-## Anchors a control over a region of the card, in fractions of the card image.
-func _anchor_to(control: Control, frac: Rect2) -> void:
-	control.anchor_left = frac.position.x
-	control.anchor_top = frac.position.y
-	control.anchor_right = frac.end.x
-	control.anchor_bottom = frac.end.y
-	control.offset_left = 0.0
-	control.offset_top = 0.0
-	control.offset_right = 0.0
-	control.offset_bottom = 0.0
-
-
-## Anchors a hotspot over a button drawn into the artwork, then pads it out
-## until it clears [constant MIN_TOUCH] in both directions.
-func _place_hotspot(button: Button, frac: Rect2) -> void:
-	_anchor_to(button, frac)
-	await get_tree().process_frame
-	var pad_x: float = maxf(0.0, (MIN_TOUCH - button.size.x) * 0.5)
-	var pad_y: float = maxf(0.0, (MIN_TOUCH - button.size.y) * 0.5)
-	button.offset_left = -pad_x
-	button.offset_right = pad_x
-	button.offset_top = -pad_y
-	button.offset_bottom = pad_y
+	place_hotspot(_overlay_button, button_rect)
 
 
 func _on_overlay_pressed() -> void:
