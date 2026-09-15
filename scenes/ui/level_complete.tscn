@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cvch3ovdan8gm" path="res://assets/art/ui_level_complete_l1.png" id="5_card"]
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui_button_continue.png" id="6_continue"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="7_artbtn"]
+[ext_resource type="AudioStream" uid="uid://2rnnyxy0vrrf" path="res://assets/audio/sfx/level_complete.wav" id="8_sting"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -19,6 +20,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
+music_track = 2
+arrival_sfx = ExtResource("8_sting")
 back_scene_path = "res://scenes/ui/hub.tscn"
 card_art = ExtResource("5_card")
 button_art = ExtResource("6_continue")

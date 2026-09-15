@@ -12,10 +12,21 @@ extends Control
 @onready var _start_button: Button = %StartButton
 @onready var _how_to_play_button: Button = %HowToPlayButton
 
+## Sound. This screen is not a [SubScreen] — there is nowhere behind the title
+## to go back to — so it fetches the director and starts the music itself.
+@onready var _audio: AudioDirectorService = (
+	get_node_or_null("/root/AudioDirector") as AudioDirectorService
+)
+
 
 func _ready() -> void:
 	_start_button.pressed.connect(_on_start_pressed)
 	_how_to_play_button.pressed.connect(_on_how_to_play_pressed)
+	if _audio != null:
+		_audio.play_music(AudioDirectorService.Track.MENU)
+		# button_down, so the tap lands under the thumb rather than on release.
+		for node in find_children("*", "BaseButton", true, false):
+			(node as BaseButton).button_down.connect(_audio.play_tap)
 
 
 func _notification(what: int) -> void:

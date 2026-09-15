@@ -144,6 +144,8 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 	if is_correct(card.option_id):
 		_answered = true
 		card.freeze()
+		if audio != null:
+			audio.play_correct()
 		if progress != null:
 			progress.record_stage_cleared(level_id, stage_number, _wrong_attempts)
 		else:
@@ -157,6 +159,8 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		card.return_home()
 		card.mark_spent()
 		_wrong_attempts += 1
+		if audio != null:
+			audio.play_wrong()
 		on_wrong(card)
 		_show_feedback(wrong_card, wrong_button_rect, choose_again_art, wrong_art_rect)
 

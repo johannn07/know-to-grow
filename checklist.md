@@ -166,7 +166,10 @@ unlocks **Little Planter**.
 - [x] ~~Decide whether Start Game resumes or always restarts~~ **Answered:
       neither.** Play always opens the stage select and the child picks. Resume
       falls out of it, since cleared rows stay unlocked
-- [ ] `AudioDirector` autoload — routes SFX/VO/music to the existing buses
+- [x] `AudioDirector` autoload — routes music and effects to the existing buses,
+      and keeps a track playing across a scene change so walking hub → level
+      overlay → stage select does not restart it. Checked by
+      `tools/verify_audio.gd`. VO has a bus but nothing to route yet
 - [ ] Real level select, replacing `level_select_stub.tscn` — or wire Start Game
       straight to Level 1 and drop the screen. **⚠**
 - [ ] Level scenes: `level_1_planting`, `level_2_monitoring`,
@@ -214,8 +217,21 @@ the open content questions, not bugs.
 
 ## 5 · Audio
 
-- [ ] SFX ×6 — correct ding, gentle bounce, pickup, drop, level complete, tap
-- [ ] Music ×2 — calm garden loop, celebration sting
+- [x] SFX ×4 wired — tap on every button, correct and wrong on an answer, and
+      the level complete sting when that card arrives. The tap hangs off
+      `button_down`, so it lands under the thumb rather than on release
+- [ ] SFX still missing — pickup and drop on a dragged card, and a gentle bounce
+      on a card that returns home. Nothing was delivered for those three
+- [x] Music — `main_menu.mp3` across the title, How To Play and the hub;
+      `level_1.mp3` across the level intro, stage select, all four stages and
+      both closing cards. All six tracks had `loop=false` from the importer,
+      which would have played each once and left the screen silent
+- [ ] Music for levels 2-4 — the tracks are in the repo and named, but those
+      levels do not exist yet. Add a `Track` per level as they are built
+- [ ] **The music is third-party and its licence is unconfirmed.** The tracks
+      arrived named after another game's soundtrack and are now on GitHub under
+      neutral names, which hides the provenance without changing it. **⚠**
+      Settle this before release
 - [ ] Voice-over ≈63 lines per language (19 prompts + 19 fun facts + ~25 item
       names). **Record a scratch version on your phone this week** — a kids' game
       lives or dies on whether the prompt is spoken, and timing needs testing long

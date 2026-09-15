@@ -25,6 +25,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
+music_track = 1
 
 [node name="Sky" type="Control" parent="." unique_id=2134140961]
 clip_contents = true

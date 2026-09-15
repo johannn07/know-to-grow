@@ -55,6 +55,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_hub")
+music_track = 1
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true

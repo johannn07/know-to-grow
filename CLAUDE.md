@@ -243,9 +243,17 @@ property that does not exist and fail silently.
 | A scene loads and runs 30 frames | `godot --headless --path . --quit-after 30 res://scenes/ui/main_menu.tscn` |
 | Menu flow smoke test | `godot --headless --path . -s res://tools/verify_menu_flow.gd` |
 | Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
+| Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.
+So does `verify_audio.gd`, which plays a stage to check the answer stings.
+
+**Once music has played, every run ends with `1 resources still in use at exit`.**
+That is the audio server's playback object outliving the scene tree, not a leak
+in this project: stopping the players, clearing their streams and nulling the
+exports all leave it, and the same run with music never started exits clean.
+Ignore that one line; treat anything else on `--quit` as real.
 
 Note that a `-s` tool script is compiled **before autoloads are registered**, so
 `GameState` as a bare identifier will not compile in one. Reach progress through

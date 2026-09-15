@@ -27,6 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
+music_track = 2
 row_art_1 = ExtResource("1u_row")
 row_art_1_locked = ExtResource("1_locked_row")
 row_art_2 = ExtResource("2u_row")

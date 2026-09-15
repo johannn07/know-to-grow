@@ -18,6 +18,11 @@ const MIN_TOUCH := 160.0
 
 @export_file("*.tscn") var back_scene_path: String = "res://scenes/ui/main_menu.tscn"
 
+## What this screen sounds like. Asking for the track that is already playing
+## does nothing, so screens in the same run share one continuous loop rather
+## than restarting it at every scene change.
+@export var music_track: AudioDirectorService.Track = AudioDirectorService.Track.NONE
+
 @onready var _back_button: Button = get_node_or_null("%BackButton") as Button
 
 ## What the child has finished so far. Fetched rather than named: see the note
@@ -26,10 +31,41 @@ const MIN_TOUCH := 160.0
 ## than assume.
 @onready var progress: GameStateStore = get_node_or_null("/root/GameState") as GameStateStore
 
+## Sound. Fetched rather than named, for the same reason as [member progress].
+@onready var audio: AudioDirectorService = (
+	get_node_or_null("/root/AudioDirector") as AudioDirectorService
+)
+
 
 func _ready() -> void:
 	if _back_button != null:
 		_back_button.pressed.connect(go_back)
+	if audio != null:
+		audio.play_music(music_track)
+		sound_every_button(self)
+
+
+## Gives every button under [param root_node] the tap sound, so a screen does not
+## have to remember one per control. Buttons added later — the feedback card's,
+## for instance — are already covered, because they live in the scene too.
+##
+## It hangs off `button_down`, not `pressed`. A child hears the tap the instant
+## a thumb lands rather than when it lifts, which is the half-second that makes
+## a button feel like it responded. It also leaves `pressed` carrying exactly
+## the one thing the screen does, which is what the smoke test checks.
+##
+## A disabled button emits neither, so a locked stage row stays silent without
+## needing to be skipped here.
+func sound_every_button(root_node: Node) -> void:
+	for node in root_node.find_children("*", "BaseButton", true, false):
+		var button := node as BaseButton
+		if not button.button_down.is_connected(_on_any_button_down):
+			button.button_down.connect(_on_any_button_down)
+
+
+func _on_any_button_down() -> void:
+	if audio != null:
+		audio.play_tap()
 
 
 func _notification(what: int) -> void:

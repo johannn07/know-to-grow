@@ -44,6 +44,12 @@ const BUTTON_BELOW_CARD := Rect2(0.265, 1.04, 0.47, 0.115)
 ## Where [member banner_art] sits. Negative y puts it above the card.
 @export var banner_rect: Rect2 = Rect2()
 
+@export_group("Sound")
+## Played once when this screen appears — the level complete sting, say. The
+## stream is set per scene rather than named in [AudioDirectorService] because
+## which card gets a fanfare is a decision about this screen, not a global one.
+@export var arrival_sfx: AudioStream
+
 @export_group("Flow")
 ## Where the button goes. Empty means this overlay is the end of its run.
 @export_file("*.tscn") var next_scene_path: String = ""
@@ -82,6 +88,9 @@ func _ready() -> void:
 		anchor_to(_action_button, Rect2(0.0, 0.0, 1.0, 1.0))
 
 	_action_button.pressed.connect(_on_action_pressed)
+
+	if audio != null and arrival_sfx != null:
+		audio.play_sfx(arrival_sfx)
 
 
 ## Override in a screen that needs to do something before moving on.

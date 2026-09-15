@@ -20,6 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
+music_track = 2
 back_scene_path = "res://scenes/ui/hub.tscn"
 card_art = ExtResource("5_card")
 button_art = ExtResource("7_continue")

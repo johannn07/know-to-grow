@@ -29,6 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
+music_track = 2
 level_id = &"level_1"
 stage_number = 2
 challenge_id = &"l1_seed"
