@@ -6,7 +6,7 @@ extends Control
 ## from the Inspector as real screens replace the stubs — no edit here when the
 ## level select is built for real.
 
-@export_file("*.tscn") var start_scene_path: String = "res://scenes/ui/level_select_stub.tscn"
+@export_file("*.tscn") var start_scene_path: String = "res://scenes/ui/hub.tscn"
 @export_file("*.tscn") var how_to_play_scene_path: String = "res://scenes/ui/how_to_play.tscn"
 
 @onready var _start_button: Button = %StartButton

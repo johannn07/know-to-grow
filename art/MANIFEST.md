@@ -50,6 +50,41 @@ Notes:
   sprite. It replaced the `CPUParticles2D` stand-in. If the leaves should
   actually animate, the art needs to be one leaf, not a scattered group.
 
+## Hub screen — delivered
+
+All seven are in the repo and wired into `scenes/ui/hub.tscn`.
+
+| File | Size | Weight | Slot |
+|---|---|---|---|
+| `bg_garden_stump.png` | 852 x 1846 | 2.0 MB | `Background` |
+| `plant_seed_pot.png` | 650 x 750 | 404 KB | `Plant` |
+| `ui_avatar.png` | 260 x 249 | 80 KB | `GreetingPill/Avatar` |
+| `ui_star.png` | 180 x 183 | 36 KB | `StarPill/Star` |
+| `ui_tab_lessons.png` | 260 x 203 | 68 KB | `BottomNav` |
+| `ui_tab_garden.png` | 260 x 269 | 80 KB | `BottomNav` |
+| `ui_tab_badges.png` | 260 x 275 | 72 KB | `BottomNav` |
+| `bg_sign.png` | 1086 x 1448 | 1.0 MB | `BgSign` |
+
+Notes:
+
+- **The hub is composed, not baked.** Unlike How To Play — one drawn image with
+  invisible buttons over it — every part of this screen is a separate asset with
+  live text on top: the greeting, the star count, the plant stage and the play
+  button. The pills, the card and the nav bar are `StyleBoxFlat`, not art.
+- That makes the hub the **first screen whose look depends on the display font**.
+  Until a `.ttf` lands in `res://fonts/` it renders in Godot's default sans,
+  which sits oddly against this art. See Fonts below — it is a one-line change.
+- `bg_garden_stump.png` is the designer's native 852 x 1846, below the 2x rule
+  and narrower than the 1080-wide design resolution, so `KEEP_COVERED` upscales
+  it about 1.27x. Every portrait stage background in the `.fig` is this size, so
+  this is the ceiling the artwork offers, not a downscaling choice.
+- `plant_seed_pot.png` is the SEED stage. The `.fig` has the rest of the growth
+  sequence (sprout, leafy, flowering, fruiting) at similar sizes — they drop into
+  the same slot when the plant stage becomes real state rather than a
+  placeholder.
+- The three tab icons are wired but their buttons are `disabled`: Lessons,
+  Garden and Badges have nowhere to go yet.
+
 ## Still in the Figma file, not yet extracted
 
 The `.fig` contains roughly **170 unique full-resolution assets** — effectively
