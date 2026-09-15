@@ -9,7 +9,7 @@ extends SubScreen
 ## button is 104 px tall at the design resolution, short of the 160 px a small
 ## thumb needs, and an invisible button can be generous without looking wrong.
 
-@export_file("*.tscn") var start_scene_path: String = "res://scenes/ui/level_select_stub.tscn"
+@export_file("*.tscn") var start_scene_path: String = "res://scenes/ui/hub.tscn"
 
 @onready var _lets_go_button: Button = %LetsGoButton
 

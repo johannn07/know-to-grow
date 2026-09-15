@@ -43,12 +43,51 @@ func _initialize() -> void:
 			)
 		menu.queue_free()
 
-	for path in ["res://scenes/ui/how_to_play.tscn", "res://scenes/ui/level_select_stub.tscn"]:
+	for path in [
+		"res://scenes/ui/hub.tscn",
+		"res://scenes/ui/how_to_play.tscn",
+		"res://scenes/ui/level_select_stub.tscn",
+	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
 			continue
-		_expect(screen.has_node("%BackButton"), "%s has %%BackButton" % path.get_file())
+		# Every SubScreen has a way back, but only some draw a button for it —
+		# the hub relies on the Android gesture alone, by design.
+		if screen.has_node("%BackButton"):
+			var back: Button = screen.get_node("%BackButton")
+			_expect(
+				back.pressed.get_connections().size() == 1,
+				"%s %%BackButton is connected" % path.get_file()
+			)
 		_expect_scene(screen.back_scene_path, "%s back_scene_path" % path.get_file())
+
+		for slot in _find_art_slots(screen):
+			_expect(
+				slot.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+				"%s ArtSlot '%s' ignores input" % [path.get_file(), slot.name]
+			)
+
+		# The hub is composed from separate art with live text over it, so the
+		# things that break quietly are the label lookups and the play target.
+		if screen.has_node("%PlayButton"):
+			_expect_scene(screen.level_scene_path, "hub level_scene_path")
+			for label_name in ["%GreetingLabel", "%StarLabel", "%PlantStageLabel"]:
+				_expect(screen.has_node(label_name), "hub has %s" % label_name)
+			var play: Button = screen.get_node("%PlayButton")
+			_expect(play.pressed.get_connections().size() == 1, "hub %PlayButton is connected")
+			_expect(
+				play.size.y >= 160.0, "hub %%PlayButton is >= 160 px tall (is %d)" % play.size.y
+			)
+			# The three tabs are drawn but have nowhere to go yet. They must stay
+			# disabled: a tab that looks live and does nothing teaches a child
+			# that tapping does not work.
+			for tab_name in ["%LessonsButton", "%GardenButton", "%BadgesButton"]:
+				var tab: Button = screen.get_node(tab_name)
+				_expect(tab.disabled, "hub %s is disabled until it has a destination" % tab_name)
+				_expect(
+					tab.size.x >= 160.0 and tab.size.y >= 160.0,
+					"hub %s clears 160 px (is %dx%d)" % [tab_name, tab.size.x, tab.size.y]
+				)
 
 		# How To Play is a single drawn image; its controls are invisible Buttons
 		# sitting over the painted ones, so their placement is only verifiable here.

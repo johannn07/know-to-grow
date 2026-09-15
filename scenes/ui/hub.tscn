@@ -1,0 +1,446 @@
+[gd_scene format=3 uid="uid://dyq8wv7xnhb5k"]
+
+[ext_resource type="Script" uid="uid://dndpy3duyr42a" path="res://scripts/ui/hub_screen.gd" id="1_hub"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://k1ruiahxqblq" path="res://art/bg_garden_stump.png" id="4_bg"]
+[ext_resource type="Texture2D" uid="uid://c3x73fl5a753b" path="res://art/ui_avatar.png" id="5_avatar"]
+[ext_resource type="Texture2D" uid="uid://dnn1ekuepxsox" path="res://art/ui_star.png" id="6_star"]
+[ext_resource type="Texture2D" uid="uid://c50xt3o5edhw2" path="res://art/plant_seed_pot.png" id="7_plant"]
+[ext_resource type="Texture2D" uid="uid://cs58a4b3s71fj" path="res://art/ui_tab_lessons.png" id="8_lessons"]
+[ext_resource type="Texture2D" uid="uid://birib6hvlxlbl" path="res://art/ui_tab_garden.png" id="9_garden"]
+[ext_resource type="Texture2D" uid="uid://dgqakneykfrq7" path="res://art/ui_tab_badges.png" id="10_badges"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pill"]
+bg_color = Color(0.98, 0.96, 0.89, 0.93)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 7
+border_color = Color(0.44, 0.31, 0.19, 1)
+corner_radius_top_left = 76
+corner_radius_top_right = 76
+corner_radius_bottom_right = 76
+corner_radius_bottom_left = 76
+shadow_color = Color(0, 0, 0, 0.18)
+shadow_size = 6
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_star"]
+bg_color = Color(0.99, 0.82, 0.27, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 7
+border_color = Color(0.44, 0.31, 0.19, 1)
+corner_radius_top_left = 66
+corner_radius_top_right = 66
+corner_radius_bottom_right = 66
+corner_radius_bottom_left = 66
+shadow_color = Color(0, 0, 0, 0.18)
+shadow_size = 6
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.98, 0.96, 0.89, 0.95)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 8
+border_color = Color(0.44, 0.31, 0.19, 1)
+corner_radius_top_left = 34
+corner_radius_top_right = 34
+corner_radius_bottom_right = 34
+corner_radius_bottom_left = 34
+shadow_color = Color(0, 0, 0, 0.18)
+shadow_size = 6
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nav"]
+bg_color = Color(0.98, 0.96, 0.89, 0.97)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_color = Color(0.44, 0.31, 0.19, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tab"]
+
+[node name="Hub" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_hub")
+
+[node name="Background" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_bg")
+fit = 2
+slot_name = "bg_garden_stump"
+placeholder_color = Color(0.56, 0.81, 0.35, 1)
+
+[node name="GreetingPill" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 40.0
+offset_top = 110.0
+offset_right = -420.0
+offset_bottom = 262.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pill")
+
+[node name="Avatar" type="Control" parent="GreetingPill"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -62.0
+offset_right = 142.0
+offset_bottom = 62.0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("5_avatar")
+fit = 1
+slot_name = "ui_avatar"
+placeholder_color = Color(0.45, 0.68, 0.88, 1)
+
+[node name="GreetingLabel" type="Label" parent="GreetingPill"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 158.0
+offset_right = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 36
+text = "Hello, Little Gardener!"
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="StarPill" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -380.0
+offset_top = 120.0
+offset_right = -40.0
+offset_bottom = 252.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_star")
+
+[node name="Star" type="Control" parent="StarPill"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -48.0
+offset_right = 112.0
+offset_bottom = 48.0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("6_star")
+fit = 1
+slot_name = "ui_star"
+placeholder_color = Color(0.99, 0.87, 0.35, 1)
+
+[node name="StarLabel" type="Label" parent="StarPill"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 122.0
+offset_right = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 54
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlantCard" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -460.0
+offset_top = 540.0
+offset_right = -40.0
+offset_bottom = 730.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="CardColumn" type="VBoxContainer" parent="PlantCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 22.0
+offset_top = 20.0
+offset_right = -22.0
+offset_bottom = -22.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="CardTitle" type="Label" parent="PlantCard/CardColumn"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 34
+text = "My Plant:"
+horizontal_alignment = 1
+
+[node name="PlantStageLabel" type="Label" parent="PlantCard/CardColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 60
+text = "SEED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Plant" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -216.0
+offset_top = -218.0
+offset_right = 216.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("7_plant")
+fit = 1
+slot_name = "plant_seed_pot"
+placeholder_color = Color(0.85, 0.5, 0.3, 1)
+
+[node name="PlayButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -590.0
+offset_right = 400.0
+offset_bottom = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 58
+text = "Level 1: Grow a Seed"
+
+[node name="BottomNav" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -320.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nav")
+
+[node name="Tabs" type="HBoxContainer" parent="BottomNav"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="LessonsTab" type="Control" parent="BottomNav/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="BottomNav/Tabs/LessonsTab"]
+modulate = Color(1, 1, 1, 0.55)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="Control" parent="BottomNav/Tabs/LessonsTab/Content"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("8_lessons")
+fit = 1
+slot_name = "ui_tab_lessons"
+placeholder_color = Color(0.35, 0.55, 0.85, 1)
+
+[node name="TabLabel" type="Label" parent="BottomNav/Tabs/LessonsTab/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 36
+text = "Lessons"
+horizontal_alignment = 1
+
+[node name="LessonsButton" type="Button" parent="BottomNav/Tabs/LessonsTab"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+disabled = true
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_tab")
+
+[node name="GardenTab" type="Control" parent="BottomNav/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="BottomNav/Tabs/GardenTab"]
+modulate = Color(1, 1, 1, 0.55)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="Control" parent="BottomNav/Tabs/GardenTab/Content"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("9_garden")
+fit = 1
+slot_name = "ui_tab_garden"
+placeholder_color = Color(0.4, 0.7, 0.3, 1)
+
+[node name="TabLabel" type="Label" parent="BottomNav/Tabs/GardenTab/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 36
+text = "Garden"
+horizontal_alignment = 1
+
+[node name="GardenButton" type="Button" parent="BottomNav/Tabs/GardenTab"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+disabled = true
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_tab")
+
+[node name="BadgesTab" type="Control" parent="BottomNav/Tabs"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="BottomNav/Tabs/BadgesTab"]
+modulate = Color(1, 1, 1, 0.55)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Icon" type="Control" parent="BottomNav/Tabs/BadgesTab/Content"]
+custom_minimum_size = Vector2(0, 130)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("10_badges")
+fit = 1
+slot_name = "ui_tab_badges"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+
+[node name="TabLabel" type="Label" parent="BottomNav/Tabs/BadgesTab/Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"BodyText"
+theme_override_font_sizes/font_size = 36
+text = "Badges"
+horizontal_alignment = 1
+
+[node name="BadgesButton" type="Button" parent="BottomNav/Tabs/BadgesTab"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+disabled = true
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_tab")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_tab")

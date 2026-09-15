@@ -5,15 +5,18 @@ extends Control
 ## reachable both from an on-screen button and from Android's back gesture.
 ##
 ## Attach this to the root of a screen that has a Button named BackButton with
-## "Access as Unique Name" enabled.
+## "Access as Unique Name" enabled. The button is optional — a screen whose
+## artwork draws no back control (the hub, for instance) still gets the Android
+## back gesture, which on a phone is the gesture children actually use.
 
 @export_file("*.tscn") var back_scene_path: String = "res://scenes/ui/main_menu.tscn"
 
-@onready var _back_button: Button = %BackButton
+@onready var _back_button: Button = get_node_or_null("%BackButton") as Button
 
 
 func _ready() -> void:
-	_back_button.pressed.connect(go_back)
+	if _back_button != null:
+		_back_button.pressed.connect(go_back)
 
 
 func _notification(what: int) -> void:
