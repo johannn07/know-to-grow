@@ -102,18 +102,42 @@ which costs nothing against the quota.
 When the goal is simply "get these PNGs into the repo", exporting by hand from
 the Figma UI costs zero calls and is usually the better trade.
 
-## Audience rules (from the design document)
+## Audience rules
 
-These are requirements, not preferences:
+Keep these two groups apart. Do not cite the second group as though the client
+asked for it.
 
-- **No penalties, no "Wrong" label, no timers, no lives, no leaderboards.**
+### Actually in the design document
+
+- **No penalties and no "Wrong" label.** Stated twice, for Level 1 and Level 4.
   A wrong choice bounces gently back with a friendly hint and the child retries.
-- **Touch targets at least 160 px** at the 1080-wide design resolution.
-- **Every instruction should eventually be spoken**, not just written — many
-  players cannot read fluently yet. Keep a `vo_key` on anything with words.
-- **Colour is never the only signal.** Shape and label accompany it.
-- **No exit trap.** Settings and exit sit behind a hold or a parent gate, not
-  one stray tap from a toddler's thumb.
+- **A friendly voice or text line on a wrong answer** — "Oops, let's try again!"
+  The document says "voice/text", so audio is permitted here, not mandated.
+- **Level 2 shows a 0/5 score** that only goes up.
+
+That is the whole of what the design document specifies about audience handling.
+It says nothing about spoken instructions, touch-target sizes, colour-blindness,
+timers, lives, leaderboards or exit gates.
+
+### Proposed in the setup guide, never ratified
+
+`know-to-grow-godot-setup-guide.md` Phase 8 lists these under "Add these to the
+design page" — they are recommendations awaiting a decision, not requirements:
+
+- Touch targets at least 160 px at the 1080-wide design resolution.
+- Every instruction spoken, not just written, with a `vo_key` on anything with
+  words, and a tap-to-hear-again button on each prompt.
+- No timers, no lives, no leaderboards.
+- Colour never the only signal.
+- Exit and settings behind a hold or a parent gate.
+
+Phase 0 of the same guide also assumes "English now, structure for Filipino",
+under an explicit "correct me if any of these are wrong".
+
+Building to these is reasonable and they are already partly implemented (the
+160 px floor is enforced by the menu smoke test). But when weighing a trade-off,
+they carry the weight of a suggestion, not of a client requirement — and they
+should be confirmed with the project owner before they decide anything.
 
 ## Verifying changes
 

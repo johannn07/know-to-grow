@@ -134,8 +134,10 @@ assets** — effectively the whole game. Inventory in `art/MANIFEST.md`.
 - [ ] **⚠ Decide what to do about text baked into the artwork.** Most of the
       level assets — fun-fact banners, stage headers, feedback cards, several
       buttons — have their English sentences rendered into the pixels. That
-      contradicts `content/*.tres`, blocks Filipino localisation, and makes the
-      spoken-prompt requirement hard to keep in sync. Options: (a) accept it and
+      contradicts `content/*.tres`, giving two sources of truth for the same
+      sentence. It would also block Filipino localisation and complicate spoken
+      prompts — though neither of those is a stated requirement; both come from
+      the setup guide as proposals. Options: (a) accept it and
       treat the art as the content source, deleting the wording from the `.tres`
       files; (b) ask for text-free frames and keep the data-driven design;
       (c) hybrid — text-free frames for anything spoken or translated, baked art

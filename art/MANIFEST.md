@@ -74,11 +74,15 @@ banner is not a frame plus a string — it is one flat drawing with the sentence
 already rendered in it. The same is true of the stage headers, the feedback
 cards and several buttons.
 
-That collides directly with the data-driven design in `content/*.tres`, where
-every prompt, hint and fun fact lives as editable text. It also rules out
-Filipino localisation and makes the "tap to hear the prompt again" requirement
-awkward, since the spoken line and the drawn line would have to be kept in sync
-by hand.
+That collides with the data-driven design in `content/*.tres`, where every
+prompt, hint and fun fact lives as editable text — two sources of truth for the
+same sentence, which will drift.
+
+It would also rule out Filipino localisation and complicate spoken prompts. Note
+that neither of those is a stated requirement: the design document says nothing
+about translation or spoken instructions beyond one "friendly voice/text" line on
+wrong answers. Both come from the setup guide as proposals. How much they matter
+is the project owner's call, not an assumption to build on.
 
 This needs a decision before any of the level art is wired up. See `checklist.md`.
 
