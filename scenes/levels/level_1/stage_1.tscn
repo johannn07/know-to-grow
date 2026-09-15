@@ -5,7 +5,6 @@
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
 [ext_resource type="Texture2D" uid="uid://py6pm0kd0dqw" path="res://art/bg_bed_empty.png" id="5_bg"]
-[ext_resource type="Texture2D" uid="uid://dq41m47tam5bv" path="res://art/bg_bed_hole.png" id="6_bgok"]
 [ext_resource type="Texture2D" uid="uid://cvs1pqtre86r0" path="res://art/ui_header_l1_s1.png" id="7_hdr"]
 [ext_resource type="Texture2D" uid="uid://b87xriki8qspt" path="res://art/ui_prompt_l1_s1.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://bvxiag6avsh6v" path="res://art/ui_correct_l1_s1.png" id="9_ok"]
@@ -29,7 +28,6 @@ theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
 challenge_id = &"l1_dig"
 correct_option_id = &"shovel"
-success_background = ExtResource("6_bgok")
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 next_stage_path = "res://scenes/levels/level_1/stage_2.tscn"

@@ -10,6 +10,12 @@ extends SubScreen
 ## stage's own scene, and anything a stage does differently belongs in its own
 ## script, which extends this one.
 ##
+## A stage's garden never changes while the stage is on screen. The backgrounds
+## are independent drawings rather than one scene with a hole added to it — every
+## cloud, tree and fence post sits slightly differently — so swapping one for the
+## next made the whole garden jump, which was very visible behind the feedback
+## card. The change now happens at the stage boundary, where a cut is expected.
+##
 ## A stage scene is expected to have: %Background, %DropZone, %Cards holding
 ## [OptionCard] children, and %Overlay / %OverlayAspect / %OverlayArt /
 ## %OverlayButton for the feedback card.
@@ -45,8 +51,6 @@ const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 @export var alternate_correct_ids: Array[StringName] = []
 
 @export_group("Art")
-## The garden after a correct answer. Leave empty to leave the scene as it is.
-@export var success_background: Texture2D
 ## The "Correct Answer!" card for this stage, with Continue drawn into it.
 @export var correct_card: Texture2D
 ## The "Oops!" card, with Choose Again drawn into it.
@@ -67,7 +71,6 @@ const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 
 var _answered := false
 
-@onready var _background: ArtSlot = %Background
 @onready var _drop_zone: Control = %DropZone
 @onready var _cards: Control = %Cards
 @onready var _overlay: Control = %Overlay
@@ -110,8 +113,6 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 	if is_correct(card.option_id):
 		_answered = true
 		card.freeze()
-		if success_background != null:
-			_background.texture = success_background
 		on_correct(card)
 		_show_feedback(correct_card, correct_button_rect)
 	else:

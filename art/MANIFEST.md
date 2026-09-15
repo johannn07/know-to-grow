@@ -105,10 +105,18 @@ Wired into `scenes/levels/level_1/stage_1.tscn`. Nothing on this screen is a
 
 Notes:
 
-- **The two backgrounds are the same garden in two states.** A stage scene holds
-  the one it opens on as its `Background` and the one it becomes as
-  `success_background`, so consecutive stages name the same file — Stage 1's
-  success garden is Stage 2's opening garden.
+- **A stage's garden never changes while the stage is on screen.** The five bed
+  pictures are *not* one garden in five states — they are independent drawings.
+  Diffing `bg_bed_empty` against `bg_bed_hole` lights up the whole frame: every
+  cloud, tree, fence post and flower sits slightly differently, and the two are
+  even different pixel sizes (852 x 1846 against 851 x 1849). Swapping one for
+  the next made the entire garden jump, which was glaring behind the feedback
+  card. Each stage now keeps one background for its whole life and the change
+  happens at the stage boundary, where a scene cut is expected anyway.
+- `bg_bed_sprout.png` is **currently unused**. It was Stage 4's success garden,
+  and with the swap gone there is no stage after it to show the sprout. That is
+  the payoff of the whole level, so it belongs on the Level 1 completion screen
+  when that gets built.
 - **Two feedback cards carry their own buttons.** `ui_correct_l1_s1.png` has
   Continue drawn into it and `ui_oops_tool.png` has Choose Again. The screen
   lays an invisible `Button` over each, positioned in fractions of the image and

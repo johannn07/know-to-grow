@@ -97,7 +97,6 @@ func _play(scene_path: String) -> String:
 	_expect(stage.get_node("%Prompt").texture != null, "%s has its prompt" % label)
 	_expect(stage.correct_card != null, "%s has a Correct card" % label)
 	_expect(stage.wrong_card != null, "%s has an Oops card" % label)
-	_expect(stage.success_background != null, "%s has a garden to change to" % label)
 	_expect(
 		stage.get_node("%FunFact").texture != null,
 		"%s has its fun fact strip" % label
@@ -188,9 +187,13 @@ func _play(scene_path: String) -> String:
 	right._end_drag(centre)
 	await _settle()
 	_expect(overlay.visible, "%s correct answer shows the Correct card" % label)
+	# The garden must not change while the stage is on screen. The backgrounds
+	# are independent drawings, so swapping one for the next jumps every cloud
+	# and fence post, and it is very visible behind the feedback card. The
+	# change belongs at the stage boundary.
 	_expect(
-		background.texture == stage.success_background,
-		"%s garden changes after a correct answer" % label
+		background.texture == opening,
+		"%s garden is unchanged by a correct answer" % label
 	)
 	_expect(
 		hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,

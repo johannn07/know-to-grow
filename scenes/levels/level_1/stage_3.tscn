@@ -1,11 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://dn5qwe8ha2vbt"]
+[gd_scene load_steps=15 format=3 uid="uid://dn5qwe8ha2vbt"]
 
 [ext_resource type="Script" uid="uid://c8wfbvrt78mh4" path="res://scripts/levels/level_1/stage_3.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
 [ext_resource type="Texture2D" uid="uid://8b100swdwyai" path="res://art/bg_bed_seed.png" id="5_bg"]
-[ext_resource type="Texture2D" uid="uid://cowbuyl1lm8os" path="res://art/bg_bed_watered.png" id="6_bgok"]
 [ext_resource type="Texture2D" uid="uid://c0easxvxrtqrk" path="res://art/ui_header_l1_s3.png" id="7_hdr"]
 [ext_resource type="Texture2D" uid="uid://cc7b44kdhns31" path="res://art/ui_prompt_l1_s3.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://hqfowfrwcvkp" path="res://art/ui_correct_l1_s3.png" id="9_ok"]
@@ -29,7 +28,6 @@ theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
 challenge_id = &"l1_water"
 correct_option_id = &"watering_can"
-success_background = ExtResource("6_bgok")
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 next_stage_path = "res://scenes/levels/level_1/stage_4.tscn"

@@ -95,7 +95,9 @@ picks one of N options, it is right or it is wrong. Build that once.
       close-up behind a white fence, not the raised bed the other four use — the
       `.fig` has no sprout in that framing. **⚠**
 - [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
-      Planter" badge are drawn and unused. Stage 4 currently returns to the hub
+      Planter" badge are drawn and unused. Stage 4 currently returns to the hub.
+      **`bg_bed_sprout.png` belongs here**: it is the payoff of the level and is
+      no longer shown anywhere, now that stages keep one garden each
 - [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
       Planter" badge are drawn and unused
 - [ ] Option shuffling for **Level 3 only** — its scripted answers sit at
