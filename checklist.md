@@ -140,7 +140,7 @@ unlocks **Little Planter**.
       locked forever and no star can ever fill
 - [ ] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
       gardener!"` with three stars, after Stage 4. Art delivered
-- [ ] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the
+- [x] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the
       `Little Planter` badge, with Continue. Art delivered
 - [ ] "You completed Level N" overlay — **not in this batch**, no art yet
 - [ ] Hub with "Click Me" on the plant, then the plant grown — **not in this

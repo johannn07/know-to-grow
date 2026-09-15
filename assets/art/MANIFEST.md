@@ -241,6 +241,8 @@ dimmed screen with a button under it, built on
 | File | Size | Weight | Screen |
 |---|---|---|---|
 | `ui_level_intro_l1.png` | 1106 x 1366 | 1.4 MB | `scenes/ui/level_intro.tscn` |
+| `ui_badge_little_planter.png` | 1122 x 1389 | 1.7 MB | `scenes/ui/badge_unlocked.tscn` |
+| `ui_badge_unlock_banner.png` | 1698 x 808 | 1.2 MB | `scenes/ui/badge_unlocked.tscn` |
 
 - **Supplied at 1.23x, not the usual 2x.** The card is drawn 900 x 1112 at the
   design resolution and the source is 1106 px wide. It is left at native size
@@ -253,9 +255,22 @@ dimmed screen with a button under it, built on
 | Card | Button rect | Drawn |
 |---|---|---|
 | `ui_level_intro_l1` | `Rect2(0.265, 1.0405, 0.47, 0.1149)` | 423 x 128, 45 px under the card |
+| `ui_badge_little_planter` | `Rect2(0.2597, 1.0413, 0.4807, 0.1172)` | 423 x 128, 45 px under the card |
 
-- The background is the hub's own `bg_garden_stump.png`, dimmed to 45%, so the
-  overlay reads as sitting on top of the hub the child just left.
+- **A banner can sit above the card the same way**, with a negative y. The badge
+  screen stacks `BADGE UNLOCK!` over the badge it is unlocking:
+
+| Banner | Banner rect | Drawn |
+|---|---|---|
+| `ui_badge_unlock_banner` | `Rect2(-0.0341, -0.429, 1.0682, 0.4106)` | 940 x 447, 20 px above the card, and wider than it — hence the x outside 0..1 |
+
+- The badge screen's stack is 1729 px of the 1920 available, so it is centred by
+  an uneven margin (top 395, bottom 100) rather than by the card alone. Change
+  any of the three sizes and that margin has to be recomputed with it.
+- Backgrounds: the level intro uses the hub's own `bg_garden_stump.png`, so it
+  reads as sitting on top of the hub the child just left. The badge screen uses
+  **`bg_bed_sprout.png`** — the sprout the level was spent growing, and which
+  had been left unused since stages stopped swapping their gardens.
 
 ## Buttons — delivered
 

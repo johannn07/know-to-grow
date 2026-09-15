@@ -11,7 +11,12 @@ extends SubScreen
 ## written four times.
 ##
 ## A scene using this is expected to have %Background, %Dim, %OverlayAspect,
-## %CardArt, %ButtonArt and %ActionButton.
+## %CardArt, %BannerArt, %ButtonArt and %ActionButton.
+##
+## Everything is placed in fractions **of the card**, which is the only node
+## whose size is pinned to an image. That is why the banner's y is negative and
+## the button's runs past 1.0: they sit outside the card, above and below it,
+## and stay there at any screen size.
 ##
 ## No wording is set here or in any scene using it. Every word on these cards is
 ## drawn into the artwork; content/*.tres records it as a transcript for review
@@ -29,10 +34,15 @@ const BUTTON_BELOW_CARD := Rect2(0.265, 1.04, 0.47, 0.115)
 ## The button under the card. Left empty, no button is drawn and the whole card
 ## becomes the target.
 @export var button_art: Texture2D
+## An optional banner over the card, for a screen that announces itself twice —
+## the badge overlay puts BADGE UNLOCK! above the badge it is unlocking.
+@export var banner_art: Texture2D
 
 @export_group("Layout")
 ## Where [member button_art] sits, in fractions of the card image.
 @export var button_rect: Rect2 = BUTTON_BELOW_CARD
+## Where [member banner_art] sits. Negative y puts it above the card.
+@export var banner_rect: Rect2 = Rect2()
 
 @export_group("Flow")
 ## Where the button goes. Empty means this overlay is the end of its run.
@@ -40,6 +50,7 @@ const BUTTON_BELOW_CARD := Rect2(0.265, 1.04, 0.47, 0.115)
 
 @onready var _aspect: AspectRatioContainer = %OverlayAspect
 @onready var _card_art: ArtSlot = %CardArt
+@onready var _banner_art: ArtSlot = %BannerArt
 @onready var _button_art: ArtSlot = %ButtonArt
 @onready var _action_button: ArtButton = %ActionButton
 
@@ -53,6 +64,11 @@ func _ready() -> void:
 		# The button is placed in fractions of the image, so the node it sits in
 		# has to be exactly the image's shape — no letterboxing.
 		_aspect.ratio = float(card_art.get_width()) / float(card_art.get_height())
+
+	_banner_art.texture = banner_art
+	_banner_art.visible = banner_art != null and banner_rect.has_area()
+	if _banner_art.visible:
+		anchor_to(_banner_art, banner_rect)
 
 	_button_art.texture = button_art
 	_button_art.visible = button_art != null and button_rect.has_area()
