@@ -231,6 +231,46 @@ Notes:
 - One transcript corrected to match the art: the fun fact is drawn *"sunlight,
   water, and air"*, not *"sunlight, water and air"*. `SCRIPT.md` regenerated.
 
+## Buttons — delivered
+
+| File | Size | Weight | Drawn over |
+|---|---|---|---|
+| `ui_button_back.png` | 332 x 299 | 121 KB | the X on `ui_how_to_play` |
+| `ui_button_lets_go.png` | 1368 x 436 | 460 KB | LET'S GO on `ui_how_to_play` |
+| `ui_button_continue.png` | 1100 x 332 | 318 KB | Continue on `ui_correct_l1_s1/2/3` |
+| `ui_button_choose_again.png` | 924 x 297 | 214 KB | Choose Again on `ui_oops_tool` |
+
+These are the four buttons as their own drawings, dressed with the leaves and
+flowers the painted-in versions do not have.
+
+- **Each one is laid over the button already drawn into the card**, not next to
+  it. The cards were rendered with a plain button baked in, and re-rendering
+  them is not on the table, so the only way to use these is to cover the old
+  one. Every rect below was found by aligning the new button's body to the
+  painted one's bounding box, which is why they are not round numbers.
+
+| Button | Rect2 on its card, in fractions |
+|---|---|
+| Back / X | `Rect2(0.8055, 0.0574, 0.1628, 0.1276)` |
+| LET'S GO | `Rect2(0.1442, 0.8009, 0.6705, 0.1824)` |
+| Continue | `Rect2(0.1818, 0.7705, 0.6105, 0.1532)` |
+| Choose Again | `Rect2(0.2736, 0.6849, 0.5130, 0.2345)` |
+
+- **They are drawn `STRETCH`, not `KEEP_ASPECT`.** Covering the painted button
+  completely matters more than holding the source aspect exactly, and the two
+  disagree by 4-8% depending on the button. At these sizes that is invisible; a
+  sliver of the old button showing around the edge would not be.
+- The two feedback buttons are placed in code by `StageScreen`, from
+  `CONTINUE_ART_RECT` and `CHOOSE_AGAIN_ART_RECT`, because the card underneath
+  changes per stage. The two on How To Play are anchored in the scene.
+- **Stage 4 shows no Continue art.** Its Correct card is Level 2's, which has no
+  Continue painted on it, so there is nothing to cover — `correct_art_rect` is
+  zero-sized there and the whole card stays tappable. If that card is ever
+  replaced with one matching the other three, set the rect back to
+  `CONTINUE_ART_RECT` and the button appears.
+- The hotspot rects are **not** these rects. A hotspot is padded out to clear
+  the 160 px touch floor; the art is not, or it would no longer line up.
+
 ## Tool trays — delivered
 
 | File | Size | Weight |

@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://assets/art/icon_sun.png" id="13_sun"]
 [ext_resource type="Texture2D" uid="uid://ci81oypkb7w3g" path="res://assets/art/icon_cloud.png" id="14_cloud"]
 [ext_resource type="Texture2D" uid="uid://cffsfhx2fx82y" path="res://assets/art/icon_moon.png" id="15_moon"]
+[ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui_button_continue.png" id="16_continue"]
+[ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui_button_choose_again.png" id="17_choose_again"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -30,6 +32,9 @@ challenge_id = &"l1_sun"
 correct_option_id = &"sun"
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
+continue_art = ExtResource("16_continue")
+choose_again_art = ExtResource("17_choose_again")
+correct_art_rect = Rect2(0, 0, 0, 0)
 correct_button_rect = Rect2(0, 0, 1, 1)
 
 [node name="Background" type="Control" parent="." unique_id=535290431]
@@ -260,6 +265,22 @@ script = ExtResource("2_slot")
 fit = 0
 slot_name = "feedback_card"
 placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="OverlayButtonArt" type="Control" parent="Overlay/Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1818
+anchor_top = 0.7705
+anchor_right = 0.7923
+anchor_bottom = 0.9237
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_button_continue"
+hide_when_empty = true
 
 [node name="OverlayButton" type="Button" parent="Overlay/Center/OverlayAspect/Card" unique_id=1836700267]
 unique_name_in_owner = true

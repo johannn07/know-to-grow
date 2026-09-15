@@ -41,6 +41,18 @@ const CHOOSE_AGAIN_RECT := Rect2(0.315, 0.71, 0.41, 0.145)
 ## Continue on them.
 const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 
+## Where the button *artwork* sits on the Level 1 feedback cards. These are not
+## the hotspot rects above: a hotspot is padded out to reach the touch floor,
+## while the art has to land exactly on the button already drawn into the card,
+## or the child sees two buttons. Measured by aligning the new button's body to
+## the painted one's, so the new art covers the old completely.
+const CONTINUE_ART_RECT := Rect2(0.1818, 0.7705, 0.6105, 0.1532)
+const CHOOSE_AGAIN_ART_RECT := Rect2(0.2736, 0.6849, 0.5130, 0.2345)
+
+## For a card with no button drawn on it, and so nothing to cover. A zero-sized
+## rect leaves the art hidden rather than stretching it across the whole card.
+const NO_BUTTON_ART := Rect2(0.0, 0.0, 0.0, 0.0)
+
 @export_group("Answer")
 ## Matches a ChallengeData in content/*.tres. Nothing reads it at runtime — it
 ## is what lets the smoke test check this scene against the reviewed content.
@@ -56,12 +68,22 @@ const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 ## The "Oops!" card, with Choose Again drawn into it.
 @export var wrong_card: Texture2D
 
+## The Continue button, drawn over the one painted into [member correct_card].
+@export var continue_art: Texture2D
+## Choose Again, drawn over the one painted into [member wrong_card].
+@export var choose_again_art: Texture2D
+
 @export_group("Feedback hotspots")
 ## Where the Continue button is drawn on [member correct_card], in fractions of
 ## that image. Use [constant WHOLE_CARD] when the card has no button drawn on it.
 @export var correct_button_rect: Rect2 = CONTINUE_RECT
 ## Where Choose Again is drawn on [member wrong_card].
 @export var wrong_button_rect: Rect2 = CHOOSE_AGAIN_RECT
+## Where [member continue_art] is drawn. [constant NO_BUTTON_ART] hides it, for a
+## card with no painted button to cover.
+@export var correct_art_rect: Rect2 = CONTINUE_ART_RECT
+## Where [member choose_again_art] is drawn.
+@export var wrong_art_rect: Rect2 = CHOOSE_AGAIN_ART_RECT
 
 @export_group("Flow")
 ## The next stage. Empty means this is the last one built.
@@ -76,6 +98,7 @@ var _answered := false
 @onready var _overlay: Control = %Overlay
 @onready var _overlay_aspect: AspectRatioContainer = %OverlayAspect
 @onready var _overlay_art: ArtSlot = %OverlayArt
+@onready var _overlay_button_art: ArtSlot = %OverlayButtonArt
 @onready var _overlay_button: Button = %OverlayButton
 
 
@@ -114,7 +137,7 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		_answered = true
 		card.freeze()
 		on_correct(card)
-		_show_feedback(correct_card, correct_button_rect)
+		_show_feedback(correct_card, correct_button_rect, continue_art, correct_art_rect)
 	else:
 		# Actually tried on the target and wrong. The card returns to its slot
 		# greyed out: still visible, so the attempt is not erased, but no longer
@@ -122,7 +145,7 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		card.return_home()
 		card.mark_spent()
 		on_wrong(card)
-		_show_feedback(wrong_card, wrong_button_rect)
+		_show_feedback(wrong_card, wrong_button_rect, choose_again_art, wrong_art_rect)
 
 
 ## Hooks for a stage that needs to do something of its own. Override in the
@@ -135,7 +158,9 @@ func on_wrong(_card: OptionCard) -> void:
 	pass
 
 
-func _show_feedback(art: Texture2D, button_rect: Rect2) -> void:
+func _show_feedback(
+	art: Texture2D, button_rect: Rect2, button_art: Texture2D, art_rect: Rect2
+) -> void:
 	if art == null:
 		push_warning("%s: no feedback art assigned in the scene" % name)
 		return
@@ -143,21 +168,32 @@ func _show_feedback(art: Texture2D, button_rect: Rect2) -> void:
 	# The hotspot is placed in fractions of the image, so the node it sits in
 	# has to be exactly the image's shape — no letterboxing.
 	_overlay_aspect.ratio = float(art.get_width()) / float(art.get_height())
+	# The button art covers the one painted into the card, so it is only shown
+	# where there is one to cover — Stage 4's borrowed card has none.
+	_overlay_button_art.texture = button_art
+	_overlay_button_art.visible = button_art != null and art_rect.has_area()
+	if _overlay_button_art.visible:
+		_anchor_to(_overlay_button_art, art_rect)
 	_overlay.show()
 	_place_hotspot(_overlay_button, button_rect)
+
+
+## Anchors a control over a region of the card, in fractions of the card image.
+func _anchor_to(control: Control, frac: Rect2) -> void:
+	control.anchor_left = frac.position.x
+	control.anchor_top = frac.position.y
+	control.anchor_right = frac.end.x
+	control.anchor_bottom = frac.end.y
+	control.offset_left = 0.0
+	control.offset_top = 0.0
+	control.offset_right = 0.0
+	control.offset_bottom = 0.0
 
 
 ## Anchors a hotspot over a button drawn into the artwork, then pads it out
 ## until it clears [constant MIN_TOUCH] in both directions.
 func _place_hotspot(button: Button, frac: Rect2) -> void:
-	button.anchor_left = frac.position.x
-	button.anchor_top = frac.position.y
-	button.anchor_right = frac.end.x
-	button.anchor_bottom = frac.end.y
-	button.offset_left = 0.0
-	button.offset_top = 0.0
-	button.offset_right = 0.0
-	button.offset_bottom = 0.0
+	_anchor_to(button, frac)
 	await get_tree().process_frame
 	var pad_x: float = maxf(0.0, (MIN_TOUCH - button.size.x) * 0.5)
 	var pad_y: float = maxf(0.0, (MIN_TOUCH - button.size.y) * 0.5)

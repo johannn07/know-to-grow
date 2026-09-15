@@ -5,6 +5,8 @@
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="Texture2D" uid="uid://cxrcvpvrfua3c" path="res://assets/art/bg_sky.png" id="4_sky"]
 [ext_resource type="Texture2D" uid="uid://du47v6vpydvdh" path="res://assets/art/ui_how_to_play.png" id="5_card"]
+[ext_resource type="Texture2D" uid="uid://37cnsxcc3k0v" path="res://assets/art/ui_button_back.png" id="6_back"]
+[ext_resource type="Texture2D" uid="uid://cq1xjpjbythmu" path="res://assets/art/ui_button_lets_go.png" id="7_go"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_invisible"]
 
@@ -66,6 +68,38 @@ texture = ExtResource("5_card")
 fit = 0
 slot_name = "ui_how_to_play"
 placeholder_color = Color(0.99, 0.97, 0.9, 1)
+
+[node name="BackButtonArt" type="Control" parent="Center/Aspect/Card"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8055
+anchor_top = 0.0574
+anchor_right = 0.9683
+anchor_bottom = 0.1849
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("6_back")
+fit = 0
+slot_name = "ui_button_back"
+hide_when_empty = true
+
+[node name="LetsGoButtonArt" type="Control" parent="Center/Aspect/Card"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1442
+anchor_top = 0.8009
+anchor_right = 0.8147
+anchor_bottom = 0.9832
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("7_go")
+fit = 0
+slot_name = "ui_button_lets_go"
+hide_when_empty = true
 
 [node name="BackButton" type="Button" parent="Center/Aspect/Card" unique_id=635918939]
 unique_name_in_owner = true
