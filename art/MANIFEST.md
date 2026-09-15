@@ -204,13 +204,21 @@ Two things follow, and both are easy to break by accident:
 - **The cards must stay in the same order as the items in the tray.** Stage 2's
   tray is Leaf / Seed / Rock, so its cards are in that order and not the order
   the content file happens to list them in. Reordering the cards in the editor
-  would leave them covering the wrong labels. Each stage script says so at the
-  top.
-- **Card art fills its slot rather than fitting inside it.** The standalone card
-  and the tray's drawn panel are the same design exported on different canvases,
-  so fitting left the tray's own label pill peeking out below the card. Filling
-  covers it exactly; the small aspect difference is the export's, not a
-  distortion of the drawing.
+  would leave them sitting over the wrong labels. Each stage script says so at
+  the top.
+- **A resting card draws nothing.** The tray already has that item painted into
+  it, at exactly the right size and place, so the card is only a hit area until
+  it is picked up. Drawing both produced a rim inside a rim: the standalone
+  cards carry thicker frames than the tray's drawn slots, and by different
+  amounts per family — `icon_sun` and `icon_gloves` have noticeably chunkier
+  frames than `icon_shovel` — so no single scaling lines them all up. Not
+  double-drawing is exact by construction, and it holds for every stage.
+  A card that has no artwork yet stays visible, so a missing asset is still a
+  labelled blank rather than an invisible one.
+
+A card becomes visible when it is lifted, and again once it has been tried and
+greyed out — there the slight frame difference reads as "used" rather than as a
+misalignment.
 
 Option shuffling is gone as a result: a card's position is fixed by the picture
 behind it. That only ever mattered for Level 3, which is multiple choice and has

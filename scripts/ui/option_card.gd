@@ -6,6 +6,14 @@ extends Control
 ## The artwork carries the item's name in its own pixels, so this draws nothing
 ## itself — it is a hit area with a picture in it and a drag behaviour.
 ##
+## While the card is sitting in its slot it draws **nothing at all**: the tray
+## behind it already has that item painted into the picture, at exactly the right
+## size and position. Drawing the card on top of it too only ever produced a rim
+## inside a rim, because the standalone cards carry thicker frames than the tray's
+## drawn slots — and by different amounts, so no single scaling lines them all up.
+## The card's own art appears the moment it is picked up, and again when it has
+## been tried and greyed out.
+##
 ## Dragging sets [member Control.top_level] so the card escapes the container
 ## that laid it out, while the container keeps reserving its slot. That way a
 ## card that snaps back lands exactly where it started without the row reflowing
@@ -47,8 +55,12 @@ var _home_global := Vector2.ZERO
 @onready var _art: ArtSlot = $Art
 
 
+var _spent := false
+
+
 func _ready() -> void:
 	_apply()
+	_rest()
 
 
 func _apply() -> void:
@@ -56,6 +68,14 @@ func _apply() -> void:
 		return
 	_art.texture = icon
 	_art.slot_name = String(option_id)
+
+
+## Hides the card's own art so the tray's drawn slot shows through. A card with
+## no artwork yet stays visible, so a missing asset is still a labelled blank
+## rather than an invisible one.
+func _rest() -> void:
+	if _art != null and not _spent:
+		_art.visible = icon == null
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -86,6 +106,8 @@ func _begin_drag(at_global: Vector2) -> void:
 	top_level = true
 	global_position = _home_global
 	z_index = 10
+	if _art != null:
+		_art.show()
 
 
 func _end_drag(at_global: Vector2) -> void:
@@ -113,6 +135,7 @@ func return_home() -> void:
 	# like it was deleted.
 	top_level = false
 	position = _home_local
+	_rest()
 
 
 ## Stops this card responding to touch, for when the stage has been answered.
@@ -125,5 +148,8 @@ func freeze() -> void:
 ## target and was wrong: removing it would erase the child's own attempt, and
 ## leaving it live invites the same wrong answer again.
 func mark_spent() -> void:
+	_spent = true
 	modulate = SPENT_MODULATE
+	if _art != null:
+		_art.show()
 	freeze()

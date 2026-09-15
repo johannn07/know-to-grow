@@ -99,6 +99,12 @@ func _play(scene_path: String) -> String:
 	_expect(cards.size() >= 2, "%s has cards (%d)" % [label, cards.size()])
 	for card in cards:
 		_expect(card.icon != null, "%s card '%s' has its artwork" % [label, card.option_id])
+		# A resting card draws nothing: the tray behind it already has that item
+		# painted in. Drawing both is what produced a rim inside a rim.
+		_expect(
+			not card.get_node("Art").visible,
+			"%s card '%s' lets the tray's own slot show through" % [label, card.option_id]
+		)
 		_expect(
 			card.size.x >= 160.0 and card.size.y >= 160.0,
 			"%s card '%s' clears 160 px" % [label, card.option_id]
@@ -143,6 +149,10 @@ func _play(scene_path: String) -> String:
 		"%s wrong card is back in its slot" % label
 	)
 	_expect(wrong.modulate != Color.WHITE, "%s wrong card is greyed out" % label)
+	_expect(
+		wrong.get_node("Art").visible,
+		"%s wrong card draws itself once retired, so the slot reads as used" % label
+	)
 	_expect(
 		wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"%s wrong card cannot be picked again" % label
