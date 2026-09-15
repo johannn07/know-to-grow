@@ -1,16 +1,20 @@
-[gd_scene load_steps=10 format=3 uid="uid://owlhlu6rt330"]
+[gd_scene format=3 uid="uid://owlhlu6rt330"]
 
-[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
-[ext_resource type="Script" path="res://scripts/ui/art_slot.gd" id="2_slot"]
-[ext_resource type="Theme" path="res://themes/ktg_theme.tres" id="3_theme"]
-[ext_resource type="Texture2D" path="res://art/bg_sky.png" id="4_sky"]
-[ext_resource type="Texture2D" path="res://art/bg_ground.png" id="5_ground"]
-[ext_resource type="Texture2D" path="res://art/logo.png" id="6_logo"]
-[ext_resource type="Texture2D" path="res://art/mascot_sprout.png" id="7_sprout"]
-[ext_resource type="Texture2D" path="res://art/mascot_flower.png" id="8_flower"]
-[ext_resource type="Texture2D" path="res://art/fx_leaves.png" id="9_leaves"]
+[ext_resource type="Script" uid="uid://jfk5frvdshcl" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://cxrcvpvrfua3c" path="res://art/bg_sky.png" id="4_sky"]
+[ext_resource type="Texture2D" uid="uid://y5u53l0rmx4p" path="res://art/bg_ground.png" id="5_ground"]
+[ext_resource type="Texture2D" uid="uid://l7dwdid0gypt" path="res://art/logo.png" id="6_logo"]
+[ext_resource type="Texture2D" uid="uid://cnw4v5fosdy2c" path="res://art/mascot_sprout.png" id="7_sprout"]
+[ext_resource type="Texture2D" uid="uid://b14n36e3hjxbl" path="res://art/mascot_flower.png" id="8_flower"]
+[ext_resource type="Texture2D" uid="uid://cjtdbenvy7wa8" path="res://art/fx_leaves.png" id="9_leaves"]
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="SystemFont" id="SystemFont_8enr0"]
+
+[sub_resource type="SystemFont" id="SystemFont_fplnf"]
+
+[node name="MainMenu" type="Control" unique_id=211196414]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +24,7 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_menu")
 
-[node name="Background" type="Control" parent="."]
+[node name="Background" type="Control" parent="." unique_id=1256602788]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,7 +33,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Sky" type="Control" parent="Background"]
+[node name="Sky" type="Control" parent="Background" unique_id=607888923]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -39,12 +43,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("4_sky")
 fit = 2
 slot_name = "bg_sky"
 placeholder_color = Color(0.52, 0.82, 0.95, 1)
-texture = ExtResource("4_sky")
 
-[node name="Hills" type="Control" parent="Background"]
+[node name="Hills" type="Control" parent="Background" unique_id=537376057]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 12
@@ -61,7 +65,7 @@ slot_name = "bg_hills"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
 hide_when_empty = true
 
-[node name="Ground" type="Control" parent="Background"]
+[node name="Ground" type="Control" parent="Background" unique_id=216963883]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 12
@@ -73,12 +77,12 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("5_ground")
 fit = 2
 slot_name = "bg_ground"
 placeholder_color = Color(0.45, 0.3, 0.18, 1)
-texture = ExtResource("5_ground")
 
-[node name="MascotLeft" type="Control" parent="Background"]
+[node name="MascotLeft" type="Control" parent="Background" unique_id=1363038535]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -90,11 +94,11 @@ offset_bottom = -130.0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("7_sprout")
 slot_name = "mascot_sprout"
 placeholder_color = Color(0.4, 0.7, 0.3, 1)
-texture = ExtResource("7_sprout")
 
-[node name="MascotRight" type="Control" parent="Background"]
+[node name="MascotRight" type="Control" parent="Background" unique_id=572507738]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -109,11 +113,11 @@ grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("8_flower")
 slot_name = "mascot_flower"
 placeholder_color = Color(0.4, 0.7, 0.3, 1)
-texture = ExtResource("8_flower")
 
-[node name="Leaves" type="Control" parent="."]
+[node name="Leaves" type="Control" parent="." unique_id=1440744731]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -121,59 +125,60 @@ offset_bottom = 1000.0
 grow_horizontal = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
-slot_name = "fx_leaves"
 texture = ExtResource("9_leaves")
+slot_name = "fx_leaves"
 placeholder_color = Color(0.4, 0.71, 0.27, 1)
 hide_when_empty = true
 
-[node name="Foreground" type="MarginContainer" parent="."]
+[node name="Foreground" type="MarginContainer" parent="." unique_id=1776180758]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
 theme_override_constants/margin_left = 70
 theme_override_constants/margin_top = 90
 theme_override_constants/margin_right = 70
 theme_override_constants/margin_bottom = 90
 
-[node name="Column" type="VBoxContainer" parent="Foreground"]
+[node name="Column" type="VBoxContainer" parent="Foreground" unique_id=1632879212]
 layout_mode = 2
-mouse_filter = 1
 theme_override_constants/separation = 34
 
-[node name="LogoSlot" type="Control" parent="Foreground/Column"]
+[node name="LogoSlot" type="Control" parent="Foreground/Column" unique_id=2008778046]
 custom_minimum_size = Vector2(0, 560)
 layout_mode = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("6_logo")
 slot_name = "logo"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
-texture = ExtResource("6_logo")
 
-[node name="TopSpacer" type="Control" parent="Foreground/Column"]
+[node name="TopSpacer" type="Control" parent="Foreground/Column" unique_id=642099295]
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="StartButton" type="Button" parent="Foreground/Column"]
+[node name="StartButton" type="Button" parent="Foreground/Column" unique_id=1562304778]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(760, 190)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"PrimaryButton"
+theme_override_fonts/font = SubResource("SystemFont_8enr0")
+theme_override_font_sizes/font_size = 100
 text = "Start Game"
 
-[node name="HowToPlayButton" type="Button" parent="Foreground/Column"]
+[node name="HowToPlayButton" type="Button" parent="Foreground/Column" unique_id=1417964607]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(470, 160)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_fonts/font = SubResource("SystemFont_fplnf")
 text = "HOW TO PLAY"
 
-[node name="BottomSpacer" type="Control" parent="Foreground/Column"]
+[node name="BottomSpacer" type="Control" parent="Foreground/Column" unique_id=1881620067]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.35

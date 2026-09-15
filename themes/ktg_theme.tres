@@ -1,6 +1,6 @@
-[gd_resource type="Theme" load_steps=7 format=3 uid="uid://ddiq5de3ppim6"]
+[gd_resource type="Theme" format=3 uid="uid://ddiq5de3ppim6"]
 
-[ext_resource type="Texture2D" path="res://art/ui_button_primary.png" id="1_btn"]
+[ext_resource type="Texture2D" uid="uid://rjgk7s4kk2c4" path="res://art/ui_button_primary.png" id="1_btn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secondary_normal"]
 content_margin_left = 44.0
@@ -38,41 +38,6 @@ corner_radius_top_left = 28
 corner_radius_top_right = 28
 corner_radius_bottom_right = 28
 corner_radius_bottom_left = 28
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_primary_normal"]
-content_margin_left = 56.0
-content_margin_top = 30.0
-content_margin_right = 56.0
-content_margin_bottom = 36.0
-bg_color = Color(0.36, 0.73, 0.26, 1)
-border_width_left = 7
-border_width_top = 7
-border_width_right = 7
-border_width_bottom = 13
-border_color = Color(0.19, 0.47, 0.13, 1)
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
-shadow_color = Color(0, 0, 0, 0.22)
-shadow_size = 9
-shadow_offset = Vector2(0, 7)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_primary_pressed"]
-content_margin_left = 56.0
-content_margin_top = 36.0
-content_margin_right = 56.0
-content_margin_bottom = 30.0
-bg_color = Color(0.31, 0.64, 0.22, 1)
-border_width_left = 7
-border_width_top = 13
-border_width_right = 7
-border_width_bottom = 7
-border_color = Color(0.19, 0.47, 0.13, 1)
-corner_radius_top_left = 40
-corner_radius_top_right = 40
-corner_radius_bottom_right = 40
-corner_radius_bottom_left = 40
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_primary_normal"]
 content_margin_left = 60.0
