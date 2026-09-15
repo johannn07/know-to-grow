@@ -127,6 +127,38 @@ Notes:
   [51], [58] — one per stage) but a baked tray cannot be dragged, and the design
   document's Level 1 action is "tap the Shovel, drag it to the dirt".
 
+## Level 1 Stage 2 — delivered
+
+| File | Size | Weight |
+|---|---|---|
+| `bg_bed_seed.png` | 863 x 1822 | 1.8 MB |
+| `ui_header_l1_s2.png` | 900 x 458 | 359 KB |
+| `ui_prompt_l1_s2.png` | 1000 x 381 | 392 KB |
+| `icon_seed.png` | 300 x 303 | 109 KB |
+| `icon_rock.png` | 300 x 337 | 106 KB |
+| `icon_leaf.png` | 300 x 329 | 109 KB |
+| `ui_correct_l1_s2.png` | 800 x 1020 | 1.1 MB |
+| `ui_fact_l1_s2.png` | 900 x 267 | 285 KB |
+
+Notes:
+
+- **Two transcripts were corrected to match the artwork**, per the rule above.
+  The speech bubble reads *"What goes inside the hole to start growing our
+  plant?"*, not the design document's *"Now, put one tiny seed into the hole.
+  What goes inside?"*; and the item card is drawn **Seed**, not *Seed Packet*.
+  Nothing a child sees changed — transcripts are never rendered — but the
+  voice-over script did, so `audio/vo/en/SCRIPT.md` was regenerated. This also
+  settles the open "Seed or Seed Packet" question in favour of the art.
+  The option's `id` stays `seed_packet`: ids are internal and renaming one
+  churns its `vo_key` for nothing.
+- **The Oops card still says "That's not the right tool."** In this stage the
+  wrong answers are a rock and a leaf, which are not tools. It is the only Oops
+  card in the file and it is wired level-wide, so the wording is off by one
+  stage. Worth a re-render if the project owner wants it exact.
+- The bed states now run `empty_bed` -> `hole_dug` -> `seed_covered`. The
+  remaining two, `soil_watered` and `sprout`, are already drawn — the same bed
+  wet ([152]) and with a sprout in it ([166]).
+
 ## Still in the Figma file, not yet extracted
 
 The `.fig` contains roughly **170 unique full-resolution assets** — effectively

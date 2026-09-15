@@ -65,9 +65,10 @@ picks one of N options, it is right or it is wrong. Build that once.
       home on a rejected drop
 - [x] `ChallengeScreen` — reads a `LevelData` + index and plays one stage.
       Nothing in it knows it is Level 1; swap the resource to play another level
-- [x] **Level 1 Stage 1 playable** — drag a tool onto the soil, the garden
-      changes state, feedback cards appear. `tools/verify_level_1.gd` plays the
-      whole loop headlessly, 23 checks
+- [x] **Level 1 Stages 1-2 playable** — drag an item onto the soil, the garden
+      changes state, feedback cards appear, Continue carries the garden into the
+      next stage. `tools/verify_level_1.gd` plays both stages headlessly, 57
+      checks
 - [ ] `DropZone` component — currently a plain `Control` rect on the screen.
       Promote it to a component with `zone_id` and hover highlight when a stage
       needs more than one zone (Level 4 does)
@@ -78,9 +79,11 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [x] Wrong answer: card slides back, "Oops!" card with Choose Again, no penalty
       and no "Wrong" label
 - [ ] Wrong answer polish: the item's own `wrong_hint`, arrow nudge
-- [ ] Level 1 Stages 2-4 — art exists in the `.fig` ([59][82][111] for Stage 2,
-      [52] Stage 3, [56] Stage 4). `ChallengeScreen` advances to the next stage
-      automatically once its `prompt_art` is wired
+- [ ] Level 1 Stages 3-4 — art exists in the `.fig` ([52] "Water the Soil" and
+      [56] "Give Sunlight" headers, beds [152] and [166]). `ChallengeScreen`
+      advances to the next stage automatically once its `prompt_art` is wired
+- [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
+      Planter" badge are drawn and unused
 - [ ] Option shuffling (`shuffle_options`) — Level 3's scripted answers sit at
       B, A, C, A, B and children memorise positions faster than content
 - [ ] Level 1 stays in fixed order (`shuffle_challenges = false`) — planting is a
@@ -119,9 +122,17 @@ the open content questions, not bugs.
       plant needs a drink" is solved equally well by *Watering Can* and *Water*,
       and both are on screen. The prototype accepted both — either keep that or
       reword the situation. **⚠**
-- [ ] **Level 1 stage 2 labels the item two ways** — the tray says "Seed Packet",
-      the correct choice is listed as "Seed". Pick one and use it in the art, the
-      prompt and the voice-over. **⚠**
+- [x] ~~**Level 1 stage 2 labels the item two ways**~~ **Answered: "Seed."** The
+      item card is drawn `Seed`, so the transcript now says Seed and the
+      voice-over line with it. The internal id stays `seed_packet`
+- [ ] **The Level 1 Oops card says "That's not the right tool."** It is wired
+      level-wide, but Stage 2's wrong answers are a rock and a leaf. Re-render
+      it with wording that fits all four stages, or accept it. **⚠**
+- [ ] **Two prompts differ between the design document and the artwork.** Stage 2
+      is the one found so far: the bubble reads "What goes inside the hole to
+      start growing our plant?" The artwork wins per the baked-text decision, and
+      the transcript was updated to match — but the teaching-content owner should
+      see the list before voice-over is recorded. **⚠**
 - [ ] **Level 1 has no completion celebration** in the design document while
       Level 4 does. Give every level the same reward beat
 - [ ] Wrong-answer hints are written one per *item* (6 lines for Level 2), not

@@ -109,6 +109,55 @@ func _initialize() -> void:
 		"the Correct card draws over the dropped card (%d vs %d)" % [overlay.z_index, right.z_index])
 
 
+	# --- Continue advances to Stage 2 ---
+	hotspot.pressed.emit()
+	await _settle()
+	_expect(screen.challenge_index == 1, "Continue moves on to stage 2 (index %d)" % screen.challenge_index)
+
+	var s2: ChallengeData = level.challenges[1]
+	_expect(s2.id == &"l1_seed", "stage 2 is l1_seed (is %s)" % s2.id)
+	_expect(screen.get_node("%Header").texture == s2.header_art, "stage 2 shows its own header")
+	_expect(screen.get_node("%Prompt").texture == s2.prompt_art, "stage 2 shows its own prompt")
+	_expect(screen.get_node("%Background").texture == level.scene_art[s2.scene_state],
+		"stage 2 opens on the '%s' garden it was left in" % s2.scene_state)
+	_expect(not screen._answered, "stage 2 starts unanswered")
+
+	var cards2: Array = []
+	for c in screen.get_node("%Cards").get_children():
+		if is_instance_valid(c) and not c.is_queued_for_deletion():
+			cards2.append(c)
+	_expect(cards2.size() == 3, "stage 2 has three cards (got %d)" % cards2.size())
+	for card in cards2:
+		_expect(card.data.icon != null, "stage 2 card '%s' has its artwork" % card.data.id)
+		_expect(card.modulate == Color.WHITE, "stage 2 card '%s' starts fresh" % card.data.id)
+
+	var wrong2: OptionCard = _wrong_card(cards2, s2)
+	wrong2._begin_drag(wrong2.global_position + Vector2(20.0, 20.0))
+	wrong2._end_drag(centre)
+	await _settle()
+	_expect(overlay.visible, "stage 2 wrong answer shows the Oops card")
+	await _rest()
+	_expect(wrong2.modulate != Color.WHITE, "stage 2 wrong card is greyed out")
+	hotspot.pressed.emit()
+	await _settle()
+
+	var right2: OptionCard = _card(cards2, s2.correct_option_id)
+	_expect(right2 != null, "stage 2 has its correct card '%s'" % s2.correct_option_id)
+	right2._begin_drag(right2.global_position + Vector2(20.0, 20.0))
+	right2._end_drag(centre)
+	await _settle()
+	_expect(screen.get_node("%OverlayArt").texture == s2.correct_art,
+		"stage 2 shows its own Correct card")
+	_expect(screen.get_node("%Background").texture == level.scene_art[s2.success_state],
+		"the garden advances to '%s'" % s2.success_state)
+
+	# --- transcripts still describe the artwork ---
+	_expect(s2.prompt_transcript == "What goes inside the hole to start growing our plant?",
+		"stage 2 prompt transcript matches the speech bubble")
+	_expect(s2.get_option(&"seed_packet").label == "Seed",
+		"the seed card's transcript matches the word drawn on it")
+
+
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
 

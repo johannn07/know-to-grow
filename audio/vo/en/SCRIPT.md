@@ -13,7 +13,7 @@ match the artwork exactly, because the art is what the child sees.
 | `level_1_instruction` | Let's plant a seed! Tap the correct tool or object, then drag it where it belongs. |
 | `l1_dig_prompt` | First, we need a little hole in the soil for our seed. Which tool do we use? |
 | `l1_dig_fact` | Digging a small hole gives the seed a cozy place to rest and grow! |
-| `l1_seed_prompt` | Now, put one tiny seed into the hole. What goes inside? |
+| `l1_seed_prompt` | What goes inside the hole to start growing our plant? |
 | `l1_seed_fact` | Inside every seed is a tiny baby plant just waiting to wake up! |
 | `l1_water_prompt` | The seed is thirsty! What do we pour gently over the soil? |
 | `l1_water_fact` | Water helps the seed wake up and begin to grow! |
@@ -101,7 +101,7 @@ Spoken when a child taps an item. Shared across levels, so each is recorded once
 | `item_leaves` | Leaves |
 | `item_leaf` | Leaf |
 | `item_rock` | Rock |
-| `item_seed_packet` | Seed Packet |
+| `item_seed_packet` | Seed |
 | `item_fruit` | Fruit |
 | `item_flower` | Flower |
 | `item_watering_can` | Watering Can |
