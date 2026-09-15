@@ -50,12 +50,17 @@ before it can be started.
 The four levels are one mechanic in four costumes: show a prompt, the learner
 picks one of N options, it is right or it is wrong. Build that once.
 
-- [ ] **Restore the data scripts** — `scripts/data/level_data.gd`,
-      `challenge_data.gd`, `option_data.gd`. They were deleted in
-      `setup/removed prototype data`, so all four `content/*.tres` files now carry
-      their own inlined copy of the schema. The content survived intact, but there
-      are four divergent copies of the class definitions. **Do this before
-      touching the `.tres` files** or the copies will drift further apart
+- [x] **Data scripts restored** — `scripts/data/level_data.gd`,
+      `challenge_data.gd`, `option_data.gd`, recreated at the UIDs the content
+      files already referenced. Only `level_1` had actually inlined the schema;
+      levels 2-4 still pointed at the missing paths, so they reconnected cleanly
+- [x] **Content restructured to the transcript model** — text fields renamed to
+      `*_transcript` and never rendered; the artwork carries the words. Every
+      spoken line has a `*_vo_key`
+- [x] `tools/verify_content.gd` — validates all 19 challenges: correct answers
+      exist among their options, transcripts present, voice-over keys unique
+- [x] `tools/export_vo_script.gd` — generates `audio/vo/en/SCRIPT.md`, the
+      76-line recording script, from the transcripts
 - [ ] `OptionCard` component — tappable and draggable, uses `ArtSlot` for its icon
 - [ ] `DropZone` component — `zone_id`, minimum 160 px target, highlight on hover
 - [ ] `ChallengeScreen` — reads a `LevelData` and plays it end to end
@@ -110,8 +115,9 @@ the open content questions, not bugs.
 - [ ] Content lock: walk all 19 stages on a phone with whoever owns the teaching
       content, then freeze the wording. Changes after voice-over is recorded mean
       re-recording
-- [ ] Structure for Filipino translation now (`.csv` → `.translation`), even if
-      only English ships. Costs nothing today, costs weeks later. **⚠**
+- [x] Filipino: **not shipping**. Decided. The artwork carries English text, so
+      translating would mean re-rendering every banner — revisit only as a
+      deliberate, costed project
 
 ## 5 · Audio
 
@@ -131,18 +137,9 @@ The artwork exists. `Untitled.fig` holds roughly **170 unique full-resolution
 assets** — effectively the whole game. Inventory in `art/MANIFEST.md`.
 
 - [x] Main menu: 7 assets extracted, downscaled and wired
-- [ ] **⚠ Decide what to do about text baked into the artwork.** Most of the
-      level assets — fun-fact banners, stage headers, feedback cards, several
-      buttons — have their English sentences rendered into the pixels. That
-      contradicts `content/*.tres`, giving two sources of truth for the same
-      sentence. It would also block Filipino localisation and complicate spoken
-      prompts — though neither of those is a stated requirement; both come from
-      the setup guide as proposals. Options: (a) accept it and
-      treat the art as the content source, deleting the wording from the `.tres`
-      files; (b) ask for text-free frames and keep the data-driven design;
-      (c) hybrid — text-free frames for anything spoken or translated, baked art
-      for fixed chrome. **Nothing else in this section should start until this
-      is settled**
+- [x] **Decided: the artwork keeps its text.** English only, no Filipino for
+      now. `content/*.tres` holds transcripts, not display strings. Verified
+      legible at 1080-wide design resolution
 - [ ] 16 item icons (1254 × 1254 in the source)
 - [ ] Stage backgrounds (852 × 1846) — Level 1 and Level 2 states
 - [ ] Hero plant variants, including versions with roots exposed
@@ -191,6 +188,5 @@ Collected from the **⚠** items above, because these block other people's work:
 3. Real level select, or straight into Level 1? — blocks the screen flow
 4. Level 2 situation 3: accept both answers, or reword it?
 5. "Seed" or "Seed Packet"? — blocks the icon brief and the voice-over script
-6. Is Filipino shipping, or only being structured for? — now entangled with the
-   baked-in-text question above, since translated art would mean re-rendering
-   every banner
+6. ~~Is Filipino shipping?~~ **Answered: no.** The artwork keeps its English
+   text; `content/*.tres` holds transcripts and voice-over keys

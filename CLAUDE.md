@@ -102,6 +102,32 @@ which costs nothing against the quota.
 When the goal is simply "get these PNGs into the repo", exporting by hand from
 the Figma UI costs zero calls and is usually the better trade.
 
+## The artwork carries the words — decided
+
+The Figma artwork has its English text drawn into the pixels: prompt banners,
+stage headers, feedback cards, several buttons. **That is the agreed design.**
+`Know To Grow.pdf` and the Figma files are the sources of truth, English only,
+no Filipino for now. Verified legible at the 1080-wide design resolution.
+
+So `content/*.tres` is no longer a display layer. Its text fields are
+**transcripts** — `prompt_transcript`, `fun_fact_transcript`,
+`instruction_transcript`, `completion_transcript`, `final_fun_fact_transcript`.
+They are never drawn on screen. They exist so the wording stays greppable,
+diffable, reviewable, and usable as a voice-over script.
+
+Rules that follow from this:
+
+- **Never render a `*_transcript` field.** If a screen needs to show words, it
+  shows the art that has them. A transcript in a `Label` is a bug.
+- **A transcript must match its artwork exactly.** If the art is re-rendered
+  with different wording, update the transcript in the same change.
+- **Voice-over is planned**, so every spoken line has a `*_vo_key` and audio
+  lives at `res://audio/vo/en/<key>.ogg`.
+- `audio/vo/en/SCRIPT.md` is **generated**, not written. Re-run
+  `tools/export_vo_script.gd` after any content change.
+- Changing wording now means re-rendering art *and* re-recording a line. Get the
+  teaching-content reviewer through all 19 stages before commissioning voice-over.
+
 ## Audience rules
 
 Keep these two groups apart. Do not cite the second group as though the client
