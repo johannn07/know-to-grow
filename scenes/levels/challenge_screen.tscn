@@ -101,6 +101,7 @@ alignment = 1
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true
+z_index = 100
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

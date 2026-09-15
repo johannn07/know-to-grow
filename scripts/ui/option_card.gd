@@ -20,6 +20,10 @@ signal dropped(card: OptionCard, at_global: Vector2)
 ## glitch.
 const RETURN_TIME := 0.25
 
+## Tint for a card that has been tried and was wrong. It stays on screen, greyed
+## out, so the child can see what they have already ruled out.
+const SPENT_MODULATE := Color(0.52, 0.52, 0.58, 1.0)
+
 var data: OptionData:
 	set(value):
 		data = value
@@ -27,7 +31,8 @@ var data: OptionData:
 
 var _dragging := false
 var _grab_offset := Vector2.ZERO
-var _home := Vector2.ZERO
+var _home_local := Vector2.ZERO
+var _home_global := Vector2.ZERO
 
 @onready var _art: ArtSlot = $Art
 
@@ -66,10 +71,11 @@ func _input(event: InputEvent) -> void:
 
 func _begin_drag(at_global: Vector2) -> void:
 	_dragging = true
-	_home = global_position
+	_home_local = position
+	_home_global = global_position
 	_grab_offset = at_global - global_position
 	top_level = true
-	global_position = _home
+	global_position = _home_global
 	z_index = 10
 
 
@@ -82,19 +88,33 @@ func _end_drag(at_global: Vector2) -> void:
 ## Slides the card back to where the drag started. Called by the screen when a
 ## drop is rejected, so the card does not decide its own fate.
 func return_home() -> void:
-	# _home is only meaningful once a drag has actually begun. Without this a
-	# card that never moved would be tweened to the origin and fly to the
-	# corner of the screen.
+	# The home position is only meaningful once a drag has actually begun.
+	# Without this a card that never moved would be tweened to the origin and
+	# fly to the corner of the screen.
 	if not top_level:
 		return
+	z_index = 0
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-	tween.tween_property(self, "global_position", _home, RETURN_TIME)
+	tween.tween_property(self, "global_position", _home_global, RETURN_TIME)
 	await tween.finished
+	# Dropping out of top_level makes Godot read `position` as parent-relative
+	# again. It currently holds global coordinates, so it has to be restored by
+	# hand — otherwise the card lands a screen-height below its row and looks
+	# like it was deleted.
 	top_level = false
+	position = _home_local
 
 
 ## Stops this card responding to touch, for when the stage has been answered.
 func freeze() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	set_process_input(false)
+
+
+## Greys the card out and retires it. Used for an option that was tried on the
+## target and was wrong: removing it would erase the child's own attempt, and
+## leaving it live invites the same wrong answer again.
+func mark_spent() -> void:
+	modulate = SPENT_MODULATE
+	freeze()

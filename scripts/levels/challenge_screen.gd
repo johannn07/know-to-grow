@@ -85,6 +85,9 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 	if _answered:
 		return
 	if not _drop_zone.get_global_rect().has_point(at_global):
+		# Let go somewhere that is not the target. That is not an answer — the
+		# child changed their mind or missed — so the card goes back and stays
+		# every bit as pickable as before.
 		card.return_home()
 		return
 	if _challenge.is_correct(card.data.id):
@@ -93,7 +96,11 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		_set_state(_challenge.success_state)
 		_show_feedback(_challenge.correct_art, CONTINUE_RECT)
 	else:
+		# Actually tried on the target and wrong. The card returns to its slot
+		# greyed out: still visible, so the attempt is not erased, but no longer
+		# pickable, so the same wrong answer cannot be repeated.
 		card.return_home()
+		card.mark_spent()
 		_show_feedback(level.wrong_art, CHOOSE_AGAIN_RECT)
 
 

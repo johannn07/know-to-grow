@@ -45,29 +45,45 @@ func _initialize() -> void:
 	var overlay: Control = screen.get_node("%Overlay")
 	var hotspot: Button = screen.get_node("%OverlayButton")
 
-	# --- a card dropped outside the soil just goes home ---
-	var stray: OptionCard = _card(cards, challenge.correct_option_id)
-	stray.dropped.emit(stray, Vector2(40.0, 40.0))
-	await _settle()
-	_expect(not overlay.visible, "a drop outside the soil shows no feedback")
+	# Dragging is simulated through the card's own begin/end so the home
+	# position is recorded exactly as it is in play. Emitting `dropped` directly
+	# would skip that and quietly not test the way back.
 
-	# --- wrong answer ---
+	# --- let go away from the soil: not an answer, stays pickable ---
+	var stray: OptionCard = _card(cards, challenge.correct_option_id)
+	var stray_home: Vector2 = stray.position
+	stray._begin_drag(stray.global_position + Vector2(20.0, 20.0))
+	stray._end_drag(Vector2(40.0, 40.0))
+	await _settle()
+	_expect(not overlay.visible, "a drop away from the soil shows no feedback")
+	await _rest()
+	_expect(stray.position.distance_to(stray_home) < 1.0,
+		"that card is back in its slot (off by %.1f px)" % stray.position.distance_to(stray_home))
+	_expect(not stray.top_level, "that card rejoined the row")
+	_expect(stray.modulate == Color.WHITE, "that card is not greyed out")
+	_expect(stray.mouse_filter != Control.MOUSE_FILTER_IGNORE,
+		"that card can still be picked up")
+
+	# --- wrong answer on the soil: returns, greyed out, retired ---
 	var wrong: OptionCard = _wrong_card(cards, challenge)
-	wrong.dropped.emit(wrong, centre)
+	var wrong_home: Vector2 = wrong.position
+	wrong._begin_drag(wrong.global_position + Vector2(20.0, 20.0))
+	wrong._end_drag(centre)
 	await _settle()
 	_expect(overlay.visible, "wrong answer shows the Oops card")
-	_expect(
-		screen.get_node("%OverlayArt").texture == level.wrong_art,
-		"the Oops card is the level's wrong_art"
-	)
-	_expect(
-		screen.get_node("%Background").texture == level.scene_art[challenge.scene_state],
-		"a wrong answer does not change the garden"
-	)
-	_expect(
-		hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
-		"Choose Again hotspot clears 160 px (is %dx%d)" % [hotspot.size.x, hotspot.size.y]
-	)
+	_expect(screen.get_node("%OverlayArt").texture == level.wrong_art,
+		"the Oops card is the level's wrong_art")
+	_expect(screen.get_node("%Background").texture == level.scene_art[challenge.scene_state],
+		"a wrong answer does not change the garden")
+	_expect(hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
+		"Choose Again hotspot clears 160 px (is %dx%d)" % [hotspot.size.x, hotspot.size.y])
+	await _rest()
+	_expect(is_instance_valid(wrong), "the wrong card still exists")
+	_expect(wrong.position.distance_to(wrong_home) < 1.0,
+		"the wrong card is back in its slot (off by %.1f px)" % wrong.position.distance_to(wrong_home))
+	_expect(wrong.modulate != Color.WHITE, "the wrong card is greyed out")
+	_expect(wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"the wrong card cannot be picked again")
 
 	hotspot.pressed.emit()
 	await _settle()
@@ -76,22 +92,22 @@ func _initialize() -> void:
 
 	# --- right answer ---
 	var right: OptionCard = _card(cards, challenge.correct_option_id)
-	right.dropped.emit(right, centre)
+	right._begin_drag(right.global_position + Vector2(20.0, 20.0))
+	right._end_drag(centre)
 	await _settle()
 	_expect(overlay.visible, "correct answer shows the Correct card")
-	_expect(
-		screen.get_node("%OverlayArt").texture == challenge.correct_art,
-		"the Correct card is this stage's own correct_art"
-	)
-	_expect(
-		screen.get_node("%Background").texture == level.scene_art[challenge.success_state],
-		"the garden advances to '%s'" % challenge.success_state
-	)
-	_expect(
-		hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
-		"Continue hotspot clears 160 px (is %dx%d)" % [hotspot.size.x, hotspot.size.y]
-	)
+	_expect(screen.get_node("%OverlayArt").texture == challenge.correct_art,
+		"the Correct card is this stage's own correct_art")
+	_expect(screen.get_node("%Background").texture == level.scene_art[challenge.success_state],
+		"the garden advances to '%s'" % challenge.success_state)
+	_expect(hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
+		"Continue hotspot clears 160 px (is %dx%d)" % [hotspot.size.x, hotspot.size.y])
 	_expect(screen._answered, "the stage is marked answered")
+	# A dragged card leaves the container's transform behind, so ordinary tree
+	# order no longer keeps the overlay on top of it.
+	_expect(overlay.z_index > right.z_index,
+		"the Correct card draws over the dropped card (%d vs %d)" % [overlay.z_index, right.z_index])
+
 
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
@@ -101,6 +117,12 @@ func _settle() -> void:
 	# _place_hotspot waits a frame before padding the hit area out to 160 px.
 	for i in 4:
 		await process_frame
+
+
+## Waits out the slide home. That is a real timed tween, so frames alone will
+## not finish it.
+func _rest() -> void:
+	await create_timer(OptionCard.RETURN_TIME + 0.2).timeout
 
 
 func _card(cards: Array, option_id: StringName) -> OptionCard:
