@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://owlhlu6rt330"]
+[gd_scene load_steps=10 format=3 uid="uid://owlhlu6rt330"]
 
 [ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Script" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" path="res://art/bg_sky.png" id="4_sky"]
+[ext_resource type="Texture2D" path="res://art/bg_ground.png" id="5_ground"]
+[ext_resource type="Texture2D" path="res://art/logo.png" id="6_logo"]
+[ext_resource type="Texture2D" path="res://art/mascot_sprout.png" id="7_sprout"]
+[ext_resource type="Texture2D" path="res://art/mascot_flower.png" id="8_flower"]
+[ext_resource type="Texture2D" path="res://art/fx_leaves.png" id="9_leaves"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -36,6 +42,7 @@ script = ExtResource("2_slot")
 fit = 2
 slot_name = "bg_sky"
 placeholder_color = Color(0.52, 0.82, 0.95, 1)
+texture = ExtResource("4_sky")
 
 [node name="Hills" type="Control" parent="Background"]
 clip_contents = true
@@ -52,6 +59,7 @@ script = ExtResource("2_slot")
 fit = 2
 slot_name = "bg_hills"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
+hide_when_empty = true
 
 [node name="Ground" type="Control" parent="Background"]
 clip_contents = true
@@ -68,6 +76,7 @@ script = ExtResource("2_slot")
 fit = 2
 slot_name = "bg_ground"
 placeholder_color = Color(0.45, 0.3, 0.18, 1)
+texture = ExtResource("5_ground")
 
 [node name="MascotLeft" type="Control" parent="Background"]
 layout_mode = 1
@@ -83,6 +92,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 slot_name = "mascot_sprout"
 placeholder_color = Color(0.4, 0.7, 0.3, 1)
+texture = ExtResource("7_sprout")
 
 [node name="MascotRight" type="Control" parent="Background"]
 layout_mode = 1
@@ -101,24 +111,20 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 slot_name = "mascot_flower"
 placeholder_color = Color(0.4, 0.7, 0.3, 1)
+texture = ExtResource("8_flower")
 
-[node name="LeafParticles" type="CPUParticles2D" parent="."]
-position = Vector2(540, -30)
-amount = 14
-lifetime = 9.0
-preprocess = 4.0
-emission_shape = 3
-emission_rect_extents = Vector2(560, 8)
-direction = Vector2(0, 1)
-spread = 25.0
-gravity = Vector2(0, 42)
-initial_velocity_min = 30.0
-initial_velocity_max = 70.0
-angular_velocity_min = -70.0
-angular_velocity_max = 70.0
-scale_amount_min = 7.0
-scale_amount_max = 13.0
-color = Color(0.4, 0.71, 0.27, 0.85)
+[node name="Leaves" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 1000.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+slot_name = "fx_leaves"
+texture = ExtResource("9_leaves")
+placeholder_color = Color(0.4, 0.71, 0.27, 1)
+hide_when_empty = true
 
 [node name="Foreground" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -139,12 +145,13 @@ mouse_filter = 1
 theme_override_constants/separation = 34
 
 [node name="LogoSlot" type="Control" parent="Foreground/Column"]
-custom_minimum_size = Vector2(0, 470)
+custom_minimum_size = Vector2(0, 560)
 layout_mode = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
 slot_name = "logo"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
+texture = ExtResource("6_logo")
 
 [node name="TopSpacer" type="Control" parent="Foreground/Column"]
 layout_mode = 2

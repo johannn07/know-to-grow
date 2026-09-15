@@ -19,9 +19,9 @@ before it can be started.
 - [x] `art/MANIFEST.md` — asset contract
 - [x] Android export preset: package name, arm64-v8a, `min_sdk` 24,
       `target_sdk` 34, version name `0.1.0`
-- [ ] Run `git lfs install` **before** the first PNG lands — `.gitattributes`
-      already routes images through LFS, but retrofitting it onto existing
-      history is painful
+- [x] Git LFS active — `git-lfs` is installed and `filter.lfs.process` is
+      configured, and `.gitattributes` routes `*.png/jpg/webp/ogg/wav/ogv`
+      through it. PNGs can land safely
 - [ ] `DESIGN.md` — the one-page record of locked decisions (orientation,
       resolution, save location, no analytics, no accounts) so settled questions
       stay settled
@@ -40,6 +40,8 @@ before it can be started.
 - [ ] Open in the editor and click through it (F5) — the headless checks confirm
       the wiring and the rendering, not that it *feels* right
 - [ ] Check it on a real phone, not just the editor. Thumb reach, not mouse reach
+- [x] Real art wired in from the Figma file — background, logo, both mascots,
+      ground, falling leaves, and the green button plate as a 9-patch
 - [ ] Button press sound and a small scale-bounce on tap
 - [ ] Menu music loop
 
@@ -125,18 +127,29 @@ the open content questions, not bugs.
 
 ## 6 · Art integration
 
-Tracked in detail in `art/MANIFEST.md`.
+The artwork exists. `Untitled.fig` holds roughly **170 unique full-resolution
+assets** — effectively the whole game. Inventory in `art/MANIFEST.md`.
 
-- [ ] Main menu: 6 slots + the leaf particle texture
-- [ ] 15 item icons at 512 × 512
-- [ ] Level 1 stage art ×5, Level 2 stage art ×5
-- [ ] Hero plant — **the most important drawing in the game**, it carries Levels
-      3 and 4. Request it as a layered file
-- [ ] Part highlight overlays ×5
-- [ ] UI frames ≈15 pieces
+- [x] Main menu: 7 assets extracted, downscaled and wired
+- [ ] **⚠ Decide what to do about text baked into the artwork.** Most of the
+      level assets — fun-fact banners, stage headers, feedback cards, several
+      buttons — have their English sentences rendered into the pixels. That
+      contradicts `content/*.tres`, blocks Filipino localisation, and makes the
+      spoken-prompt requirement hard to keep in sync. Options: (a) accept it and
+      treat the art as the content source, deleting the wording from the `.tres`
+      files; (b) ask for text-free frames and keep the data-driven design;
+      (c) hybrid — text-free frames for anything spoken or translated, baked art
+      for fixed chrome. **Nothing else in this section should start until this
+      is settled**
+- [ ] 16 item icons (1254 × 1254 in the source)
+- [ ] Stage backgrounds (852 × 1846) — Level 1 and Level 2 states
+- [ ] Hero plant variants, including versions with roots exposed
+- [ ] Level select plates, locked and unlocked, with star rows
+- [ ] Feedback cards, completion badges, tool trays
 - [ ] Display font in `res://fonts/`, wired once in `themes/ktg_theme.tres`
-- [ ] Level 4 needs no illustration at all — the function cards are text on a card
-      frame. It can be finished before any art arrives
+- [ ] Decide an import policy — sources are up to 4096 × 2896 and the raw `.fig`
+      is 290 MB. Everything needs alpha-cropping and downscaling before it lands
+      in the repo, or the APK will be enormous
 
 ## 7 · Android and release
 
@@ -176,4 +189,6 @@ Collected from the **⚠** items above, because these block other people's work:
 3. Real level select, or straight into Level 1? — blocks the screen flow
 4. Level 2 situation 3: accept both answers, or reword it?
 5. "Seed" or "Seed Packet"? — blocks the icon brief and the voice-over script
-6. Is Filipino shipping, or only being structured for?
+6. Is Filipino shipping, or only being structured for? — now entangled with the
+   baked-in-text question above, since translated art would mean re-rendering
+   every banner

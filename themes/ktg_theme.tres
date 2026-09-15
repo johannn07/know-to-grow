@@ -1,4 +1,6 @@
-[gd_resource type="Theme" format=3 uid="uid://ddiq5de3ppim6"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://ddiq5de3ppim6"]
+
+[ext_resource type="Texture2D" path="res://art/ui_button_primary.png" id="1_btn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_secondary_normal"]
 content_margin_left = 44.0
@@ -72,6 +74,29 @@ corner_radius_top_right = 40
 corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_primary_normal"]
+content_margin_left = 60.0
+content_margin_top = 26.0
+content_margin_right = 60.0
+content_margin_bottom = 40.0
+texture = ExtResource("1_btn")
+texture_margin_left = 115.0
+texture_margin_top = 85.0
+texture_margin_right = 115.0
+texture_margin_bottom = 85.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_primary_pressed"]
+content_margin_left = 60.0
+content_margin_top = 34.0
+content_margin_right = 60.0
+content_margin_bottom = 32.0
+texture = ExtResource("1_btn")
+texture_margin_left = 115.0
+texture_margin_top = 85.0
+texture_margin_right = 115.0
+texture_margin_bottom = 85.0
+modulate_color = Color(0.82, 0.82, 0.82, 1)
+
 [resource]
 default_font_size = 44
 BodyText/base_type = &"Label"
@@ -100,10 +125,10 @@ PrimaryButton/colors/font_outline_color = Color(0.19, 0.47, 0.13, 1)
 PrimaryButton/colors/font_pressed_color = Color(1, 1, 1, 1)
 PrimaryButton/constants/outline_size = 8
 PrimaryButton/font_sizes/font_size = 76
-PrimaryButton/styles/disabled = SubResource("StyleBoxFlat_primary_normal")
+PrimaryButton/styles/disabled = SubResource("StyleBoxTexture_primary_normal")
 PrimaryButton/styles/focus = SubResource("StyleBoxEmpty_focus")
-PrimaryButton/styles/hover = SubResource("StyleBoxFlat_primary_normal")
-PrimaryButton/styles/normal = SubResource("StyleBoxFlat_primary_normal")
-PrimaryButton/styles/pressed = SubResource("StyleBoxFlat_primary_pressed")
+PrimaryButton/styles/hover = SubResource("StyleBoxTexture_primary_normal")
+PrimaryButton/styles/normal = SubResource("StyleBoxTexture_primary_normal")
+PrimaryButton/styles/pressed = SubResource("StyleBoxTexture_primary_pressed")
 ScreenTitle/base_type = &"Label"
 ScreenTitle/font_sizes/font_size = 96

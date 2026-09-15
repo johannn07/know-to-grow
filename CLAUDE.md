@@ -79,6 +79,29 @@ asset is a blank to fill, never a rewrite.**
 - Add every new image position to `art/MANIFEST.md` with its exact pixel size in
   the same change that creates the slot.
 
+## Figma access is rationed
+
+The Figma MCP connector is authorised as `johnanthonysb@gmail.com`, a **View
+seat on a Starter plan**. That tier allows **20 tool calls per month** — not per
+day. `whoami`, `create_new_file` and `add_code_connect_map` are exempt;
+everything that reads a file (`get_metadata`, `get_design_context`,
+`get_screenshot`, `download_assets`) counts.
+
+Access is also gated on **edit** rights, not view rights: reading a file through
+the MCP fails with "you don't have edit access to this file" unless the
+authorising account is an editor on that specific file. Confirm access before
+planning a sequence of calls.
+
+So: **never browse a Figma file.** Plan the exact calls first, then make them.
+The efficient shape for pulling art is two calls — `get_metadata` on the frame
+to see the layer structure, then `download_assets` on that same frame, which
+returns the rendered export plus every source image and vector in the subtree
+(capped at 20 each) in a single response. Download the returned URLs with curl,
+which costs nothing against the quota.
+
+When the goal is simply "get these PNGs into the repo", exporting by hand from
+the Figma UI costs zero calls and is usually the better trade.
+
 ## Audience rules (from the design document)
 
 These are requirements, not preferences:
