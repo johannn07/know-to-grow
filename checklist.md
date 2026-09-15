@@ -1,5 +1,8 @@
 # Know To Grow — build checklist
 
+> `SESSION_NOTES.md` carries the narrative — what was decided, what the artwork
+> turned out to be like, and what to pick up next. This file is the build state.
+
 Everything between here and a finished game. Ordered so that each section
 unblocks the next; inside a section, order is a suggestion.
 
