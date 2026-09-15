@@ -186,6 +186,43 @@ Notes:
   light to help make food"*. Stage 4 needs either a new card rendered to match
   the other three, or a decision to reuse [85] and accept the mismatch.
 
+## Level 1 Stage 4 — delivered
+
+| File | Size | Weight |
+|---|---|---|
+| `bg_bed_sprout.png` | 851 x 1849 | 2.2 MB |
+| `ui_header_l1_s4.png` | 900 x 426 | 373 KB |
+| `ui_prompt_l1_s4.png` | 1000 x 464 | 426 KB |
+| `ui_tray_l1_s4.png` | 1000 x 462 | 535 KB |
+| `icon_cloud.png` | 300 x 372 | 112 KB |
+| `icon_moon.png` | 300 x 353 | 114 KB |
+| `ui_correct_l1_s4.png` | 800 x 665 | 434 KB |
+| `ui_fact_l1_s4.png` | 900 x 270 | 300 KB |
+
+Notes:
+
+- **The Correct card is borrowed from Level 2**, by decision. The Figma file has
+  exactly three "Correct Answer!" cards in the Level 1 frame — shovel, seed,
+  watering can — and none for Sun. `ui_correct_l1_s4.png` is Level 2's
+  "Correct Answer! / Sunlight". Two things come with it: it looks different from
+  the other three (a green banner rather than the wooden frame), and **it has no
+  Continue button drawn on it**, because Level 2's cards do not carry one. The
+  stage sets `correct_button_rect` to the whole card so the child can tap
+  anywhere on it. If a matching Level 1 card is ever drawn, swapping the texture
+  and clearing that one property is the whole change.
+- Its explanation is Level 2's wording — *"Sunlight provides the energy plants
+  need to help make food"* — which happens to fit Level 1's question closely.
+- `icon_sun.png` is reused from Stage 3, where Sun is a wrong answer. Since a
+  resting card draws nothing, only the dragged card is ever seen, so the slight
+  frame difference between its family and Cloud/Moon never shows.
+- **The final garden changes framing.** `bg_bed_sprout.png` is a close-up of
+  dark soil behind a white picket fence, not the raised bed in a lawn that the
+  first four backgrounds use. The `.fig` has no sprout in the raised-bed
+  framing, so Level 1 ends on a different-looking garden. Worth a look before
+  it ships.
+- One transcript corrected to match the art: the fun fact is drawn *"sunlight,
+  water, and air"*, not *"sunlight, water and air"*. `SCRIPT.md` regenerated.
+
 ## Tool trays — delivered
 
 | File | Size | Weight |
@@ -193,6 +230,7 @@ Notes:
 | `ui_tray_l1_s1.png` | 1000 x 476 | 522 KB |
 | `ui_tray_l1_s2.png` | 1000 x 487 | 504 KB |
 | `ui_tray_l1_s3.png` | 1000 x 470 | 549 KB |
+| `ui_tray_l1_s4.png` | 1000 x 462 | 535 KB |
 
 Each stage's "Choose a Tool" tray, with its three items **drawn into it**. The
 draggable cards are anchored exactly over those drawn slots, so the tray reads

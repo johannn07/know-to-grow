@@ -24,10 +24,16 @@ extends SubScreen
 ## reach it — an invisible target can be generous without looking wrong.
 const MIN_TOUCH := 160.0
 
-## Where each feedback card's drawn button sits, as fractions of that card's own
-## image. Measured off the art, which is the only place these exist.
+## Where the drawn button sits on the Level 1 feedback cards, as fractions of
+## the card's own image. Measured off the art, which is the only place these
+## exist. A card with no button drawn on it uses [constant WHOLE_CARD] instead.
 const CONTINUE_RECT := Rect2(0.20, 0.785, 0.59, 0.115)
 const CHOOSE_AGAIN_RECT := Rect2(0.315, 0.71, 0.41, 0.145)
+
+## For a feedback card that carries no drawn button: the whole card is the
+## target. Stage 4's Correct card is borrowed from Level 2, whose cards have no
+## Continue on them.
+const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 
 @export_group("Answer")
 ## Matches a ChallengeData in content/*.tres. Nothing reads it at runtime — it
@@ -45,6 +51,13 @@ const CHOOSE_AGAIN_RECT := Rect2(0.315, 0.71, 0.41, 0.145)
 @export var correct_card: Texture2D
 ## The "Oops!" card, with Choose Again drawn into it.
 @export var wrong_card: Texture2D
+
+@export_group("Feedback hotspots")
+## Where the Continue button is drawn on [member correct_card], in fractions of
+## that image. Use [constant WHOLE_CARD] when the card has no button drawn on it.
+@export var correct_button_rect: Rect2 = CONTINUE_RECT
+## Where Choose Again is drawn on [member wrong_card].
+@export var wrong_button_rect: Rect2 = CHOOSE_AGAIN_RECT
 
 @export_group("Flow")
 ## The next stage. Empty means this is the last one built.
@@ -100,7 +113,7 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		if success_background != null:
 			_background.texture = success_background
 		on_correct(card)
-		_show_feedback(correct_card, CONTINUE_RECT)
+		_show_feedback(correct_card, correct_button_rect)
 	else:
 		# Actually tried on the target and wrong. The card returns to its slot
 		# greyed out: still visible, so the attempt is not erased, but no longer
@@ -108,7 +121,7 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		card.return_home()
 		card.mark_spent()
 		on_wrong(card)
-		_show_feedback(wrong_card, CHOOSE_AGAIN_RECT)
+		_show_feedback(wrong_card, wrong_button_rect)
 
 
 ## Hooks for a stage that needs to do something of its own. Override in the

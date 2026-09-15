@@ -68,10 +68,10 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [x] **Stages are hand-built scenes** — `scenes/levels/level_N/stage_M.tscn`
       with a matching script, so a stage can be rearranged in the editor. The
       generic data-driven `ChallengeScreen` was removed in favour of this
-- [x] **Level 1 Stages 1-3 playable** — drag an item onto the soil, the garden
+- [x] **Level 1 Stages 1-4 playable — the whole level** — drag an item onto the soil, the garden
       changes state, feedback cards appear, Continue carries the garden into the
-      next stage. `tools/verify_level_1.gd` plays every wired stage headlessly
-      in a loop, 118 checks, and reports how many of the four are wired
+      next stage, and the bed runs empty -> hole -> seed -> watered -> sprout.
+      `tools/verify_level_1.gd` walks the whole chain headlessly
 - [ ] `DropZone` component — currently a plain `Control` rect on the screen.
       Promote it to a component with `zone_id` and hover highlight when a stage
       needs more than one zone (Level 4 does)
@@ -85,11 +85,17 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [x] Wrong answer: card slides back, "Oops!" card with Choose Again, no penalty
       and no "Wrong" label
 - [ ] Wrong answer polish: the item's own `wrong_hint`, arrow nudge
-- [ ] **Level 1 Stage 4 — blocked on art.** Everything exists except the Correct
-      Answer card: the `.fig` has exactly three in the Level 1 frame (shovel,
-      seed, watering can) and none for Sun. Either render a fourth to match, or
-      decide to reuse the Level 2 "Correct Answer! / Sunlight" card ([85]) and
-      accept that its explanation is Level 2's wording. **⚠**
+- [x] ~~Level 1 Stage 4 blocked on art~~ **Answered: reuse Level 2's card.**
+      Stage 4 uses the "Correct Answer! / Sunlight" card from Level 2, which
+      looks different from the other three and carries no Continue button, so
+      the whole card is tappable
+- [ ] **A Level 1 "Correct Answer! / Sun" card, if the mismatch matters.**
+      Swapping it in is one texture plus clearing `correct_button_rect`
+- [ ] **Level 1 ends on a different-looking garden.** `bg_bed_sprout.png` is a
+      close-up behind a white fence, not the raised bed the other four use — the
+      `.fig` has no sprout in that framing. **⚠**
+- [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
+      Planter" badge are drawn and unused. Stage 4 currently returns to the hub
 - [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
       Planter" badge are drawn and unused
 - [ ] Option shuffling for **Level 3 only** — its scripted answers sit at

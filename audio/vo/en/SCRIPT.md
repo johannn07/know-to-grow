@@ -18,7 +18,7 @@ match the artwork exactly, because the art is what the child sees.
 | `l1_water_prompt` | The seed is thirsty! What do we pour gently over the soil? |
 | `l1_water_fact` | Water helps the seed wake up and begin to grow! |
 | `l1_sun_prompt` | Plants need light to help make food. What shines down to help the plant grow? |
-| `l1_sun_fact` | Plants use sunlight, water and air to help make their own food! |
+| `l1_sun_fact` | Plants use sunlight, water, and air to help make their own food! |
 | `level_1_complete` | You planted a seed all by yourself! |
 | `level_1_final_fact` | A seed needs soil, water and sunlight to wake up and grow. |
 

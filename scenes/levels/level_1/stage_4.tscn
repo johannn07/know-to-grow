@@ -1,24 +1,24 @@
-[gd_scene load_steps=16 format=3 uid="uid://dn5qwe8ha2vbt"]
+[gd_scene load_steps=16 format=3 uid="uid://b8ktq2rvxm41p"]
 
-[ext_resource type="Script" uid="uid://c8wfbvrt78mh4" path="res://scripts/levels/level_1/stage_3.gd" id="1_stage"]
+[ext_resource type="Script" uid="uid://d3m1unc5vwlx2" path="res://scripts/levels/level_1/stage_4.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
-[ext_resource type="Texture2D" uid="uid://8b100swdwyai" path="res://art/bg_bed_seed.png" id="5_bg"]
-[ext_resource type="Texture2D" uid="uid://cowbuyl1lm8os" path="res://art/bg_bed_watered.png" id="6_bgok"]
-[ext_resource type="Texture2D" uid="uid://c0easxvxrtqrk" path="res://art/ui_header_l1_s3.png" id="7_hdr"]
-[ext_resource type="Texture2D" uid="uid://cc7b44kdhns31" path="res://art/ui_prompt_l1_s3.png" id="8_prm"]
-[ext_resource type="Texture2D" uid="uid://hqfowfrwcvkp" path="res://art/ui_correct_l1_s3.png" id="9_ok"]
+[ext_resource type="Texture2D" uid="uid://cowbuyl1lm8os" path="res://art/bg_bed_watered.png" id="5_bg"]
+[ext_resource type="Texture2D" uid="uid://dwepk0huoh7dn" path="res://art/bg_bed_sprout.png" id="6_bgok"]
+[ext_resource type="Texture2D" uid="uid://dmf60nwddborb" path="res://art/ui_header_l1_s4.png" id="7_hdr"]
+[ext_resource type="Texture2D" uid="uid://dlqg11wht44bn" path="res://art/ui_prompt_l1_s4.png" id="8_prm"]
+[ext_resource type="Texture2D" uid="uid://d1h2lou6sg6gk" path="res://art/ui_correct_l1_s4.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://art/ui_oops_tool.png" id="10_oops"]
-[ext_resource type="Texture2D" uid="uid://s4l0g371tcyg" path="res://art/ui_tray_l1_s3.png" id="11_tray"]
-[ext_resource type="Texture2D" uid="uid://ccmi07maroxx0" path="res://art/ui_fact_l1_s3.png" id="12_fact"]
+[ext_resource type="Texture2D" uid="uid://l4ngsbamqthg" path="res://art/ui_tray_l1_s4.png" id="11_tray"]
+[ext_resource type="Texture2D" uid="uid://csab0hul6h6pk" path="res://art/ui_fact_l1_s4.png" id="12_fact"]
 [ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://art/icon_sun.png" id="13_sun"]
-[ext_resource type="Texture2D" uid="uid://blarrhrcbnkgj" path="res://art/icon_gloves.png" id="14_gloves"]
-[ext_resource type="Texture2D" uid="uid://rul31j51fqh7" path="res://art/icon_watering_can.png" id="15_watering_can"]
+[ext_resource type="Texture2D" uid="uid://ci81oypkb7w3g" path="res://art/icon_cloud.png" id="14_cloud"]
+[ext_resource type="Texture2D" uid="uid://cffsfhx2fx82y" path="res://art/icon_moon.png" id="15_moon"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
-[node name="Stage3" type="Control"]
+[node name="Stage4" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,12 +27,13 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
-challenge_id = &"l1_water"
-correct_option_id = &"watering_can"
+challenge_id = &"l1_sun"
+correct_option_id = &"sun"
 success_background = ExtResource("6_bgok")
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
-next_stage_path = "res://scenes/levels/level_1/stage_4.tscn"
+next_stage_path = ""
+correct_button_rect = Rect2(0, 0, 1, 1)
 
 [node name="Background" type="Control" parent="."]
 unique_name_in_owner = true
@@ -47,7 +48,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("5_bg")
 fit = 2
-slot_name = "bg_bed_seed"
+slot_name = "bg_bed_watered"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
 
 [node name="Header" type="Control" parent="."]
@@ -65,7 +66,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("7_hdr")
 fit = 1
-slot_name = "ui_header_l1_s3"
+slot_name = "ui_header_l1_s4"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
 [node name="Prompt" type="Control" parent="."]
@@ -83,7 +84,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("8_prm")
 fit = 1
-slot_name = "ui_prompt_l1_s3"
+slot_name = "ui_prompt_l1_s4"
 placeholder_color = Color(0.98, 0.96, 0.89, 1)
 
 [node name="DropZone" type="Control" parent="."]
@@ -117,7 +118,7 @@ mouse_filter = 2
 [node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea"]
 layout_mode = 2
 mouse_filter = 2
-ratio = 2.1277
+ratio = 2.1645
 
 [node name="Tray" type="Control" parent="TrayArea/TrayAspect"]
 layout_mode = 2
@@ -134,7 +135,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("11_tray")
 fit = 0
-slot_name = "ui_tray_l1_s3"
+slot_name = "ui_tray_l1_s4"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
 [node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray"]
@@ -150,10 +151,10 @@ mouse_filter = 2
 [node name="Sun" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.0820
-anchor_top = 0.3128
+anchor_left = 0.0830
+anchor_top = 0.3052
 anchor_right = 0.3470
-anchor_bottom = 0.8745
+anchor_bottom = 0.8550
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
@@ -163,37 +164,37 @@ grow_vertical = 2
 option_id = &"sun"
 icon = ExtResource("13_sun")
 
-[node name="Gloves" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Cloud" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.3640
-anchor_top = 0.3128
+anchor_top = 0.3052
 anchor_right = 0.6310
-anchor_bottom = 0.8745
+anchor_bottom = 0.8550
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-option_id = &"gloves"
-icon = ExtResource("14_gloves")
+option_id = &"cloud"
+icon = ExtResource("14_cloud")
 
-[node name="WateringCan" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Moon" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.6480
-anchor_top = 0.3128
-anchor_right = 0.9130
-anchor_bottom = 0.8745
+anchor_top = 0.3052
+anchor_right = 0.9120
+anchor_bottom = 0.8550
 offset_left = 0.0
 offset_top = 0.0
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-option_id = &"watering_can"
-icon = ExtResource("15_watering_can")
+option_id = &"moon"
+icon = ExtResource("15_moon")
 
 [node name="FunFact" type="Control" parent="."]
 unique_name_in_owner = true
@@ -212,7 +213,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("12_fact")
 fit = 1
-slot_name = "ui_fact_l1_s3"
+slot_name = "ui_fact_l1_s4"
 placeholder_color = Color(0.85, 0.66, 0.33, 1)
 
 [node name="Overlay" type="Control" parent="."]
