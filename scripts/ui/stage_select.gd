@@ -8,18 +8,19 @@ extends SubScreen
 ## only interactive parts are invisible hotspots laid over the drawn rows, the
 ## same way How To Play works.
 ##
-## **The row states are part of that picture**, not something this screen
-## decides: Stage 1 is drawn unlocked and the other three drawn grey, and every
-## star is drawn empty. That is the correct state today, because there is no
-## GameState and nothing has ever been completed. It is also the reason
-## [member unlocked_count] is a plain export rather than something read from
-## progress — raising it past what the artwork shows would light up a row that
-## still looks locked.
+## **Which rows can be tapped, and how many stars each shows, comes from
+## [GameStateStore].** A row opens when the stage before it is cleared, and its
+## three stars fill with what was earned. The stars are drawn over the empty ones
+## in the picture, which they cover exactly — the delivered star art is within
+## half a percent of the drawn one.
 ##
-## The loose parts for building these rows out of components instead — both pill
-## plates, all four item icons in locked and unlocked form, and both star states
-## — are in the repo and listed in art/MANIFEST.md. Composing rows from them is
-## the job to do alongside GameState, not before it.
+## **What is still baked into the picture is the row's own plate**: Stage 1 is
+## drawn on green and the other three on grey, and the "Stage N" label goes with
+## it. So a stage that has been cleared becomes tappable and fills its stars
+## while its plate stays grey. That is an art gap, not a logic one, and it is
+## written up in art/MANIFEST.md with what would fix it. The loose parts that
+## were delivered do not: their label pill is ratio 5.17 against the drawn 3.12,
+## so it cannot be laid over the one already there without overflowing the row.
 
 ## Where each drawn row sits, in fractions of the card image. Measured off the
 ## artwork, which is the only place they exist.
@@ -44,13 +45,18 @@ const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
 	"res://scenes/levels/level_1/stage_4.tscn",
 ]
 
-@export_group("Placeholder state")
-## How many rows are tappable, counted from the top. Placeholder until
-## GameState exists: the artwork draws exactly one row unlocked, so raising this
-## makes a row respond to a tap while still looking grey.
-@export var unlocked_count: int = 1
+## Which level's progress this screen shows, matching the `id` in content/*.tres
+## and the `level_id` on each stage scene.
+@export var level_id: StringName = &"level_1"
+
+@export_group("Art")
+## Drawn over a row's empty star for each one earned.
+@export var star_filled: Texture2D
+## Drawn over the rest. Usually left empty, since the picture already has them.
+@export var star_empty: Texture2D
 
 @onready var _rows: Control = %Rows
+@onready var _stars: Control = %Stars
 @onready var _close_button: Button = %CloseButton
 
 
@@ -64,12 +70,30 @@ func _ready() -> void:
 		if button == null:
 			continue
 		place_hotspot(button, ROW_RECTS[i])
+		var stage_number := i + 1
 		var path := stage_scene_paths[i] if i < stage_scene_paths.size() else ""
-		# A row is live only if it is both reached and actually goes somewhere.
-		var live := i < unlocked_count and not path.is_empty() and ResourceLoader.exists(path)
+		# A row is live only if it has been reached and goes somewhere real.
+		var reached := progress == null or progress.is_stage_unlocked(level_id, stage_number)
+		var live := reached and not path.is_empty() and ResourceLoader.exists(path)
 		button.disabled = not live
 		if live:
 			button.pressed.connect(_on_row_pressed.bind(path))
+		_show_stars(stage_number)
+
+
+## Fills a row's three stars with what that stage earned. Nothing is drawn for
+## an unearned one unless [member star_empty] is set — the picture underneath
+## already has an empty star there.
+func _show_stars(stage_number: int) -> void:
+	var earned := 0 if progress == null else progress.stars_for(level_id, stage_number)
+	for slot_number in 3:
+		var slot: ArtSlot = _stars.get_node_or_null(
+			"Row%dStar%d" % [stage_number, slot_number + 1]
+		) as ArtSlot
+		if slot == null:
+			push_warning("%s: no Row%dStar%d in this layout" % [name, stage_number, slot_number + 1])
+			continue
+		slot.texture = star_filled if slot_number < earned else star_empty
 
 
 ## The hotspot for one drawn row. The scene owns these, so a row that has been

@@ -141,12 +141,14 @@ unlocks **Little Planter**.
 - [x] **Stage select** — `Level 1 / Planting`, an X back to the hub, and a
       hotspot over each drawn row. Stage 1 live, the rest disabled to match the
       grey they are drawn in
-- [ ] **Stage select rows built from parts, not baked into the picture.** The
-      row states are currently part of the artwork, which is correct only while
-      nothing has been completed. The plates, labels, item icons and stars are
-      all cut and in the repo, unused. Doing this is also the only way those
-      rows can show they were pressed. **Belongs with `GameState`** — before it,
-      there is nothing to drive them
+- [x] Stage select rows read progress — a row opens when the stage before it is
+      cleared, and its three stars fill with what was earned
+- [ ] **The row plate and its "Stage N" label are still baked into the picture**,
+      so a cleared stage goes tappable and fills its stars while its plate stays
+      grey. The delivered parts cannot cover the drawn ones — their label pill
+      is ratio 5.17 against the drawn 3.12, and no row plate was delivered at
+      all. `art/MANIFEST.md` has the measurements and the two art options that
+      would close it. **⚠** Needs art, not code
 - [x] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
       gardener!"` with three stars, after Stage 4. Art delivered
 - [x] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the

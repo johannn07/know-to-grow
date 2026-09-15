@@ -294,14 +294,47 @@ Drawn 960 x 1444 at the design resolution, over the hub's garden dimmed to 45%.
 | Row 4 | `Rect2(0.1145, 0.7671, 0.7624, 0.1730)` | 731 x 249, locked |
 | Close | `Rect2(0.8500, 0.1164, 0.1316, 0.0799)` | 126 x 115, grown to 160 x 160 |
 
-- **The row states are in the picture, not in code.** Stage 1 is drawn unlocked,
-  the rest grey, every star empty. That is right today because nothing has been
-  completed and there is no `GameState`. `unlocked_count` is a plain export for
-  the same reason: raising it lights up a row that still *looks* locked.
-- These rows are the one place in the game where a control cannot show it was
-  pressed, because there is no separate art under the hotspot to tint. Building
-  the rows from the parts below fixes that and makes the state real. Both belong
-  with `GameState`.
+- **The stars are live.** Each row's three stars are drawn over the empty ones in
+  the picture from what `GameState` recorded, and they cover them exactly — the
+  delivered star is 248 x 236 against the drawn 153 x 145, a ratio of 1.051
+  against 1.055, within half a percent. Which rows can be tapped is live too: a
+  row opens when the stage before it is cleared.
+
+| Star | Rect2 on the card | Drawn |
+|---|---|---|
+| Row 1, stars 1-3 | `L0.4838 / L0.5860 / L0.6938`, `T0.3217 B0.3807` | 90 x 85 each |
+| Row 2, stars 1-3 | `L0.4819 / L0.5845 / L0.6926`, `T0.4998 B0.5569` | 90 x 82 each |
+| Row 3, stars 1-3 | `L0.4854 / L0.5896 / L0.6995`, `T0.6819 B0.7395` | 92 x 83 each |
+| Row 4, stars 1-3 | `L0.4827 / L0.5856 / L0.6940`, `T0.8603 B0.9190` | 90 x 85 each |
+
+### What is still baked in, and the art that would free it — **⚠**
+
+**The row's own plate and its "Stage N" label cannot be made live with what was
+delivered.** Stage 1 is drawn on a green plate and the other three on grey, so a
+stage that has been cleared becomes tappable and fills its stars *while its
+plate stays grey*. That is visible and wrong, and it is an art gap rather than a
+logic one.
+
+The loose parts do not close it, because they are a different, flatter pill:
+
+| Part | Delivered | Drawn in the card | |
+|---|---|---|---|
+| "Stage N" label | 362 x 70, ratio **5.17** | 496 x 159, ratio **3.12** | cannot cover it |
+| Row plate | none delivered | 1238 x 427, ratio **2.90** | `ui_stage_label_plate*.png` is the blank *label*, not a row |
+| Item icon | ~303 x 302, ratio 1.00 | 364 x 349, ratio 1.04 | close enough to cover |
+| Star | 248 x 236, ratio 1.05 | 153 x 145, ratio 1.06 | **in use** |
+
+Scaling the delivered label to cover the drawn one would make it 848 px wide
+inside a 1238 px row starting at x 588 — 186 px past the row's right edge.
+
+Either of these would close it, and the second is less work:
+
+1. A **blank row plate in both states**, at ratio ~2.90, plus a "Stage N" label
+   at ratio ~3.12 in both states. Rows then compose from parts entirely.
+2. **Eight pre-composed rows** — four stages, locked and unlocked — drawn like
+   the ones already in the card. The screen would swap whole rows.
+
+Until then the stars carry the progress and the plate does not.
 
 ### Row parts — delivered, not yet used
 

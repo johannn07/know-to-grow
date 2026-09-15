@@ -16,6 +16,11 @@ var _failures := 0
 
 func _initialize() -> void:
 	await process_frame
+	# The stage select reads progress, so start from a known empty game and
+	# leave it that way. Otherwise a previous run decides how many rows open.
+	var state: GameStateStore = root.get_node_or_null("/root/GameState") as GameStateStore
+	if state != null:
+		state.reset()
 
 	var menu: Node = await _instantiate("res://scenes/ui/main_menu.tscn")
 	if menu != null:
@@ -163,8 +168,8 @@ func _initialize() -> void:
 						"stage_select Row%d is connected" % (i + 1)
 					)
 			_expect(
-				live == select.unlocked_count,
-				"stage_select has %d live row(s), matching unlocked_count" % live
+				live == 1,
+				"stage_select opens exactly the one reached row on a fresh start (got %d)" % live
 			)
 			var close: Button = select.get_node("%CloseButton")
 			_expect(close.pressed.get_connections().size() == 1, "stage_select %CloseButton is connected")
@@ -187,8 +192,50 @@ func _initialize() -> void:
 		screen.queue_free()
 
 	await process_frame
+	if state != null:
+		await _check_progress_reaches_the_rows(state)
+		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
+
+
+## The stage select is the only screen that reads progress, and opening it on a
+## fresh game proves nothing. This clears two stages and checks the rows and the
+## stars actually moved.
+func _check_progress_reaches_the_rows(state: GameStateStore) -> void:
+	state.reset()
+	state.record_stage_cleared(&"level_1", 1, 0)  # first try, three stars
+	state.record_stage_cleared(&"level_1", 2, 1)  # one wrong, two stars
+
+	var screen: StageSelect = await _instantiate("res://scenes/ui/stage_select.tscn") as StageSelect
+	if screen == null:
+		_expect(false, "stage select reopens with progress")
+		return
+	var rows: Control = screen.get_node("%Rows")
+	for stage_number in [1, 2, 3]:
+		_expect(
+			not (rows.get_node("Row%d" % stage_number) as Button).disabled,
+			"with stages 1 and 2 cleared, Row%d is open" % stage_number
+		)
+	_expect(
+		(rows.get_node("Row4") as Button).disabled,
+		"Row4 stays closed while stage 3 is unfinished"
+	)
+
+	var stars: Control = screen.get_node("%Stars")
+	for expected: Array in [[1, 3], [2, 2], [3, 0], [4, 0]]:
+		var stage_number: int = expected[0]
+		var filled := 0
+		for slot_number in 3:
+			var slot: ArtSlot = stars.get_node("Row%dStar%d" % [stage_number, slot_number + 1])
+			if screen.star_filled != null and slot.texture == screen.star_filled:
+				filled += 1
+		_expect(
+			filled == expected[1],
+			"Row%d shows %d filled star(s) (got %d)" % [stage_number, expected[1], filled]
+		)
+	screen.queue_free()
+	await process_frame
 
 
 func _instantiate(path: String) -> Node:

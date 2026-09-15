@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bulr1pp08oq4w"
-path="res://.godot/imported/ui_stage_row.png-3b44e622c09f8b4268bdced6ddd08904.ctex"
+path="res://.godot/imported/ui_stage_label_plate.png-1307da046aea484f23f9be3ac6578fae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/ui_stage_row.png"
-dest_files=["res://.godot/imported/ui_stage_row.png-3b44e622c09f8b4268bdced6ddd08904.ctex"]
+source_file="res://assets/art/ui_stage_label_plate.png"
+dest_files=["res://.godot/imported/ui_stage_label_plate.png-1307da046aea484f23f9be3ac6578fae.ctex"]
 
 [params]
 
