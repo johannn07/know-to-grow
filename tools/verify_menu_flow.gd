@@ -71,8 +71,27 @@ func _initialize() -> void:
 		# things that break quietly are the label lookups and the play target.
 		if screen.has_node("%PlayButton"):
 			_expect_scene(screen.level_scene_path, "hub level_scene_path")
-			for label_name in ["%GreetingLabel", "%StarLabel", "%PlantStageLabel"]:
-				_expect(screen.has_node(label_name), "hub has %s" % label_name)
+			# The hub's text nodes are optional — the layout is still moving, and
+			# cards get added and removed in the editor. So do not demand a
+			# particular set of labels; demand that the ones the scene does have
+			# received their exported value, which is what a mistyped unique name
+			# would break.
+			var expected := {
+				"%GreetingLabel": screen.player_greeting,
+				"%StarLabel": str(screen.star_count),
+				"%PlantStageLabel": screen.plant_stage_label,
+			}
+			var wired := 0
+			for label_name in expected:
+				if not screen.has_node(label_name):
+					continue
+				var label: Label = screen.get_node(label_name)
+				_expect(
+					label.text == expected[label_name],
+					"hub %s shows its exported value ('%s')" % [label_name, label.text]
+				)
+				wired += 1
+			_expect(wired > 0, "hub wires at least one label (%d found)" % wired)
 			var play: Button = screen.get_node("%PlayButton")
 			_expect(play.pressed.get_connections().size() == 1, "hub %PlayButton is connected")
 			_expect(

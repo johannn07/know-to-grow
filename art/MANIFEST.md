@@ -63,6 +63,7 @@ All seven are in the repo and wired into `scenes/ui/hub.tscn`.
 | `ui_tab_lessons.png` | 260 x 203 | 68 KB | `BottomNav` |
 | `ui_tab_garden.png` | 260 x 269 | 80 KB | `BottomNav` |
 | `ui_tab_badges.png` | 260 x 275 | 72 KB | `BottomNav` |
+| `bg_sign.png` | 1086 x 1448 | 1.0 MB | `BgSign` |
 
 Notes:
 
