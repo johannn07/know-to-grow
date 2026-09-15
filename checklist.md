@@ -143,12 +143,14 @@ unlocks **Little Planter**.
       grey they are drawn in
 - [x] Stage select rows read progress — a row opens when the stage before it is
       cleared, and its three stars fill with what was earned
-- [ ] **The row plate and its "Stage N" label are still baked into the picture**,
-      so a cleared stage goes tappable and fills its stars while its plate stays
-      grey. The delivered parts cannot cover the drawn ones — their label pill
-      is ratio 5.17 against the drawn 3.12, and no row plate was delivered at
-      all. `art/MANIFEST.md` has the measurements and the two art options that
-      would close it. **⚠** Needs art, not code
+- [x] Rows are drawn in the state they have reached — a cleared stage turns its
+      plate green and colours its icon, not just its stars
+- [ ] **Four of the eight rows are composited, not illustrated.** Only Stage 1
+      unlocked and Stages 2-4 locked were ever drawn; the rest are built by
+      `tools/build_stage_rows.py` by recolouring the drawn ones. They read as
+      one set, but the composited greens are slightly paler than the drawn
+      Stage 1. Replacing them with drawn art is a straight file swap — same
+      names, same rects, no code change. **⚠** Worth a look before it ships
 - [x] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
       gardener!"` with three stars, after Stage 4. Art delivered
 - [x] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the

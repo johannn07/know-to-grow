@@ -307,46 +307,43 @@ Drawn 960 x 1444 at the design resolution, over the hub's garden dimmed to 45%.
 | Row 3, stars 1-3 | `L0.4854 / L0.5896 / L0.6995`, `T0.6819 B0.7395` | 92 x 83 each |
 | Row 4, stars 1-3 | `L0.4827 / L0.5856 / L0.6940`, `T0.8603 B0.9190` | 90 x 85 each |
 
-### What is still baked in, and the art that would free it — **⚠**
+### Rows — composited, not drawn
 
-**The row's own plate and its "Stage N" label cannot be made live with what was
-delivered.** Stage 1 is drawn on a green plate and the other three on grey, so a
-stage that has been cleared becomes tappable and fills its stars *while its
-plate stays grey*. That is visible and wrong, and it is an art gap rather than a
-logic one.
+| File | Size | Weight |
+|---|---|---|
+| `ui_stage_row_1..4.png` | ~1240 x 420 | ~0.6 MB each |
+| `ui_stage_row_1..4_locked.png` | ~1240 x 420 | ~0.4 MB each |
 
-The loose parts do not close it, because they are a different, flatter pill:
+Each row is drawn over the one baked into the card, at the same rect, so the
+drawn one is covered exactly. Which of the pair is used comes from `GameState`.
 
-| Part | Delivered | Drawn in the card | |
-|---|---|---|---|
-| "Stage N" label | 362 x 70, ratio **5.17** | 496 x 159, ratio **3.12** | cannot cover it |
-| Row plate | none delivered | 1238 x 427, ratio **2.90** | `ui_stage_label_plate*.png` is the blank *label*, not a row |
-| Item icon | ~303 x 302, ratio 1.00 | 364 x 349, ratio 1.04 | close enough to cover |
-| Star | 248 x 236, ratio 1.05 | 153 x 145, ratio 1.06 | **in use** |
+- **Only four of the eight were ever illustrated.** The card has Stage 1 on a
+  green plate and Stages 2-4 on grey. The other four — Stage 1 locked, Stages
+  2-4 unlocked — are **composited by `tools/build_stage_rows.py`**, not drawn:
+  the row is cut out of the card, its plate and its "Stage N" label recoloured
+  into the other state, then the right item icon and clean empty stars laid on
+  top. The recolour matches luminance rank to rank against the opposite row's
+  palette, so shading and the leaf pattern survive and only the hue moves.
+- **Plate and label are recoloured separately.** Matched together, the label
+  loses its contrast against the plate and nearly disappears.
+- **The composited greens are slightly paler than the drawn Stage 1** and their
+  label pill a little lighter. They read as one set, but Stage 1 is the only
+  green anyone drew, and a close eye will see it. Replacing the four composited
+  files with drawn ones needs no code change — same names, same rects.
+- Re-run the script if `ui_stage_select_l1.png` is ever re-exported.
 
-Scaling the delivered label to cover the drawn one would make it 848 px wide
-inside a 1238 px row starting at x 588 — 186 px past the row's right edge.
+### Row parts — cut from the delivered sheets
 
-Either of these would close it, and the second is less work:
-
-1. A **blank row plate in both states**, at ratio ~2.90, plus a "Stage N" label
-   at ratio ~3.12 in both states. Rows then compose from parts entirely.
-2. **Eight pre-composed rows** — four stages, locked and unlocked — drawn like
-   the ones already in the card. The screen would swap whole rows.
-
-Until then the stars carry the progress and the plate does not.
-
-### Row parts — delivered, not yet used
-
-Cut from the delivered sheets and sitting ready for the row rebuild. Nothing
-references them yet.
+The item icons and both stars are used, by the row builder and by the screen.
+The label pill and its blank plate are **not**: they are ratio ~5.2 against the
+3.12 the card draws, so they cannot stand in for the label already there.
 
 | File | Size | Purpose |
 |---|---|---|
-| `ui_stage_row.png` | 1932 x 347 | the row plate, unlocked |
-| `ui_stage_row_locked.png` | 1923 x 349 | the row plate, locked |
-| `ui_stage_label_1..4.png` | ~362 x 71 | "Stage N", unlocked |
-| `ui_stage_label_1..4_locked.png` | ~362 x 71 | "Stage N", locked |
+| `ui_stage_label_plate.png` | 1932 x 347 | blank label pill, unlocked — **unused** |
+| `ui_stage_label_plate_locked.png` | 1923 x 349 | blank label pill, locked — **unused** |
+| `ui_stage_label_1..4.png` | ~362 x 71 | "Stage N", unlocked — **unused** |
+| `ui_stage_label_1..4_locked.png` | ~362 x 71 | "Stage N", locked — **unused** |
 | `icon_stage_shovel/seed/water/sun.png` | ~303 x 302 | the row's item, unlocked |
 | `icon_stage_*_locked.png` | ~303 x 302 | the same four, greyed |
 | `icon_star_filled.png` | 248 x 236 | earned star |

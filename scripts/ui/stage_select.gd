@@ -50,12 +50,23 @@ const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
 @export var level_id: StringName = &"level_1"
 
 @export_group("Art")
+## One row in each state, drawn over the row baked into the card. Same capsule,
+## same place, so the one underneath is covered exactly.
+@export var row_art_1: Texture2D
+@export var row_art_1_locked: Texture2D
+@export var row_art_2: Texture2D
+@export var row_art_2_locked: Texture2D
+@export var row_art_3: Texture2D
+@export var row_art_3_locked: Texture2D
+@export var row_art_4: Texture2D
+@export var row_art_4_locked: Texture2D
 ## Drawn over a row's empty star for each one earned.
 @export var star_filled: Texture2D
-## Drawn over the rest. Usually left empty, since the picture already has them.
+## Drawn over the rest. Usually left empty, since the row art already has them.
 @export var star_empty: Texture2D
 
 @onready var _rows: Control = %Rows
+@onready var _rows_art: Control = %RowsArt
 @onready var _stars: Control = %Stars
 @onready var _close_button: Button = %CloseButton
 
@@ -78,7 +89,27 @@ func _ready() -> void:
 		button.disabled = not live
 		if live:
 			button.pressed.connect(_on_row_pressed.bind(path))
+		_show_row(stage_number, reached)
 		_show_stars(stage_number)
+
+
+## Draws the row in the state it has actually reached, over the one baked into
+## the card. Same capsule at the same place, so the drawn one is covered.
+func _show_row(stage_number: int, unlocked: bool) -> void:
+	var slot: ArtSlot = _rows_art.get_node_or_null("Row%dArt" % stage_number) as ArtSlot
+	if slot == null:
+		push_warning("%s: no Row%dArt in this layout" % [name, stage_number])
+		return
+	slot.texture = _row_art(stage_number, unlocked)
+
+
+func _row_art(stage_number: int, unlocked: bool) -> Texture2D:
+	match stage_number:
+		1: return row_art_1 if unlocked else row_art_1_locked
+		2: return row_art_2 if unlocked else row_art_2_locked
+		3: return row_art_3 if unlocked else row_art_3_locked
+		4: return row_art_4 if unlocked else row_art_4_locked
+	return null
 
 
 ## Fills a row's three stars with what that stage earned. Nothing is drawn for

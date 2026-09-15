@@ -222,6 +222,17 @@ func _check_progress_reaches_the_rows(state: GameStateStore) -> void:
 		"Row4 stays closed while stage 3 is unfinished"
 	)
 
+	# A row that has been reached must be drawn in its unlocked state, not just
+	# be tappable. That mismatch is exactly what the row art was added to fix.
+	var rows_art: Control = screen.get_node("%RowsArt")
+	for stage_number in [1, 2, 3, 4]:
+		var slot: ArtSlot = rows_art.get_node("Row%dArt" % stage_number)
+		var unlocked: bool = stage_number <= 3
+		_expect(
+			slot.texture == screen._row_art(stage_number, unlocked),
+			"Row%d is drawn %s" % [stage_number, "unlocked" if unlocked else "locked"]
+		)
+
 	var stars: Control = screen.get_node("%Stars")
 	for expected: Array in [[1, 3], [2, 2], [3, 0], [4, 0]]:
 		var stage_number: int = expected[0]
