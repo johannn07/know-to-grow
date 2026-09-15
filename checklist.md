@@ -97,12 +97,10 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [ ] **Level 1 ends on a different-looking garden.** `bg_bed_sprout.png` is a
       close-up behind a white fence, not the raised bed the other four use — the
       `.fig` has no sprout in that framing. **⚠**
-- [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
-      Planter" badge are drawn and unused. Stage 4 currently returns to the hub.
-      **`bg_bed_sprout.png` belongs here**: it is the payoff of the level and is
-      no longer shown anywhere, now that stages keep one garden each
-- [ ] Level 1 completion beat — [107] "Level 1 Complete!" and the [116] "Little
-      Planter" badge are drawn and unused
+- [ ] Level 1 completion beat — **specified in §3 now**, as the Level Complete
+      and Badge Unlocked overlays. Stage 4 still returns straight to the hub.
+      **`bg_bed_sprout.png` belongs somewhere in that run**: it is the payoff of
+      the level and is shown nowhere, now that stages keep one garden each
 - [ ] Option shuffling for **Level 3 only** — its scripted answers sit at
       B, A, C, A, B and children memorise positions faster than content. Levels
       1, 2 and 4 use drawn trays, so a card's position is fixed by the picture
@@ -115,6 +113,38 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [ ] Play all 19 stages as grey boxes before any art exists
 
 ## 3 · Screen flow
+
+### The sequence a level runs through — decided
+
+Confirmed by the project owner, and the order everything below is built to:
+
+```
+Hub → Level overlay → Stage select → Stages 1-4 → Level Complete overlay
+    → Badge Unlocked overlay → "You completed Level N" overlay
+    → Hub, "Click Me" on the plant → Hub, plant grown
+```
+
+Today the game runs `Hub → Stages 1-4` and returns to the hub, so the four
+screens between them are missing, plus the three beats that close the loop.
+
+**Badges are fixed per level, not earned by performance.** Level 1 always
+unlocks **Little Planter**.
+
+- [ ] **Level overlay** — the card that names the level before it starts.
+      `Level 1 / "Ready to grow?"`, with Continue. Art delivered
+- [ ] **Stage select** — `Level 1 / Planting` with a row per stage, each row
+      carrying its item icon and three stars, locked rows greyed, and an X back
+      to the hub. Art delivered for the frame, both pill states, all four item
+      icons in locked and unlocked form, and both star states. **This is the
+      screen that needs `GameState`** — without it every row but Stage 1 is
+      locked forever and no star can ever fill
+- [ ] **Level Complete overlay** — `Level 1 Complete! / "Great job, little
+      gardener!"` with three stars, after Stage 4. Art delivered
+- [ ] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the
+      `Little Planter` badge, with Continue. Art delivered
+- [ ] "You completed Level N" overlay — **not in this batch**, no art yet
+- [ ] Hub with "Click Me" on the plant, then the plant grown — **not in this
+      batch**, no art yet. Both need `GameState` to know the level is done
 
 - [ ] `GameState` autoload — current level, per-level completion, save to
       `user://`. Removed with the prototype; the menu currently does not read
