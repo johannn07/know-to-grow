@@ -8,7 +8,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
-[node name="StageSelect" type="Control"]
+[node name="StageSelect" type="Control" unique_id=76464856]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +19,7 @@ theme = ExtResource("3_theme")
 script = ExtResource("1_screen")
 back_scene_path = "res://scenes/ui/hub.tscn"
 
-[node name="Background" type="Control" parent="."]
+[node name="Background" type="Control" parent="." unique_id=1095638558]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -34,7 +34,7 @@ fit = 2
 slot_name = "bg_garden_stump"
 placeholder_color = Color(0.52, 0.82, 0.95, 1)
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=1339443387]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -44,7 +44,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0.45)
 
-[node name="Center" type="MarginContainer" parent="."]
+[node name="Center" type="MarginContainer" parent="." unique_id=1307534507]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -57,17 +57,17 @@ theme_override_constants/margin_top = 120
 theme_override_constants/margin_right = 60
 theme_override_constants/margin_bottom = 120
 
-[node name="CardAspect" type="AspectRatioContainer" parent="Center"]
+[node name="CardAspect" type="AspectRatioContainer" parent="Center" unique_id=1345664489]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 ratio = 0.6649
 
-[node name="Card" type="Control" parent="Center/CardAspect"]
+[node name="Card" type="Control" parent="Center/CardAspect" unique_id=1516687765]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="CardArt" type="Control" parent="Center/CardAspect/Card"]
+[node name="CardArt" type="Control" parent="Center/CardAspect/Card" unique_id=1597768350]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -82,7 +82,7 @@ fit = 0
 slot_name = "ui_stage_select_l1"
 placeholder_color = Color(0.98, 0.96, 0.89, 1)
 
-[node name="Rows" type="Control" parent="Center/CardAspect/Card"]
+[node name="Rows" type="Control" parent="Center/CardAspect/Card" unique_id=12595135]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -92,7 +92,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Row1" type="Button" parent="Center/CardAspect/Card/Rows"]
+[node name="Row1" type="Button" parent="Center/CardAspect/Card/Rows" unique_id=1913383049]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1176
@@ -107,7 +107,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
 
-[node name="Row2" type="Button" parent="Center/CardAspect/Card/Rows"]
+[node name="Row2" type="Button" parent="Center/CardAspect/Card/Rows" unique_id=1363581090]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1145
@@ -122,7 +122,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
 
-[node name="Row3" type="Button" parent="Center/CardAspect/Card/Rows"]
+[node name="Row3" type="Button" parent="Center/CardAspect/Card/Rows" unique_id=1110768894]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1121
@@ -137,7 +137,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
 
-[node name="Row4" type="Button" parent="Center/CardAspect/Card/Rows"]
+[node name="Row4" type="Button" parent="Center/CardAspect/Card/Rows" unique_id=1838046248]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1145
@@ -152,7 +152,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
 
-[node name="CloseButton" type="Button" parent="Center/CardAspect/Card"]
+[node name="CloseButton" type="Button" parent="Center/CardAspect/Card" unique_id=547853568]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1

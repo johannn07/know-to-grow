@@ -51,6 +51,12 @@ const CHOOSE_AGAIN_ART_RECT := Rect2(0.2736, 0.6849, 0.5130, 0.2345)
 const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 
 @export_group("Answer")
+## Which level this stage belongs to, matching the `id` in content/*.tres. With
+## [member stage_number] it is how progress is filed against this stage.
+@export var level_id: StringName = &""
+## Where this stage sits in its level, counting from 1. It decides which stage
+## select row this is, so it has to match the order the rows are drawn in.
+@export var stage_number: int = 0
 ## Matches a ChallengeData in content/*.tres. Nothing reads it at runtime — it
 ## is what lets the smoke test check this scene against the reviewed content.
 @export var challenge_id: StringName = &""
@@ -89,6 +95,11 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 @export_file("*.tscn") var done_scene_path: String = "res://scenes/ui/hub.tscn"
 
 var _answered := false
+
+## Wrong answers actually dropped on the target before the right one. Drops that
+## missed the target are not attempts — the child changed their mind. This is
+## what the stars are worked out from.
+var _wrong_attempts := 0
 
 @onready var _drop_zone: Control = %DropZone
 @onready var _cards: Control = %Cards
@@ -133,6 +144,10 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 	if is_correct(card.option_id):
 		_answered = true
 		card.freeze()
+		if progress != null:
+			progress.record_stage_cleared(level_id, stage_number, _wrong_attempts)
+		else:
+			push_warning("%s: no GameState, so this stage was not recorded" % name)
 		on_correct(card)
 		_show_feedback(correct_card, correct_button_rect, continue_art, correct_art_rect)
 	else:
@@ -141,6 +156,7 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		# pickable, so the same wrong answer cannot be repeated.
 		card.return_home()
 		card.mark_spent()
+		_wrong_attempts += 1
 		on_wrong(card)
 		_show_feedback(wrong_card, wrong_button_rect, choose_again_art, wrong_art_rect)
 

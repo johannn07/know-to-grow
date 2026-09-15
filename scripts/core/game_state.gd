@@ -1,0 +1,136 @@
+class_name GameStateStore
+extends Node
+
+## What the child has finished, and how well. Autoloaded as `GameState`.
+##
+## The class name and the autoload name differ on purpose. `GameState` as a bare
+## identifier resolves when the game runs, but **not inside a `godot -s` tool
+## script**, which is compiled before the autoload list is registered — and those
+## tool scripts are how everything here is verified. Any script that reaches for
+## progress does it through [member SubScreen.progress], which fetches the node
+## and is typed by this class, so it compiles in both.
+##
+## This is the only thing in the game that survives closing it. It holds one
+## number per stage — the stars earned, 1 to 3, with 0 meaning never finished —
+## and everything else is derived from that: whether a stage is unlocked,
+## whether a level is done, how many stars the hub shows.
+##
+## **Stars come from attempts**, decided by the project owner: three for getting
+## it right first try, two on the second, one after that. Worth knowing that the
+## design document says Level 1 has no penalties and no "Wrong" label, and a
+## grade that falls with attempts sits in some tension with that. It is recorded
+## in checklist.md §4 so whoever owns the teaching content sees it.
+##
+## **Stars are never taken away.** Replaying a stage can raise the score and
+## never lowers it, so going back to an early stage cannot cost anything.
+##
+## Saving is deliberately dull: a ConfigFile in user://, which is plain text and
+## can be read or deleted by hand while the game is being built. There is no
+## account, nothing leaves the device, and a corrupt or missing file is treated
+## as a fresh start rather than an error.
+
+## Emitted whenever anything here changes, so a screen showing progress can
+## redraw without polling.
+signal progress_changed
+
+const SAVE_PATH := "user://progress.cfg"
+const SAVE_SECTION := "stars"
+const MAX_STARS := 3
+
+## Stars per stage, keyed by [method _key]. Absent means never finished.
+var _stars: Dictionary[String, int] = {}
+
+
+func _ready() -> void:
+	load_progress()
+
+
+## Records a finished stage. [param wrong_attempts] is how many wrong answers
+## were tried before the right one, so 0 means first time.
+func record_stage_cleared(
+	level_id: StringName, stage_number: int, wrong_attempts: int
+) -> void:
+	if level_id.is_empty() or stage_number < 1:
+		push_warning("GameState: refusing to record '%s' stage %d" % [level_id, stage_number])
+		return
+	var earned := clampi(MAX_STARS - wrong_attempts, 1, MAX_STARS)
+	var key := _key(level_id, stage_number)
+	# Never downgrade: a replay can only improve on what is already there.
+	if earned <= _stars.get(key, 0):
+		return
+	_stars[key] = earned
+	save_progress()
+	progress_changed.emit()
+
+
+## Stars earned for one stage, or 0 if it has never been finished.
+func stars_for(level_id: StringName, stage_number: int) -> int:
+	return _stars.get(_key(level_id, stage_number), 0)
+
+
+func is_stage_cleared(level_id: StringName, stage_number: int) -> bool:
+	return stars_for(level_id, stage_number) > 0
+
+
+## A stage is open once the one before it is done. The first always is, so a
+## level can always be started.
+func is_stage_unlocked(level_id: StringName, stage_number: int) -> bool:
+	if stage_number <= 1:
+		return true
+	return is_stage_cleared(level_id, stage_number - 1)
+
+
+## How many stages of a level are finished, counted from the first. Stops at the
+## first gap, so this is "how far they have got", not a total.
+func stages_cleared(level_id: StringName) -> int:
+	var count := 0
+	while is_stage_cleared(level_id, count + 1):
+		count += 1
+	return count
+
+
+func is_level_cleared(level_id: StringName, stage_count: int) -> bool:
+	return stage_count > 0 and stages_cleared(level_id) >= stage_count
+
+
+## Every star earned anywhere, which is what the hub counts.
+func total_stars() -> int:
+	var sum := 0
+	for value in _stars.values():
+		sum += value
+	return sum
+
+
+## Wipes progress. For a "start over" control, and for tests that need a known
+## state — call it before asserting anything about stars.
+func reset() -> void:
+	_stars.clear()
+	save_progress()
+	progress_changed.emit()
+
+
+func save_progress() -> void:
+	var file := ConfigFile.new()
+	for key in _stars:
+		file.set_value(SAVE_SECTION, key, _stars[key])
+	var error := file.save(SAVE_PATH)
+	if error != OK:
+		push_warning("GameState: could not save to %s (error %d)" % [SAVE_PATH, error])
+
+
+func load_progress() -> void:
+	_stars.clear()
+	var file := ConfigFile.new()
+	# A missing file is the normal first run, not a problem worth reporting. So
+	# is a file with no stars in it, which is what reset() leaves behind.
+	if file.load(SAVE_PATH) != OK or not file.has_section(SAVE_SECTION):
+		return
+	for key in file.get_section_keys(SAVE_SECTION):
+		var value: Variant = file.get_value(SAVE_SECTION, key, 0)
+		if value is int and value > 0:
+			_stars[key] = clampi(value, 1, MAX_STARS)
+	progress_changed.emit()
+
+
+func _key(level_id: StringName, stage_number: int) -> String:
+	return "%s/%d" % [level_id, stage_number]

@@ -20,6 +20,12 @@ const MIN_TOUCH := 160.0
 
 @onready var _back_button: Button = get_node_or_null("%BackButton") as Button
 
+## What the child has finished so far. Fetched rather than named: see the note
+## on [GameStateStore] for why `GameState` cannot be written directly here. Null
+## only if the autoload is missing, so screens that read it should say so rather
+## than assume.
+@onready var progress: GameStateStore = get_node_or_null("/root/GameState") as GameStateStore
+
 
 func _ready() -> void:
 	if _back_button != null:

@@ -29,6 +29,12 @@ var _fact_widths: Array[float] = []
 
 func _initialize() -> void:
 	await process_frame
+	# Playing the stages records real progress, so this starts from nothing and
+	# clears up after itself. Otherwise a run would leave stars behind and the
+	# next screen that reads them would see a different game.
+	var state: GameStateStore = root.get_node_or_null("/root/GameState") as GameStateStore
+	if state != null:
+		state.reset()
 	_level = load(CONTENT)
 	_expect(_level != null, "level content loads")
 
@@ -48,6 +54,12 @@ func _initialize() -> void:
 	_expect(seen > 0, "at least one stage was played")
 	_expect_same("prompt", _prompt_widths)
 	_expect_same("fun fact", _fact_widths)
+	if state != null:
+		_expect(
+			state.stars_for(&"level_1", 1) > 0,
+			"playing stage 1 recorded progress (%d star(s))" % state.stars_for(&"level_1", 1)
+		)
+		state.reset()
 	print("%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
 

@@ -109,6 +109,12 @@ picks one of N options, it is right or it is wrong. Build that once.
       real-world sequence
 - [ ] Progress indicator — the design document specifies `Score: 0/5` for Level 2;
       it only ever goes up
+- [ ] **Stars are scored by attempts, which the design document does not ask
+      for.** Three for right first time, two on the second, one after that —
+      decided by the project owner. The document says Level 1 has no penalties
+      and no "Wrong" label, and a grade that falls with attempts sits against
+      that, so whoever owns the teaching content should see it. Stars are never
+      taken away once earned, and replaying can only improve them. **⚠**
 - [ ] Level completion beat: message, final fun fact, continue button
 - [ ] Play all 19 stages as grey boxes before any art exists
 
@@ -149,9 +155,13 @@ unlocks **Little Planter**.
 - [ ] Hub with "Click Me" on the plant, then the plant grown — **not in this
       batch**, no art yet. Both need `GameState` to know the level is done
 
-- [ ] `GameState` autoload — current level, per-level completion, save to
-      `user://`. Removed with the prototype; the menu currently does not read
-      progress. **⚠** Decide whether Start Game resumes or always restarts
+- [x] `GameState` autoload — one number per stage, the stars earned, saved to
+      `user://progress.cfg`. Everything else is derived from it: whether a stage
+      is unlocked, whether a level is done, what the hub counts. Checked by
+      `tools/verify_game_state.gd`
+- [x] ~~Decide whether Start Game resumes or always restarts~~ **Answered:
+      neither.** Play always opens the stage select and the child picks. Resume
+      falls out of it, since cleared rows stay unlocked
 - [ ] `AudioDirector` autoload — routes SFX/VO/music to the existing buses
 - [ ] Real level select, replacing `level_select_stub.tscn` — or wire Start Game
       straight to Level 1 and drop the screen. **⚠**

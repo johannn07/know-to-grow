@@ -24,7 +24,8 @@ extends SubScreen
 @export_group("Placeholder state")
 ## Greeting above the garden. The child is never asked to type a name.
 @export var player_greeting: String = "Hello, Little Gardener!"
-## Stars collected so far. Placeholder until GameState exists.
+## Stars collected so far. Read from [GameState]; the export is only what shows
+## in the editor, where no autoload has run.
 @export var star_count: int = 0
 ## What the plant has grown into. Shown only while the scene has a label for it;
 ## it also decides which plant art belongs in the Plant slot.
@@ -39,7 +40,7 @@ extends SubScreen
 func _ready() -> void:
 	super()
 	_set_label_text("%GreetingLabel", player_greeting)
-	_set_label_text("%StarLabel", str(star_count))
+	_set_label_text("%StarLabel", str(progress.total_stars() if progress != null else star_count))
 	_set_label_text("%PlantStageLabel", plant_stage_label)
 	_play_button.text = level_label
 	_play_button.pressed.connect(_on_play_pressed)

@@ -242,6 +242,14 @@ property that does not exist and fail silently.
 | Project loads, no import errors | `godot --headless --path . --quit` |
 | A scene loads and runs 30 frames | `godot --headless --path . --quit-after 30 res://scenes/ui/main_menu.tscn` |
 | Menu flow smoke test | `godot --headless --path . -s res://tools/verify_menu_flow.gd` |
+| Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
+
+`verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
+whatever progress is on the machine. It resets to empty afterwards.
+
+Note that a `-s` tool script is compiled **before autoloads are registered**, so
+`GameState` as a bare identifier will not compile in one. Reach progress through
+`SubScreen.progress`, which is typed by `GameStateStore` and works in both.
 
 The smoke test exits non-zero on failure and covers the things that break
 quietly: `%UniqueName` lookups, exported scene paths, theme variations, the
