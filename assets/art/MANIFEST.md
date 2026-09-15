@@ -231,6 +231,32 @@ Notes:
 - One transcript corrected to match the art: the fun fact is drawn *"sunlight,
   water, and air"*, not *"sunlight, water and air"*. `SCRIPT.md` regenerated.
 
+## Level flow overlays — in progress
+
+The four screens between the hub and the stages, and between the stages and the
+hub again. See `checklist.md` §3 for the sequence. Each is one drawn card on a
+dimmed screen with a button under it, built on
+[`CardOverlay`](../../scripts/ui/card_overlay.gd).
+
+| File | Size | Weight | Screen |
+|---|---|---|---|
+| `ui_level_intro_l1.png` | 1106 x 1366 | 1.4 MB | `scenes/ui/level_intro.tscn` |
+
+- **Supplied at 1.23x, not the usual 2x.** The card is drawn 900 x 1112 at the
+  design resolution and the source is 1106 px wide. It is left at native size
+  rather than upscaled, which would add weight without adding detail. Worth
+  re-exporting larger from the `.fig` if it looks soft on a 1440p phone.
+- **The Continue button sits below the card**, not on it — these cards have no
+  button drawn into them. `CardOverlay.BUTTON_BELOW_CARD` is the shared rect,
+  in fractions of the card, and the y past 1.0 is what puts it outside:
+
+| Card | Button rect | Drawn |
+|---|---|---|
+| `ui_level_intro_l1` | `Rect2(0.265, 1.0405, 0.47, 0.1149)` | 423 x 128, 45 px under the card |
+
+- The background is the hub's own `bg_garden_stump.png`, dimmed to 45%, so the
+  overlay reads as sitting on top of the hub the child just left.
+
 ## Buttons — delivered
 
 | File | Size | Weight | Drawn over |

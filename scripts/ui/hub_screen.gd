@@ -17,7 +17,9 @@ extends SubScreen
 ## button itself is required, because without it the screen has no exit.
 
 @export_group("Destination")
-@export_file("*.tscn") var level_scene_path: String = "res://scenes/levels/level_1/stage_1.tscn"
+## The level overlay, which names the level and then hands off to it. Play does
+## not go straight into a stage: see the flow in checklist.md §3.
+@export_file("*.tscn") var level_scene_path: String = "res://scenes/ui/level_intro.tscn"
 
 @export_group("Placeholder state")
 ## Greeting above the garden. The child is never asked to type a name.

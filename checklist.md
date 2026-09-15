@@ -130,7 +130,7 @@ screens between them are missing, plus the three beats that close the loop.
 **Badges are fixed per level, not earned by performance.** Level 1 always
 unlocks **Little Planter**.
 
-- [ ] **Level overlay** — the card that names the level before it starts.
+- [x] **Level overlay** — the card that names the level before it starts.
       `Level 1 / "Ready to grow?"`, with Continue. Art delivered
 - [ ] **Stage select** — `Level 1 / Planting` with a row per stage, each row
       carrying its item icon and three stars, locked rows greyed, and an X back

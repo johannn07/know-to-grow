@@ -47,6 +47,7 @@ func _initialize() -> void:
 		"res://scenes/ui/hub.tscn",
 		"res://scenes/ui/how_to_play.tscn",
 		"res://scenes/ui/level_select_stub.tscn",
+		"res://scenes/ui/level_intro.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -115,6 +116,30 @@ func _initialize() -> void:
 				_expect(
 					tab.size.x >= 160.0 and tab.size.y >= 160.0,
 					"hub %s clears 160 px (is %dx%d)" % [tab_name, tab.size.x, tab.size.y]
+				)
+
+		# A CardOverlay is one drawn card with its button placed in fractions of
+		# that card, in code. Nothing about that is visible in the scene file, so
+		# a rect that stopped covering its art would break quietly.
+		if screen is CardOverlay:
+			var overlay: CardOverlay = screen
+			_expect(overlay.card_art != null, "%s has its card art" % path.get_file())
+			_expect_scene(overlay.next_scene_path, "%s next_scene_path" % path.get_file())
+			var action: ArtButton = overlay.get_node("%ActionButton")
+			_expect(
+				action.pressed.get_connections().size() == 1,
+				"%s %%ActionButton is connected" % path.get_file()
+			)
+			_expect(
+				action.size.x >= 160.0 and action.size.y >= 160.0,
+				"%s %%ActionButton clears 160 px (is %dx%d)"
+					% [path.get_file(), action.size.x, action.size.y]
+			)
+			if overlay.button_art != null:
+				var button_art: ArtSlot = overlay.get_node("%ButtonArt")
+				_expect(
+					action.art == button_art,
+					"%s %%ActionButton tints its own art" % path.get_file()
 				)
 
 		# How To Play is a single drawn image; its controls are invisible Buttons
