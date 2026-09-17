@@ -5,6 +5,81 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
+## 2026-09-17 — Asset folders, Level 2 art, stage select art and the font
+
+**Where it got to:** the art is sorted into category folders, the Level 2 and
+hub art from the `Know To Grow Assets` export is in the repo, Level 1's stage
+select shows the newly drawn coloured rows, and every screen uses Fredoka One.
+Nothing new is wired into gameplay yet. Merged to `master` and pushed. All five
+headless suites pass, and a real render of stage select with every star filled
+confirmed the stars line up.
+
+### What was done, in order
+
+- **Art sorted into folders** — the 89 loose PNGs in `assets/art/` now live in
+  `backgrounds/`, `branding/`, `characters/`, `effects/`, `plants/`, `items/`,
+  `ui/{buttons,common,hub,screens,stage_select}/` and `levels/level_N/`.
+  Filenames and texture IDs unchanged; every scene, the theme and the row tool
+  were repointed. The layout is in `CLAUDE.md` and `assets/art/MANIFEST.md`.
+- **27 new images imported** from the export's 40, under proper names: Level 2
+  headers, Correct cards, backgrounds and situation select card and rows;
+  Fertilizer, Water and Pruning Shears cards; Level 2 intro and complete,
+  the Plant Helper badge, the "You Completed Level 1" sign, Click Me and Grow
+  Now buttons, and the hub's sprout. **13 were duplicates** of art already here
+  and were skipped.
+- **Situations mapped from the delivered file names.** Situation 2's background
+  is the existing `bg_bed_sprout.png` and Situation 4's Correct card is the
+  existing `ui_correct_l1_s4.png`; both are reused, not copied.
+- **Stage select cards** — the four blank "Level N" cards are
+  `ui_stage_select_bg_l1..l4.png`.
+- **Drawn Level 1 rows** replace the composited unlocked ones. Their drawn
+  filled stars are covered with the empty star in the image, and the scene's
+  star slots were moved onto them. `build_stage_rows.py` now writes only the
+  locked rows.
+- **Fredoka One** in `assets/fonts/fredoka_one/`, set as the theme's default
+  font. The owner then removed the old system-font overrides from the main menu
+  and hub in the editor so the font shows there too.
+- **`CLAUDE.md`** now records the asset layout and three new rules: prompts are
+  live text on one shared bubble, Fredoka One is the only typeface, and how
+  stage select rows and stars work.
+
+### Decisions taken
+
+| Decision | Who |
+|---|---|
+| Every prompt, Levels 1-4, is live text on `ui_prompt_bubble.png` | owner |
+| Art that already has its words drawn in is kept, not rebuilt as text | owner |
+| Fredoka One for all text | owner |
+| `ui_stage_select_bg_l1..l4` are the stage select backgrounds | owner |
+| Drawn rows' stars are covered with the empty star | owner |
+| `prompt_transcript` is the one transcript that gets rendered | Claude, following from the above |
+| Duplicates are reused by their existing name, never copied | Claude |
+
+### Still in progress
+
+- **Stage select still uses the old Level 1 card**, the one with its rows drawn
+  in. The new blank cards are imported, not wired.
+- **Locked rows don't match the drawn unlocked ones** — grey composites against
+  orange, blue and yellow art.
+- **Level 1's four drawn prompts**: the rule keeps them, but "all prompts,
+  Levels 1-4" could mean they move to the bubble too. Needs the owner's answer.
+- **The new level cards are ~377 px wide** for a ~960 px slot and will look
+  soft. A larger export is needed.
+- **Level 2 has no headers for Situations 2-5.**
+- `tools/export_vo_script.gd` and the doc comment in `option_data.gd` still
+  point at `res://audio/vo/en/`, not `res://assets/audio/vo/en/`. Running the
+  export now writes to a folder that doesn't exist.
+
+### Next step
+
+Wire the new stage select card: put `ui_stage_select_bg_l1.png` behind Level 1's
+rows in `stage_select.tscn`, choose the row rects fresh (the card has no rows
+baked in), and re-measure the star slots in a real render. After that, the
+prompt bubble with live text in Level 1's stages, once the owner confirms
+whether the drawn prompts go.
+
+---
+
 ## 2026-09-16/17 — The level loop closes, with progress and sound
 
 **Where it got to:** a full run of Level 1 now goes hub → level overlay → stage

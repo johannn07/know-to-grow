@@ -250,18 +250,27 @@ the open content questions, not bugs.
 ## 6 · Art integration
 
 The artwork exists. `Untitled.fig` holds roughly **170 unique full-resolution
-assets** — effectively the whole game. Inventory in `art/MANIFEST.md`.
+assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 
 - [x] Main menu: 7 assets extracted, downscaled and wired
 - [x] **Decided: the artwork keeps its text.** English only, no Filipino for
       now. `content/*.tres` holds transcripts, not display strings. Verified
       legible at 1080-wide design resolution
-- [ ] 16 item icons (1254 × 1254 in the source)
-- [ ] Stage backgrounds (852 × 1846) — Level 1 and Level 2 states
+- [x] Art sorted into category folders under `assets/art/`
+- [ ] 16 item icons (1254 × 1254 in the source) — 13 in the repo, incl. Fertilizer, Water, Pruning Shears
+- [x] Stage backgrounds (852 × 1846) — Level 1 and all five Level 2 situations
+- [ ] Level 2 headers for Situations 2-5 — only Situation 1 is drawn
 - [ ] Hero plant variants, including versions with roots exposed
-- [ ] Level select plates, locked and unlocked, with star rows
+- [x] Stage select cards for Levels 1-4 imported (`ui_stage_select_bg_l1..l4`)
+- [ ] Wire the new cards into `stage_select.tscn`, rows and star slots re-measured
+- [ ] Stage select cards at a higher resolution — current ones are ~377 px wide
+- [x] Level 1 unlocked rows drawn, stars covered with the empty star
+- [ ] Level 1 locked rows drawn to match — still composited grey
+- [ ] Level 2 situation rows, locked and unlocked
 - [ ] Feedback cards, completion badges, tool trays
-- [ ] Display font in `res://fonts/`, wired once in `themes/ktg_theme.tres`
+- [x] Fredoka One in `assets/fonts/`, wired once in `themes/ktg_theme.tres`
+- [ ] Prompts as live text on `ui_prompt_bubble.png`, Levels 1-4
+- [ ] Fix `tools/export_vo_script.gd` to write under `res://assets/audio/vo/en/`
 - [ ] Decide an import policy — sources are up to 4096 × 2896 and the raw `.fig`
       is 290 MB. Everything needs alpha-cropping and downscaling before it lands
       in the repo, or the APK will be enormous
@@ -307,3 +316,5 @@ Collected from the **⚠** items above, because these block other people's work:
 5. "Seed" or "Seed Packet"? — blocks the icon brief and the voice-over script
 6. ~~Is Filipino shipping?~~ **Answered: no.** The artwork keeps its English
    text; `content/*.tres` holds transcripts and voice-over keys
+7. Level 1's four drawn prompts: keep them, or move them to the blank bubble
+   with live text like the other levels?
