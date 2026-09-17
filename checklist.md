@@ -281,8 +281,12 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [ ] Debug keystore, and a **release keystore backed up in two places** with the
       passwords written down somewhere that survives a year. Lose it and the app
       can never be updated under the same listing
-- [ ] Install the Android Build Template — `min_sdk` and `target_sdk` in
-      `export_presets.cfg` are inert until `gradle_build/use_gradle_build` is on
+- [x] Android Build Template installed — `android/build/` holds the Gradle
+      project at `4.7.2.stable`, and `gradle_build/use_gradle_build=true` in
+      `export_presets.cfg`, so `min_sdk` 24 / `target_sdk` 34 are live rather
+      than inert. **`/android/` is gitignored**, so a fresh clone has to
+      reinstall it from the editor (Project → Install Android Build Template)
+      before a gradle export will run
 - [ ] Launcher icons: 192×192 and the three 432×432 adaptive layers
 - [ ] Splash screen art
 - [x] **Export a debug APK to a real phone**, and keep doing it — the owner tests
