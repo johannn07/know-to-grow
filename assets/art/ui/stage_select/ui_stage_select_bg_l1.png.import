@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ch0fu05ufxcus"
-path="res://.godot/imported/ui_prompt_blank_l2.png-3ab81d5f6ae9a9c0c19a7671a0099c6d.ctex"
+uid="uid://3yff74ixa4em"
+path="res://.godot/imported/ui_stage_select_bg_l1.png-e70ebaf5f0e4df9cf869a7637eb6620d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/levels/level_2/ui_prompt_blank_l2.png"
-dest_files=["res://.godot/imported/ui_prompt_blank_l2.png-3ab81d5f6ae9a9c0c19a7671a0099c6d.ctex"]
+source_file="res://assets/art/ui/stage_select/ui_stage_select_bg_l1.png"
+dest_files=["res://.godot/imported/ui_stage_select_bg_l1.png-e70ebaf5f0e4df9cf869a7637eb6620d.ctex"]
 
 [params]
 

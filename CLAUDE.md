@@ -71,10 +71,10 @@ res://
     ├── art/        MANIFEST.md is the asset contract; images sorted by category
     │   ├── backgrounds/  branding/  characters/  effects/  plants/
     │   ├── items/        draggable item cards shared across stages
-    │   ├── ui/           buttons/, hub/, screens/, stage_select/ (+ source/)
+    │   ├── ui/           buttons/, common/, hub/, screens/, stage_select/ (+ source/)
     │   └── levels/       level_N/ — art that belongs to one level
     ├── audio/      music/, sfx/, vo/en/
-    ├── fonts/
+    ├── fonts/      fredoka_one/ — the only typeface
     └── video/
 ```
 
@@ -187,8 +187,9 @@ diffable, reviewable, and usable as a voice-over script.
 
 Rules that follow from this:
 
-- **Never render a `*_transcript` field.** If a screen needs to show words, it
-  shows the art that has them. A transcript in a `Label` is a bug.
+- **Never render a `*_transcript` field** — with one exception, the prompt
+  (below). Otherwise, if a screen needs to show words, it shows the art that
+  has them. Any other transcript in a `Label` is a bug.
 - **A transcript must match its artwork exactly.** If the art is re-rendered
   with different wording, update the transcript in the same change.
 - **Voice-over is planned**, so every spoken line has a `*_vo_key` and audio
@@ -197,6 +198,48 @@ Rules that follow from this:
   `tools/export_vo_script.gd` after any content change.
 - Changing wording now means re-rendering art *and* re-recording a line. Get the
   teaching-content reviewer through all 19 stages before commissioning voice-over.
+
+## Prompts are live text on one shared bubble — decided
+
+Every stage prompt, **Level 1 through Level 4**, is drawn on the same blank
+speech bubble, `assets/art/ui/common/ui_prompt_bubble.png`, with the words laid
+over it as live text. The bubble has no words in it, so it is never re-rendered
+when a prompt changes.
+
+- **The prompt's text is `prompt_transcript`.** This is the one transcript that
+  is rendered. It still has to be reviewed, and it is still the voice-over line.
+- **Art that already has words drawn in stays as it is.** Do not rebuild an
+  existing image as live text: headers, feedback cards, fact strips, buttons and
+  overlay cards keep their drawn wording.
+- New prompts do not need their own drawn artwork, so a missing prompt image is
+  never a blocker for building a stage.
+
+## Fredoka One is the only typeface — decided
+
+All live text uses **Fredoka One**, `assets/fonts/fredoka_one/
+fredoka_one_regular.ttf`. It is set once as `default_font` in
+`themes/ktg_theme.tres`, and every scene uses that theme, so nothing else needs
+setting.
+
+- Do not add a font override to a single node; change the theme's sizes and
+  variations instead.
+- The font is under the SIL Open Font License. Keep `OFL.txt` next to it.
+
+## Stage select — decided
+
+Each level's stage select is an overlay on that level's blank card:
+`assets/art/ui/stage_select/ui_stage_select_bg_l1.png` to `_l4.png`. The card
+has only its "Level N" header drawn in, and the rows are laid over it.
+
+- **Rows are drawn art with their stars covered.** The drawn rows come with
+  three filled stars. Before import, each one is covered with
+  `icon_star_empty.png` in the image itself, so a row always starts empty.
+- **Earned stars are drawn on top** with `icon_star_filled.png`, from
+  `GameState`. Each row's three star slots in the scene have to sit exactly on
+  that row's drawn stars, so moving or replacing a row means re-measuring its
+  star slots. Check it in a real render with all stars filled, not headless.
+- Level 1's unlocked rows are the drawn `ui_stage_row_1..4.png`. The locked rows
+  still come from `tools/build_stage_rows.py`, which now writes only those four.
 
 ## Audience rules
 

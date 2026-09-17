@@ -37,11 +37,11 @@ should still tell you what it is in a scene's `ext_resource` list.
 | `plants/` | `plant_*` — the hub's growth stages |
 | `items/` | the draggable item cards (`icon_shovel`, `icon_seed`, ...), shared across stages |
 | `ui/buttons/` | `ui_button_*` |
+| `ui/common/` | art every level shares, such as the blank prompt bubble |
 | `ui/hub/` | avatar, star and bottom-nav tab icons |
 | `ui/screens/` | one-image screens and overlay cards: How To Play, level intro and complete, badges |
-| `ui/stage_select/` | the stage select card, its rows and the star icons |
+| `ui/stage_select/` | the stage select cards (`ui_stage_select_bg_l1..l4` and the older drawn `ui_stage_select_l1`), rows and star icons |
 | `ui/stage_select/source/` | inputs to `tools/build_stage_rows.py` that no scene loads |
-| `ui/level_select/` | the four-level select card |
 | `levels/level_N/` | art that belongs to one level: headers, prompts, trays, feedback and fact cards |
 
 When a level's art arrives, give it a `levels/level_N/` folder. Anything a
@@ -98,9 +98,8 @@ Notes:
   invisible buttons over it — every part of this screen is a separate asset with
   live text on top: the greeting, the star count, the plant stage and the play
   button. The pills, the card and the nav bar are `StyleBoxFlat`, not art.
-- That makes the hub the **first screen whose look depends on the display font**.
-  Until a `.ttf` lands in `res://fonts/` it renders in Godot's default sans,
-  which sits oddly against this art. See Fonts below — it is a one-line change.
+- That makes the hub the **first screen whose look depends on the display font**,
+  which is Fredoka One — see Fonts below.
 - `bg_garden_stump.png` is the designer's native 852 x 1846, below the 2x rule
   and narrower than the 1080-wide design resolution, so `KEEP_COVERED` upscales
   it about 1.27x. Every portrait stage background in the `.fig` is this size, so
@@ -303,6 +302,28 @@ dimmed screen with a button under it, built on
 
 ## Stage select — delivered
 
+### Level cards — imported, not wired
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_stage_select_bg_l1.png` | 377 x 732 | ~0.3 MB |
+| `ui_stage_select_bg_l2.png` | 378 x 732 | ~0.3 MB |
+| `ui_stage_select_bg_l3.png` | 375 x 732 | ~0.3 MB |
+| `ui_stage_select_bg_l4.png` | 375 x 732 | ~0.3 MB |
+
+Blank cards with only the "Level N / subtitle" header drawn in: Planting,
+Monitoring, Identifying, Functions. **These are the stage select backgrounds for
+all four levels**, with the rows laid over them. Cut from one sheet,
+`Level 1-4 Stage select.png`.
+
+- **They are low resolution.** The drawn card is ~960 px wide on screen and
+  these are ~377, so they display at about 2.5x and will look soft. Ask for a
+  larger export before this ships.
+- Unlike `ui_stage_select_l1.png` they have **no rows baked in**, so row rects
+  are free to be chosen rather than measured off the art.
+
+### Level 1 card — wired
+
 | File | Size | Weight |
 |---|---|---|
 | `ui_stage_select_l1.png` | 1633 x 2456 | 2.7 MB |
@@ -334,19 +355,32 @@ Drawn 960 x 1444 at the design resolution, over the hub's garden dimmed to 45%.
 | Row 3, stars 1-3 | `L0.4854 / L0.5896 / L0.6995`, `T0.6819 B0.7395` | 92 x 83 each |
 | Row 4, stars 1-3 | `L0.4827 / L0.5856 / L0.6940`, `T0.8603 B0.9190` | 90 x 85 each |
 
-### Rows — composited, not drawn
+### Rows
 
-| File | Size | Weight |
-|---|---|---|
-| `ui_stage_row_1..4.png` | ~1240 x 420 | ~0.6 MB each |
-| `ui_stage_row_1..4_locked.png` | ~1240 x 420 | ~0.4 MB each |
+| File | Size | Weight | Made by |
+|---|---|---|---|
+| `ui_stage_row_1..4.png` | ~1240 x 420 | ~0.8 MB each | drawn: green, orange, blue, yellow |
+| `ui_stage_row_1..4_locked.png` | ~1240 x 420 | ~0.4 MB each | composited by `tools/build_stage_rows.py` |
+
+**The four unlocked rows are drawn art**, delivered as `l1_stage1..4.png`. Each
+is cropped to its capsule and stretched to the rect of the row it covers, which
+is 12-19% larger and within 4% of the same shape. The drawn rows came with three
+filled stars; those are **covered with `icon_star_empty.png`** in the file, so
+the row always starts empty and `GameState` fills stars on top. The star slots
+in `stage_select.tscn` were moved to sit on the new stars — the per-row star
+table below describes the old composited rows and no longer applies to the
+unlocked ones. Checked in a real render with all twelve stars filled.
 
 Each row is drawn over the one baked into the card, at the same rect, so the
 drawn one is covered exactly. Which of the pair is used comes from `GameState`.
 
-- **Only four of the eight were ever illustrated.** The card has Stage 1 on a
+- **The locked rows are still composited** — the notes below are about those.
+  The drawn rows share no palette with them, so a locked Stage 2 is grey where
+  the unlocked one is orange. Drawn locked rows would fix that; drop them in
+  under the same names.
+- **Originally only four of the eight were illustrated.** The card has Stage 1 on a
   green plate and Stages 2-4 on grey. The other four — Stage 1 locked, Stages
-  2-4 unlocked — are **composited by `tools/build_stage_rows.py`**, not drawn:
+  2-4 unlocked — were **composited by `tools/build_stage_rows.py`**:
   the row is cut out of the card, its plate and its "Stage N" label recoloured
   into the other state, then the right item icon and clean empty stars laid on
   top. The recolour matches luminance rank to rank against the opposite row's
@@ -357,7 +391,8 @@ drawn one is covered exactly. Which of the pair is used comes from `GameState`.
   label pill a little lighter. They read as one set, but Stage 1 is the only
   green anyone drew, and a close eye will see it. Replacing the four composited
   files with drawn ones needs no code change — same names, same rects.
-- Re-run the script if `ui_stage_select_l1.png` is ever re-exported.
+- The script now writes **only the locked four**, so re-running it cannot
+  overwrite the drawn rows.
 
 ### Row parts — cut from the delivered sheets
 
@@ -513,7 +548,8 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | File | Size | Weight | What it is |
 |---|---|---|---|
 | `bg_soil_cracked.png` | 863 x 1822 | 1.9 MB | sprout in cracked dry soil — Situation 1, hard and dry soil |
-| `bg_plant_brown_leaves.png` | 852 x 1846 | 1.8 MB | sprout with a dead brown leaf — Situation 2, dead leaves |
+| `bg_bed_sprout.png` | 851 x 1849 | 2.2 MB | sprout with dead brown leaves — Situation 2 (already here, see below) |
+| `bg_soil_dry.png` | 852 x 1846 | 1.8 MB | sprout wilting in dry soil — Situation 3, needs a drink |
 | `bg_plant_shade.png` | 852 x 1846 | 1.7 MB | sprout in deep shade, grey sky — Situation 4, needs light |
 | `bg_plant_yellow_leaves.png` | 852 x 1846 | 1.9 MB | pale yellow sprout in rich soil — Situation 5, needs nutrients |
 | `plant_sprout.png` | 650 x 726 | 307 KB | seed with a root and a shoot — the hub's next growth stage after `plant_seed_pot` |
@@ -522,7 +558,6 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `icon_pruning_shears.png` | 300 x 285 | 112 KB | item card, "Pruning Shears" |
 | `ui_button_click_me.png` | 1368 x 447 | 560 KB | "Click Me" button, text drawn in |
 | `ui_button_grow_now.png` | 1368 x 438 | 569 KB | "Grow Now" button, text drawn in |
-| `ui_level_select_cards.png` | 1535 x 928 | 1.4 MB | four blank cards: Level 1 Planting, 2 Monitoring, 3 Identifying, 4 Functions |
 | `ui_situation_select_l2.png` | 1535 x 2287 | 2.5 MB | Level 2 Monitoring card, Situation 1 unlocked, 2–5 locked |
 | `ui_situation_row_1..5.png` | ~1110 x 330 | ~380 KB each | unlocked Situation rows, one colour each, three filled stars |
 | `ui_level_intro_l2.png` | 1110 x 1373 | 1.4 MB | "Level 2 — Uh-oh! Your plant needs you!" |
@@ -534,7 +569,7 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `ui_correct_l2_s2.png` | 800 x 622 | 447 KB | Correct Answer, Pruning Shears |
 | `ui_correct_l2_s3.png` | 800 x 588 | 394 KB | Correct Answer, Water |
 | `ui_correct_l2_s5.png` | 800 x 570 | 389 KB | Correct Answer, Fertilizer |
-| `ui_prompt_blank_l2.png` | 1000 x 474 | 364 KB | the sprout's speech bubble with **no text in it** |
+| `ui_prompt_bubble.png` | 1000 x 474 | 364 KB | the sprout's speech bubble with **no text in it** — every prompt, Levels 1-4 |
 
 Notes:
 
@@ -545,19 +580,19 @@ Notes:
   "Correct Answer / Sunlight", which is `ui_correct_l1_s4.png`. That last one
   is Level 2 art to begin with, so **Situation 4's Correct card is
   `ui_correct_l1_s4.png`** — point the scene at it rather than copying it.
-- **Situations 2–5 have no header**, and **Situation 3 has no background**.
-  The background-to-situation mapping above is read from the pictures, not
-  stated anywhere in the art.
-- **The Level 2 speech bubble is blank.** Every Level 1 prompt has its words
-  drawn in. Either the Level 2 prompts are still to be rendered, or this
-  level shows them another way — that needs a decision before the stages are
-  built, because transcripts are never rendered.
+- **The situation mapping comes from the delivered file names**
+  (`Situation N_bg.png`, `situationN_correct_answer.png`). Situation 2's
+  background is pixel-identical to **`bg_bed_sprout.png`**, which Level
+  Complete and Badge Unlocked already use, so it is not copied — the Situation 2
+  scene points at `bg_bed_sprout.png`. Situation 4's Correct card is
+  `ui_correct_l1_s4.png` the same way.
+- **Situations 2–5 have no header.**
+- **The blank bubble is decided: it is the prompt for every stage, Levels 1–4**,
+  with the words set as live text in Fredoka One. See `CLAUDE.md`.
 - The situation rows are all drawn **unlocked with three filled stars**, and
   there are no locked versions except as they appear inside
   `ui_situation_select_l2.png`. Level 1 needed `tools/build_stage_rows.py` for
   the same gap.
-- `ui_level_select_cards.png` is one image of four cards. Slice it when the
-  level select screen is built and the card size is known.
 
 ## Still in the Figma file, not yet extracted
 
@@ -608,6 +643,7 @@ and `fun_fact_art` slots waiting, and each `OptionData` has `icon`.
 
 ## Fonts
 
-The game currently uses Godot's default font. The Figma artwork uses a chunky
-rounded display face. Drop a licensed `.ttf` in `res://fonts/` and set it once in
-`themes/ktg_theme.tres` — every screen follows.
+**Fredoka One** is the game's only typeface: `res://assets/fonts/fredoka_one/
+fredoka_one_regular.ttf`, set as `default_font` in `themes/ktg_theme.tres`, so
+every `Label` and `Button` in every scene uses it. SIL Open Font License 1.1 —
+`OFL.txt` sits beside the font and must ship with it.

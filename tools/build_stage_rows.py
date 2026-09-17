@@ -16,8 +16,8 @@ label are matched separately, or the label loses its contrast against the plate.
 The delivered loose parts could not do this job: their label pill is ratio 5.17
 against the 3.12 drawn in the card, and no row plate was delivered at all.
 
-Re-run this if ui_stage_select_l1.png is ever re-exported. If the rows are ever
-drawn properly, delete it and drop the eight files in by hand.
+The unlocked rows have since been drawn properly and are no longer written
+here. Re-run this only for the locked four; once those are drawn too, delete it.
 
 Needs pillow, numpy and scipy, which nothing else here does.
 """
@@ -119,8 +119,10 @@ green_plate, green_label = palettes(1)
 grey_plate,  grey_label  = palettes(2)
 print(f"palette sizes  green plate {len(green_plate)}, green label {len(green_label)}, "
       f"grey plate {len(grey_plate)}, grey label {len(grey_label)}")
+# Only the locked rows are made here now. The unlocked four were drawn properly
+# and dropped in by hand, and writing them again would overwrite that art.
 for n in (1,2,3,4):
-    for locked in (False, True):
+    for locked in (True,):
         drawn_locked = (n != 1)
         if locked == drawn_locked:
             im, how = build(n, locked, None, None), "as drawn"
