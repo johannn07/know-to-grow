@@ -46,8 +46,10 @@ before it can be started.
       The owner tests each build on a phone as it lands
 - [x] Real art wired in from the Figma file — background, logo, both mascots,
       ground, falling leaves, and the green button plate as a 9-patch
-- [ ] Button press sound and a small scale-bounce on tap
-- [ ] Menu music loop
+- [x] Button press sound — every button, on `button_down`, via `AudioDirector`
+- [ ] A small scale-bounce on tap. Presses tint the art today; nothing moves
+- [x] Menu music loop — `main_menu.mp3`, continuous across the title, How To
+      Play and the hub
 
 ## 2 · Core gameplay
 
@@ -91,17 +93,17 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [ ] Wrong answer polish: the item's own `wrong_hint`, arrow nudge
 - [x] ~~Level 1 Stage 4 blocked on art~~ **Answered: reuse Level 2's card.**
       Stage 4 uses the "Correct Answer! / Sunlight" card from Level 2, which
-      looks different from the other three and carries no Continue button, so
-      the whole card is tappable
+      looks different from the other three and has no Continue drawn on it, so
+      one is drawn just below the card and that button is the tap target
 - [ ] **A Level 1 "Correct Answer! / Sun" card, if the mismatch matters.**
-      Swapping it in is one texture plus clearing `correct_button_rect`
+      Swapping it in is one texture, plus setting Stage 4's `correct_art_rect`
+      and `correct_button_rect` back to the on-card Continue rects
 - [ ] **Level 1 ends on a different-looking garden.** `bg_bed_sprout.png` is a
       close-up behind a white fence, not the raised bed the other four use — the
       `.fig` has no sprout in that framing. **⚠**
-- [ ] Level 1 completion beat — **specified in §3 now**, as the Level Complete
-      and Badge Unlocked overlays. Stage 4 still returns straight to the hub.
-      **`bg_bed_sprout.png` belongs somewhere in that run**: it is the payoff of
-      the level and is shown nowhere, now that stages keep one garden each
+- [x] Level 1 completion beat — Stage 4 now leads to the Level Complete and
+      Badge Unlocked overlays (§3). `bg_bed_sprout.png`, the payoff of the
+      level, is the background behind both
 - [ ] Option shuffling for **Level 3 only** — its scripted answers sit at
       B, A, C, A, B and children memorise positions faster than content. Levels
       1, 2 and 4 use drawn trays, so a card's position is fixed by the picture
@@ -131,8 +133,9 @@ Hub → Level overlay → Stage select → Stages 1-4 → Level Complete overlay
     → Hub, "Click Me" on the plant → Hub, plant grown
 ```
 
-Today the game runs `Hub → Stages 1-4` and returns to the hub, so the four
-screens between them are missing, plus the three beats that close the loop.
+The game now runs this sequence as far as Badge Unlocked, then returns to the
+hub. The three beats after that — "You completed Level N" and the two hub
+states — are still to build.
 
 **Badges are fixed per level, not earned by performance.** Level 1 always
 unlocks **Little Planter**.
