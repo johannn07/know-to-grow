@@ -1,4 +1,18 @@
-# Turn these on with: git lfs install && git add .gitattributes
+# Line endings: LF everywhere, in the index and in the working copy.
+#
+# Godot writes .import, .uid, .tscn, .tres and project.godot with LF. With
+# core.autocrlf=true on Windows git checked them back out as CRLF, so the files
+# on disk no longer matched what Godot had written — 117 of them reported as
+# modified with an empty diff, every session, discarded by hand each time.
+# Pinning LF for every text file ends it.
+#
+# text=auto still detects binaries by content, so a binary that is not listed
+# below is left alone rather than mangled. The explicit entries are the ones
+# worth being certain about.
+* text=auto eol=lf
+
+# Binaries. Never diffed, never converted.
+# Turn LFS on with: git lfs install && git add .gitattributes
 *.png  filter=lfs diff=lfs merge=lfs -text
 *.jpg  filter=lfs diff=lfs merge=lfs -text
 *.webp filter=lfs diff=lfs merge=lfs -text
@@ -6,8 +20,4 @@
 *.wav  filter=lfs diff=lfs merge=lfs -text
 *.mp3  filter=lfs diff=lfs merge=lfs -text
 *.ogv  filter=lfs diff=lfs merge=lfs -text
-
-# Keep text files diffable
-*.gd   text eol=lf
-*.tres text eol=lf
-*.tscn text eol=lf
+*.ttf  -text
