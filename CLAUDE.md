@@ -3,7 +3,7 @@
 An educational mobile game for ages ~5–9 about planting, caring for and naming
 the parts of a plant. Godot 4, Android first, portrait only, offline, no
 accounts. The design document lives outside the repo; `checklist.md` tracks what
-is left to build and `art/MANIFEST.md` is the asset contract.
+is left to build and `assets/art/MANIFEST.md` is the asset contract.
 
 ## One thing at a time
 
@@ -67,10 +67,20 @@ res://
 │   ├── levels/     level_N/stage_M.tscn — one scene per stage
 │   └── components/ option card, drop zone, feedback popup
 ├── themes/         ktg_theme.tres — all button and label styling
-├── art/            MANIFEST.md is the asset contract; images land here
-├── audio/          sfx/, vo/en/, music/
-└── fonts/
+└── assets/
+    ├── art/        MANIFEST.md is the asset contract; images sorted by category
+    │   ├── backgrounds/  branding/  characters/  effects/  plants/
+    │   ├── items/        draggable item cards shared across stages
+    │   ├── ui/           buttons/, hub/, screens/, stage_select/ (+ source/)
+    │   └── levels/       level_N/ — art that belongs to one level
+    ├── audio/      music/, sfx/, vo/en/
+    ├── fonts/
+    └── video/
 ```
+
+`assets/art/MANIFEST.md` says which folder each kind of image goes in. Keep the
+category prefix on filenames (`bg_`, `icon_`, `ui_`) even inside a folder that
+says the same thing.
 
 ## Conventions
 
@@ -93,11 +103,11 @@ asset is a blank to fill, never a rewrite.**
   texture it draws a labelled colour block at the final size; assign a texture
   in the Inspector and the placeholder vanishes. Sizes come from the layout, not
   from the image, so real art can never shift a finished screen.
-- Never hardcode a `res://art/...` path in a script. Export the texture and set
+- Never hardcode a `res://assets/art/...` path in a script. Export the texture and set
   it in the scene.
 - Do not download stock or CC0 art into the repo "for now". A labelled grey box
   is honest; borrowed art becomes something you have to remember to strip out.
-- Add every new image position to `art/MANIFEST.md` with its exact pixel size in
+- Add every new image position to `assets/art/MANIFEST.md` with its exact pixel size in
   the same change that creates the slot.
 
 ## Figma access is rationed
@@ -182,8 +192,8 @@ Rules that follow from this:
 - **A transcript must match its artwork exactly.** If the art is re-rendered
   with different wording, update the transcript in the same change.
 - **Voice-over is planned**, so every spoken line has a `*_vo_key` and audio
-  lives at `res://audio/vo/en/<key>.ogg`.
-- `audio/vo/en/SCRIPT.md` is **generated**, not written. Re-run
+  lives at `res://assets/audio/vo/en/<key>.ogg`.
+- `assets/audio/vo/en/SCRIPT.md` is **generated**, not written. Re-run
   `tools/export_vo_script.gd` after any content change.
 - Changing wording now means re-rendering art *and* re-recording a line. Get the
   teaching-content reviewer through all 19 stages before commissioning voice-over.
