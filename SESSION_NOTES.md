@@ -10,7 +10,8 @@ is the build state; this is the narrative behind it. Newest session first.
 **Where it got to:** a full run of Level 1 now goes hub → level overlay → stage
 select → Stages 1-4 → Level Complete → Badge Unlocked → hub, with progress saved
 between launches and music and effects throughout. Everything is merged to
-`master` and pushed. Five headless suites pass. Still not on a phone.
+`master` and pushed. Five headless suites pass, and the owner has been
+playing each build on a phone as it lands.
 
 ### What was built, in order
 
@@ -167,9 +168,11 @@ These cost time to discover and are worth not rediscovering:
 
 Ordered by what unblocks the most.
 
-1. **Play it on a phone.** Still the highest-value action, and still not done.
-   Headless cannot say whether a drag feels right, whether a five-year-old can
-   hit a stage row, or how the music sits against the effects.
+1. **Act on what the phone shows.** The owner is testing each build on a
+   device as it lands, which is the only check that covers what headless
+   cannot — whether a drag feels right, whether a small thumb can hit a stage
+   row, how the music sits against the effects. Anything reported from there
+   goes ahead of the items below. Not yet covered: a cheap second device.
 2. **The last three beats of the loop** — "You completed Level N", then the hub
    with "Click Me" on the plant, then the hub with the plant grown. No art has
    been delivered for any of them. `GameState.is_level_cleared()` already

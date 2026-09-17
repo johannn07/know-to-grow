@@ -42,7 +42,8 @@ before it can be started.
 - [x] All three screens load, run and render correctly under Godot 4.7.2
 - [ ] Open in the editor and click through it (F5) — the headless checks confirm
       the wiring and the rendering, not that it *feels* right
-- [ ] Check it on a real phone, not just the editor. Thumb reach, not mouse reach
+- [x] Check it on a real phone, not just the editor. Thumb reach, not mouse reach.
+      The owner tests each build on a phone as it lands
 - [x] Real art wired in from the Figma file — background, logo, both mascots,
       ground, falling leaves, and the green button plate as a 9-patch
 - [ ] Button press sound and a small scale-bounce on tap
@@ -269,8 +270,9 @@ assets** — effectively the whole game. Inventory in `art/MANIFEST.md`.
       `export_presets.cfg` are inert until `gradle_build/use_gradle_build` is on
 - [ ] Launcher icons: 192×192 and the three 432×432 adaptive layers
 - [ ] Splash screen art
-- [ ] **Export a debug APK to a real phone now**, with the grey-box build. Touch
-      targets that feel fine with a mouse are often too small for a six-year-old
+- [x] **Export a debug APK to a real phone**, and keep doing it — the owner tests
+      each build on a device as it lands. Touch targets that feel fine with a
+      mouse are often too small for a six-year-old
 - [ ] Test on two real devices: one cheap, one current
 - [ ] Store listing, screenshots, privacy policy, and the Play Console
       "designed for families" declarations
