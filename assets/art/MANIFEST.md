@@ -21,6 +21,32 @@ not a code change** — select the node, set its `texture`, done.
 - Backgrounds may bleed past their slot — they are drawn `KEEP_COVERED` and
   clipped, so a taller phone shows more scenery rather than a stretched image.
 
+## Folders
+
+Filenames are unique across the whole tree, so the tables below give the bare
+name; this is where each one lives under `res://assets/art/`. A file keeps its
+category prefix even though the folder says the same thing — the name alone
+should still tell you what it is in a scene's `ext_resource` list.
+
+| Folder | Holds |
+|---|---|
+| `backgrounds/` | `bg_*` — full-screen scenery, drawn `KEEP_COVERED` |
+| `branding/` | `logo.png` |
+| `characters/` | `mascot_*` |
+| `effects/` | `fx_*` |
+| `plants/` | `plant_*` — the hub's growth stages |
+| `items/` | the draggable item cards (`icon_shovel`, `icon_seed`, ...), shared across stages |
+| `ui/buttons/` | `ui_button_*` |
+| `ui/hub/` | avatar, star and bottom-nav tab icons |
+| `ui/screens/` | one-image screens and overlay cards: How To Play, level intro and complete, badges |
+| `ui/stage_select/` | the stage select card, its rows and the star icons |
+| `ui/stage_select/source/` | inputs to `tools/build_stage_rows.py` that no scene loads |
+| `levels/level_N/` | art that belongs to one level: headers, prompts, trays, feedback and fact cards |
+
+When a level's art arrives, give it a `levels/level_N/` folder. Anything a
+second level reuses moves up to `items/` or `ui/` rather than being referenced
+across level folders.
+
 ## Main menu — delivered
 
 All seven are in the repo and wired into `scenes/ui/main_menu.tscn`.

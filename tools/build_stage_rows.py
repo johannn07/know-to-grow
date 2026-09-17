@@ -25,7 +25,7 @@ from PIL import Image
 import numpy as np, os
 from scipy import ndimage
 
-card = Image.open("assets/art/ui_stage_select_l1.png").convert("RGBA")
+card = Image.open("assets/art/ui/stage_select/ui_stage_select_l1.png").convert("RGBA")
 ROWS  = {1:(192,560,1430,987), 2:(187,1005,1429,1418), 3:(183,1450,1445,1867), 4:(187,1884,1432,2309)}
 DISC  = {1:(89,50,453,399), 2:(92,45,456,396), 3:(92,46,465,399), 4:(92,44,459,399)}
 STARS = {1:[(598,230,751,375),(765,230,918,375),(941,230,1094,375)],
@@ -107,10 +107,10 @@ def build(n, locked, plate_pal, label_pal):
     # Only the capsule is the asset; the card's beige and leaves stay behind it.
     out[..., 3] = np.where(pill, 255.0, 0.0)
     im = Image.fromarray(out.clip(0,255).astype(np.uint8), "RGBA")
-    icon = Image.open("assets/art/icon_stage_%s%s.png" % (ICON[n], "_locked" if locked else "")).convert("RGBA")
+    icon = Image.open("assets/art/ui/stage_select/source/icon_stage_%s%s.png" % (ICON[n], "_locked" if locked else "")).convert("RGBA")
     x0,y0,x1,y1 = DISC[n]
     im.alpha_composite(icon.resize((x1-x0, y1-y0), Image.LANCZOS), (x0, y0))
-    star = Image.open("assets/art/icon_star_empty.png").convert("RGBA")
+    star = Image.open("assets/art/ui/stage_select/icon_star_empty.png").convert("RGBA")
     for sx0,sy0,sx1,sy1 in STARS[n]:
         im.alpha_composite(star.resize((sx1-sx0, sy1-sy0), Image.LANCZOS), (sx0, sy0))
     return im
@@ -127,7 +127,7 @@ for n in (1,2,3,4):
         else:
             pal = (grey_plate, grey_label) if locked else (green_plate, green_label)
             im, how = build(n, locked, *pal), "recoloured"
-        name = f"assets/art/ui_stage_row_{n}{'_locked' if locked else ''}.png"
+        name = f"assets/art/ui/stage_select/ui_stage_row_{n}{'_locked' if locked else ''}.png"
         im.save(name, "PNG", optimize=True)
         print(f"  {os.path.basename(name):28s} {im.size[0]:4d}x{im.size[1]:<4d} "
               f"{os.path.getsize(name)//1024:4d} KB  {how}")
