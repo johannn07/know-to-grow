@@ -41,6 +41,7 @@ should still tell you what it is in a scene's `ext_resource` list.
 | `ui/screens/` | one-image screens and overlay cards: How To Play, level intro and complete, badges |
 | `ui/stage_select/` | the stage select card, its rows and the star icons |
 | `ui/stage_select/source/` | inputs to `tools/build_stage_rows.py` that no scene loads |
+| `ui/level_select/` | the four-level select card |
 | `levels/level_N/` | art that belongs to one level: headers, prompts, trays, feedback and fact cards |
 
 When a level's art arrives, give it a `levels/level_N/` folder. Anything a
@@ -501,6 +502,62 @@ be seen and moved in the editor.
 Level 1; they remain in the schema for any screen that is driven from data
 instead. `tools/verify_level_1.gd` checks each scene's answer and item cards
 still match the content file, so the two cannot drift.
+
+## Level 2 and hub extras — imported, not wired
+
+Imported from a hand-exported `Know To Grow Assets` folder (hub, level select,
+Level 2 situation select and situations). Every file is in the repo and
+imported, but **no scene uses them yet**. Cropped to their content and scaled to
+the width of their Level 1 sibling where one exists; the rest are at source size.
+
+| File | Size | Weight | What it is |
+|---|---|---|---|
+| `bg_soil_cracked.png` | 863 x 1822 | 1.9 MB | sprout in cracked dry soil — Situation 1, hard and dry soil |
+| `bg_plant_brown_leaves.png` | 852 x 1846 | 1.8 MB | sprout with a dead brown leaf — Situation 2, dead leaves |
+| `bg_plant_shade.png` | 852 x 1846 | 1.7 MB | sprout in deep shade, grey sky — Situation 4, needs light |
+| `bg_plant_yellow_leaves.png` | 852 x 1846 | 1.9 MB | pale yellow sprout in rich soil — Situation 5, needs nutrients |
+| `plant_sprout.png` | 650 x 726 | 307 KB | seed with a root and a shoot — the hub's next growth stage after `plant_seed_pot` |
+| `icon_fertilizer.png` | 300 x 302 | 122 KB | item card, "Fertilizer" |
+| `icon_water.png` | 300 x 300 | 96 KB | item card, "Water" |
+| `icon_pruning_shears.png` | 300 x 285 | 112 KB | item card, "Pruning Shears" |
+| `ui_button_click_me.png` | 1368 x 447 | 560 KB | "Click Me" button, text drawn in |
+| `ui_button_grow_now.png` | 1368 x 438 | 569 KB | "Grow Now" button, text drawn in |
+| `ui_level_select_cards.png` | 1535 x 928 | 1.4 MB | four blank cards: Level 1 Planting, 2 Monitoring, 3 Identifying, 4 Functions |
+| `ui_situation_select_l2.png` | 1535 x 2287 | 2.5 MB | Level 2 Monitoring card, Situation 1 unlocked, 2–5 locked |
+| `ui_situation_row_1..5.png` | ~1110 x 330 | ~380 KB each | unlocked Situation rows, one colour each, three filled stars |
+| `ui_level_intro_l2.png` | 1110 x 1373 | 1.4 MB | "Level 2 — Uh-oh! Your plant needs you!" |
+| `ui_level_complete_l2.png` | 1122 x 1336 | 1.4 MB | "Level 2 Complete! You saved the plant!" |
+| `ui_badge_plant_helper.png` | 1122 x 1388 | 1.8 MB | "Plant Helper" badge, Level 2's counterpart to Little Planter |
+| `ui_level_complete_sign_l1.png` | 1072 x 1379 | 1.3 MB | signpost, "You Completed Level 1!" with a Grow Now button drawn in |
+| `ui_header_l2_s1.png` | 900 x 314 | 298 KB | "Situation 1 — Hard and Dry Soil" |
+| `ui_correct_l2_s1.png` | 800 x 547 | 349 KB | Correct Answer, Shovel |
+| `ui_correct_l2_s2.png` | 800 x 622 | 447 KB | Correct Answer, Pruning Shears |
+| `ui_correct_l2_s3.png` | 800 x 588 | 394 KB | Correct Answer, Water |
+| `ui_correct_l2_s5.png` | 800 x 570 | 389 KB | Correct Answer, Fertilizer |
+| `ui_prompt_blank_l2.png` | 1000 x 474 | 364 KB | the sprout's speech bubble with **no text in it** |
+
+Notes:
+
+- **Thirteen files in the folder were already here** and were skipped: the
+  hub's trophy, star, book, sprout pot, seed pot and sign; the green button
+  plate (the uncropped source of `ui_button_primary.png`); the Sun and Watering
+  Can and Shovel cards; `bg_bed_sprout`; the Badge Unlock banner; and
+  "Correct Answer / Sunlight", which is `ui_correct_l1_s4.png`. That last one
+  is Level 2 art to begin with, so **Situation 4's Correct card is
+  `ui_correct_l1_s4.png`** — point the scene at it rather than copying it.
+- **Situations 2–5 have no header**, and **Situation 3 has no background**.
+  The background-to-situation mapping above is read from the pictures, not
+  stated anywhere in the art.
+- **The Level 2 speech bubble is blank.** Every Level 1 prompt has its words
+  drawn in. Either the Level 2 prompts are still to be rendered, or this
+  level shows them another way — that needs a decision before the stages are
+  built, because transcripts are never rendered.
+- The situation rows are all drawn **unlocked with three filled stars**, and
+  there are no locked versions except as they appear inside
+  `ui_situation_select_l2.png`. Level 1 needed `tools/build_stage_rows.py` for
+  the same gap.
+- `ui_level_select_cards.png` is one image of four cards. Slice it when the
+  level select screen is built and the card size is known.
 
 ## Still in the Figma file, not yet extracted
 
