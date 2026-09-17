@@ -36,6 +36,15 @@ neither the rows nor the feedback buttons bounce where they cover other art. All
   coverage: all four rows opt out, their art does not squash, it darkens on
   press and lifts on release. 12 assertions replacing the 4 that encoded the
   bounce.
+- **How To Play's X and LET'S GO** were the last two, and the card really does
+  have a full LET'S GO button and an X disc painted into it — checked by
+  cropping `ui_how_to_play.png` at both rects rather than trusting the comment
+  that said so. Composited at 0.93 the painted button rings the shrunken one as
+  a visible double outline. Both set `bounce_art = false` in the scene.
+- **The three `CardOverlay` screens needed no change.** Their `button_rect`
+  starts at y ≈ 1.04, outside the card, so the Continue sits over the dim with
+  nothing painted behind it and should bounce — which it already did. The smoke
+  test now asserts that, so the distinction is pinned from both sides.
 - **The feedback cards followed**, once the rows showed what the problem was.
   Continue and Choose Again are laid exactly over buttons painted into the
   cards, so they had it too. `StageScreen._show_feedback` now **derives**
@@ -55,6 +64,7 @@ neither the rows nor the feedback buttons bounce where they cover other art. All
 | The feedback cards' Continue / Choose Again do the same | owner |
 | Levels 3 and 4 need a *drawn* card each, rows included, not a blank one | follows from the above |
 | A button's bounce is derived from whether its art covers anything, not set per stage | Claude, since Stage 4 differs from the other three |
+| How To Play's two buttons darken without squashing; the overlay cards' Continue keeps its squash | owner |
 
 ### Why the blank cards had to go
 
@@ -85,13 +95,8 @@ tweak to `PressBounce`.
 
 - **Levels 3 and 4 have no stage select card**, and now no blank fallback. Level
   2 has `ui_situation_select_l2.png`.
-- **How To Play's X and LET'S GO still bounce**, and the session that built
-  them recorded that they too were laid *over* buttons already painted into
-  that screen. They are the last place the rule may apply and were left alone.
-  Worth a look in a real render.
-- **The `CardOverlay` screens** — level intro, level complete, badge unlocked —
-  have Continue buttons that were placed in fractions of their card. Whether
-  those cover a painted button was not checked.
+- Nothing outstanding on the bounce. Every `ArtButton` in the project was
+  enumerated and accounted for; see the table in `CLAUDE.md`.
 - The `[ ]` items from the last session are untouched: locked rows still
   composited grey, Level 2 headers for Situations 2-5, and
   `tools/export_vo_script.gd` still writing to `res://audio/vo/en/`.

@@ -204,12 +204,18 @@ func _initialize() -> void:
 ## button bounces itself; a hotspot bounces the art under it, never itself,
 ## since scaling an invisible hotspot only moves where the tap lands.
 ##
-## The stage select rows are the exception and are checked separately, by
-## [method _check_rows_darken_without_bouncing].
+## This covers the buttons with **nothing behind them**. The ones laid over art
+## already painted into a card must not squash, and are checked by
+## [method _check_art_over_art_darkens_only].
 func _check_press_bounce() -> void:
+	# Every one of these has nothing painted behind the art it moves: the menu
+	# button is themed and is its own art, and the three overlay cards put their
+	# Continue *below* the card, over the dim.
 	var cases: Array = [
 		["res://scenes/ui/main_menu.tscn", "%StartButton", ""],
-		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton", "../LetsGoButtonArt"],
+		["res://scenes/ui/level_intro.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/level_complete.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked.tscn", "%ActionButton", "../ButtonArt"],
 	]
 	for case: Array in cases:
 		var screen: Node = await _instantiate(case[0])
@@ -253,46 +259,62 @@ func _check_press_bounce() -> void:
 		select.queue_free()
 		await process_frame
 
-	await _check_rows_darken_without_bouncing()
+	await _check_art_over_art_darkens_only()
 
 
-## A stage select row is the one press that must *not* squash. Its art covers the
-## row painted into the card at the same rect, so shrinking it uncovers the
-## painted one instead of reading as a press. The darken has to survive, since
-## with the bounce gone it is the only thing left that answers the tap.
-func _check_rows_darken_without_bouncing() -> void:
-	var screen: Node = await _instantiate("res://scenes/ui/stage_select.tscn")
-	if screen == null:
-		return
-	for i in 4:
-		var button: ArtButton = screen.get_node_or_null("%%Rows/Row%d" % (i + 1)) as ArtButton
-		var art: Control = screen.get_node_or_null(
-			"%%RowsArt/Row%dArt" % (i + 1)
-		) as Control
-		if button == null or art == null:
-			_expect(false, "stage_select.tscn has a Row%d hotspot and row art" % (i + 1))
+## The presses that must *not* squash: a drawing laid exactly over one already
+## painted into a card. Shrinking it uncovers the painted version around its
+## edges instead of reading as a press — the stage select rows over the rows in
+## the card, and How To Play's X and LET'S GO over the controls painted into
+## that screen. The darken has to survive, since with the bounce gone it is the
+## only thing left that answers the tap.
+##
+## The feedback cards obey the same rule, derived from their art rect; that is
+## checked by verify_level_1, which is where a stage gets played.
+func _check_art_over_art_darkens_only() -> void:
+	# The art is read off the button's own resolved reference rather than by
+	# path, so this checks the very node the button tints.
+	var cases: Array = [
+		["res://scenes/ui/stage_select.tscn", "%Rows/Row1"],
+		["res://scenes/ui/stage_select.tscn", "%Rows/Row2"],
+		["res://scenes/ui/stage_select.tscn", "%Rows/Row3"],
+		["res://scenes/ui/stage_select.tscn", "%Rows/Row4"],
+		["res://scenes/ui/how_to_play.tscn", "%BackButton"],
+		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton"],
+	]
+	for case: Array in cases:
+		var screen: Node = await _instantiate(case[0])
+		if screen == null:
 			continue
-		_expect(not button.bounce_art, "stage_select.tscn Row%d opts out of the bounce" % (i + 1))
+		var label := "%s %s" % [String(case[0]).get_file(), String(case[1]).get_file()]
+		var button: ArtButton = screen.get_node_or_null(case[1]) as ArtButton
+		var art: Control = null if button == null else button.art as Control
+		if button == null or art == null:
+			_expect(false, "%s has a hotspot with art under it" % label)
+			screen.queue_free()
+			await process_frame
+			continue
+		_expect(not button.bounce_art, "%s opts out of the bounce" % label)
 
 		button.button_down.emit()
 		await create_timer(PressBounce.PRESS_SECONDS + 0.05).timeout
 		_expect(
 			art.scale.is_equal_approx(Vector2.ONE),
-			"stage_select.tscn Row%dArt does not squash (scale %.2f)" % [i + 1, art.scale.x]
+			"%s art does not squash (scale %.2f)" % [label, art.scale.x]
 		)
 		_expect(
 			art.modulate.is_equal_approx(ArtButton.PRESSED_TINT),
-			"stage_select.tscn Row%dArt darkens on press" % (i + 1)
+			"%s art darkens on press" % label
 		)
 
 		button.button_up.emit()
 		await process_frame
 		_expect(
 			art.modulate.is_equal_approx(Color.WHITE),
-			"stage_select.tscn Row%dArt lifts its tint on release" % (i + 1)
+			"%s art lifts its tint on release" % label
 		)
-	screen.queue_free()
-	await process_frame
+		screen.queue_free()
+		await process_frame
 
 
 ## The stage select is the only screen that reads progress, and opening it on a
