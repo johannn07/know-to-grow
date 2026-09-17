@@ -34,6 +34,9 @@ const CHOOSE_AGAIN_RECT := Rect2(0.315, 0.71, 0.41, 0.145)
 ## For a feedback card that carries no drawn button: the whole card is the
 ## target. Stage 4's Correct card is borrowed from Level 2, whose cards have no
 ## Continue on them.
+##
+## Doubles as the card's own extent, for deciding whether a button's artwork
+## lands on the card or below it. See [method _show_feedback].
 const WHOLE_CARD := Rect2(0.0, 0.0, 1.0, 1.0)
 
 ## Where the button *artwork* sits on the Level 1 feedback cards. These are not
@@ -193,6 +196,11 @@ func _show_feedback(
 		# The art is anchored but never padded: it has to stay exactly on the
 		# button painted into the card, while the hotspot over it does not.
 		anchor_to(_overlay_button_art, art_rect)
+	# A button drawn *on* the card covers one painted into it, exactly, so a
+	# squash would uncover the painted one rather than read as a press — the
+	# same reason the stage select rows do not bounce. A button drawn below the
+	# card has nothing underneath, so it bounces as every other button does.
+	_overlay_button.bounce_art = not WHOLE_CARD.intersects(art_rect)
 	# Both cards share one hotspot and one art node, so a tint left over from the
 	# last answer would otherwise still be on them when the next card appears.
 	_overlay_button.clear_tint()

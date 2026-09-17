@@ -237,12 +237,8 @@ be brought back**. At 377 x 732 for a ~960 px slot they were a quarter of the
 drawn card's resolution. Levels 3 and 4 need a *drawn* card each, rows included,
 not a blank one.
 
-- **A row's press does not bounce.** Because the row art covers a row painted
-  into the card, squashing it uncovers the painted one rather than reading as a
-  press. The four row hotspots set `bounce_art = false` on
-  [`ArtButton`](scripts/ui/art_button.gd); they still tint to 0.82, which is the
-  part that survives the row not moving. Every other `ArtButton` in the game still
-  bounces, and should.
+- **A row's press does not bounce**, per the rule below. The four row hotspots
+  set `bounce_art = false` on [`ArtButton`](scripts/ui/art_button.gd).
 - **Rows are drawn art with their stars covered.** The drawn rows come with
   three filled stars. Before import, each one is covered with
   `icon_star_empty.png` in the image itself, so a row always starts empty.
@@ -252,6 +248,31 @@ not a blank one.
   star slots. Check it in a real render with all stars filled, not headless.
 - Level 1's unlocked rows are the drawn `ui_stage_row_1..4.png`. The locked rows
   still come from `tools/build_stage_rows.py`, which now writes only those four.
+
+## Art laid over art does not bounce — decided
+
+`PressBounce` squashes a control to 0.93 so a tap feels answered. That only
+works when there is nothing behind the thing being squashed.
+
+Several buttons here are a new drawing laid **exactly over** one already painted
+into a card — the stage select rows over the rows in the card, Continue and
+Choose Again over the buttons painted into the feedback cards. Shrinking one of
+those uncovers the painted version around its edges, so the press reads as the
+card showing through rather than as a button moving.
+
+**The rule:** art that covers other art keeps the 0.82 darken and drops the
+squash. Art with nothing behind it bounces as normal.
+
+- `ArtButton.bounce_art` is the switch. It defaults to `true`, so a new button
+  bounces unless it says otherwise.
+- Stage select rows set it `false` in the scene.
+- The feedback cards **derive it** in `StageScreen._show_feedback`: a button
+  whose art rect falls on the card covers a painted button and does not bounce,
+  while one drawn below the card — Stage 4's, on its borrowed Level 2 card that
+  has no Continue — does. A new stage gets the right behaviour from its rects
+  without anyone remembering this.
+- When the darken is the only feedback left, it is doing real work. Do not
+  quietly drop it.
 
 ## Audience rules
 

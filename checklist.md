@@ -49,10 +49,12 @@ before it can be started.
 - [x] Button press sound — every button, on `button_down`, via `AudioDirector`
 - [x] A small scale-bounce on tap — `PressBounce`: squash to 0.93, spring back
       with an overshoot. A themed button bounces itself; a hotspot bounces the
-      art under it. Two things opt out: the close X on the stage select, since
-      it is part of the card, and the stage select rows, which set
-      `bounce_art = false` because a shrinking row uncovers the row painted into
-      the card behind it. Both still darken on press
+      art under it. **Art laid over art does not bounce**, because shrinking it
+      uncovers the picture underneath: the stage select rows, and Continue /
+      Choose Again where they sit on a feedback card's painted button. They keep
+      the 0.82 darken. Stage 4's Continue, drawn below its card with nothing
+      behind it, still bounces — `StageScreen` derives that from the art rect.
+      The close X on the stage select has no separate art to move at all
 - [x] Menu music loop — `main_menu.mp3`, continuous across the title, How To
       Play and the hub
 

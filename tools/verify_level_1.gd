@@ -167,6 +167,7 @@ func _play(scene_path: String) -> String:
 		hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
 		"%s Choose Again clears 160 px (is %dx%d)" % [label, hotspot.size.x, hotspot.size.y]
 	)
+	await _check_feedback_press(stage, hotspot, label, "Choose Again", stage.wrong_art_rect)
 	await _rest()
 	_expect(is_instance_valid(wrong), "%s wrong card still exists" % label)
 	_expect(
@@ -211,6 +212,7 @@ func _play(scene_path: String) -> String:
 		hotspot.size.x >= 160.0 and hotspot.size.y >= 160.0,
 		"%s Continue clears 160 px (is %dx%d)" % [label, hotspot.size.x, hotspot.size.y]
 	)
+	await _check_feedback_press(stage, hotspot, label, "Continue", stage.correct_art_rect)
 	# A dragged card leaves its container's transform behind, so tree order no
 	# longer keeps the feedback card above it.
 	_expect(overlay.z_index > right.z_index, "%s Correct card draws over the dropped card" % label)
@@ -272,6 +274,58 @@ func _wrong(cards: Array[OptionCard], stage: StageScreen) -> OptionCard:
 		if not stage.is_correct(card.option_id):
 			return card
 	return null
+
+
+## A feedback button drawn *on* its card covers a button painted into the card,
+## exactly, so squashing it uncovers the painted one rather than reading as a
+## press — the same reason a stage select row does not bounce. A button drawn
+## *below* the card has nothing underneath and must still bounce, since for
+## Stage 4's borrowed Level 2 card that is the only Continue there is.
+##
+## Either way the darken has to fire, because on an on-card button it is the
+## whole of the feedback.
+func _check_feedback_press(
+	stage: StageScreen, hotspot: Button, label: String, what: String, art_rect: Rect2
+) -> void:
+	var art: Control = stage.get_node_or_null("%OverlayButtonArt") as Control
+	if art == null:
+		_expect(false, "%s has an OverlayButtonArt to press" % label)
+		return
+	var on_card := StageScreen.WHOLE_CARD.intersects(art_rect)
+	_expect(
+		(hotspot as ArtButton).bounce_art != on_card,
+		"%s %s %s" % [
+			label, what, "on the card does not bounce" if on_card else "below the card bounces"
+		]
+	)
+
+	hotspot.button_down.emit()
+	await create_timer(PressBounce.PRESS_SECONDS + 0.05).timeout
+	if on_card:
+		_expect(
+			art.scale.is_equal_approx(Vector2.ONE),
+			"%s %s art stays put under a press (scale %.2f)" % [label, what, art.scale.x]
+		)
+	else:
+		_expect(
+			art.scale.x < 0.99,
+			"%s %s art squashes under a press (scale %.2f)" % [label, what, art.scale.x]
+		)
+	_expect(
+		art.modulate.is_equal_approx(ArtButton.PRESSED_TINT),
+		"%s %s art darkens under a press" % [label, what]
+	)
+
+	hotspot.button_up.emit()
+	await create_timer(PressBounce.RELEASE_SECONDS + 0.1).timeout
+	_expect(
+		art.scale.is_equal_approx(Vector2.ONE),
+		"%s %s art is back at full size (scale %.2f)" % [label, what, art.scale.x]
+	)
+	_expect(
+		art.modulate.is_equal_approx(Color.WHITE),
+		"%s %s art lifts its tint on release" % [label, what]
+	)
 
 
 func _expect(condition: bool, label: String) -> void:

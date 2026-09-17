@@ -8,8 +8,8 @@ is the build state; this is the narrative behind it. Newest session first.
 ## 2026-09-18 — DESIGN.md, and the stage select keeps its drawn card
 
 **Where it got to:** the locked decisions are written down, and the stage select
-question from the last session is answered — the blank cards are gone and the
-rows no longer bounce. All five headless suites pass. On a branch,
+question from the last session is answered — the blank cards are gone, and
+neither the rows nor the feedback buttons bounce where they cover other art. All five headless suites pass. On a branch,
 `docs/design-decisions`, not pushed.
 
 ### What was done, in order
@@ -36,6 +36,15 @@ rows no longer bounce. All five headless suites pass. On a branch,
   coverage: all four rows opt out, their art does not squash, it darkens on
   press and lifts on release. 12 assertions replacing the 4 that encoded the
   bounce.
+- **The feedback cards followed**, once the rows showed what the problem was.
+  Continue and Choose Again are laid exactly over buttons painted into the
+  cards, so they had it too. `StageScreen._show_feedback` now **derives**
+  `bounce_art` from the art rect rather than taking a per-stage export: a rect
+  that falls on the card covers a painted button and does not bounce, one below
+  the card has nothing behind it and does. Stage 4's borrowed Level 2 card,
+  whose Continue is drawn below it, keeps its bounce and is the case that made
+  deriving it worth it. `verify_level_1` checks all eight buttons across the
+  four stages — 40 assertions.
 
 ### Decisions taken
 
@@ -43,7 +52,9 @@ rows no longer bounce. All five headless suites pass. On a branch,
 |---|---|
 | Keep `ui_stage_select_l1.png`, the card with rows drawn in; delete the blank `_bg_l1..l4` cards | owner |
 | Stage select rows darken on press but do not scale | owner |
+| The feedback cards' Continue / Choose Again do the same | owner |
 | Levels 3 and 4 need a *drawn* card each, rows included, not a blank one | follows from the above |
+| A button's bounce is derived from whether its art covers anything, not set per stage | Claude, since Stage 4 differs from the other three |
 
 ### Why the blank cards had to go
 
@@ -53,6 +64,15 @@ slot — a quarter of the resolution. Wiring it in meant a visibly softer card
 *and* re-measuring every row and star rect, then re-measuring them again after a
 higher-resolution re-export. The drawn card is already sharp and already
 measured.
+
+### Why deriving the bounce beat exporting it
+
+Three of Level 1's four stages put Continue on the card; Stage 4 puts it below,
+because its card is borrowed from Level 2 and has no Continue painted on it. A
+`bounce_art` export on `StageScreen` would have meant setting it by hand on all
+nineteen stages and getting it wrong on the one that differs. The rect already
+says which case a stage is — `WHOLE_CARD.intersects(art_rect)` — so the
+behaviour follows from the measurement that was already there.
 
 The bounce and the card turn out to be the same problem. The row art is laid
 *exactly over* the row painted into the card, so `PressBounce` squashing it to
@@ -65,10 +85,13 @@ tweak to `PressBounce`.
 
 - **Levels 3 and 4 have no stage select card**, and now no blank fallback. Level
   2 has `ui_situation_select_l2.png`.
-- **Every other `ArtButton` still bounces**, including the Continue buttons laid
-  over the feedback cards. Those sit over a *painted button* in the same way a
-  row sits over a painted row, so the same uncovering may be visible there. Not
-  investigated — it needs a real render, not headless.
+- **How To Play's X and LET'S GO still bounce**, and the session that built
+  them recorded that they too were laid *over* buttons already painted into
+  that screen. They are the last place the rule may apply and were left alone.
+  Worth a look in a real render.
+- **The `CardOverlay` screens** — level intro, level complete, badge unlocked —
+  have Continue buttons that were placed in fractions of their card. Whether
+  those cover a painted button was not checked.
 - The `[ ]` items from the last session are untouched: locked rows still
   composited grey, Level 2 headers for Situations 2-5, and
   `tools/export_vo_script.gd` still writing to `res://audio/vo/en/`.
