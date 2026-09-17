@@ -32,6 +32,13 @@ neither the rows nor the feedback buttons bounce where they cover other art. All
 - **Stage select rows no longer bounce.** `ArtButton` gained
   `bounce_art: bool = true`, and the four row hotspots set it `false`. The 0.82
   darken still fires.
+- **The `.import` churn is gone.** `core.autocrlf=true` meant every text file
+  without a `.gitattributes` rule was one git wanted to convert on touch, and
+  only `.gd`, `.tres` and `.tscn` were pinned. Replaced the three rules with a
+  catch-all, `* text=auto eol=lf`, so `.import`, `.uid`, `.md`, `.py`, `.cfg`
+  and `project.godot` are all covered, and marked `.ttf` `-text` since it is a
+  binary that is not in LFS. One `git add --renormalize .` cleared the stale
+  index entries.
 - **The smoke test now asserts the new behaviour** rather than losing the
   coverage: all four rows opt out, their art does not squash, it darkens on
   press and lifts on release. 12 assertions replacing the 4 that encoded the
@@ -75,6 +82,25 @@ slot — a quarter of the resolution. Wiring it in meant a visibly softer card
 higher-resolution re-export. The drawn card is already sharp and already
 measured.
 
+### The churn was never line endings
+
+Worth recording, because the diagnosis sitting in the last session's
+housekeeping was wrong and cost a detour. The 117 files reported as modified
+were **byte-identical to `HEAD`** — `git diff` printed nothing for any of them,
+and the files on disk were already pure LF, exactly as Godot had written them.
+
+What was stale was the index's **stat cache**. Because `core.autocrlf=true` and
+no attribute pinned these paths, git treated them as files it might have to
+convert, so it kept marking their cached stat data as untrustworthy and
+reporting them as modified. `git update-index --refresh` would not clear it — it
+reports `needs update` and refuses. `git add --renormalize .` did, and staged no
+content, which is the proof there was none to stage.
+
+So the `.gitattributes` line is the real fix and the renormalize is the one-time
+cleanup. Verified by deleting `.godot/imported` and running `--import` to
+regenerate all 254 assets: Godot rewrote every `.import` file and `git status`
+stayed empty.
+
 ### Why deriving the bounce beat exporting it
 
 Three of Level 1's four stages put Continue on the card; Stage 4 puts it below,
@@ -97,6 +123,9 @@ tweak to `PressBounce`.
   2 has `ui_situation_select_l2.png`.
 - Nothing outstanding on the bounce. Every `ArtButton` in the project was
   enumerated and accounted for; see the table in `CLAUDE.md`.
+- `core.autocrlf` is still `true` in the local git config. The `.gitattributes`
+  rules override it for this repo, so it does not need changing — but it is why
+  a repo without those rules will do the same thing on this machine.
 - The `[ ]` items from the last session are untouched: locked rows still
   composited grey, Level 2 headers for Situations 2-5, and
   `tools/export_vo_script.gd` still writing to `res://audio/vo/en/`.
@@ -386,10 +415,11 @@ Ordered by what unblocks the most.
 
 ## Housekeeping
 
-- **`.import` and `.uid` files churn on every reimport** — git reports them
-  modified with an empty diff, line endings only. `.gitattributes` sets
-  `eol=lf` for `.gd`, `.tres` and `.tscn` but not those two. They were
-  discarded by hand all session; one line in `.gitattributes` would end it.
+- ~~**`.import` and `.uid` files churn on every reimport**~~ **Fixed
+  2026-09-18.** `.gitattributes` now pins `* text=auto eol=lf`. The diagnosis
+  in this entry was half right: the files really were unpinned, but nothing
+  about them had ever changed — not even the line endings. See the entry at the
+  top.
 - `CLAUDE.md`'s project layout still says `art/` and `audio/`; both have lived
   under `assets/` since `66c2429`.
 - `README.md` still describes the original starter kit.
