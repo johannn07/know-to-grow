@@ -199,6 +199,31 @@ Rules that follow from this:
 - Changing wording now means re-rendering art *and* re-recording a line. Get the
   teaching-content reviewer through all 19 stages before commissioning voice-over.
 
+## Headers are live text on a blank sign, Level 2 — decided
+
+Level 2's five situation headers are the blank sign with two plates, and the
+words laid over it:
+
+- the small **wooden plaque** carries `header_label_transcript` — "Situation 1"
+  — in white with a dark outline;
+- the **cream banner** under it carries `header_title_transcript` — "Hard and
+  Dry Soil" — in dark brown.
+
+Both are on `ChallengeData`, both are **rendered**, and they join the prompt as
+exceptions to the never-render-a-transcript rule. Set both or neither;
+`verify_content` enforces that.
+
+Level 1's four headers keep their drawn wording and leave both fields empty.
+Levels 3 and 4 are undecided.
+
+## Fun facts are Level 1's alone — decided
+
+Only Level 1 has a fun fact strip. Levels 2-4 have no `fun_fact_transcript` and
+no `fun_fact_vo_key`, `verify_content` requires them for Level 1 and forbids
+them elsewhere, and `export_vo_script.gd` skips the row rather than writing an
+empty one. This is why Level 1's stage layout is taller than every other
+level's.
+
 ## Prompts are live text on one shared bubble — decided
 
 Every stage prompt, **Level 1 through Level 4**, is drawn on the same blank

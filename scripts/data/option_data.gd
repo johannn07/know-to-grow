@@ -26,5 +26,5 @@ extends Resource
 ## twenty-five for Level 2, and it reads correctly everywhere.
 @export_multiline var wrong_hint: String = "Oops, let's try again!"
 
-## Voice-over line for this item's name, at res://audio/vo/en/<vo_key>.ogg.
+## Voice-over line for this item's name, at res://assets/audio/vo/en/<vo_key>.ogg.
 @export var vo_key: StringName = &""

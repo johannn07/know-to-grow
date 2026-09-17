@@ -35,9 +35,7 @@ prompt_transcript = "I am green and flat. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_2hnhk"), SubResource("Resource_n1cny"), SubResource("Resource_1qecj")])
 correct_option_id = &"leaves"
-fun_fact_transcript = "Leaves capture sunlight and help the plant make food!"
 prompt_vo_key = &"l3_leaves_prompt"
-fun_fact_vo_key = &"l3_leaves_fact"
 scene_state = &"highlight_leaves"
 
 [sub_resource type="Resource" id="Resource_8chqc"]
@@ -63,9 +61,7 @@ prompt_transcript = "I stand tall like a trunk or a straw. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_8chqc"), SubResource("Resource_3ghdj"), SubResource("Resource_2hnhk")])
 correct_option_id = &"stem"
-fun_fact_transcript = "The stem holds the plant upright and carries water to other parts!"
 prompt_vo_key = &"l3_stem_prompt"
-fun_fact_vo_key = &"l3_stem_fact"
 scene_state = &"highlight_stem"
 
 [sub_resource type="Resource" id="Resource_poojw"]
@@ -75,9 +71,7 @@ prompt_transcript = "I live underground in the soil. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_1qecj"), SubResource("Resource_8chqc"), SubResource("Resource_2hnhk")])
 correct_option_id = &"roots"
-fun_fact_transcript = "Roots hold the plant firmly in the soil and absorb water and nutrients!"
 prompt_vo_key = &"l3_roots_prompt"
-fun_fact_vo_key = &"l3_roots_fact"
 scene_state = &"highlight_roots"
 
 [sub_resource type="Resource" id="Resource_th7np"]
@@ -87,9 +81,7 @@ prompt_transcript = "I am bright and colourful. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_1qecj"), SubResource("Resource_n1cny"), SubResource("Resource_8chqc")])
 correct_option_id = &"flower"
-fun_fact_transcript = "Flowers help plants reproduce by helping them make seeds!"
 prompt_vo_key = &"l3_flower_prompt"
-fun_fact_vo_key = &"l3_flower_fact"
 scene_state = &"highlight_flower"
 
 [sub_resource type="Resource" id="Resource_5x22e"]
@@ -99,9 +91,7 @@ prompt_transcript = "I grow after the flower. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_2hnhk"), SubResource("Resource_3ghdj"), SubResource("Resource_n1cny")])
 correct_option_id = &"fruit"
-fun_fact_transcript = "Fruits protect the seeds and help them develop into new plants!"
 prompt_vo_key = &"l3_fruit_prompt"
-fun_fact_vo_key = &"l3_fruit_fact"
 scene_state = &"highlight_fruit"
 
 [resource]
@@ -111,7 +101,5 @@ title = "Level 3: Identifying"
 instruction_transcript = "Look closely at the plant. Can you identify the plant part?"
 challenges = Array[ExtResource("1_mkr7o")]([SubResource("Resource_ab44i"), SubResource("Resource_3v4u6"), SubResource("Resource_poojw"), SubResource("Resource_th7np"), SubResource("Resource_5x22e")])
 completion_transcript = "You know all the parts of a plant!"
-final_fun_fact_transcript = "Every plant part has its own name and its own job."
-final_fun_fact_vo_key = &"level_3_final_fact"
 instruction_vo_key = &"level_3_instruction"
 completion_vo_key = &"level_3_complete"

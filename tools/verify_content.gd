@@ -48,9 +48,22 @@ func _initialize() -> void:
 			for alt in c.alternate_correct_ids:
 				_expect(alt in ids, "  %s: alternate '%s' is one of the options" % [c.id, alt])
 			_expect(not c.prompt_transcript.is_empty(), "  %s: prompt transcript present" % c.id)
-			_expect(not c.fun_fact_transcript.is_empty(), "  %s: fun fact transcript present" % c.id)
 			_claim_vo(c.prompt_vo_key, "%s prompt" % c.id)
-			_claim_vo(c.fun_fact_vo_key, "%s fun fact" % c.id)
+			# Fun facts are Level 1's alone, by decision. Everywhere else the
+			# field is empty and there is no line to record.
+			if level.id == &"level_1":
+				_expect(not c.fun_fact_transcript.is_empty(),
+					"  %s: fun fact transcript present" % c.id)
+				_claim_vo(c.fun_fact_vo_key, "%s fun fact" % c.id)
+			else:
+				_expect(c.fun_fact_transcript.is_empty(),
+					"  %s: no fun fact outside Level 1" % c.id)
+			# A header is either drawn into its art, as Level 1's four are, or
+			# laid over the blank sign as live text. Live text needs both plates.
+			var plaque := not c.header_label_transcript.is_empty()
+			var banner := not c.header_title_transcript.is_empty()
+			_expect(plaque == banner,
+				"  %s: header has both plaque and banner, or neither" % c.id)
 
 	print("\n%d challenges, %d distinct voice-over lines to record" % [total_challenges, _vo_keys.size()])
 	print("%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])

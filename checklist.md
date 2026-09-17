@@ -202,25 +202,37 @@ unlocks **Little Planter**.
 The wording in `content/*.tres` already matches the design document. These are
 the open content questions, not bugs.
 
-- [ ] **Level 2 situation 3 has two valid answers.** "The soil is dry and the
-      plant needs a drink" is solved equally well by *Watering Can* and *Water*,
-      and both are on screen. The prototype accepted both — either keep that or
-      reword the situation. **⚠**
+- [x] ~~**Level 2 situation 3 has two valid answers**~~ **Resolved by the
+      three-option cut.** The Figma gives each situation three slots, not six,
+      so Water is simply not on screen in Situation 3 and Watering Can is the
+      only answer. `alternate_correct_ids` is gone. No rewording needed
 - [x] ~~**Level 1 stage 2 labels the item two ways**~~ **Answered: "Seed."** The
       item card is drawn `Seed`, so the transcript now says Seed and the
       voice-over line with it. The internal id stays `seed_packet`
-- [ ] **The Level 1 Oops card says "That's not the right tool."** It is wired
-      level-wide, but Stage 2's wrong answers are a rock and a leaf. Re-render
-      it with wording that fits all four stages, or accept it. **⚠**
-- [ ] **Two prompts differ between the design document and the artwork.** Stage 2
-      is the one found so far: the bubble reads "What goes inside the hole to
-      start growing our plant?" The artwork wins per the baked-text decision, and
-      the transcript was updated to match — but the teaching-content owner should
-      see the list before voice-over is recorded. **⚠**
+- [x] ~~**The Level 1 Oops card says "That's not the right tool."**~~
+      **Accepted.** One Oops card is reused for every level, wording and all.
+      The tray's drawn "Choose a Tool" is accepted on the same grounds
+- [ ] **Seven prompts differ between the design document and the artwork.**
+      Level 1 Stage 2's bubble reads "What goes inside the hole to start growing
+      our plant?", and **all five Level 2 prompts** were statements in the
+      content file but questions in the Figma ("The soil is dry and the plant
+      looks thirsty. What does it need?"). The artwork wins per the baked-text
+      decision and every transcript now matches — but the teaching-content owner
+      should see the whole list before voice-over is recorded. **⚠**
 - [ ] **Level 1 has no completion celebration** in the design document while
       Level 4 does. Give every level the same reward beat
 - [ ] Wrong-answer hints are written one per *item* (6 lines for Level 2), not
       one per item × situation (25 lines). Keep it that way
+- [x] **Level 2 shows three options per situation, not six** — the Figma gives
+      each situation three slots. The correct answer plus two distractors,
+      approved by the owner: S1 Shovel / Watering Can / Sunlight · S2 Pruning
+      Shears / Shovel / Water · S3 Watering Can / Shovel / Fertilizer · S4
+      Sunlight / Water / Fertilizer · S5 Fertilizer / Pruning Shears / Sunlight.
+      The Figma itself only ever showed Level 1 Stage 1's placeholder cards, so
+      which three was never drawn
+- [x] **Only Level 1 has fun facts.** Decided. The transcripts and voice-over
+      keys are out of Levels 2-4, `verify_content` requires them for Level 1 and
+      forbids them elsewhere, and the recording script drops from 76 lines to 58
 - [ ] Content lock: walk all 19 stages on a phone with whoever owns the teaching
       content, then freeze the wording. Changes after voice-over is recorded mean
       re-recording
@@ -265,7 +277,21 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [x] Art sorted into category folders under `assets/art/`
 - [ ] 16 item icons (1254 × 1254 in the source) — 13 in the repo, incl. Fertilizer, Water, Pruning Shears
 - [x] Stage backgrounds (852 × 1846) — Level 1 and all five Level 2 situations
-- [ ] Level 2 headers for Situations 2-5 — only Situation 1 is drawn
+- [ ] **Import the blank header sign** and retire `ui_header_l2_s1.png`.
+      Decided: all five situations use the blank sign with "Situation N" on the
+      plaque and the title on the banner as live text, which is what the Figma
+      already does for Situations 2-5 — S1 was the only one ever rendered. The
+      blank is a real Figma export (`e54af65e…`, 1672 x 941), so it drops in
+      cleanly. **The five titles are already in `content/level_2_monitoring.tres`**
+- [ ] **Swap in the new empty tool tray** for Levels 1 and 2 — decided, deferred.
+      It is a newly drawn asset rather than a Figma export, so its proportions
+      differ from `ui_tray_l1_s1.png` (alpha ratio 2.0802 against 2.1008, and
+      shifted down the canvas). Swapping it means **re-measuring the card
+      anchors in all four Level 1 stage scenes**, so it is not a file swap.
+      Cards draw themselves at rest over the blank slots; a spent card keeps its
+      darkened slot and may lose its icon entirely. Levels 3 and 4 undecided
+- [ ] Item cards for Level 2's six items at the tray's slot size — the three in
+      the Figma are Level 1 Stage 1's placeholders, reused in all five situations
 - [ ] Hero plant variants, including versions with roots exposed
 - [x] ~~Stage select cards for Levels 1-4 imported (`ui_stage_select_bg_l1..l4`)~~
       **Removed.** At 377 x 732 for a ~960 px slot they were a quarter of the
@@ -280,7 +306,11 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [ ] Feedback cards, completion badges, tool trays
 - [x] Fredoka One in `assets/fonts/`, wired once in `themes/ktg_theme.tres`
 - [ ] Prompts as live text on `ui_prompt_bubble.png`, Levels 1-4
-- [ ] Fix `tools/export_vo_script.gd` to write under `res://assets/audio/vo/en/`
+- [ ] Headers as live text on the blank sign, Level 2 — two theme label
+      variations, white-with-outline on the plaque and dark brown on the banner
+- [x] ~~Fix `tools/export_vo_script.gd` to write under
+      `res://assets/audio/vo/en/`~~ — done, along with the same stale path in
+      `option_data.gd`'s doc comment
 - [ ] Decide an import policy — sources are up to 4096 × 2896 and the raw `.fig`
       is 290 MB. Everything needs alpha-cropping and downscaling before it lands
       in the repo, or the APK will be enormous

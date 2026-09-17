@@ -48,11 +48,23 @@ enum Interaction {
 @export var fun_fact_art: Texture2D
 
 @export_group("Transcript")
-## What [member prompt_art] says. NEVER RENDERED — this is the voice-over script
-## and the text a content reviewer signs off on.
+## What [member prompt_art] says. **Rendered**, as live text on the shared blank
+## bubble, and also the voice-over line and the text a reviewer signs off on.
 @export_multiline var prompt_transcript: String = ""
 ## What [member fun_fact_art] says. Never rendered.
+##
+## **Level 1 only.** Levels 2-4 have no fun fact, by decision, so this is empty
+## there and nothing reads it.
 @export_multiline var fun_fact_transcript: String = ""
+
+## The small wooden plaque on the header — "Situation 1", "Stage 1".
+##
+## **Rendered**, as live text, for a level whose header is the blank sign rather
+## than a drawn one. Level 1's four headers have their words drawn in and leave
+## this empty. Set both header fields or neither.
+@export var header_label_transcript: String = ""
+## The cream banner under the plaque — "Hard and Dry Soil". Rendered, as above.
+@export var header_title_transcript: String = ""
 
 @export_group("Voice-over")
 @export var prompt_vo_key: StringName = &""

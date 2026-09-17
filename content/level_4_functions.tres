@@ -34,9 +34,7 @@ id = &"l4_roots"
 prompt_transcript = "What do the roots do?"
 options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_dfjcr"), SubResource("Resource_0x7nk"), SubResource("Resource_un6w3")])
 correct_option_id = &"fn_absorb_hold"
-fun_fact_transcript = "Roots hold the plant in the soil and absorb water and nutrients."
 prompt_vo_key = &"l4_roots_prompt"
-fun_fact_vo_key = &"l4_roots_fact"
 zone_id = &"roots"
 scene_state = &"highlight_roots"
 
@@ -54,9 +52,7 @@ id = &"l4_stem"
 prompt_transcript = "What does the stem do?"
 options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_84aeb"), SubResource("Resource_un6w3"), SubResource("Resource_dfjcr")])
 correct_option_id = &"fn_support"
-fun_fact_transcript = "The stem supports the plant and helps move water and nutrients to different parts."
 prompt_vo_key = &"l4_stem_prompt"
-fun_fact_vo_key = &"l4_stem_fact"
 zone_id = &"stem"
 scene_state = &"highlight_stem"
 
@@ -74,9 +70,7 @@ id = &"l4_leaves"
 prompt_transcript = "What do the leaves do?"
 options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_euefq"), SubResource("Resource_dfjcr"), SubResource("Resource_un6w3")])
 correct_option_id = &"fn_make_food"
-fun_fact_transcript = "Leaves use sunlight to help the plant make its own food."
 prompt_vo_key = &"l4_leaves_prompt"
-fun_fact_vo_key = &"l4_leaves_fact"
 zone_id = &"leaves"
 scene_state = &"highlight_leaves"
 
@@ -110,9 +104,7 @@ id = &"l4_flower"
 prompt_transcript = "What does the flower do?"
 options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_tgjmt"), SubResource("Resource_xnxuv"), SubResource("Resource_cu20s")])
 correct_option_id = &"fn_reproduce"
-fun_fact_transcript = "Flowers help plants reproduce and produce seeds for new plants."
 prompt_vo_key = &"l4_flower_prompt"
-fun_fact_vo_key = &"l4_flower_fact"
 zone_id = &"flower"
 scene_state = &"highlight_flower"
 
@@ -122,9 +114,7 @@ id = &"l4_fruit"
 prompt_transcript = "What does the fruit do?"
 options = Array[ExtResource("2_gqsdk")]([SubResource("Resource_dfjcr"), SubResource("Resource_un6w3"), SubResource("Resource_tgjmt")])
 correct_option_id = &"fn_protect"
-fun_fact_transcript = "Fruits protect the seeds inside and help them develop."
 prompt_vo_key = &"l4_fruit_prompt"
-fun_fact_vo_key = &"l4_fruit_fact"
 zone_id = &"fruit"
 scene_state = &"highlight_fruit"
 
@@ -135,7 +125,5 @@ title = "Level 4: Functions"
 instruction_transcript = "Now let's discover what each part does. Drag each function to the correct plant part."
 challenges = Array[ExtResource("1_jucf2")]([SubResource("Resource_ro8s2"), SubResource("Resource_ltca7"), SubResource("Resource_psf8n"), SubResource("Resource_8ux8p"), SubResource("Resource_035s3")])
 completion_transcript = "Fantastic! You know the parts of a plant and what each part does!"
-final_fun_fact_transcript = "Every plant part has an important job. Together, they help the plant live, grow and reproduce!"
-final_fun_fact_vo_key = &"level_4_final_fact"
 instruction_vo_key = &"level_4_instruction"
 completion_vo_key = &"level_4_complete"

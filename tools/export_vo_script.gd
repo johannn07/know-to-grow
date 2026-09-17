@@ -1,6 +1,6 @@
 extends SceneTree
 
-## Generates audio/vo/en/SCRIPT.md from the transcripts in res://content/.
+## Generates assets/audio/vo/en/SCRIPT.md from the transcripts in res://content/.
 ##
 ##   godot --headless --path . -s res://tools/export_vo_script.gd
 ##
@@ -14,7 +14,7 @@ const LEVELS := [
 	"res://content/level_3_identifying.tres",
 	"res://content/level_4_functions.tres",
 ]
-const OUT := "res://audio/vo/en/SCRIPT.md"
+const OUT := "res://assets/audio/vo/en/SCRIPT.md"
 
 
 func _initialize() -> void:
@@ -24,7 +24,7 @@ func _initialize() -> void:
 	lines.append("Generated from `content/level_*.tres` by `tools/export_vo_script.gd`.")
 	lines.append("Do not edit by hand — edit the transcripts and re-run it.")
 	lines.append("")
-	lines.append("Each line is recorded as `res://audio/vo/en/<key>.ogg`. The wording must")
+	lines.append("Each line is recorded as `res://assets/audio/vo/en/<key>.ogg`. The wording must")
 	lines.append("match the artwork exactly, because the art is what the child sees.")
 	lines.append("")
 
@@ -41,8 +41,12 @@ func _initialize() -> void:
 		total += 1
 		for c in level.challenges:
 			lines.append("| `%s` | %s |" % [c.prompt_vo_key, _clean(c.prompt_transcript)])
-			lines.append("| `%s` | %s |" % [c.fun_fact_vo_key, _clean(c.fun_fact_transcript)])
-			total += 2
+			total += 1
+			# Fun facts are Level 1's alone, so everywhere else there is no line
+			# to record and the row would come out empty.
+			if not c.fun_fact_transcript.is_empty():
+				lines.append("| `%s` | %s |" % [c.fun_fact_vo_key, _clean(c.fun_fact_transcript)])
+				total += 1
 			for o in c.options:
 				items[o.vo_key] = o.label
 		lines.append("| `%s` | %s |" % [level.completion_vo_key, _clean(level.completion_transcript)])
