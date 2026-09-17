@@ -5,6 +5,82 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
+## 2026-09-18 — DESIGN.md, and the stage select keeps its drawn card
+
+**Where it got to:** the locked decisions are written down, and the stage select
+question from the last session is answered — the blank cards are gone and the
+rows no longer bounce. All five headless suites pass. On a branch,
+`docs/design-decisions`, not pushed.
+
+### What was done, in order
+
+- **`DESIGN.md`** — the one-page record of locked decisions: resolution and
+  orientation, the empty Android permission list and the single local progress
+  file, the star and unlock rules, English-only with the artwork carrying the
+  words, and Figma-over-PDF. Every number taken from `project.godot`,
+  `export_presets.cfg` and `default_bus_layout.tres` rather than from prose. It
+  opens by saying what it is *not*, so it does not drift into a second
+  checklist.
+- **The stale gradle note fixed.** The checklist claimed `min_sdk` and
+  `target_sdk` were inert until `gradle_build/use_gradle_build` was switched on.
+  It is on, and `android/build/` holds the Gradle project at `4.7.2.stable`, so
+  the item was already done. Replaced with the part that actually catches
+  people: `/android/` is gitignored, so a fresh clone must reinstall the
+  template before a gradle export runs.
+- **`ui_stage_select_bg_l1..l4.png` deleted.** They were never referenced by a
+  scene, only by docs.
+- **Stage select rows no longer bounce.** `ArtButton` gained
+  `bounce_art: bool = true`, and the four row hotspots set it `false`. The 0.82
+  darken still fires.
+- **The smoke test now asserts the new behaviour** rather than losing the
+  coverage: all four rows opt out, their art does not squash, it darkens on
+  press and lifts on release. 12 assertions replacing the 4 that encoded the
+  bounce.
+
+### Decisions taken
+
+| Decision | Who |
+|---|---|
+| Keep `ui_stage_select_l1.png`, the card with rows drawn in; delete the blank `_bg_l1..l4` cards | owner |
+| Stage select rows darken on press but do not scale | owner |
+| Levels 3 and 4 need a *drawn* card each, rows included, not a blank one | follows from the above |
+
+### Why the blank cards had to go
+
+Measured rather than eyeballed: `ui_stage_select_bg_l1.png` is **377 × 732**
+against the **1633 × 2456** card it would have replaced, for the same ~960 px
+slot — a quarter of the resolution. Wiring it in meant a visibly softer card
+*and* re-measuring every row and star rect, then re-measuring them again after a
+higher-resolution re-export. The drawn card is already sharp and already
+measured.
+
+The bounce and the card turn out to be the same problem. The row art is laid
+*exactly over* the row painted into the card, so `PressBounce` squashing it to
+0.93 uncovers the painted row around its edges — the press reads as the card
+showing through rather than as a button moving. Any card with rows drawn into it
+has this, which is why the opt-out lives on `ArtButton` rather than being a
+tweak to `PressBounce`.
+
+### Still in progress
+
+- **Levels 3 and 4 have no stage select card**, and now no blank fallback. Level
+  2 has `ui_situation_select_l2.png`.
+- **Every other `ArtButton` still bounces**, including the Continue buttons laid
+  over the feedback cards. Those sit over a *painted button* in the same way a
+  row sits over a painted row, so the same uncovering may be visible there. Not
+  investigated — it needs a real render, not headless.
+- The `[ ]` items from the last session are untouched: locked rows still
+  composited grey, Level 2 headers for Situations 2-5, and
+  `tools/export_vo_script.gd` still writing to `res://audio/vo/en/`.
+
+### Next step
+
+`tools/export_vo_script.gd` writes to `res://audio/vo/en/`, which has not
+existed since the `assets/` move — small and currently broken. After that, the
+prompt bubble with live text in Level 1's stages.
+
+---
+
 ## 2026-09-17 — Asset folders, Level 2 art, stage select art and the font
 
 **Where it got to:** the art is sorted into category folders, the Level 2 and
@@ -71,6 +147,9 @@ confirmed the stars line up.
   export now writes to a folder that doesn't exist.
 
 ### Next step
+
+> **Superseded 2026-09-18 — do not do this.** The blank cards were deleted and
+> the drawn `ui_stage_select_l1.png` was kept. See the entry above.
 
 Wire the new stage select card: put `ui_stage_select_bg_l1.png` behind Level 1's
 rows in `stage_select.tscn`, choose the row rects fresh (the card has no rows

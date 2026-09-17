@@ -11,7 +11,8 @@ extends Button
 ## button drawn into a picture feels like the ones that are not.
 ##
 ## It also bounces that art with [PressBounce], since the hotspot itself is
-## invisible and scaling it would only move the hit area.
+## invisible and scaling it would only move the hit area — unless
+## [member bounce_art] is off, for art that cannot afford to shrink.
 ##
 ## Hover is a small lift on top of that. Only a mouse ever sees it: Android has
 ## no hover state, so on the device this ships to, pressed is the one that does
@@ -23,6 +24,14 @@ const PRESSED_TINT := Color(0.82, 0.82, 0.82, 1.0)
 ## Slightly brighter than untouched. The theme's primary button has no hover
 ## state to copy, since it was drawn for a phone.
 const HOVER_TINT := Color(1.08, 1.08, 1.08, 1.0)
+
+## Whether a press squashes the art as well as tinting it.
+##
+## Off for a drawing that is laid exactly over something else — a stage select
+## row covers the row painted into the card at the same rect, so shrinking it
+## uncovers the one underneath instead of reading as a press. The tint still
+## fires, which is the part that survives a row not moving.
+@export var bounce_art: bool = true
 
 ## The drawing this hotspot sits over, and the node that actually gets tinted.
 ## Left empty, the button still works and simply shows nothing on press.
@@ -72,7 +81,8 @@ func _on_mouse_exited() -> void:
 func _on_button_down() -> void:
 	_held = true
 	_refresh()
-	PressBounce.press(art as Control)
+	if bounce_art:
+		PressBounce.press(art as Control)
 
 
 func _on_button_up() -> void:
@@ -80,7 +90,8 @@ func _on_button_up() -> void:
 	# dragged off the edge cannot leave the art dark.
 	_held = false
 	_refresh()
-	PressBounce.release(art as Control)
+	if bounce_art:
+		PressBounce.release(art as Control)
 
 
 func _refresh() -> void:

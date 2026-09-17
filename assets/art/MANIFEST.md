@@ -40,7 +40,7 @@ should still tell you what it is in a scene's `ext_resource` list.
 | `ui/common/` | art every level shares, such as the blank prompt bubble |
 | `ui/hub/` | avatar, star and bottom-nav tab icons |
 | `ui/screens/` | one-image screens and overlay cards: How To Play, level intro and complete, badges |
-| `ui/stage_select/` | the stage select cards (`ui_stage_select_bg_l1..l4` and the older drawn `ui_stage_select_l1`), rows and star icons |
+| `ui/stage_select/` | the stage select card (`ui_stage_select_l1`, rows drawn in), the rows laid over it and the star icons |
 | `ui/stage_select/source/` | inputs to `tools/build_stage_rows.py` that no scene loads |
 | `levels/level_N/` | art that belongs to one level: headers, prompts, trays, feedback and fact cards |
 
@@ -302,19 +302,25 @@ dimmed screen with a button under it, built on
 
 ## Stage select — delivered
 
-### Level cards — imported, not wired
+### Level cards — one drawn card per level
 
 | File | Size | Weight |
 |---|---|---|
-| `ui_stage_select_bg_l1.png` | 377 x 732 | ~0.3 MB |
-| `ui_stage_select_bg_l2.png` | 378 x 732 | ~0.3 MB |
-| `ui_stage_select_bg_l3.png` | 375 x 732 | ~0.3 MB |
-| `ui_stage_select_bg_l4.png` | 375 x 732 | ~0.3 MB |
+| `ui_stage_select_l1.png` | 1633 x 2456 | ~0.2 MB |
 
-Blank cards with only the "Level N / subtitle" header drawn in: Planting,
-Monitoring, Identifying, Functions. **These are the stage select backgrounds for
-all four levels**, with the rows laid over them. Cut from one sheet,
-`Level 1-4 Stage select.png`.
+The card with its four rows already drawn into it, which is what
+`stage_select.tscn` uses. The row art is laid over the rows in the picture at
+the same rects, so the drawn ones are covered exactly.
+
+**The blank `ui_stage_select_bg_l1..l4.png` cards were removed.** They were cut
+from one sheet, `Level 1-4 Stage select.png`, at 377 x 732 — a quarter of the
+resolution of the drawn card they would have replaced, for the same ~960 px
+slot. Using them meant a visibly softer card and a fresh measurement of every
+row and star rect. The owner's decision is to keep the drawn card instead.
+
+Levels 3 and 4 therefore have **no stage select card yet**. Level 2's situation
+select is `ui_situation_select_l2.png`. A drawn card per level, rows included,
+is what those two need — not a blank one.
 
 - **They are low resolution.** The drawn card is ~960 px wide on screen and
   these are ~377, so they display at about 2.5x and will look soft. Ask for a

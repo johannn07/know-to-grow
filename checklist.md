@@ -49,8 +49,10 @@ before it can be started.
 - [x] Button press sound — every button, on `button_down`, via `AudioDirector`
 - [x] A small scale-bounce on tap — `PressBounce`: squash to 0.93, spring back
       with an overshoot. A themed button bounces itself; a hotspot bounces the
-      art under it. Stage select rows bounce with their stars. The close X on
-      the stage select cannot, since it is part of the card
+      art under it. Two things opt out: the close X on the stage select, since
+      it is part of the card, and the stage select rows, which set
+      `bounce_art = false` because a shrinking row uncovers the row painted into
+      the card behind it. Both still darken on press
 - [x] Menu music loop — `main_menu.mp3`, continuous across the title, How To
       Play and the hub
 
@@ -261,9 +263,13 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [x] Stage backgrounds (852 × 1846) — Level 1 and all five Level 2 situations
 - [ ] Level 2 headers for Situations 2-5 — only Situation 1 is drawn
 - [ ] Hero plant variants, including versions with roots exposed
-- [x] Stage select cards for Levels 1-4 imported (`ui_stage_select_bg_l1..l4`)
-- [ ] Wire the new cards into `stage_select.tscn`, rows and star slots re-measured
-- [ ] Stage select cards at a higher resolution — current ones are ~377 px wide
+- [x] ~~Stage select cards for Levels 1-4 imported (`ui_stage_select_bg_l1..l4`)~~
+      **Removed.** At 377 x 732 for a ~960 px slot they were a quarter of the
+      resolution of `ui_stage_select_l1.png`, the card with its rows already
+      drawn in. Decided: keep the drawn card, drop the blanks
+- [ ] A **drawn** stage select card for Levels 3 and 4, rows included, like
+      Level 1's. Level 2's situation select is `ui_situation_select_l2.png`; the
+      other two have nothing
 - [x] Level 1 unlocked rows drawn, stars covered with the empty star
 - [ ] Level 1 locked rows drawn to match — still composited grey
 - [ ] Level 2 situation rows, locked and unlocked

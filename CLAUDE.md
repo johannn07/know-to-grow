@@ -227,10 +227,22 @@ setting.
 
 ## Stage select — decided
 
-Each level's stage select is an overlay on that level's blank card:
-`assets/art/ui/stage_select/ui_stage_select_bg_l1.png` to `_l4.png`. The card
-has only its "Level N" header drawn in, and the rows are laid over it.
+Each level's stage select is an overlay on that level's **card with its rows
+already drawn in** — `assets/art/ui/stage_select/ui_stage_select_l1.png` for
+Level 1. The row art is laid over the rows in the picture, at the same rects, so
+the drawn ones are covered exactly.
 
+The blank `ui_stage_select_bg_l1..l4.png` cards were **removed, and should not
+be brought back**. At 377 x 732 for a ~960 px slot they were a quarter of the
+drawn card's resolution. Levels 3 and 4 need a *drawn* card each, rows included,
+not a blank one.
+
+- **A row's press does not bounce.** Because the row art covers a row painted
+  into the card, squashing it uncovers the painted one rather than reading as a
+  press. The four row hotspots set `bounce_art = false` on
+  [`ArtButton`](scripts/ui/art_button.gd); they still tint to 0.82, which is the
+  part that survives the row not moving. Every other `ArtButton` in the game still
+  bounces, and should.
 - **Rows are drawn art with their stars covered.** The drawn rows come with
   three filled stars. Before import, each one is covered with
   `icon_star_empty.png` in the image itself, so a row always starts empty.
