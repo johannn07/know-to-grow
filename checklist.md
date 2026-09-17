@@ -25,7 +25,7 @@ before it can be started.
 - [x] Git LFS active — `git-lfs` is installed and `filter.lfs.process` is
       configured, and `.gitattributes` routes `*.png/jpg/webp/ogg/wav/ogv`
       through it. PNGs can land safely
-- [ ] `DESIGN.md` — the one-page record of locked decisions (orientation,
+- [x] `DESIGN.md` — the one-page record of locked decisions (orientation,
       resolution, save location, no analytics, no accounts) so settled questions
       stay settled
 
