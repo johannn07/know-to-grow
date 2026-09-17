@@ -42,25 +42,35 @@ func _ready() -> void:
 		_back_button.pressed.connect(go_back)
 	if audio != null:
 		audio.play_music(music_track)
-		sound_every_button(self)
+	dress_every_button(self)
 
 
-## Gives every button under [param root_node] the tap sound, so a screen does not
-## have to remember one per control. Buttons added later — the feedback card's,
-## for instance — are already covered, because they live in the scene too.
+## Gives every button under [param root_node] its tap sound and its bounce, so a
+## screen does not have to remember either per control. Buttons added later —
+## the feedback card's, for instance — are already covered, because they live
+## in the scene too.
 ##
-## It hangs off `button_down`, not `pressed`. A child hears the tap the instant
-## a thumb lands rather than when it lifts, which is the half-second that makes
-## a button feel like it responded. It also leaves `pressed` carrying exactly
-## the one thing the screen does, which is what the smoke test checks.
+## Both hang off `button_down`/`button_up`, not `pressed`. A child hears and sees
+## the press the instant a thumb lands rather than when it lifts, which is what
+## makes a button feel like it responded. It also leaves `pressed` carrying
+## exactly the one thing the screen does, which is what the smoke test checks.
 ##
-## A disabled button emits neither, so a locked stage row stays silent without
-## needing to be skipped here.
-func sound_every_button(root_node: Node) -> void:
+## A themed button bounces itself. An [ArtButton] is an invisible hotspot, so it
+## bounces its own art and is left alone here — scaling the hotspot would only
+## move where the tap lands.
+##
+## A disabled button emits nothing, so a locked stage row stays still and silent
+## without needing to be skipped.
+func dress_every_button(root_node: Node) -> void:
 	for node in root_node.find_children("*", "BaseButton", true, false):
 		var button := node as BaseButton
 		if not button.button_down.is_connected(_on_any_button_down):
 			button.button_down.connect(_on_any_button_down)
+		var face := button as Control
+		if face != null and not (button is ArtButton) and not button.has_meta(&"_bounces"):
+			button.set_meta(&"_bounces", true)
+			button.button_down.connect(PressBounce.press.bind(face))
+			button.button_up.connect(PressBounce.release.bind(face))
 
 
 func _on_any_button_down() -> void:

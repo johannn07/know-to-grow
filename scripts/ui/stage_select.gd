@@ -8,19 +8,16 @@ extends SubScreen
 ## only interactive parts are invisible hotspots laid over the drawn rows, the
 ## same way How To Play works.
 ##
-## **Which rows can be tapped, and how many stars each shows, comes from
-## [GameStateStore].** A row opens when the stage before it is cleared, and its
-## three stars fill with what was earned. The stars are drawn over the empty ones
-## in the picture, which they cover exactly — the delivered star art is within
-## half a percent of the drawn one.
+## **Which rows can be tapped, and how each is drawn, comes from
+## [GameStateStore].** A row opens when the stage before it is cleared; its row
+## art switches between the locked and unlocked drawing; its three stars fill
+## with what was earned. The row art covers the row baked into the card at the
+## same rect, and the stars are children of that row art.
 ##
-## **What is still baked into the picture is the row's own plate**: Stage 1 is
-## drawn on green and the other three on grey, and the "Stage N" label goes with
-## it. So a stage that has been cleared becomes tappable and fills its stars
-## while its plate stays grey. That is an art gap, not a logic one, and it is
-## written up in art/MANIFEST.md with what would fix it. The loose parts that
-## were delivered do not: their label pill is ratio 5.17 against the drawn 3.12,
-## so it cannot be laid over the one already there without overflowing the row.
+## Each row hotspot is an [ArtButton] pointed at its row art, so a press tints
+## and bounces the whole row — stars included, since they are its children. The
+## close button is an ArtButton with no art: its X is part of the card, so
+## there is nothing separate to move.
 
 ## Where each drawn row sits, in fractions of the card image. Measured off the
 ## artwork, which is the only place they exist.
@@ -36,8 +33,8 @@ const ROW_RECTS: Array[Rect2] = [
 const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
 
 @export_group("Destinations")
-## One scene per row, in the order they are drawn. A row with no path, or a row
-## past [member unlocked_count], is left disabled.
+## One scene per row, in the order they are drawn. A row with no path, or one
+## whose stage has not been reached yet, is left disabled.
 @export var stage_scene_paths: Array[String] = [
 	"res://scenes/levels/level_1/stage_1.tscn",
 	"res://scenes/levels/level_1/stage_2.tscn",
@@ -67,7 +64,6 @@ const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
 
 @onready var _rows: Control = %Rows
 @onready var _rows_art: Control = %RowsArt
-@onready var _stars: Control = %Stars
 @onready var _close_button: Button = %CloseButton
 
 
@@ -118,8 +114,9 @@ func _row_art(stage_number: int, unlocked: bool) -> Texture2D:
 func _show_stars(stage_number: int) -> void:
 	var earned := 0 if progress == null else progress.stars_for(level_id, stage_number)
 	for slot_number in 3:
-		var slot: ArtSlot = _stars.get_node_or_null(
-			"Row%dStar%d" % [stage_number, slot_number + 1]
+		# Stars are children of their row, so they tint and bounce with it.
+		var slot: ArtSlot = _rows_art.get_node_or_null(
+			"Row%dArt/Row%dStar%d" % [stage_number, stage_number, slot_number + 1]
 		) as ArtSlot
 		if slot == null:
 			push_warning("%s: no Row%dStar%d in this layout" % [name, stage_number, slot_number + 1])

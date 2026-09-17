@@ -10,6 +10,9 @@ extends Button
 ## tint is applied to that art instead, with the same 0.82 the theme uses, and a
 ## button drawn into a picture feels like the ones that are not.
 ##
+## It also bounces that art with [PressBounce], since the hotspot itself is
+## invisible and scaling it would only move the hit area.
+##
 ## Hover is a small lift on top of that. Only a mouse ever sees it: Android has
 ## no hover state, so on the device this ships to, pressed is the one that does
 ## the work.
@@ -53,6 +56,7 @@ func clear_tint() -> void:
 	_hovered = false
 	_held = false
 	_refresh()
+	PressBounce.reset(art as Control)
 
 
 func _on_mouse_entered() -> void:
@@ -68,6 +72,7 @@ func _on_mouse_exited() -> void:
 func _on_button_down() -> void:
 	_held = true
 	_refresh()
+	PressBounce.press(art as Control)
 
 
 func _on_button_up() -> void:
@@ -75,6 +80,7 @@ func _on_button_up() -> void:
 	# dragged off the edge cannot leave the art dark.
 	_held = false
 	_refresh()
+	PressBounce.release(art as Control)
 
 
 func _refresh() -> void:

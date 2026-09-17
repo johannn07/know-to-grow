@@ -24,9 +24,14 @@ func _ready() -> void:
 	_how_to_play_button.pressed.connect(_on_how_to_play_pressed)
 	if _audio != null:
 		_audio.play_music(AudioDirectorService.Track.MENU)
-		# button_down, so the tap lands under the thumb rather than on release.
-		for node in find_children("*", "BaseButton", true, false):
-			(node as BaseButton).button_down.connect(_audio.play_tap)
+	# button_down, so the tap and the squash land under the thumb rather than on
+	# release. Same treatment SubScreen gives every other screen.
+	for node in find_children("*", "BaseButton", true, false):
+		var button := node as BaseButton
+		if _audio != null:
+			button.button_down.connect(_audio.play_tap)
+		button.button_down.connect(PressBounce.press.bind(button))
+		button.button_up.connect(PressBounce.release.bind(button))
 
 
 func _notification(what: int) -> void:

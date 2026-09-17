@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://gjewey4rh3hg" path="res://assets/art/ui_stage_row_3_locked.png" id="3_locked_row"]
 [ext_resource type="Texture2D" uid="uid://bwjoyen5nfsw8" path="res://assets/art/ui_stage_row_4.png" id="4u_row"]
 [ext_resource type="Texture2D" uid="uid://by8uww2owljq" path="res://assets/art/ui_stage_row_4_locked.png" id="4_locked_row"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="8_artbtn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -128,6 +129,51 @@ fit = 0
 slot_name = "ui_stage_row_1"
 hide_when_empty = true
 
+[node name="Row1Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row1Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.483
+anchor_top = 0.5386
+anchor_right = 0.6066
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row1Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row1Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6179
+anchor_top = 0.5386
+anchor_right = 0.7415
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row1Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row1Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7601
+anchor_top = 0.5386
+anchor_right = 0.8837
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
 [node name="Row2Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
 layout_mode = 1
 anchors_preset = -1
@@ -141,6 +187,51 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 fit = 0
 slot_name = "ui_stage_row_2"
+hide_when_empty = true
+
+[node name="Row2Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row2Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.483
+anchor_top = 0.5386
+anchor_right = 0.6066
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row2Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row2Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6179
+anchor_top = 0.5386
+anchor_right = 0.7415
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row2Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row2Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7601
+anchor_top = 0.5386
+anchor_right = 0.8837
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
 hide_when_empty = true
 
 [node name="Row3Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
@@ -158,6 +249,51 @@ fit = 0
 slot_name = "ui_stage_row_3"
 hide_when_empty = true
 
+[node name="Row3Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row3Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.483
+anchor_top = 0.5386
+anchor_right = 0.6066
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row3Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row3Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6179
+anchor_top = 0.5386
+anchor_right = 0.7415
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row3Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row3Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7601
+anchor_top = 0.5386
+anchor_right = 0.8837
+anchor_bottom = 0.8782
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
 [node name="Row4Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
 layout_mode = 1
 anchors_preset = -1
@@ -173,23 +309,13 @@ fit = 0
 slot_name = "ui_stage_row_4"
 hide_when_empty = true
 
-[node name="Stars" type="Control" parent="Center/CardAspect/Card"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Row1Star1" type="Control" parent="Center/CardAspect/Card/Stars"]
+[node name="Row4Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row4Art"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.4838
-anchor_top = 0.3217
-anchor_right = 0.5775
-anchor_bottom = 0.3807
+anchor_left = 0.483
+anchor_top = 0.5386
+anchor_right = 0.6066
+anchor_bottom = 0.8782
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -198,13 +324,13 @@ fit = 0
 slot_name = "star"
 hide_when_empty = true
 
-[node name="Row1Star2" type="Control" parent="Center/CardAspect/Card/Stars"]
+[node name="Row4Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row4Art"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.5860
-anchor_top = 0.3217
-anchor_right = 0.6797
-anchor_bottom = 0.3807
+anchor_left = 0.6179
+anchor_top = 0.5386
+anchor_right = 0.7415
+anchor_bottom = 0.8782
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -213,148 +339,13 @@ fit = 0
 slot_name = "star"
 hide_when_empty = true
 
-[node name="Row1Star3" type="Control" parent="Center/CardAspect/Card/Stars"]
+[node name="Row4Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row4Art"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.6938
-anchor_top = 0.3217
-anchor_right = 0.7875
-anchor_bottom = 0.3807
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row2Star1" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.4819
-anchor_top = 0.4998
-anchor_right = 0.5759
-anchor_bottom = 0.5569
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row2Star2" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5845
-anchor_top = 0.4998
-anchor_right = 0.6785
-anchor_bottom = 0.5569
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row2Star3" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.6926
-anchor_top = 0.4998
-anchor_right = 0.7866
-anchor_bottom = 0.5569
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row3Star1" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.4854
-anchor_top = 0.6819
-anchor_right = 0.5809
-anchor_bottom = 0.7395
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row3Star2" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5896
-anchor_top = 0.6819
-anchor_right = 0.6851
-anchor_bottom = 0.7395
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row3Star3" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.6995
-anchor_top = 0.6819
-anchor_right = 0.7950
-anchor_bottom = 0.7395
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row4Star1" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.4827
-anchor_top = 0.8603
-anchor_right = 0.5770
-anchor_bottom = 0.9190
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row4Star2" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5856
-anchor_top = 0.8603
-anchor_right = 0.6798
-anchor_bottom = 0.9190
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-fit = 0
-slot_name = "star"
-hide_when_empty = true
-
-[node name="Row4Star3" type="Control" parent="Center/CardAspect/Card/Stars"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.6940
-anchor_top = 0.8603
-anchor_right = 0.7882
-anchor_bottom = 0.9190
+anchor_left = 0.7601
+anchor_top = 0.5386
+anchor_right = 0.8837
+anchor_bottom = 0.8782
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -382,6 +373,8 @@ anchor_right = 0.8757
 anchor_bottom = 0.4019
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row1Art")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
@@ -397,6 +390,8 @@ anchor_right = 0.8751
 anchor_bottom = 0.5774
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row2Art")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
@@ -412,6 +407,8 @@ anchor_right = 0.8849
 anchor_bottom = 0.7602
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row3Art")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
@@ -427,6 +424,8 @@ anchor_right = 0.8769
 anchor_bottom = 0.9401
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row4Art")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
@@ -443,6 +442,7 @@ anchor_right = 0.9816
 anchor_bottom = 0.1963
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("8_artbtn")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")

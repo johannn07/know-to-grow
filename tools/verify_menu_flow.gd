@@ -192,11 +192,64 @@ func _initialize() -> void:
 		screen.queue_free()
 
 	await process_frame
+	await _check_press_bounce()
 	if state != null:
 		await _check_progress_reaches_the_rows(state)
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
+
+
+## A press should squash what the child can see and let it spring back. A themed
+## button bounces itself; a hotspot bounces the art under it, never itself,
+## since scaling an invisible hotspot only moves where the tap lands.
+func _check_press_bounce() -> void:
+	var cases: Array = [
+		["res://scenes/ui/main_menu.tscn", "%StartButton", ""],
+		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton", "../LetsGoButtonArt"],
+		["res://scenes/ui/stage_select.tscn", "%Rows/Row1", "../../RowsArt/Row1Art"],
+	]
+	for case: Array in cases:
+		var screen: Node = await _instantiate(case[0])
+		if screen == null:
+			continue
+		var button: BaseButton = screen.get_node(case[1])
+		var face: Control = button if case[2] == "" else button.get_node(case[2])
+		var label := "%s %s" % [String(case[0]).get_file(), face.name]
+
+		button.button_down.emit()
+		await create_timer(PressBounce.PRESS_SECONDS + 0.05).timeout
+		_expect(face.scale.x < 0.99, "%s squashes on press (scale %.2f)" % [label, face.scale.x])
+		if face != button:
+			_expect(
+				(button as Control).scale == Vector2.ONE,
+				"%s: the hotspot itself does not move" % label
+			)
+		_expect(
+			face.pivot_offset.is_equal_approx(face.size * 0.5),
+			"%s squashes about its centre" % label
+		)
+
+		button.button_up.emit()
+		await create_timer(PressBounce.RELEASE_SECONDS + 0.1).timeout
+		_expect(
+			face.scale.is_equal_approx(Vector2.ONE),
+			"%s springs back to full size (scale %.2f)" % [label, face.scale.x]
+		)
+		screen.queue_free()
+		await process_frame
+
+	# The stage select close button has no separate art — its X is part of the
+	# card — so a press must neither move the hotspot nor fail.
+	var select: Node = await _instantiate("res://scenes/ui/stage_select.tscn")
+	if select != null:
+		var close: ArtButton = select.get_node("%CloseButton")
+		close.button_down.emit()
+		await create_timer(PressBounce.PRESS_SECONDS + 0.05).timeout
+		_expect(close.scale == Vector2.ONE, "stage_select close hotspot stays put when pressed")
+		close.button_up.emit()
+		select.queue_free()
+		await process_frame
 
 
 ## The stage select is the only screen that reads progress, and opening it on a
@@ -233,12 +286,13 @@ func _check_progress_reaches_the_rows(state: GameStateStore) -> void:
 			"Row%d is drawn %s" % [stage_number, "unlocked" if unlocked else "locked"]
 		)
 
-	var stars: Control = screen.get_node("%Stars")
 	for expected: Array in [[1, 3], [2, 2], [3, 0], [4, 0]]:
 		var stage_number: int = expected[0]
 		var filled := 0
 		for slot_number in 3:
-			var slot: ArtSlot = stars.get_node("Row%dStar%d" % [stage_number, slot_number + 1])
+			var slot: ArtSlot = rows_art.get_node(
+				"Row%dArt/Row%dStar%d" % [stage_number, stage_number, slot_number + 1]
+			)
 			if screen.star_filled != null and slot.texture == screen.star_filled:
 				filled += 1
 		_expect(

@@ -47,7 +47,10 @@ before it can be started.
 - [x] Real art wired in from the Figma file — background, logo, both mascots,
       ground, falling leaves, and the green button plate as a 9-patch
 - [x] Button press sound — every button, on `button_down`, via `AudioDirector`
-- [ ] A small scale-bounce on tap. Presses tint the art today; nothing moves
+- [x] A small scale-bounce on tap — `PressBounce`: squash to 0.93, spring back
+      with an overshoot. A themed button bounces itself; a hotspot bounces the
+      art under it. Stage select rows bounce with their stars. The close X on
+      the stage select cannot, since it is part of the card
 - [x] Menu music loop — `main_menu.mp3`, continuous across the title, How To
       Play and the hub
 
