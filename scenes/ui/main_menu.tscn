@@ -10,10 +10,6 @@
 [ext_resource type="Texture2D" uid="uid://b14n36e3hjxbl" path="res://assets/art/characters/mascot_flower.png" id="8_flower"]
 [ext_resource type="Texture2D" uid="uid://cjtdbenvy7wa8" path="res://assets/art/effects/fx_leaves.png" id="9_leaves"]
 
-[sub_resource type="SystemFont" id="SystemFont_8enr0"]
-
-[sub_resource type="SystemFont" id="SystemFont_fplnf"]
-
 [node name="MainMenu" type="Control" unique_id=211196414]
 layout_mode = 3
 anchors_preset = 15
@@ -166,8 +162,6 @@ custom_minimum_size = Vector2(760, 190)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"PrimaryButton"
-theme_override_fonts/font = SubResource("SystemFont_8enr0")
-theme_override_font_sizes/font_size = 100
 text = "Start Game"
 
 [node name="HowToPlayButton" type="Button" parent="Foreground/Column" unique_id=1417964607]
@@ -175,7 +169,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(470, 160)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_fonts/font = SubResource("SystemFont_fplnf")
 text = "HOW TO PLAY"
 
 [node name="BottomSpacer" type="Control" parent="Foreground/Column" unique_id=1881620067]

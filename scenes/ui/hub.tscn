@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cgxmwagmxkenm" path="res://assets/art/backgrounds/bg_sign.png" id="7_78ua6"]
 [ext_resource type="Texture2D" uid="uid://c50xt3o5edhw2" path="res://assets/art/plants/plant_seed_pot.png" id="7_plant"]
 [ext_resource type="Texture2D" uid="uid://cs58a4b3s71fj" path="res://assets/art/ui/hub/ui_tab_lessons.png" id="8_lessons"]
+[ext_resource type="FontFile" uid="uid://5dh1bd816wds" path="res://assets/fonts/fredoka_one/fredoka_one_regular.ttf" id="8_myxet"]
 [ext_resource type="Texture2D" uid="uid://birib6hvlxlbl" path="res://assets/art/ui/hub/ui_tab_garden.png" id="9_garden"]
 [ext_resource type="Texture2D" uid="uid://dgqakneykfrq7" path="res://assets/art/ui/hub/ui_tab_badges.png" id="10_badges"]
 
@@ -28,12 +29,6 @@ corner_radius_bottom_left = 66
 shadow_color = Color(0, 0, 0, 0.18)
 shadow_size = 6
 shadow_offset = Vector2(0, 4)
-
-[sub_resource type="SystemFont" id="SystemFont_biclb"]
-
-[sub_resource type="SystemFont" id="SystemFont_lvdkt"]
-font_italic = true
-subpixel_positioning = 0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nav"]
 bg_color = Color(0.98, 0.96, 0.89, 0.97)
@@ -200,7 +195,7 @@ offset_top = -437.8641
 offset_right = 316.23224
 offset_bottom = -245.8641
 theme_override_colors/font_color = Color(0.2901961, 0.2, 0.12156863, 1)
-theme_override_fonts/font = SubResource("SystemFont_biclb")
+theme_override_fonts/font = ExtResource("8_myxet")
 theme_override_font_sizes/font_size = 140
 text = "My Plant:"
 
@@ -211,7 +206,7 @@ offset_top = -230.01723
 offset_right = 274.39566
 offset_bottom = -38.017227
 theme_override_colors/font_color = Color(0.2901961, 0.2, 0.12156863, 1)
-theme_override_fonts/font = SubResource("SystemFont_biclb")
+theme_override_fonts/font = ExtResource("8_myxet")
 theme_override_font_sizes/font_size = 140
 text = "SEED"
 horizontal_alignment = 1
@@ -250,7 +245,6 @@ offset_bottom = -367.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_type_variation = &"PrimaryButton"
-theme_override_fonts/font = SubResource("SystemFont_lvdkt")
 theme_override_font_sizes/font_size = 50
 text = "Level 1: Grow a Seed"
 
