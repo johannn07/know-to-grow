@@ -21,6 +21,11 @@ extends Control
 ## Either way a tried-and-wrong option ends the same: its art gone and its slot
 ## tinted — see [method mark_spent].
 ##
+## The art keeps its own shape, centred in the card's rect, rather than being
+## stretched to it. The item cards are not one shape — from 0.83 wide for the
+## flower to 1.06 for the sun — and the slots are square, so stretching squashed
+## them by up to 15%.
+##
 ## Dragging sets [member Control.top_level] so the card escapes the container
 ## that laid it out, while the container keeps reserving its slot. That way a
 ## card that snaps back lands exactly where it started without the row reflowing

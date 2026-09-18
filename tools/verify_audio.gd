@@ -16,6 +16,10 @@ const MENU_SCREENS: Array[String] = [
 	"res://scenes/ui/how_to_play.tscn",
 	"res://scenes/ui/level_select_stub.tscn",
 ]
+const LEVEL_2_SCREENS: Array[String] = [
+	"res://scenes/ui/stage_select_l2.tscn",
+	"res://scenes/levels/level_2/stage_1.tscn",
+]
 const LEVEL_SCREENS: Array[String] = [
 	"res://scenes/ui/level_intro.tscn",
 	"res://scenes/ui/stage_select.tscn",
@@ -86,6 +90,8 @@ func _initialize() -> void:
 		await _expect_track(path, AudioDirectorService.Track.MENU, "menu")
 	for path in LEVEL_SCREENS:
 		await _expect_track(path, AudioDirectorService.Track.LEVEL_1, "level 1")
+	for path in LEVEL_2_SCREENS:
+		await _expect_track(path, AudioDirectorService.Track.LEVEL_2, "level 2")
 
 	# --- and the music does not restart between them ---
 	_audio.stop_music()

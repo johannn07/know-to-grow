@@ -383,6 +383,7 @@ property that does not exist and fail silently.
 | Menu flow smoke test | `godot --headless --path . -s res://tools/verify_menu_flow.gd` |
 | Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
 | Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
+| Level 2 stages play through | `godot --headless --path . -s res://tools/verify_level_2.gd` |
 | Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears

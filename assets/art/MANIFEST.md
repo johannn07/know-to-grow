@@ -590,6 +590,16 @@ the `PromptBubble` component. The prompt is live text over the cream box:
   which all 19 prompts fit. `tools/verify_live_text.gd` enforces it.
 - The Figma holds this bubble at **1774 x 887**, if it ever needs to be sharper.
 
+**`ui_tray_blank.png`**, 1000 x 443, 424 KB, in `ui/common/` — the empty
+"Choose a Tool" tray, three blank square slots. A newly drawn asset, not a Figma
+export; cropped to alpha > 16 and scaled to 1000 wide like the other trays.
+Used by Level 2, and by Level 1 once its swap is done.
+
+- **Slots**, outline to outline, in fractions of the tray: `(0.083, 0.2912) -
+  (0.351, 0.9007)`, `(0.364, 0.2912) - (0.636, 0.9007)`, `(0.648, 0.2912) -
+  (0.916, 0.9007)` — 268-272 x 270 px of the 1000 x 443 image. A card is
+  anchored over the whole slot and draws its art at its own shape inside it.
+
 **`ui_header_blank.png`**, 900 x 307, 274 KB, in `ui/common/` — the blank
 wooden stage header, wired as `scenes/components/header_sign.tscn`, the
 `HeaderSign` component. Cut from Figma image `e54af65e3603` (1672 x 941) by

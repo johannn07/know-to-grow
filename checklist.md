@@ -194,6 +194,15 @@ unlocks **Little Planter**.
       `tools/verify_audio.gd`. VO has a bus but nothing to route yet
 - [ ] Real level select, replacing `level_select_stub.tscn` — or wire Start Game
       straight to Level 1 and drop the screen. **⚠**
+- [x] **Level 2 Situation 1** — `scenes/levels/level_2/stage_1.tscn`, the pattern
+      for the other four: live header and prompt from content, no fun fact,
+      cards drawn on the blank tray, Continue below the Correct card. Played by
+      `tools/verify_level_2.gd` and checked in a real render. Leads back to the
+      situation select until Situation 2 exists
+- [ ] Level 2 Situations 2-5, copying Situation 1's numbers
+- [ ] **The sun card says "Sun"; Level 2's content calls it "Sunlight".** The
+      artwork wins by the rule, which would make the item's transcript "Sun" —
+      but Level 2's Correct card for Situation 4 also says "Sunlight". **⚠**
 - [ ] Level scenes: `level_1_planting`, `level_2_monitoring`,
       `level_3_identifying`, `level_4_functions`
 - [ ] Video screens between Level 2 → 3 and Level 3 → 4. **⚠** Godot 4 plays
@@ -295,7 +304,7 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       already does for Situations 2-5 — S1 was the only one ever rendered. The
       blank is a real Figma export (`e54af65e…`, 1672 x 941), so it drops in
       cleanly. **The five titles are already in `content/level_2_monitoring.tres`**
-- [ ] **Swap in the new empty tool tray** for Levels 1 and 2 — decided, deferred.
+- [ ] **Swap in the new empty tool tray** for Level 1 — decided, deferred. (Level 2 already uses it: `ui_tray_blank.png`.)
       It is a newly drawn asset rather than a Figma export, so its proportions
       differ from `ui_tray_l1_s1.png` (alpha ratio 2.0802 against 2.1008, and
       shifted down the canvas). Swapping it means **re-measuring the card
