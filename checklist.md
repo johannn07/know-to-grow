@@ -178,9 +178,12 @@ unlocks **Little Planter**.
 - [x] Hub, plant grown — the hub grows one stage per level cleared, in order:
       the seed in its pot, then the rooted seed (`plant_sprout.png`) labelled
       ROOT, as in the Figma's "Character Screen L2". Checked in a real render
-- [ ] **The hub's play button still says "Level 1: Grow a Seed"** after Level 1
-      is done. What it should lead to is the open routing decision below
-
+- [x] **The hub's play button follows the plant.** "Level 1: Grow a Seed" into
+      Level 1's overlay until Level 1 is cleared, then "Level 2: Help Your
+      Plant" into `level_intro_l2.tscn`, Level 2's overlay, which has Continue
+      below the card like every level's. Each is one entry in the hub's
+      `level_labels` and `level_scene_paths`, stepped by the same count of
+      cleared levels that grows the plant
 - [x] `GameState` autoload — one number per stage, the stars earned, saved to
       `user://progress.cfg`. Everything else is derived from it: whether a stage
       is unlocked, whether a level is done, what the hub counts. Checked by
@@ -192,17 +195,20 @@ unlocks **Little Planter**.
       and keeps a track playing across a scene change so walking hub → level
       overlay → stage select does not restart it. Checked by
       `tools/verify_audio.gd`. VO has a bus but nothing to route yet
-- [ ] Real level select, replacing `level_select_stub.tscn` — or wire Start Game
-      straight to Level 1 and drop the screen. **⚠**
+- [x] ~~Real level select, or straight into Level 1?~~ **Answered: neither — the
+      hub picks.** Its play button always offers the next level the plant is
+      waiting on. `level_select_stub.tscn` is now reached by nothing; only the
+      smoke and audio tests still load it, so it can be deleted
 - [x] **Level 2 Situation 1** — `scenes/levels/level_2/stage_1.tscn`, the pattern
       for the other four: live header and prompt from content, no fun fact,
       cards drawn on the blank tray, Continue below the Correct card. Played by
       `tools/verify_level_2.gd` and checked in a real render. Leads back to the
       situation select until Situation 2 exists
 - [ ] Level 2 Situations 2-5, copying Situation 1's numbers
-- [ ] **The sun card says "Sun"; Level 2's content calls it "Sunlight".** The
-      artwork wins by the rule, which would make the item's transcript "Sun" —
-      but Level 2's Correct card for Situation 4 also says "Sunlight". **⚠**
+- [x] ~~**The sun card says "Sun"; Level 2's content called it "Sunlight"**~~
+      **Answered: "Sun".** Level 2's item is labelled Sun and shares Level 1's
+      `item_sun` voice-over line, so it is recorded once. Its internal id stays
+      `sunlight`. Situation 4's Correct card still reads "Sunlight" in its art
 - [ ] Level scenes: `level_1_planting`, `level_2_monitoring`,
       `level_3_identifying`, `level_4_functions`
 - [ ] Video screens between Level 2 → 3 and Level 3 → 4. **⚠** Godot 4 plays

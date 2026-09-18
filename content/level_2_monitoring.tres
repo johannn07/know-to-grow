@@ -31,10 +31,10 @@ vo_key = &"item_watering_can"
 [sub_resource type="Resource" id="Resource_5jcoj"]
 script = ExtResource("2_h8fke")
 id = &"sunlight"
-label = "Sunlight"
+label = "Sun"
 placeholder_color = Color(0.98, 0.78, 0.25, 1)
 wrong_hint = "Not quite! This plant needs help with something other than light right now."
-vo_key = &"item_sunlight"
+vo_key = &"item_sun"
 
 [sub_resource type="Resource" id="Resource_gljak"]
 script = ExtResource("2_h8fke")

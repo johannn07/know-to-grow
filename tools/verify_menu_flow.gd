@@ -53,6 +53,7 @@ func _initialize() -> void:
 		"res://scenes/ui/how_to_play.tscn",
 		"res://scenes/ui/level_select_stub.tscn",
 		"res://scenes/ui/level_intro.tscn",
+		"res://scenes/ui/level_intro_l2.tscn",
 		"res://scenes/ui/badge_unlocked.tscn",
 		"res://scenes/ui/level_complete_sign.tscn",
 		"res://scenes/ui/level_complete.tscn",
@@ -81,7 +82,13 @@ func _initialize() -> void:
 		# The hub is composed from separate art with live text over it, so the
 		# things that break quietly are the label lookups and the play target.
 		if screen.has_node("%PlayButton"):
-			_expect_scene(screen.level_scene_path, "hub level_scene_path")
+			_expect(
+				screen.level_scene_paths.size() == screen.level_labels.size()
+					and screen.level_scene_paths.size() == screen.plant_stages.size(),
+				"hub has a destination and a label for every plant stage"
+			)
+			for i in screen.level_scene_paths.size():
+				_expect_scene(screen.level_scene_paths[i], "hub level_scene_paths[%d]" % i)
 			# The hub's text nodes are optional — the layout is still moving, and
 			# cards get added and removed in the editor. So do not demand a
 			# particular set of labels; demand that the ones the scene does have
@@ -244,6 +251,7 @@ func _check_press_bounce() -> void:
 	var cases: Array = [
 		["res://scenes/ui/main_menu.tscn", "%StartButton", ""],
 		["res://scenes/ui/level_intro.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/level_intro_l2.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/level_complete.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/badge_unlocked.tscn", "%ActionButton", "../ButtonArt"],
 	]
@@ -412,6 +420,10 @@ func _check_progress_reaches_the_rows(
 ## The hub's plant is how a finished level shows: seed until Level 1 is cleared,
 ## the rooted seed after. A level three stages in must not count.
 func _check_hub_grows_the_plant(state: GameStateStore) -> void:
+	var plays := {
+		0: ["Level 1: Grow a Seed", "res://scenes/ui/level_intro.tscn"],
+		1: ["Level 2: Help Your Plant", "res://scenes/ui/level_intro_l2.tscn"],
+	}
 	for case: Array in [[0, 0, "SEED"], [3, 0, "SEED"], [4, 1, "ROOT"]]:
 		state.reset()
 		for stage_number in range(1, int(case[0]) + 1):
@@ -427,6 +439,14 @@ func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 				and (label == null or label.text == case[2]),
 			"hub with %d of Level 1's stages cleared shows the %s (stage %d)"
 				% [case[0], case[2], stage]
+		)
+		# The play button moves on with the plant: once Level 1 is done it names
+		# Level 2 and leads to Level 2's overlay, not back into Level 1.
+		var play: Button = hub.get_node("%PlayButton")
+		var want: Array = plays[case[1]]
+		_expect(
+			play.text == want[0] and hub.level_scene_path() == want[1],
+			"hub with %d of Level 1's stages cleared offers \"%s\"" % [case[0], want[0]]
 		)
 		hub.queue_free()
 		await process_frame

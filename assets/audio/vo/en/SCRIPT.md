@@ -72,7 +72,6 @@ Spoken when a child taps an item. Shared across levels, so each is recorded once
 | `item_fertilizer` | Fertilizer |
 | `item_water` | Water |
 | `item_fn_support` | Support the plant and carry water and nutrients. |
-| `item_sunlight` | Sunlight |
 | `item_pruning_shears` | Pruning Shears |
 | `item_fn_make_food` | Help make food using sunlight. |
 | `item_moon` | Moon |
@@ -91,4 +90,4 @@ Spoken when a child taps an item. Shared across levels, so each is recorded once
 | `item_fn_hold` | Hold the plant firmly in the soil. |
 | `item_shovel` | Shovel |
 
-**58 lines to record.**
+**57 lines to record.**

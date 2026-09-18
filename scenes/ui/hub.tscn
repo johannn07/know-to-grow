@@ -56,6 +56,8 @@ music_track = 1
 plant_stages = Array[Texture2D]([ExtResource("7_plant"), ExtResource("11_sprout")])
 plant_stage_names = Array[String](["SEED", "ROOT"])
 growth_levels = Array[Resource]([ExtResource("12_level_1")])
+level_scene_paths = Array[String](["res://scenes/ui/level_intro.tscn", "res://scenes/ui/level_intro_l2.tscn"])
+level_labels = Array[String](["Level 1: Grow a Seed", "Level 2: Help Your Plant"])
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true

@@ -17,6 +17,7 @@ const MENU_SCREENS: Array[String] = [
 	"res://scenes/ui/level_select_stub.tscn",
 ]
 const LEVEL_2_SCREENS: Array[String] = [
+	"res://scenes/ui/level_intro_l2.tscn",
 	"res://scenes/ui/stage_select_l2.tscn",
 	"res://scenes/levels/level_2/stage_1.tscn",
 ]
