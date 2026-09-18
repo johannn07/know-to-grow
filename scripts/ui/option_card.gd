@@ -6,13 +6,20 @@ extends Control
 ## The artwork carries the item's name in its own pixels, so this draws nothing
 ## itself — it is a hit area with a picture in it and a drag behaviour.
 ##
-## While the card is sitting in its slot it draws **nothing at all**: the tray
-## behind it already has that item painted into the picture, at exactly the right
-## size and position. Drawing the card on top of it too only ever produced a rim
-## inside a rim, because the standalone cards carry thicker frames than the tray's
-## drawn slots — and by different amounts, so no single scaling lines them all up.
-## The card's own art appears only while it is being dragged. A tried-and-wrong
-## option is marked by tinting its slot instead — see [method mark_spent].
+## Where the card rests depends on the tray behind it, set by [member
+## draw_at_rest]:
+##
+## - **A drawn tray** (Level 1's) has each item already painted into the picture,
+##   at exactly the right size and position, so a resting card draws **nothing
+##   at all**. Drawing the card on top of it too only ever produced a rim inside
+##   a rim, because the standalone cards carry thicker frames than the tray's
+##   drawn slots — and by different amounts, so no single scaling lines them all
+##   up. The card's own art appears only while it is being dragged.
+## - **A blank tray** has empty slots, so the card draws itself at rest, over its
+##   slot.
+##
+## Either way a tried-and-wrong option ends the same: its art gone and its slot
+## tinted — see [method mark_spent].
 ##
 ## Dragging sets [member Control.top_level] so the card escapes the container
 ## that laid it out, while the container keeps reserving its slot. That way a
@@ -43,6 +50,15 @@ const RETURN_TIME := 0.25
 		icon = value
 		_apply()
 
+## Whether the card shows its own art while sitting in its slot. On for a blank
+## tray, whose slots are empty; off for a drawn tray, which already shows the
+## item. A stage sets it for all its cards from [member StageScreen.blank_tray].
+@export var draw_at_rest: bool = false:
+	set(value):
+		draw_at_rest = value
+		if is_node_ready():
+			_rest()
+
 var _dragging := false
 var _grab_offset := Vector2.ZERO
 var _home_local := Vector2.ZERO
@@ -67,12 +83,13 @@ func _apply() -> void:
 	_art.slot_name = String(option_id)
 
 
-## Hides the card's own art so the tray's drawn slot shows through. A card with
-## no artwork yet stays visible, so a missing asset is still a labelled blank
-## rather than an invisible one.
+## Shows the card at rest over a blank tray, or hides it so a drawn tray's slot
+## shows through. A card with no artwork yet stays visible either way, so a
+## missing asset is still a labelled blank rather than an invisible one. A spent
+## card stays hidden: its slot is tinted instead.
 func _rest() -> void:
 	if _art != null and not _spent:
-		_art.visible = icon == null
+		_art.visible = draw_at_rest or icon == null
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -144,9 +161,11 @@ func freeze() -> void:
 ## Retires this option: the slot it came from is tinted and stops responding.
 ##
 ## The tint is a rounded panel sized to the card's own rect, which is the tray's
-## drawn slot, so it dims that slot and nothing else. Showing the greyed card art
-## instead would put its thicker frame back over the slot, which is the mismatch
-## this whole arrangement exists to avoid.
+## slot, so it dims that slot and nothing else. On a drawn tray, showing the
+## greyed card art instead would put its thicker frame back over the slot, which
+## is the mismatch this whole arrangement exists to avoid. On a blank tray the
+## slot is left empty and darkened: the card's icon goes, since it can never be
+## picked up again anyway.
 ##
 ## The option is dimmed rather than deleted: removing it would erase the child's
 ## own attempt, and leaving it live invites the same wrong answer again.

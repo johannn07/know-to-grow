@@ -54,6 +54,7 @@ func _initialize() -> void:
 	_expect(seen > 0, "at least one stage was played")
 	_expect_same("prompt", _prompt_widths)
 	_expect_same("fun fact", _fact_widths)
+	await _check_blank_tray()
 	if state != null:
 		_expect(
 			state.stars_for(&"level_1", 1) > 0,
@@ -232,6 +233,56 @@ func _play(scene_path: String) -> String:
 
 ## Every stage should draw this element at the same width, so it reads at the
 ## same size whatever the wording is.
+## Level 2 onwards puts its cards on a blank tray, whose slots are empty, so a
+## resting card has to draw itself — the opposite of Level 1's drawn trays. No
+## stage uses one yet, so Stage 1 is played with the switch turned on: at rest,
+## after a missed drop, and after a wrong answer, which must still leave a
+## darkened empty slot rather than the card.
+func _check_blank_tray() -> void:
+	print("--- blank tray, on stage_1 ---")
+	var stage: StageScreen = (load(FIRST_STAGE) as PackedScene).instantiate()
+	stage.blank_tray = true
+	root.add_child(stage)
+	stage.set_deferred("size", Vector2(1080, 1920))
+	await _settle()
+
+	var cards := stage.cards()
+	for card in cards:
+		_expect(card.draw_at_rest, "card '%s' is told to draw at rest" % card.option_id)
+		_expect(
+			card.get_node("Art").visible,
+			"card '%s' shows its own art in its empty slot" % card.option_id
+		)
+
+	var centre: Vector2 = stage.get_node("%DropZone").get_global_rect().get_center()
+	var stray: OptionCard = cards[0]
+	stray._begin_drag(stray.global_position + Vector2(20.0, 20.0))
+	stray._end_drag(Vector2(40.0, 40.0))
+	await _settle()
+	await _rest()
+	_expect(stray.get_node("Art").visible, "a card let go off target is shown again in its slot")
+
+	var wrong: OptionCard = _wrong(cards, stage)
+	wrong._begin_drag(wrong.global_position + Vector2(20.0, 20.0))
+	wrong._end_drag(centre)
+	await _settle()
+	await _rest()
+	_expect(not wrong.get_node("Art").visible, "a wrong card leaves its slot without an icon")
+	_expect(wrong.get_node("Spent").visible, "a wrong card's slot is darkened")
+	_expect(
+		wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+		"a wrong card cannot be picked again"
+	)
+	for card in cards:
+		if card != wrong:
+			_expect(
+				card.get_node("Art").visible,
+				"untried card '%s' is still shown" % card.option_id
+			)
+	stage.queue_free()
+	await process_frame
+
+
 func _expect_same(what: String, widths: Array[float]) -> void:
 	if widths.is_empty():
 		return

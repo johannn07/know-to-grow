@@ -288,8 +288,10 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       differ from `ui_tray_l1_s1.png` (alpha ratio 2.0802 against 2.1008, and
       shifted down the canvas). Swapping it means **re-measuring the card
       anchors in all four Level 1 stage scenes**, so it is not a file swap.
-      Cards draw themselves at rest over the blank slots; a spent card keeps its
-      darkened slot and may lose its icon entirely. Levels 3 and 4 undecided
+      The card side is built: a stage sets `blank_tray` and its cards draw
+      themselves at rest, while a wrong card leaves a darkened empty slot. So
+      the swap is the texture, `blank_tray = true`, and the re-measured anchors.
+      Levels 3 and 4 undecided
 - [ ] Item cards for Level 2's six items at the tray's slot size — the three in
       the Figma are Level 1 Stage 1's placeholders, reused in all five situations
 - [ ] Hero plant variants, including versions with roots exposed

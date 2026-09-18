@@ -147,6 +147,11 @@ is the part worth **not** copying nineteen times — every one of those was a bu
 at some point, and a fix should land once. Put anything a stage does differently
 in its own script; `on_correct` and `on_wrong` exist to be overridden.
 
+A stage on a **blank tray** — empty slots, Level 2 onwards — sets `blank_tray`,
+and its cards draw themselves at rest. On Level 1's drawn trays it stays off and
+a resting card draws nothing, because the picture already shows the item. A
+wrong card ends the same on both: no icon, slot darkened.
+
 **The stage scenes are yours, not generated.** They were first written by a
 script, but they are hand-owned now: sizes and positions get nudged in the
 editor, and regenerating a scene wholesale throws that away. To make a change

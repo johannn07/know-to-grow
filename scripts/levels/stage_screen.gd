@@ -73,6 +73,10 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 @export var alternate_correct_ids: Array[StringName] = []
 
 @export_group("Art")
+## On when this stage's tray has empty slots rather than its items painted in, so
+## every card draws itself at rest over its slot. Off for Level 1's drawn trays,
+## where the picture already shows each item. See [member OptionCard.draw_at_rest].
+@export var blank_tray: bool = false
 ## The "Correct Answer!" card for this stage, with Continue drawn into it.
 @export var correct_card: Texture2D
 ## The "Oops!" card, with Choose Again drawn into it.
@@ -122,6 +126,7 @@ func _ready() -> void:
 	_overlay.hide()
 	_overlay_button.pressed.connect(_on_overlay_pressed)
 	for card in cards():
+		card.draw_at_rest = blank_tray
 		card.dropped.connect(_on_card_dropped)
 	_show_prompt()
 	_show_header()
