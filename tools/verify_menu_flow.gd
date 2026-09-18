@@ -56,6 +56,7 @@ func _initialize() -> void:
 		"res://scenes/ui/badge_unlocked.tscn",
 		"res://scenes/ui/level_complete.tscn",
 		"res://scenes/ui/stage_select.tscn",
+		"res://scenes/ui/stage_select_l2.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -167,9 +168,13 @@ func _initialize() -> void:
 						row.pressed.get_connections().size() == 1,
 						"stage_select Row%d is connected" % (i + 1)
 					)
+			# On a fresh start only the first row is reached, and it opens only if
+			# its stage has been built.
+			var first_built := ResourceLoader.exists(select.stage_scene_paths[0])
 			_expect(
-				live == 1,
-				"stage_select opens exactly the one reached row on a fresh start (got %d)" % live
+				live == (1 if first_built else 0),
+				"%s opens exactly the reached, built rows on a fresh start (got %d)"
+					% [path.get_file(), live]
 			)
 			# How many rows there are is set by the scene, so everything the scene
 			# holds for them has to agree: one rect, one drawing each way, one
@@ -216,7 +221,8 @@ func _initialize() -> void:
 	await process_frame
 	await _check_press_bounce()
 	if state != null:
-		await _check_progress_reaches_the_rows(state)
+		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
+		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
@@ -301,6 +307,11 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/stage_select.tscn", "%Rows/Row2"],
 		["res://scenes/ui/stage_select.tscn", "%Rows/Row3"],
 		["res://scenes/ui/stage_select.tscn", "%Rows/Row4"],
+		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row1"],
+		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row2"],
+		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row3"],
+		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row4"],
+		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row5"],
 		["res://scenes/ui/how_to_play.tscn", "%BackButton"],
 		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton"],
 	]
@@ -340,51 +351,56 @@ func _check_art_over_art_darkens_only() -> void:
 
 
 ## The stage select is the only screen that reads progress, and opening it on a
-## fresh game proves nothing. This clears two stages and checks the rows and the
-## stars actually moved.
-func _check_progress_reaches_the_rows(state: GameStateStore) -> void:
+## fresh game proves nothing. This clears two stages of a level and checks the
+## rows and the stars actually moved, on each level's card.
+func _check_progress_reaches_the_rows(
+	state: GameStateStore, path: String, level_id: StringName
+) -> void:
 	state.reset()
-	state.record_stage_cleared(&"level_1", 1, 0)  # first try, three stars
-	state.record_stage_cleared(&"level_1", 2, 1)  # one wrong, two stars
+	state.record_stage_cleared(level_id, 1, 0)  # first try, three stars
+	state.record_stage_cleared(level_id, 2, 1)  # one wrong, two stars
+	var label := path.get_file()
 
-	var screen: StageSelect = await _instantiate("res://scenes/ui/stage_select.tscn") as StageSelect
+	var screen: StageSelect = await _instantiate(path) as StageSelect
 	if screen == null:
-		_expect(false, "stage select reopens with progress")
+		_expect(false, "%s reopens with progress" % label)
 		return
 	var rows: Control = screen.get_node("%Rows")
-	for stage_number in [1, 2, 3]:
-		_expect(
-			not (rows.get_node("Row%d" % stage_number) as Button).disabled,
-			"with stages 1 and 2 cleared, Row%d is open" % stage_number
-		)
-	_expect(
-		(rows.get_node("Row4") as Button).disabled,
-		"Row4 stays closed while stage 3 is unfinished"
-	)
-
-	# A row that has been reached must be drawn in its unlocked state, not just
-	# be tappable. That mismatch is exactly what the row art was added to fix.
 	var rows_art: Control = screen.get_node("%RowsArt")
-	for stage_number in [1, 2, 3, 4]:
-		var slot: ArtSlot = rows_art.get_node("Row%dArt" % stage_number)
-		var unlocked: bool = stage_number <= 3
+	for stage_number in range(1, screen.row_count() + 1):
+		var reached: bool = stage_number <= 3
+		# A reached row opens only if its stage has been built. Level 2's rows
+		# are drawn before its stages exist, and must not lead nowhere.
+		var built := ResourceLoader.exists(screen.stage_scene_paths[stage_number - 1])
+		var open := not (rows.get_node("Row%d" % stage_number) as Button).disabled
 		_expect(
-			slot.texture == screen._row_art(stage_number, unlocked),
-			"Row%d is drawn %s" % [stage_number, "unlocked" if unlocked else "locked"]
+			open == (reached and built),
+			"%s Row%d is %s (reached %s, built %s)"
+				% [label, stage_number, "open" if open else "closed", reached, built]
 		)
-
-	for expected: Array in [[1, 3], [2, 2], [3, 0], [4, 0]]:
-		var stage_number: int = expected[0]
+		# A reached row must be drawn in its unlocked state, not just be
+		# tappable. A locked row with no drawing of its own draws nothing, so
+		# the locked row painted into the card shows through instead.
+		var slot: ArtSlot = rows_art.get_node("Row%dArt" % stage_number)
+		var art := screen._row_art(stage_number, reached)
+		_expect(
+			slot.texture == art and (art != null or slot.hide_when_empty),
+			"%s Row%d is drawn %s" % [
+				label, stage_number,
+				"unlocked" if reached else ("locked" if art != null else "as the card paints it")
+			]
+		)
+		var want := 3 if stage_number == 1 else (2 if stage_number == 2 else 0)
 		var filled := 0
 		for slot_number in 3:
-			var slot: ArtSlot = rows_art.get_node(
+			var star: ArtSlot = rows_art.get_node(
 				"Row%dArt/Row%dStar%d" % [stage_number, stage_number, slot_number + 1]
 			)
-			if screen.star_filled != null and slot.texture == screen.star_filled:
+			if screen.star_filled != null and star.texture == screen.star_filled:
 				filled += 1
 		_expect(
-			filled == expected[1],
-			"Row%d shows %d filled star(s) (got %d)" % [stage_number, expected[1], filled]
+			filled == want,
+			"%s Row%d shows %d filled star(s) (got %d)" % [label, stage_number, want, filled]
 		)
 	screen.queue_free()
 	await process_frame

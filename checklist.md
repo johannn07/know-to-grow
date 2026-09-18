@@ -307,7 +307,12 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       other two have nothing
 - [x] Level 1 unlocked rows drawn, stars covered with the empty star
 - [ ] Level 1 locked rows drawn to match — still composited grey
-- [ ] Level 2 situation rows, locked and unlocked
+- [x] Level 2 situation select — `scenes/ui/stage_select_l2.tscn`: the drawn
+      card, five rows with their stars covered, star slots checked in a real
+      render. Locked rows are the card's own painting, so no locked art was
+      needed. Its rows stay closed until the Level 2 stage scenes exist, and
+      nothing routes to it yet. Background is Level 1's `bg_garden_stump.png`
+      for now
 - [ ] Feedback cards, completion badges, tool trays
 - [x] Fredoka One in `assets/fonts/`, wired once in `themes/ktg_theme.tres`
 - [ ] Prompts as live text on `ui_prompt_bubble.png`, Levels 1-4

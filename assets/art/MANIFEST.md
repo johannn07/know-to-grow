@@ -565,7 +565,7 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `ui_button_click_me.png` | 1368 x 447 | 560 KB | "Click Me" button, text drawn in |
 | `ui_button_grow_now.png` | 1368 x 438 | 569 KB | "Grow Now" button, text drawn in |
 | `ui_situation_select_l2.png` | 1535 x 2287 | 2.5 MB | Level 2 Monitoring card, Situation 1 unlocked, 2–5 locked |
-| `ui_situation_row_1..5.png` | ~1110 x 330 | ~380 KB each | unlocked Situation rows, one colour each, three filled stars |
+| `ui_situation_row_1..5.png` | ~1110 x 330 | ~380 KB each | unlocked Situation rows, one colour each, **stars covered with the empty star** |
 | `ui_level_intro_l2.png` | 1110 x 1373 | 1.4 MB | "Level 2 — Uh-oh! Your plant needs you!" |
 | `ui_level_complete_l2.png` | 1122 x 1336 | 1.4 MB | "Level 2 Complete! You saved the plant!" |
 | `ui_badge_plant_helper.png` | 1122 x 1388 | 1.8 MB | "Plant Helper" badge, Level 2's counterpart to Little Planter |
@@ -622,10 +622,24 @@ downscaled to 900 wide, the drawn header's width.
   live text on it, which is what the Figma already did for Situations 2–5.
 - **The blank bubble is decided: it is the prompt for every stage, Levels 1–4**,
   with the words set as live text in Fredoka One. See `CLAUDE.md`.
-- The situation rows are all drawn **unlocked with three filled stars**, and
-  there are no locked versions except as they appear inside
-  `ui_situation_select_l2.png`. Level 1 needed `tools/build_stage_rows.py` for
-  the same gap.
+- **Wired as `scenes/ui/stage_select_l2.tscn`.** The situation rows arrived
+  drawn unlocked with three filled stars; each star was covered with
+  `icon_star_empty.png` in the image itself, as Level 1's were. Every star was
+  found by its yellow and covered at the same outline margin, measured on
+  rows 1, 3 and 5 (strict-yellow box −8 / −10 / +10 / +15 px).
+- **No locked row art is needed.** The card already paints Situations 2–5
+  locked, with empty stars, so a locked row draws nothing and the card shows
+  through. `row_art_locked` is five nulls, and `build_stage_rows.py` is not
+  involved.
+- **Placement was found by edge matching**, since the card's rows are grey and
+  the row art is coloured. Rows 2–5 sit on the card at 1.00 scale, row 1 at
+  **0.97**, which is why its rect is narrower. Rects in fractions of the card:
+  `(0.1492, 0.2038, 0.7140, 0.1373)`, `(0.1427, 0.3389, 0.7257, 0.1482)`,
+  `(0.1420, 0.4880, 0.7264, 0.1447)`, `(0.1459, 0.6231, 0.7205, 0.1478)`,
+  `(0.1446, 0.7731, 0.7173, 0.1443)`. The X disc is `(0.8534, 0.1128, 0.1283,
+  0.0870)`, 197 x 199 px.
+- Stars checked in a real render with all fifteen earned: every filled star
+  sits on its drawn empty one.
 
 ## Still in the Figma file, not yet extracted
 

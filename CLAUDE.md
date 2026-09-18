@@ -286,6 +286,9 @@ not a blank one.
   star slots. Check it in a real render with all stars filled, not headless.
 - Level 1's unlocked rows are the drawn `ui_stage_row_1..4.png`. The locked rows
   still come from `tools/build_stage_rows.py`, which now writes only those four.
+- Level 2's is `stage_select_l2.tscn`. Its card paints Situations 2–5 locked,
+  so `row_art_locked` is empty and a locked row shows the card's painting. A
+  reached row stays closed until its stage scene exists.
 
 ## Art laid over art does not bounce — decided
 
