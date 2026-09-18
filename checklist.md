@@ -209,10 +209,15 @@ unlocks **Little Planter**.
       their plant lower, so their drop zone starts at 880 rather than 800 — it
       still ends above the tray. 1 → 2 → 3 → 4 → 5 are chained; played by
       `verify_level_2` and checked in a real render
-- [ ] **Level 2 ends back at the situation select.** Level 2 Complete and the
-      Plant Helper badge are drawn (`ui_level_complete_l2.png`,
-      `ui_badge_plant_helper.png`) but not built, so Situation 5 has nowhere
-      further to go yet
+- [x] **Level 2's ending**, the same beats as Level 1's with one more badge:
+      Situation 5 → Level 2 Complete → **Plant Helper** → **Green Thumb** →
+      "You Completed Level 2!" sign → hub. The sign's Grow Now is its own pill
+      cut from the sign (`ui_button_grow_now_sign_l2.png`), darken only. All
+      over `bg_garden_stump`, the Level 2 intro's garden, on the Level 2 track.
+      The hub's third plant is `plant_leafy.png`, "SPROUT", and its button then
+      says "Level 3: Identifying" and opens `level_intro_l3.tscn`
+- [ ] **Level 3 intro's Continue goes back to the hub** — Level 3 has no stage
+      select or stages yet. Point `next_scene_path` at them once they exist
 - [x] ~~**The right answer is the leftmost card in every Level 2 situation.**~~
       **Answered: shuffled per play.** The
       approved table lists the answer first, and the scenes follow the content
@@ -257,6 +262,13 @@ the open content questions, not bugs.
       looks thirsty. What does it need?"). The artwork wins per the baked-text
       decision and every transcript now matches — but the teaching-content owner
       should see the whole list before voice-over is recorded. **⚠**
+- [ ] **Two more transcripts corrected to new artwork**, same rule. Level 2's
+      completion was "You took great care of the plant!"; the card says "You
+      saved the plant! You're a great helper!" Level 3's instruction was "Look
+      closely at the plant. Can you identify the plant part?"; the intro card
+      says "Detective time! Read each clue and find which plant part it
+      describes." — which also describes Level 3 as **clues**, a teaching
+      change worth the owner's eye. **⚠**
 - [ ] **Level 1 has no completion celebration** in the design document while
       Level 4 does. Give every level the same reward beat
 - [ ] Wrong-answer hints are written one per *item* (6 lines for Level 2), not

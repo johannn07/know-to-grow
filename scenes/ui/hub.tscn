@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://c50xt3o5edhw2" path="res://assets/art/plants/plant_seed_pot.png" id="7_plant"]
 [ext_resource type="Texture2D" uid="uid://df2ew1520xccu" path="res://assets/art/plants/plant_sprout.png" id="11_sprout"]
 [ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="12_level_1"]
+[ext_resource type="Texture2D" uid="uid://4r6r0pxfsyqv" path="res://assets/art/plants/plant_leafy.png" id="13_leafy"]
+[ext_resource type="Resource" uid="uid://dkswoxvpud5gj" path="res://content/level_2_monitoring.tres" id="14_level_2"]
 [ext_resource type="Texture2D" uid="uid://cs58a4b3s71fj" path="res://assets/art/ui/hub/ui_tab_lessons.png" id="8_lessons"]
 [ext_resource type="FontFile" uid="uid://5dh1bd816wds" path="res://assets/fonts/fredoka_one/fredoka_one_regular.ttf" id="8_myxet"]
 [ext_resource type="Texture2D" uid="uid://birib6hvlxlbl" path="res://assets/art/ui/hub/ui_tab_garden.png" id="9_garden"]
@@ -53,11 +55,11 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_hub")
 music_track = 1
-plant_stages = Array[Texture2D]([ExtResource("7_plant"), ExtResource("11_sprout")])
-plant_stage_names = Array[String](["SEED", "ROOT"])
-growth_levels = Array[Resource]([ExtResource("12_level_1")])
-level_scene_paths = Array[String](["res://scenes/ui/level_intro.tscn", "res://scenes/ui/level_intro_l2.tscn"])
-level_labels = Array[String](["Level 1: Grow a Seed", "Level 2: Help Your Plant"])
+plant_stages = Array[Texture2D]([ExtResource("7_plant"), ExtResource("11_sprout"), ExtResource("13_leafy")])
+plant_stage_names = Array[String](["SEED", "ROOT", "SPROUT"])
+growth_levels = Array[Resource]([ExtResource("12_level_1"), ExtResource("14_level_2")])
+level_scene_paths = Array[String](["res://scenes/ui/level_intro.tscn", "res://scenes/ui/level_intro_l2.tscn", "res://scenes/ui/level_intro_l3.tscn"])
+level_labels = Array[String](["Level 1: Grow a Seed", "Level 2: Help Your Plant", "Level 3: Identifying"])
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true

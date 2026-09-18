@@ -574,6 +574,11 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `ui_level_complete_l2.png` | 1122 x 1336 | 1.4 MB | "Level 2 Complete! You saved the plant!" |
 | `ui_badge_plant_helper.png` | 1122 x 1388 | 1.8 MB | "Plant Helper" badge, Level 2's counterpart to Little Planter |
 | `ui_level_complete_sign_l1.png` | 1072 x 1379 | 1.3 MB | signpost, "You Completed Level 1!" with a Grow Now button drawn in |
+| `ui_badge_green_thumb.png` | 1122 x 1402 | 1.8 MB | "Green Thumb — You know how to care for plants!", Level 2's second badge, after Plant Helper |
+| `ui_level_complete_sign_l2.png` | 1086 x 1404 | 1.3 MB | signpost, "You Completed Level 2!" with a Grow Now button drawn in; top 44 px of transparent margin cropped |
+| `ui_button_grow_now_sign_l2.png` | 720 x 227 | 195 KB | the Grow Now pill **cut from** `ui_level_complete_sign_l2.png` with `ui_button_grow_now_sign.png`'s stadium mask, laid back over itself at `(0.1685, 0.7927, 0.663, 0.1617)` of the sign. Not the Level 1 pill: the two are drawn slightly differently |
+| `ui_level_intro_l3.png` | 1122 x 1402 | 1.4 MB | "Level 3 — Detective time! Read each clue and find which plant part it describes." |
+| `plant_leafy.png` | 650 x 735 | 434 KB | leafy sprout with roots in a mound of soil — the hub's plant once Level 2 is cleared, "SPROUT"; cropped to alpha and scaled to 650 wide like `plant_sprout` |
 | `ui_correct_l2_s1.png` | 800 x 547 | 349 KB | Correct Answer, Shovel |
 | `ui_correct_l2_s2.png` | 800 x 622 | 447 KB | Correct Answer, Pruning Shears |
 | `ui_correct_l2_s3.png` | 800 x 588 | 394 KB | Correct Answer, Water |

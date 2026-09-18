@@ -57,6 +57,11 @@ func _initialize() -> void:
 		"res://scenes/ui/badge_unlocked.tscn",
 		"res://scenes/ui/level_complete_sign.tscn",
 		"res://scenes/ui/level_complete.tscn",
+		"res://scenes/ui/level_complete_l2.tscn",
+		"res://scenes/ui/badge_unlocked_l2.tscn",
+		"res://scenes/ui/badge_unlocked_l2_green_thumb.tscn",
+		"res://scenes/ui/level_complete_sign_l2.tscn",
+		"res://scenes/ui/level_intro_l3.tscn",
 		"res://scenes/ui/stage_select.tscn",
 		"res://scenes/ui/stage_select_l2.tscn",
 	]:
@@ -228,6 +233,7 @@ func _initialize() -> void:
 
 	await process_frame
 	await _check_press_bounce()
+	_check_level_2_ending()
 	if state != null:
 		await _check_hub_grows_the_plant(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
@@ -235,6 +241,28 @@ func _initialize() -> void:
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
+
+
+## Level 2 ends the way Level 1 does, with one more card: Situation 5 leads to
+## Level 2 Complete, then both of its badges, then its sign, whose Grow Now goes
+## to the hub where the plant has grown. Each screen has to name the next.
+func _check_level_2_ending() -> void:
+	var chain: Array[String] = [
+		"res://scenes/levels/level_2/stage_5.tscn",
+		"res://scenes/ui/level_complete_l2.tscn",
+		"res://scenes/ui/badge_unlocked_l2.tscn",
+		"res://scenes/ui/badge_unlocked_l2_green_thumb.tscn",
+		"res://scenes/ui/level_complete_sign_l2.tscn",
+		"res://scenes/ui/hub.tscn",
+	]
+	for i in chain.size() - 1:
+		var node: Node = (load(chain[i]) as PackedScene).instantiate()
+		var next: String = node.get("done_scene_path") if node is StageScreen 			else node.get("next_scene_path")
+		_expect(
+			next == chain[i + 1],
+			"%s leads on to %s" % [chain[i].get_file(), chain[i + 1].get_file()]
+		)
+		node.free()
 
 
 ## A press should squash what the child can see and let it spring back. A themed
@@ -254,6 +282,10 @@ func _check_press_bounce() -> void:
 		["res://scenes/ui/level_intro_l2.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/level_complete.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/badge_unlocked.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/level_complete_l2.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked_l2.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked_l2_green_thumb.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/level_intro_l3.tscn", "%ActionButton", "../ButtonArt"],
 	]
 	for case: Array in cases:
 		var screen: Node = await _instantiate(case[0])
@@ -323,6 +355,7 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row4"],
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row5"],
 		["res://scenes/ui/level_complete_sign.tscn", "%ActionButton"],
+		["res://scenes/ui/level_complete_sign_l2.tscn", "%ActionButton"],
 		["res://scenes/ui/how_to_play.tscn", "%BackButton"],
 		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton"],
 	]
@@ -418,16 +451,29 @@ func _check_progress_reaches_the_rows(
 
 
 ## The hub's plant is how a finished level shows: seed until Level 1 is cleared,
-## the rooted seed after. A level three stages in must not count.
+## the rooted seed after, the leafy sprout once Level 2 is too. A level part way
+## through must not count.
 func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 	var plays := {
 		0: ["Level 1: Grow a Seed", "res://scenes/ui/level_intro.tscn"],
 		1: ["Level 2: Help Your Plant", "res://scenes/ui/level_intro_l2.tscn"],
+		2: ["Level 3: Identifying", "res://scenes/ui/level_intro_l3.tscn"],
 	}
-	for case: Array in [[0, 0, "SEED"], [3, 0, "SEED"], [4, 1, "ROOT"]]:
+	# [Level 1 stages cleared, Level 2 situations cleared, plant stage, its name]
+	for case: Array in [
+		[0, 0, 0, "SEED"], [3, 0, 0, "SEED"], [4, 0, 1, "ROOT"], [4, 4, 1, "ROOT"],
+		[4, 5, 2, "SPROUT"],
+	]:
+		var level_1: int = case[0]
+		var level_2: int = case[1]
+		var want_stage: int = case[2]
+		var want_name: String = case[3]
+		var cleared := "%d of Level 1 and %d of Level 2 cleared" % [level_1, level_2]
 		state.reset()
-		for stage_number in range(1, int(case[0]) + 1):
+		for stage_number in range(1, level_1 + 1):
 			state.record_stage_cleared(&"level_1", stage_number, 0)
+		for stage_number in range(1, level_2 + 1):
+			state.record_stage_cleared(&"level_2", stage_number, 0)
 		var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
 		if hub == null:
 			continue
@@ -435,18 +481,17 @@ func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 		var plant: ArtSlot = hub.get_node("%Plant")
 		var label: Label = hub.get_node_or_null("%PlantStageLabel") as Label
 		_expect(
-			stage == case[1] and plant.texture == hub.plant_stages[case[1]]
-				and (label == null or label.text == case[2]),
-			"hub with %d of Level 1's stages cleared shows the %s (stage %d)"
-				% [case[0], case[2], stage]
+			stage == want_stage and plant.texture == hub.plant_stages[want_stage]
+				and (label == null or label.text == want_name),
+			"hub with %s shows the %s (stage %d)" % [cleared, want_name, stage]
 		)
-		# The play button moves on with the plant: once Level 1 is done it names
-		# Level 2 and leads to Level 2's overlay, not back into Level 1.
+		# The play button moves on with the plant: once a level is done it names
+		# the next one and leads to that level's overlay, not back into the last.
 		var play: Button = hub.get_node("%PlayButton")
-		var want: Array = plays[case[1]]
+		var want: Array = plays[want_stage]
 		_expect(
 			play.text == want[0] and hub.level_scene_path() == want[1],
-			"hub with %d of Level 1's stages cleared offers \"%s\"" % [case[0], want[0]]
+			"hub with %s offers \"%s\"" % [cleared, want[0]]
 		)
 		hub.queue_free()
 		await process_frame

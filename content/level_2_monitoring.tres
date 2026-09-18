@@ -119,6 +119,6 @@ title = "Level 2: Monitoring"
 instruction_transcript = "Help the plant! Drag the correct tool or basic need to fix its situation."
 challenges = Array[ExtResource("1_xkpm1")]([SubResource("Resource_72tqy"), SubResource("Resource_qphrj"), SubResource("Resource_t7a6i"), SubResource("Resource_jqcrv"), SubResource("Resource_aoxk1")])
 shuffle_challenges = true
-completion_transcript = "You took great care of the plant!"
+completion_transcript = "You saved the plant! You're a great helper!"
 instruction_vo_key = &"level_2_instruction"
 completion_vo_key = &"level_2_complete"

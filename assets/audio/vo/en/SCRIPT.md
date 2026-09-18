@@ -32,13 +32,13 @@ match the artwork exactly, because the art is what the child sees.
 | `l2_thirsty_prompt` | The soil is dry and the plant looks thirsty. What does it need? |
 | `l2_light_prompt` | The plant looks weak because it does not get enough light. What does it need? |
 | `l2_nutrients_prompt` | The plant needs extra nutrients to help it grow. What can provide nutrients? |
-| `level_2_complete` | You took great care of the plant! |
+| `level_2_complete` | You saved the plant! You're a great helper! |
 
 ## Level 3: Identifying
 
 | Key | Line |
 |---|---|
-| `level_3_instruction` | Look closely at the plant. Can you identify the plant part? |
+| `level_3_instruction` | Detective time! Read each clue and find which plant part it describes. |
 | `l3_leaves_prompt` | I am green and flat. What am I? |
 | `l3_stem_prompt` | I stand tall like a trunk or a straw. What am I? |
 | `l3_roots_prompt` | I live underground in the soil. What am I? |

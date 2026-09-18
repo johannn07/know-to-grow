@@ -15,6 +15,7 @@ const MENU_SCREENS: Array[String] = [
 	"res://scenes/ui/hub.tscn",
 	"res://scenes/ui/how_to_play.tscn",
 	"res://scenes/ui/level_select_stub.tscn",
+	"res://scenes/ui/level_intro_l3.tscn",
 ]
 const LEVEL_2_SCREENS: Array[String] = [
 	"res://scenes/ui/level_intro_l2.tscn",
@@ -24,6 +25,10 @@ const LEVEL_2_SCREENS: Array[String] = [
 	"res://scenes/levels/level_2/stage_3.tscn",
 	"res://scenes/levels/level_2/stage_4.tscn",
 	"res://scenes/levels/level_2/stage_5.tscn",
+	"res://scenes/ui/level_complete_l2.tscn",
+	"res://scenes/ui/badge_unlocked_l2.tscn",
+	"res://scenes/ui/badge_unlocked_l2_green_thumb.tscn",
+	"res://scenes/ui/level_complete_sign_l2.tscn",
 ]
 const LEVEL_SCREENS: Array[String] = [
 	"res://scenes/ui/level_intro.tscn",
