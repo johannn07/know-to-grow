@@ -63,9 +63,9 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 ## Matches a ChallengeData in content/*.tres. The smoke test checks this scene
 ## against it, and a stage with a %PromptBubble reads its prompt from it.
 @export var challenge_id: StringName = &""
-## The level's reviewed content file. Only a stage with a %PromptBubble needs
-## it: the bubble's words are that challenge's `prompt_transcript`, read here at
-## runtime so the reviewed transcript is the only copy of them.
+## The level's reviewed content file. Only a stage with a %PromptBubble or a
+## %HeaderSign needs it: their words are that challenge's transcripts, read here
+## at runtime so the reviewed transcript is the only copy of them.
 @export var level_content: LevelData
 ## The [member OptionCard.option_id] that is correct here.
 @export var correct_option_id: StringName = &""
@@ -124,6 +124,7 @@ func _ready() -> void:
 	for card in cards():
 		card.dropped.connect(_on_card_dropped)
 	_show_prompt()
+	_show_header()
 
 
 ## The stage's option cards. Each one is anchored over a slot drawn into the
@@ -180,14 +181,33 @@ func _show_prompt() -> void:
 	var bubble: PromptBubble = get_node_or_null("%PromptBubble") as PromptBubble
 	if bubble == null:
 		return
+	var challenge: ChallengeData = _challenge("bubble")
+	if challenge != null:
+		bubble.text = challenge.prompt_transcript
+
+
+## Writes the plaque and banner onto a blank header sign. A stage without a
+## %HeaderSign has its header drawn into the art — Level 1's four do.
+func _show_header() -> void:
+	var header: HeaderSign = get_node_or_null("%HeaderSign") as HeaderSign
+	if header == null:
+		return
+	var challenge: ChallengeData = _challenge("header")
+	if challenge != null:
+		header.label_text = challenge.header_label_transcript
+		header.title_text = challenge.header_title_transcript
+
+
+## This stage's challenge in [member level_content], or null with a warning
+## naming what is left blank because of it.
+func _challenge(left_blank: String) -> ChallengeData:
 	var challenge: ChallengeData = null
 	if level_content != null:
 		challenge = level_content.get_challenge(challenge_id)
 	if challenge == null:
-		push_warning("%s: no challenge '%s' in level_content, so the bubble is blank"
-			% [name, challenge_id])
-		return
-	bubble.text = challenge.prompt_transcript
+		push_warning("%s: no challenge '%s' in level_content, so the %s is blank"
+			% [name, challenge_id, left_blank])
+	return challenge
 
 
 ## Hooks for a stage that needs to do something of its own. Override in the

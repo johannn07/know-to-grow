@@ -277,7 +277,7 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [x] Art sorted into category folders under `assets/art/`
 - [ ] 16 item icons (1254 × 1254 in the source) — 13 in the repo, incl. Fertilizer, Water, Pruning Shears
 - [x] Stage backgrounds (852 × 1846) — Level 1 and all five Level 2 situations
-- [ ] **Import the blank header sign** and retire `ui_header_l2_s1.png`.
+- [x] **Import the blank header sign** and retire `ui_header_l2_s1.png`.
       Decided: all five situations use the blank sign with "Situation N" on the
       plaque and the title on the banner as live text, which is what the Figma
       already does for Situations 2-5 — S1 was the only one ever rendered. The
@@ -306,8 +306,10 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [ ] Feedback cards, completion badges, tool trays
 - [x] Fredoka One in `assets/fonts/`, wired once in `themes/ktg_theme.tres`
 - [ ] Prompts as live text on `ui_prompt_bubble.png`, Levels 1-4
-- [ ] Headers as live text on the blank sign, Level 2 — two theme label
-      variations, white-with-outline on the plaque and dark brown on the banner
+- [x] Headers as live text on the blank sign, Level 2 — the `HeaderSign`
+      component, with `HeaderLabel` (58 px, white outlined) on the plaque and
+      `HeaderTitle` (51 px, dark brown) on the banner. Filled by `StageScreen`
+      from the challenge's header transcripts. No stage uses it yet
 - [x] ~~Fix `tools/export_vo_script.gd` to write under
       `res://assets/audio/vo/en/`~~ — done, along with the same stale path in
       `option_data.gd`'s doc comment

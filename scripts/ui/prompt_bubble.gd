@@ -14,7 +14,7 @@ extends AspectRatioContainer
 ##
 ## The text is one fixed size from the theme's PromptText variation rather than
 ## shrunk to fit. A prompt that no longer fits is clipped, and
-## tools/verify_prompt_bubble.gd fails on it — a loud test beats text that
+## tools/verify_live_text.gd fails on it — a loud test beats text that
 ## quietly gets smaller from one stage to the next.
 
 ## The blank bubble. Its pixel ratio sets the shape of this control.

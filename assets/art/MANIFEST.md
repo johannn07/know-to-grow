@@ -570,7 +570,6 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `ui_level_complete_l2.png` | 1122 x 1336 | 1.4 MB | "Level 2 Complete! You saved the plant!" |
 | `ui_badge_plant_helper.png` | 1122 x 1388 | 1.8 MB | "Plant Helper" badge, Level 2's counterpart to Little Planter |
 | `ui_level_complete_sign_l1.png` | 1072 x 1379 | 1.3 MB | signpost, "You Completed Level 1!" with a Grow Now button drawn in |
-| `ui_header_l2_s1.png` | 900 x 314 | 298 KB | "Situation 1 — Hard and Dry Soil" |
 | `ui_correct_l2_s1.png` | 800 x 547 | 349 KB | Correct Answer, Shovel |
 | `ui_correct_l2_s2.png` | 800 x 622 | 447 KB | Correct Answer, Pruning Shears |
 | `ui_correct_l2_s3.png` | 800 x 588 | 394 KB | Correct Answer, Water |
@@ -587,8 +586,23 @@ the `PromptBubble` component. The prompt is live text over the cream box:
   `(0.364, 0.3439) - (0.890, 0.7257)` in fractions of the image.
 - **At a stage's 964 px wide slot** the bubble is 964 x 457 and the text box is
   507 x 174, which holds three lines of 34 px `PromptText` — the largest size at
-  which all 19 prompts fit. `tools/verify_prompt_bubble.gd` enforces it.
+  which all 19 prompts fit. `tools/verify_live_text.gd` enforces it.
 - The Figma holds this bubble at **1774 x 887**, if it ever needs to be sharper.
+
+**`ui_header_blank.png`**, 900 x 307, 274 KB, in `ui/common/` — the blank
+wooden stage header, wired as `scenes/components/header_sign.tscn`, the
+`HeaderSign` component. Cut from Figma image `e54af65e3603` (1672 x 941) by
+cropping to alpha > 16 — the source's height was mostly faint padding — then
+downscaled to 900 wide, the drawn header's width.
+
+- **Plaque** text rect `(0.2556, 0.0847) - (0.7389, 0.4463)`: the wooden plank
+  at y 26-137, between its two nails. 58 px `HeaderLabel`, white outlined in the
+  prompts' dark brown.
+- **Banner** text rect `(0.0789, 0.4691) - (0.9189, 0.8567)`: the cream at
+  x 47-851, y 144-263, inset 24 px. 51 px `HeaderTitle`, the largest at which
+  "Needs Extra Nutrients" still fits on one line.
+- Sizes are chosen at a **660 px wide** header, Level 1's header slot, where
+  the sign is 660 x 225. `tools/verify_live_text.gd` enforces both.
 
 - **Thirteen files in the folder were already here** and were skipped: the
   hub's trophy, star, book, sprout pot, seed pot and sign; the green button
@@ -603,7 +617,9 @@ the `PromptBubble` component. The prompt is live text over the cream box:
   Complete and Badge Unlocked already use, so it is not copied — the Situation 2
   scene points at `bg_bed_sprout.png`. Situation 4's Correct card is
   `ui_correct_l1_s4.png` the same way.
-- **Situations 2–5 have no header.**
+- **No situation has a drawn header any more.** `ui_header_l2_s1.png` was
+  removed so all five match: every Level 2 header is the blank sign below with
+  live text on it, which is what the Figma already did for Situations 2–5.
 - **The blank bubble is decided: it is the prompt for every stage, Levels 1–4**,
   with the words set as live text in Fredoka One. See `CLAUDE.md`.
 - The situation rows are all drawn **unlocked with three filled stars**, and

@@ -213,6 +213,9 @@ Both are on `ChallengeData`, both are **rendered**, and they join the prompt as
 exceptions to the never-render-a-transcript rule. Set both or neither;
 `verify_content` enforces that.
 
+It is the `HeaderSign` component: a stage that holds a `%HeaderSign` has it
+filled from its challenge by `StageScreen`, the same way a `%PromptBubble` is.
+
 Level 1's four headers keep their drawn wording and leave both fields empty.
 Levels 3 and 4 are undecided.
 
@@ -365,7 +368,7 @@ property that does not exist and fail silently.
 | Menu flow smoke test | `godot --headless --path . -s res://tools/verify_menu_flow.gd` |
 | Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
 | Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
-| Every prompt fits its bubble | `godot --headless --path . -s res://tools/verify_prompt_bubble.gd` |
+| Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.
