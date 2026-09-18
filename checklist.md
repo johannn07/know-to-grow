@@ -204,7 +204,21 @@ unlocks **Little Planter**.
       cards drawn on the blank tray, Continue below the Correct card. Played by
       `tools/verify_level_2.gd` and checked in a real render. Leads back to the
       situation select until Situation 2 exists
-- [ ] Level 2 Situations 2-5, copying Situation 1's numbers
+- [x] Level 2 Situations 2-5, copying Situation 1's numbers. Each has its own
+      garden, Correct card (Situation 4 borrows `ui_correct_l1_s4.png`, which
+      was Level 2 art to begin with), cards and answer. Situations 4 and 5 put
+      their plant lower, so their drop zone starts at 880 rather than 800 — it
+      still ends above the tray. 1 → 2 → 3 → 4 → 5 are chained; played by
+      `verify_level_2` and checked in a real render
+- [ ] **Level 2 ends back at the situation select.** Level 2 Complete and the
+      Plant Helper badge are drawn (`ui_level_complete_l2.png`,
+      `ui_badge_plant_helper.png`) but not built, so Situation 5 has nowhere
+      further to go yet
+- [ ] **The right answer is the leftmost card in every Level 2 situation.** The
+      approved table lists the answer first, and the scenes follow the content
+      order. On a blank tray a card's position is no longer fixed by the
+      picture, so the order could be varied — in the content, or shuffled per
+      play. **⚠**
 - [x] ~~**The sun card says "Sun"; Level 2's content called it "Sunlight"**~~
       **Answered: "Sun".** Level 2's item is labelled Sun and shares Level 1's
       `item_sun` voice-over line, so it is recorded once. Its internal id stays

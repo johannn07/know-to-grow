@@ -1,26 +1,26 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/levels/level_2/stage_1.gd" id="1_stage"]
+[ext_resource type="Script" path="res://scripts/levels/level_2/stage_4.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
-[ext_resource type="Texture2D" uid="uid://jdsnyca006p" path="res://assets/art/backgrounds/bg_soil_cracked.png" id="5_bg"]
+[ext_resource type="Texture2D" uid="uid://4am2lkdm2dj6" path="res://assets/art/backgrounds/bg_plant_shade.png" id="5_bg"]
 [ext_resource type="PackedScene" path="res://scenes/components/header_sign.tscn" id="6_header"]
 [ext_resource type="PackedScene" path="res://scenes/components/prompt_bubble.tscn" id="7_bubble"]
-[ext_resource type="Texture2D" uid="uid://cijlbe5nyykbd" path="res://assets/art/levels/level_2/ui_correct_l2_s1.png" id="9_ok"]
+[ext_resource type="Texture2D" uid="uid://d1h2lou6sg6gk" path="res://assets/art/levels/level_1/ui_correct_l1_s4.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://assets/art/levels/level_1/ui_oops_tool.png" id="10_oops"]
 [ext_resource type="Texture2D" uid="uid://c5rck1pxv0f6y" path="res://assets/art/ui/common/ui_tray_blank.png" id="11_tray"]
 [ext_resource type="Resource" uid="uid://dkswoxvpud5gj" path="res://content/level_2_monitoring.tres" id="12_content"]
-[ext_resource type="Texture2D" uid="uid://dwfmtdeopuw6y" path="res://assets/art/items/icon_shovel.png" id="13_shovel"]
-[ext_resource type="Texture2D" uid="uid://rul31j51fqh7" path="res://assets/art/items/icon_watering_can.png" id="14_watering_can"]
-[ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://assets/art/items/icon_sun.png" id="15_sun"]
+[ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://assets/art/items/icon_sun.png" id="13_card_1"]
+[ext_resource type="Texture2D" uid="uid://cnhqg2yxv5yun" path="res://assets/art/items/icon_water.png" id="14_card_2"]
+[ext_resource type="Texture2D" uid="uid://hkr7nfxuylle" path="res://assets/art/items/icon_fertilizer.png" id="15_card_3"]
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui/buttons/ui_button_continue.png" id="16_continue"]
 [ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui/buttons/ui_button_choose_again.png" id="17_choose_again"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="18_artbtn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
-[node name="Stage1" type="Control"]
+[node name="Stage4" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,10 +31,10 @@ theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
 music_track = 3
 level_id = &"level_2"
-stage_number = 1
-challenge_id = &"l2_hard_soil"
+stage_number = 4
+challenge_id = &"l2_light"
 level_content = ExtResource("12_content")
-correct_option_id = &"shovel"
+correct_option_id = &"sunlight"
 blank_tray = true
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
@@ -42,7 +42,7 @@ continue_art = ExtResource("16_continue")
 choose_again_art = ExtResource("17_choose_again")
 correct_button_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
 correct_art_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
-next_stage_path = "res://scenes/levels/level_2/stage_2.tscn"
+next_stage_path = "res://scenes/levels/level_2/stage_5.tscn"
 done_scene_path = "res://scenes/ui/stage_select_l2.tscn"
 
 [node name="Background" type="Control" parent="."]
@@ -58,7 +58,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("5_bg")
 fit = 2
-slot_name = "bg_soil_cracked"
+slot_name = "bg_plant_shade"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
 
 [node name="HeaderSign" parent="." instance=ExtResource("6_header")]
@@ -98,7 +98,7 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 160.0
-offset_top = 800.0
+offset_top = 880.0
 offset_right = -160.0
 offset_bottom = -600.0
 grow_horizontal = 2
@@ -152,7 +152,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Shovel" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Sunlight" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.083
@@ -163,10 +163,10 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-option_id = &"shovel"
-icon = ExtResource("13_shovel")
+option_id = &"sunlight"
+icon = ExtResource("13_card_1")
 
-[node name="WateringCan" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Water" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.364
@@ -177,10 +177,10 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-option_id = &"watering_can"
-icon = ExtResource("14_watering_can")
+option_id = &"water"
+icon = ExtResource("14_card_2")
 
-[node name="Sunlight" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
+[node name="Fertilizer" parent="TrayArea/TrayAspect/Tray/Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.648
@@ -191,8 +191,8 @@ offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-option_id = &"sunlight"
-icon = ExtResource("15_sun")
+option_id = &"fertilizer"
+icon = ExtResource("15_card_3")
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

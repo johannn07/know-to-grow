@@ -20,6 +20,10 @@ const LEVEL_2_SCREENS: Array[String] = [
 	"res://scenes/ui/level_intro_l2.tscn",
 	"res://scenes/ui/stage_select_l2.tscn",
 	"res://scenes/levels/level_2/stage_1.tscn",
+	"res://scenes/levels/level_2/stage_2.tscn",
+	"res://scenes/levels/level_2/stage_3.tscn",
+	"res://scenes/levels/level_2/stage_4.tscn",
+	"res://scenes/levels/level_2/stage_5.tscn",
 ]
 const LEVEL_SCREENS: Array[String] = [
 	"res://scenes/ui/level_intro.tscn",
