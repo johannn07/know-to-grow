@@ -60,9 +60,13 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 ## Where this stage sits in its level, counting from 1. It decides which stage
 ## select row this is, so it has to match the order the rows are drawn in.
 @export var stage_number: int = 0
-## Matches a ChallengeData in content/*.tres. Nothing reads it at runtime — it
-## is what lets the smoke test check this scene against the reviewed content.
+## Matches a ChallengeData in content/*.tres. The smoke test checks this scene
+## against it, and a stage with a %PromptBubble reads its prompt from it.
 @export var challenge_id: StringName = &""
+## The level's reviewed content file. Only a stage with a %PromptBubble needs
+## it: the bubble's words are that challenge's `prompt_transcript`, read here at
+## runtime so the reviewed transcript is the only copy of them.
+@export var level_content: LevelData
 ## The [member OptionCard.option_id] that is correct here.
 @export var correct_option_id: StringName = &""
 ## Answers that also count, for a stage with more than one good answer.
@@ -119,6 +123,7 @@ func _ready() -> void:
 	_overlay_button.pressed.connect(_on_overlay_pressed)
 	for card in cards():
 		card.dropped.connect(_on_card_dropped)
+	_show_prompt()
 
 
 ## The stage's option cards. Each one is anchored over a slot drawn into the
@@ -166,6 +171,23 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 			audio.play_wrong()
 		on_wrong(card)
 		_show_feedback(wrong_card, wrong_button_rect, choose_again_art, wrong_art_rect)
+
+
+## Writes this stage's question into its speech bubble. A stage without a
+## %PromptBubble has its prompt drawn into the art instead — Level 1's four do —
+## and there is nothing to fill.
+func _show_prompt() -> void:
+	var bubble: PromptBubble = get_node_or_null("%PromptBubble") as PromptBubble
+	if bubble == null:
+		return
+	var challenge: ChallengeData = null
+	if level_content != null:
+		challenge = level_content.get_challenge(challenge_id)
+	if challenge == null:
+		push_warning("%s: no challenge '%s' in level_content, so the bubble is blank"
+			% [name, challenge_id])
+		return
+	bubble.text = challenge.prompt_transcript
 
 
 ## Hooks for a stage that needs to do something of its own. Override in the

@@ -579,6 +579,17 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 
 Notes:
 
+**`ui_prompt_bubble.png` is wired** as `scenes/components/prompt_bubble.tscn`,
+the `PromptBubble` component. The prompt is live text over the cream box:
+
+- **Cream box** measured at 340-914 x 151-356 px of the 1000 x 474 image. The
+  text is inset 24 px horizontally and 12 px vertically, so its rect is
+  `(0.364, 0.3439) - (0.890, 0.7257)` in fractions of the image.
+- **At a stage's 964 px wide slot** the bubble is 964 x 457 and the text box is
+  507 x 174, which holds three lines of 34 px `PromptText` — the largest size at
+  which all 19 prompts fit. `tools/verify_prompt_bubble.gd` enforces it.
+- The Figma holds this bubble at **1774 x 887**, if it ever needs to be sharper.
+
 - **Thirteen files in the folder were already here** and were skipped: the
   hub's trophy, star, book, sprout pot, seed pot and sign; the green button
   plate (the uncropped source of `ui_button_primary.png`); the Sun and Watering

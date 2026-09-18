@@ -365,6 +365,7 @@ property that does not exist and fail silently.
 | Menu flow smoke test | `godot --headless --path . -s res://tools/verify_menu_flow.gd` |
 | Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
 | Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
+| Every prompt fits its bubble | `godot --headless --path . -s res://tools/verify_prompt_bubble.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.

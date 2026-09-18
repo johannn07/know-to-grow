@@ -40,3 +40,12 @@ extends Resource
 @export var instruction_vo_key: StringName = &""
 @export var completion_vo_key: StringName = &""
 @export var final_fun_fact_vo_key: StringName = &""
+
+
+## The challenge with this id, or null. A stage uses it to find its own
+## transcripts by its [member StageScreen.challenge_id].
+func get_challenge(challenge_id: StringName) -> ChallengeData:
+	for challenge in challenges:
+		if challenge.id == challenge_id:
+			return challenge
+	return null
