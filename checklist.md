@@ -251,8 +251,11 @@ the open content questions, not bugs.
       `level_1.mp3` across the level intro, stage select, all four stages and
       both closing cards. All six tracks had `loop=false` from the importer,
       which would have played each once and left the screen silent
-- [ ] Music for levels 2-4 — the tracks are in the repo and named, but those
-      levels do not exist yet. Add a `Track` per level as they are built
+- [ ] Music for levels 2-4 — the tracks are in the repo and named. **Level 2
+      is wired**: `Track.LEVEL_2` plays `level_2.mp3`, looping, and
+      `verify_audio` checks it; its screens will ask for it as they are built.
+      Levels 3 and 4 get a `Track` each the same way — **appended to the end of
+      the enum**, since scenes store a track as its number
 - [ ] **The music is third-party and its licence is unconfirmed.** The tracks
       arrived named after another game's soundtrack and are now on GitHub under
       neutral names, which hides the provenance without changing it. **⚠**

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://inonql46126" path="res://scripts/core/audio_director.gd" id="1_director"]
 [ext_resource type="AudioStream" uid="uid://daeuv6i63av4l" path="res://assets/audio/music/main_menu.mp3" id="2_menu"]
 [ext_resource type="AudioStream" uid="uid://s4dv0snun5sv" path="res://assets/audio/music/level_1.mp3" id="3_level_1"]
+[ext_resource type="AudioStream" uid="uid://hsyxucq6gron" path="res://assets/audio/music/level_2.mp3" id="7_level_2"]
 [ext_resource type="AudioStream" uid="uid://duym11cc8vbhk" path="res://assets/audio/sfx/button_press.wav" id="4_tap"]
 [ext_resource type="AudioStream" uid="uid://vd60o1vng3pj" path="res://assets/audio/sfx/correct_answer.wav" id="5_correct"]
 [ext_resource type="AudioStream" uid="uid://bffomavfrf6e5" path="res://assets/audio/sfx/wrong_answer.wav" id="6_wrong"]
@@ -12,6 +13,7 @@ process_mode = 3
 script = ExtResource("1_director")
 menu_music = ExtResource("2_menu")
 level_1_music = ExtResource("3_level_1")
+level_2_music = ExtResource("7_level_2")
 tap = ExtResource("4_tap")
 correct_answer = ExtResource("5_correct")
 wrong_answer = ExtResource("6_wrong")

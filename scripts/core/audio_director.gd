@@ -17,10 +17,15 @@ extends Node
 
 ## Which music a screen wants. Screens name a track rather than carrying a
 ## stream, so there is one place that decides what each one sounds like.
+##
+## **Add new tracks at the end.** A screen's scene stores its track as this
+## number, so inserting one in the middle would silently move every screen
+## after it onto a different track.
 enum Track {
 	NONE, ## Silence. Also means "leave whatever is playing alone".
 	MENU, ## Title, How To Play, hub — everything outside a level.
 	LEVEL_1,
+	LEVEL_2,
 }
 
 ## How many effects can overlap before the oldest is cut off. A tap landing on
@@ -30,6 +35,7 @@ const SFX_VOICES := 4
 @export_group("Music")
 @export var menu_music: AudioStream
 @export var level_1_music: AudioStream
+@export var level_2_music: AudioStream
 
 @export_group("Effects")
 ## Any button, anywhere. Connected for a whole screen by [SubScreen].
@@ -89,6 +95,7 @@ func music_for(track: Track) -> AudioStream:
 	match track:
 		Track.MENU: return menu_music
 		Track.LEVEL_1: return level_1_music
+		Track.LEVEL_2: return level_2_music
 	return null
 
 
