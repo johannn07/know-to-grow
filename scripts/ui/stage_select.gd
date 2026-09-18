@@ -3,8 +3,8 @@ extends SubScreen
 
 ## The list of stages inside one level, with an X back to the hub.
 ##
-## The whole screen is one drawn picture — frame, header, and all four rows with
-## their item icons, their "Stage N" labels and their stars already in it. The
+## The whole screen is one drawn picture — frame, header, and every row with
+## its item icon, its "Stage N" label and its stars already in it. The
 ## only interactive parts are invisible hotspots laid over the drawn rows, the
 ## same way How To Play works.
 ##
@@ -15,22 +15,25 @@ extends SubScreen
 ## same rect, and the stars are children of that row art.
 ##
 ## Each row hotspot is an [ArtButton] pointed at its row art, so a press tints
-## and bounces the whole row — stars included, since they are its children. The
-## close button is an ArtButton with no art: its X is part of the card, so
-## there is nothing separate to move.
+## the whole row — stars included, since they are its children. It does not
+## bounce: the row art covers a row painted into the card, and shrinking it would
+## uncover that one (see CLAUDE.md). The close button is an ArtButton with no
+## art: its X is part of the card, so there is nothing separate to move.
 
-## Where each drawn row sits, in fractions of the card image. Measured off the
-## artwork, which is the only place they exist.
-const ROW_RECTS: Array[Rect2] = [
-	Rect2(0.1176, 0.2280, 0.7581, 0.1739),
-	Rect2(0.1145, 0.4092, 0.7606, 0.1682),
-	Rect2(0.1121, 0.5904, 0.7728, 0.1698),
-	Rect2(0.1145, 0.7671, 0.7624, 0.1730),
-]
+## **How many rows a level has is set by its scene**, not here. Each level's card
+## is drawn differently — Level 1 has four stages, Level 2 five situations — so
+## the measurements belong with the card they were taken from. For every entry
+## in [member row_rects] the scene holds a %Rows/RowN hotspot and a
+## %RowsArt/RowNArt with three RowNStarM star slots in it.
 
-## Where the X is drawn, in the same fractions. It is 126 x 115 on screen, under
-## the touch floor, so its hotspot is grown past the drawn disc.
-const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
+@export_group("Layout")
+## Where each drawn row sits on the card, top to bottom, in fractions of the card
+## image. Measured off the artwork, which is the only place they exist.
+@export var row_rects: Array[Rect2] = []
+## Where the card's X is drawn, in the same fractions. On Level 1's card it is
+## 126 x 115 on screen, under the touch floor, so its hotspot is grown past the
+## drawn disc.
+@export var close_rect: Rect2 = Rect2()
 
 @export_group("Destinations")
 ## One scene per row, in the order they are drawn. A row with no path, or one
@@ -47,16 +50,12 @@ const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
 @export var level_id: StringName = &"level_1"
 
 @export_group("Art")
-## One row in each state, drawn over the row baked into the card. Same capsule,
-## same place, so the one underneath is covered exactly.
-@export var row_art_1: Texture2D
-@export var row_art_1_locked: Texture2D
-@export var row_art_2: Texture2D
-@export var row_art_2_locked: Texture2D
-@export var row_art_3: Texture2D
-@export var row_art_3_locked: Texture2D
-@export var row_art_4: Texture2D
-@export var row_art_4_locked: Texture2D
+## Each row as it looks once reached, top to bottom, one per [member row_rects]
+## entry. Drawn over the row baked into the card: same capsule, same place, so
+## the one underneath is covered exactly.
+@export var row_art: Array[Texture2D] = []
+## Each row as it looks before it is reached, in the same order.
+@export var row_art_locked: Array[Texture2D] = []
 ## Drawn over a row's empty star for each one earned.
 @export var star_filled: Texture2D
 ## Drawn over the rest. Usually left empty, since the row art already has them.
@@ -69,14 +68,19 @@ const CLOSE_RECT := Rect2(0.8500, 0.1164, 0.1316, 0.0799)
 
 func _ready() -> void:
 	super()
-	place_hotspot(_close_button, CLOSE_RECT)
+	if not close_rect.has_area():
+		push_warning("%s: close_rect is not set, so the X has no hotspot" % name)
+	place_hotspot(_close_button, close_rect)
 	_close_button.pressed.connect(go_back)
+	if row_art.size() != row_rects.size() or row_art_locked.size() != row_rects.size():
+		push_warning("%s: %d rows but %d unlocked and %d locked row drawings"
+			% [name, row_rects.size(), row_art.size(), row_art_locked.size()])
 
-	for i in ROW_RECTS.size():
+	for i in row_rects.size():
 		var button := _row_button(i)
 		if button == null:
 			continue
-		place_hotspot(button, ROW_RECTS[i])
+		place_hotspot(button, row_rects[i])
 		var stage_number := i + 1
 		var path := stage_scene_paths[i] if i < stage_scene_paths.size() else ""
 		# A row is live only if it has been reached and goes somewhere real.
@@ -100,12 +104,14 @@ func _show_row(stage_number: int, unlocked: bool) -> void:
 
 
 func _row_art(stage_number: int, unlocked: bool) -> Texture2D:
-	match stage_number:
-		1: return row_art_1 if unlocked else row_art_1_locked
-		2: return row_art_2 if unlocked else row_art_2_locked
-		3: return row_art_3 if unlocked else row_art_3_locked
-		4: return row_art_4 if unlocked else row_art_4_locked
-	return null
+	var art: Array[Texture2D] = row_art if unlocked else row_art_locked
+	var i := stage_number - 1
+	return art[i] if i >= 0 and i < art.size() else null
+
+
+## How many rows this level's card has.
+func row_count() -> int:
+	return row_rects.size()
 
 
 ## Fills a row's three stars with what that stage earned. Nothing is drawn for
@@ -114,7 +120,7 @@ func _row_art(stage_number: int, unlocked: bool) -> Texture2D:
 func _show_stars(stage_number: int) -> void:
 	var earned := 0 if progress == null else progress.stars_for(level_id, stage_number)
 	for slot_number in 3:
-		# Stars are children of their row, so they tint and bounce with it.
+		# Stars are children of their row, so they tint with it.
 		var slot: ArtSlot = _rows_art.get_node_or_null(
 			"Row%dArt/Row%dStar%d" % [stage_number, stage_number, slot_number + 1]
 		) as ArtSlot

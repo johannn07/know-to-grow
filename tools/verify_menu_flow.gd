@@ -155,7 +155,7 @@ func _initialize() -> void:
 		if screen is StageSelect:
 			var select: StageSelect = screen
 			var live := 0
-			for i in StageSelect.ROW_RECTS.size():
+			for i in select.row_count():
 				var row: Button = select.get_node("%Rows").get_node("Row%d" % (i + 1))
 				_expect(
 					row.size.x >= 160.0 and row.size.y >= 160.0,
@@ -171,6 +171,28 @@ func _initialize() -> void:
 				live == 1,
 				"stage_select opens exactly the one reached row on a fresh start (got %d)" % live
 			)
+			# How many rows there are is set by the scene, so everything the scene
+			# holds for them has to agree: one rect, one drawing each way, one
+			# hotspot and one row art with three star slots per row.
+			var n := select.row_count()
+			_expect(n > 0, "stage_select has rows (%d)" % n)
+			_expect(
+				select.row_art.size() == n and select.row_art_locked.size() == n,
+				"stage_select has a drawing each way for all %d rows (%d unlocked, %d locked)"
+					% [n, select.row_art.size(), select.row_art_locked.size()]
+			)
+			_expect(
+				select.get_node("%Rows").get_child_count() == n,
+				"stage_select has one hotspot per row (%d for %d)"
+					% [select.get_node("%Rows").get_child_count(), n]
+			)
+			for i in n:
+				var art: Node = select.get_node("%RowsArt").get_node_or_null("Row%dArt" % (i + 1))
+				_expect(
+					art != null and art.get_child_count() == 3,
+					"stage_select Row%dArt exists with three star slots" % (i + 1)
+				)
+			_expect(select.close_rect.has_area(), "stage_select close_rect is set")
 			var close: Button = select.get_node("%CloseButton")
 			_expect(close.pressed.get_connections().size() == 1, "stage_select %CloseButton is connected")
 			_expect(

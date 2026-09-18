@@ -270,6 +270,11 @@ be brought back**. At 377 x 732 for a ~960 px slot they were a quarter of the
 drawn card's resolution. Levels 3 and 4 need a *drawn* card each, rows included,
 not a blank one.
 
+- **The scene sets how many rows there are.** `row_rects`, `close_rect`,
+  `row_art` and `row_art_locked` are measured off that level's card and live in
+  its scene, one entry per row, with a `%Rows/RowN` hotspot and a
+  `%RowsArt/RowNArt` holding three star slots for each. `verify_menu_flow`
+  fails if any of them disagree.
 - **A row's press does not bounce**, per the rule below. The four row hotspots
   set `bounce_art = false` on [`ArtButton`](scripts/ui/art_button.gd).
 - **Rows are drawn art with their stars covered.** The drawn rows come with
