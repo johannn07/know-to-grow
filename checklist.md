@@ -138,13 +138,13 @@ Confirmed by the project owner, and the order everything below is built to:
 
 ```
 Hub → Level overlay → Stage select → Stages 1-4 → Level Complete overlay
-    → Badge Unlocked overlay → "You completed Level N" overlay
-    → Hub, "Click Me" on the plant → Hub, plant grown
+    → Badge Unlocked overlay → "You completed Level N" overlay (Grow Now)
+    → Hub, plant grown
 ```
 
-The game now runs this sequence as far as Badge Unlocked, then returns to the
-hub. The three beats after that — "You completed Level N" and the two hub
-states — are still to build.
+**The "Click Me" hub beat is dropped** — decided by the owner. Grow Now on the
+completed-level sign leads straight to the hub, which shows the plant a stage
+further on. The whole sequence now runs end to end for Level 1.
 
 **Badges are fixed per level, not earned by performance.** Level 1 always
 unlocks **Little Planter**.
@@ -168,9 +168,18 @@ unlocks **Little Planter**.
       gardener!"` with three stars, after Stage 4. Art delivered
 - [x] **Badge Unlocked overlay** — the `BADGE UNLOCK!` banner over the
       `Little Planter` badge, with Continue. Art delivered
-- [ ] "You completed Level N" overlay — **not in this batch**, no art yet
-- [ ] Hub with "Click Me" on the plant, then the plant grown — **not in this
-      batch**, no art yet. Both need `GameState` to know the level is done
+- [x] "You completed Level N" overlay — `level_complete_sign.tscn`, a
+      `CardOverlay` on `ui_level_complete_sign_l1.png`. Its Grow Now is the
+      green pill painted into the sign, cut out and laid back over itself, so
+      it looks as drawn and darkens on press. The wooden
+      `ui_button_grow_now.png` is a different design and is unused. **Level 1
+      only** — there is no sign for Levels 2-4 yet
+- [x] ~~Hub with "Click Me" on the plant~~ **Dropped**, owner's decision
+- [x] Hub, plant grown — the hub grows one stage per level cleared, in order:
+      the seed in its pot, then the rooted seed (`plant_sprout.png`) labelled
+      ROOT, as in the Figma's "Character Screen L2". Checked in a real render
+- [ ] **The hub's play button still says "Level 1: Grow a Seed"** after Level 1
+      is done. What it should lead to is the open routing decision below
 
 - [x] `GameState` autoload — one number per stage, the stars earned, saved to
       `user://progress.cfg`. Everything else is derived from it: whether a stage

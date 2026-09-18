@@ -312,14 +312,16 @@ bounces unless it says otherwise.
 | How To Play's X and LET'S GO | the controls painted into the screen | darken | the scene |
 | Continue / Choose Again on a feedback card | the button painted into the card | darken | derived |
 | Stage 4's Continue | below the card, nothing behind | darken + squash | derived |
-| Level intro / complete / badge Continue | below the card, over the dim | darken + squash | default |
+| Completed-level sign's Grow Now | the button painted into the sign | darken | derived |
+| Level intro / complete / badge Continue | below the card, over the dim | darken + squash | derived |
 | Main menu buttons | their own themed plate | darken + squash | default |
 
 - The feedback cards **derive it** in `StageScreen._show_feedback`, from whether
   the art rect falls on the card: `not WHOLE_CARD.intersects(art_rect)`. A new
   stage gets the right behaviour from its rects without anyone remembering this.
-  `CardOverlay` needs nothing, because `BUTTON_BELOW_CARD` is already outside
-  the card.
+  `CardOverlay` derives it the same way from its `button_rect`: the three
+  overlays with their button below the card bounce, the completed-level sign,
+  whose Grow Now is painted on it, does not.
 - **Check the art, not the comment.** Whether something is painted underneath is
   a fact about the PNG. Crop the card at the button's rect and look.
 - When the darken is the only feedback left, it is doing real work. Do not

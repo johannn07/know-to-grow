@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://dnn1ekuepxsox" path="res://assets/art/ui/hub/ui_star.png" id="6_star"]
 [ext_resource type="Texture2D" uid="uid://cgxmwagmxkenm" path="res://assets/art/backgrounds/bg_sign.png" id="7_78ua6"]
 [ext_resource type="Texture2D" uid="uid://c50xt3o5edhw2" path="res://assets/art/plants/plant_seed_pot.png" id="7_plant"]
+[ext_resource type="Texture2D" uid="uid://df2ew1520xccu" path="res://assets/art/plants/plant_sprout.png" id="11_sprout"]
+[ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="12_level_1"]
 [ext_resource type="Texture2D" uid="uid://cs58a4b3s71fj" path="res://assets/art/ui/hub/ui_tab_lessons.png" id="8_lessons"]
 [ext_resource type="FontFile" uid="uid://5dh1bd816wds" path="res://assets/fonts/fredoka_one/fredoka_one_regular.ttf" id="8_myxet"]
 [ext_resource type="Texture2D" uid="uid://birib6hvlxlbl" path="res://assets/art/ui/hub/ui_tab_garden.png" id="9_garden"]
@@ -51,6 +53,9 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_hub")
 music_track = 1
+plant_stages = Array[Texture2D]([ExtResource("7_plant"), ExtResource("11_sprout")])
+plant_stage_names = Array[String](["SEED", "ROOT"])
+growth_levels = Array[Resource]([ExtResource("12_level_1")])
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true
@@ -212,6 +217,7 @@ text = "SEED"
 horizontal_alignment = 1
 
 [node name="Plant" type="Control" parent="." unique_id=90489919]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

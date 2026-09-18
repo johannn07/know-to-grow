@@ -563,7 +563,8 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `icon_water.png` | 300 x 300 | 96 KB | item card, "Water" |
 | `icon_pruning_shears.png` | 300 x 285 | 112 KB | item card, "Pruning Shears" |
 | `ui_button_click_me.png` | 1368 x 447 | 560 KB | "Click Me" button, text drawn in |
-| `ui_button_grow_now.png` | 1368 x 438 | 569 KB | "Grow Now" button, text drawn in |
+| `ui_button_grow_now.png` | 1368 x 438 | 569 KB | "Grow Now" button, text drawn in — a wooden plank, **not** the green one on the sign; unused |
+| `ui_button_grow_now_sign.png` | 720 x 227 | 185 KB | the green Grow Now pill **cut from** `ui_level_complete_sign_l1.png`, masked to its stadium shape, laid back over itself at `(0.1707, 0.8057, 0.6716, 0.1646)` of the sign so a press can darken it |
 | `ui_situation_select_l2.png` | 1535 x 2287 | 2.5 MB | Level 2 Monitoring card, Situation 1 unlocked, 2–5 locked |
 | `ui_situation_row_1..5.png` | ~1110 x 330 | ~380 KB each | unlocked Situation rows, one colour each, **stars covered with the empty star** |
 | `ui_level_intro_l2.png` | 1110 x 1373 | 1.4 MB | "Level 2 — Uh-oh! Your plant needs you!" |

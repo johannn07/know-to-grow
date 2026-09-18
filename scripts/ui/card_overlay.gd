@@ -86,6 +86,10 @@ func _ready() -> void:
 	else:
 		# Nothing drawn to aim at, so the whole card takes the tap.
 		anchor_to(_action_button, Rect2(0.0, 0.0, 1.0, 1.0))
+	# A button drawn on the card covers one painted into it — the completed
+	# level sign's Grow Now — so a squash would uncover the painted one. A
+	# button below the card has nothing behind it and bounces as normal.
+	_action_button.bounce_art = not Rect2(0.0, 0.0, 1.0, 1.0).intersects(button_rect)
 
 	_action_button.pressed.connect(_on_action_pressed)
 

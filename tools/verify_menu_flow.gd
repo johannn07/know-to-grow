@@ -54,6 +54,7 @@ func _initialize() -> void:
 		"res://scenes/ui/level_select_stub.tscn",
 		"res://scenes/ui/level_intro.tscn",
 		"res://scenes/ui/badge_unlocked.tscn",
+		"res://scenes/ui/level_complete_sign.tscn",
 		"res://scenes/ui/level_complete.tscn",
 		"res://scenes/ui/stage_select.tscn",
 		"res://scenes/ui/stage_select_l2.tscn",
@@ -221,6 +222,7 @@ func _initialize() -> void:
 	await process_frame
 	await _check_press_bounce()
 	if state != null:
+		await _check_hub_grows_the_plant(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
 		state.reset()
@@ -312,6 +314,7 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row3"],
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row4"],
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row5"],
+		["res://scenes/ui/level_complete_sign.tscn", "%ActionButton"],
 		["res://scenes/ui/how_to_play.tscn", "%BackButton"],
 		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton"],
 	]
@@ -404,6 +407,30 @@ func _check_progress_reaches_the_rows(
 		)
 	screen.queue_free()
 	await process_frame
+
+
+## The hub's plant is how a finished level shows: seed until Level 1 is cleared,
+## the rooted seed after. A level three stages in must not count.
+func _check_hub_grows_the_plant(state: GameStateStore) -> void:
+	for case: Array in [[0, 0, "SEED"], [3, 0, "SEED"], [4, 1, "ROOT"]]:
+		state.reset()
+		for stage_number in range(1, int(case[0]) + 1):
+			state.record_stage_cleared(&"level_1", stage_number, 0)
+		var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
+		if hub == null:
+			continue
+		var stage: int = hub.growth_stage()
+		var plant: ArtSlot = hub.get_node("%Plant")
+		var label: Label = hub.get_node_or_null("%PlantStageLabel") as Label
+		_expect(
+			stage == case[1] and plant.texture == hub.plant_stages[case[1]]
+				and (label == null or label.text == case[2]),
+			"hub with %d of Level 1's stages cleared shows the %s (stage %d)"
+				% [case[0], case[2], stage]
+		)
+		hub.queue_free()
+		await process_frame
+	state.reset()
 
 
 func _instantiate(path: String) -> Node:
