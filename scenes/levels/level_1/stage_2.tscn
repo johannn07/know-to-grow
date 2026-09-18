@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://ibhy8gs5f80i" path="res://assets/art/levels/level_1/ui_prompt_l1_s2.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://d33royc7wdxbv" path="res://assets/art/levels/level_1/ui_correct_l1_s2.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://assets/art/levels/level_1/ui_oops_tool.png" id="10_oops"]
-[ext_resource type="Texture2D" uid="uid://sx2t1u1raan2" path="res://assets/art/levels/level_1/ui_tray_l1_s2.png" id="11_tray"]
+[ext_resource type="Texture2D" uid="uid://c5rck1pxv0f6y" path="res://assets/art/ui/common/ui_tray_blank.png" id="11_tray"]
 [ext_resource type="Texture2D" uid="uid://ba1d66fkeuf4e" path="res://assets/art/levels/level_1/ui_fact_l1_s2.png" id="12_fact"]
 [ext_resource type="Texture2D" uid="uid://cnsmcl0wb3pw2" path="res://assets/art/items/icon_leaf.png" id="13_leaf"]
 [ext_resource type="Texture2D" uid="uid://dxv025a0t0ks7" path="res://assets/art/items/icon_seed.png" id="14_seed_packet"]
@@ -34,6 +34,7 @@ level_id = &"level_1"
 stage_number = 2
 challenge_id = &"l1_seed"
 correct_option_id = &"seed_packet"
+blank_tray = true
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 continue_art = ExtResource("16_continue")
@@ -121,7 +122,7 @@ mouse_filter = 2
 [node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea" unique_id=76471614]
 layout_mode = 2
 mouse_filter = 2
-ratio = 2.0534
+ratio = 2.2573
 
 [node name="Tray" type="Control" parent="TrayArea/TrayAspect" unique_id=1701136464]
 layout_mode = 2
@@ -138,7 +139,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("11_tray")
 fit = 0
-slot_name = "ui_tray_l1_s2"
+slot_name = "ui_tray_blank"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
 [node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray" unique_id=1081590827]
@@ -154,10 +155,10 @@ mouse_filter = 2
 [node name="Leaf" parent="TrayArea/TrayAspect/Tray/Cards" unique_id=1159161169 instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.082
-anchor_top = 0.2649
-anchor_right = 0.347
-anchor_bottom = 0.809
+anchor_left = 0.083
+anchor_top = 0.2912
+anchor_right = 0.351
+anchor_bottom = 0.9007
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -169,9 +170,9 @@ icon = ExtResource("13_leaf")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.364
-anchor_top = 0.2649
-anchor_right = 0.632
-anchor_bottom = 0.809
+anchor_top = 0.2912
+anchor_right = 0.636
+anchor_bottom = 0.9007
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -182,10 +183,10 @@ icon = ExtResource("14_seed_packet")
 [node name="Rock" parent="TrayArea/TrayAspect/Tray/Cards" unique_id=191728684 instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.649
-anchor_top = 0.2649
-anchor_right = 0.914
-anchor_bottom = 0.809
+anchor_left = 0.648
+anchor_top = 0.2912
+anchor_right = 0.916
+anchor_bottom = 0.9007
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2

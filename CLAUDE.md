@@ -147,14 +147,15 @@ is the part worth **not** copying nineteen times — every one of those was a bu
 at some point, and a fix should land once. Put anything a stage does differently
 in its own script; `on_correct` and `on_wrong` exist to be overridden.
 
-A stage on a **blank tray** — empty slots, Level 2 onwards — sets `blank_tray`,
-and its cards draw themselves at rest. On Level 1's drawn trays it stays off and
-a resting card draws nothing, because the picture already shows the item. A
-wrong card ends the same on both: no icon, slot darkened.
+Levels 1 and 2 play on the **blank tray**, `ui_tray_blank.png` — three empty
+slots. A stage on it sets `blank_tray`, and its cards draw themselves at rest.
+A wrong card leaves no icon and a darkened slot. With `blank_tray` off, a
+resting card draws nothing, for a tray with its items painted in; Level 1's
+old drawn trays were that, and no stage uses one now.
 
 A blank tray also **shuffles**: each play deals the cards into the scene's slots
 in a new order. The scene still lists its cards in the content file's order,
-which is what erify_level_* compares. A drawn tray cannot shuffle, since a
+which is what `verify_level_*` compares. A drawn tray cannot shuffle, since a
 card moved off its own painting would sit on another item's picture.
 
 **The stage scenes are yours, not generated.** They were first written by a

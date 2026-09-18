@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dlqg11wht44bn" path="res://assets/art/levels/level_1/ui_prompt_l1_s4.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://d1h2lou6sg6gk" path="res://assets/art/levels/level_1/ui_correct_l1_s4.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://assets/art/levels/level_1/ui_oops_tool.png" id="10_oops"]
-[ext_resource type="Texture2D" uid="uid://l4ngsbamqthg" path="res://assets/art/levels/level_1/ui_tray_l1_s4.png" id="11_tray"]
+[ext_resource type="Texture2D" uid="uid://c5rck1pxv0f6y" path="res://assets/art/ui/common/ui_tray_blank.png" id="11_tray"]
 [ext_resource type="Texture2D" uid="uid://csab0hul6h6pk" path="res://assets/art/levels/level_1/ui_fact_l1_s4.png" id="12_fact"]
 [ext_resource type="Texture2D" uid="uid://bhab1nos4qojj" path="res://assets/art/items/icon_sun.png" id="13_sun"]
 [ext_resource type="Texture2D" uid="uid://ci81oypkb7w3g" path="res://assets/art/items/icon_cloud.png" id="14_cloud"]
@@ -34,6 +34,7 @@ level_id = &"level_1"
 stage_number = 4
 challenge_id = &"l1_sun"
 correct_option_id = &"sun"
+blank_tray = true
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 continue_art = ExtResource("16_continue")
@@ -123,7 +124,7 @@ mouse_filter = 2
 [node name="TrayAspect" type="AspectRatioContainer" parent="TrayArea" unique_id=1985494667]
 layout_mode = 2
 mouse_filter = 2
-ratio = 2.1645
+ratio = 2.2573
 
 [node name="Tray" type="Control" parent="TrayArea/TrayAspect" unique_id=1692310458]
 layout_mode = 2
@@ -140,7 +141,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("11_tray")
 fit = 0
-slot_name = "ui_tray_l1_s4"
+slot_name = "ui_tray_blank"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
 [node name="Cards" type="Control" parent="TrayArea/TrayAspect/Tray" unique_id=132183296]
@@ -157,9 +158,9 @@ mouse_filter = 2
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.083
-anchor_top = 0.3052
-anchor_right = 0.347
-anchor_bottom = 0.855
+anchor_top = 0.2912
+anchor_right = 0.351
+anchor_bottom = 0.9007
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -171,9 +172,9 @@ icon = ExtResource("13_sun")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.364
-anchor_top = 0.3052
-anchor_right = 0.631
-anchor_bottom = 0.855
+anchor_top = 0.2912
+anchor_right = 0.636
+anchor_bottom = 0.9007
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2
@@ -185,9 +186,9 @@ icon = ExtResource("14_cloud")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.648
-anchor_top = 0.3052
-anchor_right = 0.912
-anchor_bottom = 0.855
+anchor_top = 0.2912
+anchor_right = 0.916
+anchor_bottom = 0.9007
 offset_right = 0.0
 offset_bottom = 0.0
 grow_horizontal = 2

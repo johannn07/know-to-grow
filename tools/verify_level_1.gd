@@ -54,7 +54,6 @@ func _initialize() -> void:
 	_expect(seen > 0, "at least one stage was played")
 	_expect_same("prompt", _prompt_widths)
 	_expect_same("fun fact", _fact_widths)
-	await _check_blank_tray()
 	await _check_quick_taps()
 	if state != null:
 		_expect(
@@ -117,16 +116,16 @@ func _play(scene_path: String) -> String:
 	)
 	var tray: ArtSlot = stage.get_node("%Cards").get_parent().get_node("TrayArt")
 	_expect(tray.texture != null, "%s has its tool tray" % label)
+	_expect(stage.blank_tray, "%s is on the blank tray" % label)
 	_prompt_widths.append(stage.get_node("%Prompt").size.x)
 	_fact_widths.append(stage.get_node("%FunFact").size.x)
 	_expect(cards.size() >= 2, "%s has cards (%d)" % [label, cards.size()])
 	for card in cards:
 		_expect(card.icon != null, "%s card '%s' has its artwork" % [label, card.option_id])
-		# A resting card draws nothing: the tray behind it already has that item
-		# painted in. Drawing both is what produced a rim inside a rim.
+		# The tray's slots are empty, so a resting card draws its own item.
 		_expect(
-			not card.get_node("Art").visible,
-			"%s card '%s' lets the tray's own slot show through" % [label, card.option_id]
+			card.draw_at_rest and card.get_node("Art").visible,
+			"%s card '%s' shows itself in its empty slot" % [label, card.option_id]
 		)
 		_expect(
 			not card.get_node("Spent").visible,
@@ -152,6 +151,7 @@ func _play(scene_path: String) -> String:
 		"%s that card is back in its slot" % label
 	)
 	_expect(not stray.get_node("Spent").visible, "%s that card is not marked used" % label)
+	_expect(stray.get_node("Art").visible, "%s that card is shown again in its slot" % label)
 	_expect(
 		stray.mouse_filter != Control.MOUSE_FILTER_IGNORE,
 		"%s that card can still be picked up" % label
@@ -176,12 +176,13 @@ func _play(scene_path: String) -> String:
 		wrong.position.distance_to(wrong_home) < 1.0,
 		"%s wrong card is back in its slot" % label
 	)
-	# A retired option tints its slot rather than drawing the greyed card over
-	# it: the card's frame is thicker than the drawn slot's, so putting it back
-	# reintroduces exactly the mismatch this arrangement avoids.
+	# A retired option leaves its slot empty and darkened, not a greyed card.
 	var tint: Panel = wrong.get_node("Spent")
 	_expect(tint.visible, "%s wrong card's slot is tinted" % label)
-	_expect(not wrong.get_node("Art").visible, "%s wrong card still draws no art" % label)
+	_expect(not wrong.get_node("Art").visible, "%s wrong card leaves its slot without an icon" % label)
+	for card in cards:
+		if card != wrong:
+			_expect(card.get_node("Art").visible, "%s untried card '%s' is still shown" % [label, card.option_id])
 	_expect(
 		tint.size.is_equal_approx(wrong.size),
 		"%s the tint covers the whole slot (%dx%d over %dx%d)"
@@ -232,58 +233,6 @@ func _play(scene_path: String) -> String:
 	return next
 
 
-## Every stage should draw this element at the same width, so it reads at the
-## same size whatever the wording is.
-## Level 2 onwards puts its cards on a blank tray, whose slots are empty, so a
-## resting card has to draw itself — the opposite of Level 1's drawn trays. No
-## stage uses one yet, so Stage 1 is played with the switch turned on: at rest,
-## after a missed drop, and after a wrong answer, which must still leave a
-## darkened empty slot rather than the card.
-func _check_blank_tray() -> void:
-	print("--- blank tray, on stage_1 ---")
-	var stage: StageScreen = (load(FIRST_STAGE) as PackedScene).instantiate()
-	stage.blank_tray = true
-	root.add_child(stage)
-	stage.set_deferred("size", Vector2(1080, 1920))
-	await _settle()
-
-	var cards := stage.cards()
-	for card in cards:
-		_expect(card.draw_at_rest, "card '%s' is told to draw at rest" % card.option_id)
-		_expect(
-			card.get_node("Art").visible,
-			"card '%s' shows its own art in its empty slot" % card.option_id
-		)
-
-	var centre: Vector2 = stage.get_node("%DropZone").get_global_rect().get_center()
-	var stray: OptionCard = cards[0]
-	stray._begin_drag(stray.global_position + Vector2(20.0, 20.0))
-	stray._end_drag(Vector2(40.0, 40.0))
-	await _settle()
-	await _rest()
-	_expect(stray.get_node("Art").visible, "a card let go off target is shown again in its slot")
-
-	var wrong: OptionCard = _wrong(cards, stage)
-	wrong._begin_drag(wrong.global_position + Vector2(20.0, 20.0))
-	wrong._end_drag(centre)
-	await _settle()
-	await _rest()
-	_expect(not wrong.get_node("Art").visible, "a wrong card leaves its slot without an icon")
-	_expect(wrong.get_node("Spent").visible, "a wrong card's slot is darkened")
-	_expect(
-		wrong.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-		"a wrong card cannot be picked again"
-	)
-	for card in cards:
-		if card != wrong:
-			_expect(
-				card.get_node("Art").visible,
-				"untried card '%s' is still shown" % card.option_id
-			)
-	stage.queue_free()
-	await process_frame
-
-
 ## A child taps a card again and again. Each tap is a tiny drag that lets go on
 ## the card itself, so the card slides home — and the next tap lands mid-slide.
 ## That once made the card take its half-way point as home, and the two slides
@@ -317,6 +266,8 @@ func _check_quick_taps() -> void:
 			await process_frame
 
 
+## Every stage should draw this element at the same width, so it reads at the
+## same size whatever the wording is.
 func _expect_same(what: String, widths: Array[float]) -> void:
 	if widths.is_empty():
 		return

@@ -24,8 +24,8 @@ of N options, it is right or it is wrong.
 
 | Level | Theme | Stages | What is settled about how it plays |
 |---|---|---|---|
-| 1 | Planting | 4 | drag an item from a drawn tray onto the soil; fixed stage order |
-| 2 | Monitoring | 5 | a drawn tray, and a `Score: 0/5` that only goes up |
+| 1 | Planting | 4 | drag an item from the blank tray onto the soil, cards shuffled; fixed stage order |
+| 2 | Monitoring | 5 | the blank tray, cards shuffled, and a `Score: 0/5` that only goes up |
 | 3 | Identifying | 5 | multiple choice, no tray, options shuffled |
 | 4 | Functions | 5 | matching a plant part to its function; needs more than one drop zone |
 
@@ -74,9 +74,8 @@ unlocked, whether a level is done, what the hub counts.
 - **Stars are never taken away.** A replay can only raise them.
 - **Badges are fixed per level, not earned by performance.** Level 1 always
   unlocks *Little Planter*.
-- **Level 1 plays in fixed order** — planting is a real-world sequence. Only
-  Level 3 shuffles its options, because it has no drawn tray fixing a card's
-  position.
+- **Level 1 plays in fixed order** — planting is a real-world sequence. The
+  cards within a stage are shuffled every play, on Levels 1 and 2 alike.
 
 ### The sequence a level runs through
 

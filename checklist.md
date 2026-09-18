@@ -113,10 +113,9 @@ picks one of N options, it is right or it is wrong. Build that once.
 - [x] Level 1 completion beat — Stage 4 now leads to the Level Complete and
       Badge Unlocked overlays (§3). `bg_bed_sprout.png`, the payoff of the
       level, is the background behind both
-- [ ] Option shuffling for **Level 3 only** — its scripted answers sit at
-      B, A, C, A, B and children memorise positions faster than content. Levels
-      1, 2 and 4 use drawn trays, so a card's position is fixed by the picture
-      behind it and cannot be shuffled
+- [x] Cards are shuffled every play on a blank tray — Levels 1 and 2. The
+      scene keeps the content's order; `StageScreen.shuffle_cards` deals them
+      into its slots. Level 3's options still need the same
 - [ ] Level 1 stays in fixed order (`shuffle_challenges = false`) — planting is a
       real-world sequence
 - [ ] Progress indicator — the design document specifies `Score: 0/5` for Level 2;
@@ -214,7 +213,8 @@ unlocks **Little Planter**.
       Plant Helper badge are drawn (`ui_level_complete_l2.png`,
       `ui_badge_plant_helper.png`) but not built, so Situation 5 has nowhere
       further to go yet
-- [ ] **The right answer is the leftmost card in every Level 2 situation.** The
+- [x] ~~**The right answer is the leftmost card in every Level 2 situation.**~~
+      **Answered: shuffled per play.** The
       approved table lists the answer first, and the scenes follow the content
       order. On a blank tray a card's position is no longer fixed by the
       picture, so the order could be varied — in the content, or shuffled per
@@ -324,7 +324,9 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       already does for Situations 2-5 — S1 was the only one ever rendered. The
       blank is a real Figma export (`e54af65e…`, 1672 x 941), so it drops in
       cleanly. **The five titles are already in `content/level_2_monitoring.tres`**
-- [ ] **Swap in the new empty tool tray** for Level 1 — decided, deferred. (Level 2 already uses it: `ui_tray_blank.png`.)
+- [x] **Swap in the new empty tool tray** for Level 1 — done. All four stages
+      are on `ui_tray_blank.png` with Level 2's slot anchors, and shuffle.
+      `ui_tray_l1_s1..4.png` are now used by nothing and can be deleted **⚠**
       It is a newly drawn asset rather than a Figma export, so its proportions
       differ from `ui_tray_l1_s1.png` (alpha ratio 2.0802 against 2.1008, and
       shifted down the canvas). Swapping it means **re-measuring the card

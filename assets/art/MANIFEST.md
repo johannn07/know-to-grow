@@ -480,6 +480,9 @@ flowers the painted-in versions do not have.
 | `ui_tray_l1_s3.png` | 1000 x 470 | 549 KB |
 | `ui_tray_l1_s4.png` | 1000 x 462 | 535 KB |
 
+**Retired: no stage uses these now.** Level 1 moved to `ui_tray_blank.png`,
+below, so its cards can be shuffled. Kept until it is decided to delete them.
+
 Each stage's "Choose a Tool" tray, with its three items **drawn into it**. The
 draggable cards are anchored exactly over those drawn slots, so the tray reads
 as one picture until a card is lifted — and then the drawn item underneath shows
@@ -593,7 +596,7 @@ the `PromptBubble` component. The prompt is live text over the cream box:
 **`ui_tray_blank.png`**, 1000 x 443, 424 KB, in `ui/common/` — the empty
 "Choose a Tool" tray, three blank square slots. A newly drawn asset, not a Figma
 export; cropped to alpha > 16 and scaled to 1000 wide like the other trays.
-Used by Level 2, and by Level 1 once its swap is done.
+Used by Levels 1 and 2.
 
 - **Slots**, outline to outline, in fractions of the tray: `(0.083, 0.2912) -
   (0.351, 0.9007)`, `(0.364, 0.2912) - (0.636, 0.9007)`, `(0.648, 0.2912) -
