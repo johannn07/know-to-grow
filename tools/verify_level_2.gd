@@ -28,6 +28,8 @@ func _initialize() -> void:
 	_level = load(CONTENT)
 	_expect(_level != null, "level content loads")
 
+	await _check_shuffle()
+
 	var path := FIRST_STAGE
 	var seen := 0
 	while not path.is_empty() and path.begins_with("res://scenes/levels/level_2/"):
@@ -77,8 +79,8 @@ func _play(scene_path: String) -> String:
 		challenge.correct_option_id == stage.correct_option_id,
 		"%s answer '%s' matches the content" % [label, stage.correct_option_id]
 	)
-	# Order matters as well as membership: each card sits over one slot, and the
-	# content lists them left to right.
+	# The scene lists its cards in the content's order. Where each one lands on
+	# screen is dealt afresh every play; see _check_shuffle.
 	var scene_ids: Array[StringName] = []
 	for card in cards:
 		scene_ids.append(card.option_id)
@@ -170,6 +172,44 @@ func _play(scene_path: String) -> String:
 	stage.queue_free()
 	await process_frame
 	return next
+
+
+## Every play deals the cards into the tray's three slots afresh. The places
+## themselves never move — only which card is in which — and over enough plays
+## the answer turns up in more than one of them.
+func _check_shuffle() -> void:
+	print("--- shuffle ---")
+	var scene: PackedScene = load(FIRST_STAGE)
+	var authored: StageScreen = scene.instantiate()
+	var slots: Array = []
+	# Read before _ready, which is where the deal happens.
+	for card in authored.get_node("%Cards").get_children():
+		slots.append(_slot_key(card))
+	slots.sort()
+	authored.free()
+
+	var answer_slots := {}
+	var same_slots := true
+	for i in 30:
+		var stage: StageScreen = scene.instantiate()
+		root.add_child(stage)
+		var dealt: Array = []
+		for card in stage.cards():
+			dealt.append(_slot_key(card))
+			if card.option_id == stage.correct_option_id:
+				answer_slots[_slot_key(card)] = true
+		dealt.sort()
+		same_slots = same_slots and dealt == slots
+		stage.free()
+	_expect(same_slots, "every deal uses exactly the scene's three slots")
+	_expect(
+		answer_slots.size() > 1,
+		"over 30 plays the answer sat in %d different slots" % answer_slots.size()
+	)
+
+
+func _slot_key(card: Control) -> String:
+	return "%.4f,%.4f,%.4f,%.4f" % [card.anchor_left, card.anchor_top, card.anchor_right, card.anchor_bottom]
 
 
 func _settle() -> void:

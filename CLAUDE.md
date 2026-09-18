@@ -152,6 +152,11 @@ and its cards draw themselves at rest. On Level 1's drawn trays it stays off and
 a resting card draws nothing, because the picture already shows the item. A
 wrong card ends the same on both: no icon, slot darkened.
 
+A blank tray also **shuffles**: each play deals the cards into the scene's slots
+in a new order. The scene still lists its cards in the content file's order,
+which is what erify_level_* compares. A drawn tray cannot shuffle, since a
+card moved off its own painting would sit on another item's picture.
+
 **The stage scenes are yours, not generated.** They were first written by a
 script, but they are hand-owned now: sizes and positions get nudged in the
 editor, and regenerating a scene wholesale throws that away. To make a change

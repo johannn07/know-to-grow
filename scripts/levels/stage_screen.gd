@@ -128,18 +128,53 @@ func _ready() -> void:
 	for card in cards():
 		card.draw_at_rest = blank_tray
 		card.dropped.connect(_on_card_dropped)
+	if blank_tray:
+		shuffle_cards()
 	_show_prompt()
 	_show_header()
 
 
-## The stage's option cards. Each one is anchored over a slot drawn into the
-## tray artwork, so their order is fixed by the picture and must match it.
+## The stage's option cards, in scene order — which is the content file's order,
+## not necessarily where they sit on screen. See [method shuffle_cards].
 func cards() -> Array[OptionCard]:
 	var found: Array[OptionCard] = []
 	for child in _cards.get_children():
 		if child is OptionCard:
 			found.append(child)
 	return found
+
+
+## Deals the cards into the tray's slots in a new order, so the answer is not
+## always in the same place when a stage is played again. Only a blank tray can
+## do this: on Level 1's drawn trays each item is painted into its slot, and a
+## card moved off its own painting would pick up the wrong item.
+##
+## The slots are the cards' own anchors and offsets as the scene places them, so
+## the set of places is unchanged and only who stands where moves.
+func shuffle_cards() -> void:
+	var dealt: Array[OptionCard] = cards()
+	var slots: Array = []
+	for card in dealt:
+		slots.append(_slot_of(card))
+	slots.shuffle()
+	for i in dealt.size():
+		_put_in_slot(dealt[i], slots[i])
+
+
+func _slot_of(card: Control) -> Array[float]:
+	var slot: Array[float] = []
+	for side in 4:
+		slot.append(card.get_anchor(side))
+	for side in 4:
+		slot.append(card.get_offset(side))
+	return slot
+
+
+func _put_in_slot(card: Control, slot: Array[float]) -> void:
+	for side in 4:
+		card.set_anchor(side, slot[side])
+	for side in 4:
+		card.set_offset(side, slot[4 + side])
 
 
 func is_correct(option_id: StringName) -> bool:
