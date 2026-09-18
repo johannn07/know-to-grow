@@ -55,6 +55,7 @@ func _initialize() -> void:
 	_expect_same("prompt", _prompt_widths)
 	_expect_same("fun fact", _fact_widths)
 	await _check_blank_tray()
+	await _check_quick_taps()
 	if state != null:
 		_expect(
 			state.stars_for(&"level_1", 1) > 0,
@@ -281,6 +282,39 @@ func _check_blank_tray() -> void:
 			)
 	stage.queue_free()
 	await process_frame
+
+
+## A child taps a card again and again. Each tap is a tiny drag that lets go on
+## the card itself, so the card slides home — and the next tap lands mid-slide.
+## That once made the card take its half-way point as home, and the two slides
+## raced until it came to rest ~1300 px away, off the screen, where it could
+## never be tapped again. A double-tap did it at any speed; more taps only
+## sometimes put the card back by accident, so this tries two and three taps at
+## three speeds and every one has to end in the slot.
+func _check_quick_taps() -> void:
+	print("--- quick taps, on stage_1 ---")
+	for gap in [0.05, 0.08, 0.15]:
+		for taps in [2, 3]:
+			var stage: StageScreen = (load(FIRST_STAGE) as PackedScene).instantiate()
+			root.add_child(stage)
+			stage.set_deferred("size", Vector2(1080, 1920))
+			await _settle()
+			var card: OptionCard = stage.cards()[1]
+			var home := card.global_position
+			for tap in taps:
+				var at := card.global_position + Vector2(20.0, 20.0)
+				card._begin_drag(at)
+				card._end_drag(at)
+				await create_timer(gap).timeout
+			await _rest()
+			_expect(
+				card.global_position.distance_to(home) < 1.0 and not card.top_level
+					and card.mouse_filter != Control.MOUSE_FILTER_IGNORE,
+				"%d taps %.2fs apart leave the card in its slot, pickable (off by %.0f px)"
+					% [taps, gap, card.global_position.distance_to(home)]
+			)
+			stage.queue_free()
+			await process_frame
 
 
 func _expect_same(what: String, widths: Array[float]) -> void:

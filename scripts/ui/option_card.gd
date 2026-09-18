@@ -65,6 +65,9 @@ const RETURN_TIME := 0.25
 			_rest()
 
 var _dragging := false
+## The slide home currently running, if any. Kept so a tap that lands during the
+## slide can finish it first rather than race it: see [method _begin_drag].
+var _return_tween: Tween = null
 var _grab_offset := Vector2.ZERO
 var _home_local := Vector2.ZERO
 var _home_global := Vector2.ZERO
@@ -118,6 +121,13 @@ func _input(event: InputEvent) -> void:
 
 
 func _begin_drag(at_global: Vector2) -> void:
+	# A tap while the card is still sliding home would otherwise take its
+	# half-way point as home, in global coordinates, and the two slides would
+	# race until it came to rest off the screen, where no one can tap it again.
+	# Land it first, so home is always the real slot.
+	if _return_tween != null:
+		_return_tween.kill()
+		_arrive_home()
 	_dragging = true
 	_home_local = position
 	_home_global = global_position
@@ -144,10 +154,16 @@ func return_home() -> void:
 	if not top_level:
 		return
 	z_index = 0
-	var tween := create_tween()
-	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
-	tween.tween_property(self, "global_position", _home_global, RETURN_TIME)
-	await tween.finished
+	_return_tween = create_tween()
+	_return_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	_return_tween.tween_property(self, "global_position", _home_global, RETURN_TIME)
+	_return_tween.finished.connect(_arrive_home)
+
+
+## Settles the card back into its slot, at the end of a slide or cut short by a
+## new tap.
+func _arrive_home() -> void:
+	_return_tween = null
 	# Dropping out of top_level makes Godot read `position` as parent-relative
 	# again. It currently holds global coordinates, so it has to be restored by
 	# hand — otherwise the card lands a screen-height below its row and looks
