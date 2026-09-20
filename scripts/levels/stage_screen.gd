@@ -16,9 +16,10 @@ extends SubScreen
 ## next made the whole garden jump, which was very visible behind the feedback
 ## card. The change now happens at the stage boundary, where a cut is expected.
 ##
-## A stage scene is expected to have: %Background, %DropZone, %Cards holding
-## [OptionCard] children, and %Overlay / %OverlayAspect / %OverlayArt /
-## %OverlayButton for the feedback card.
+## A stage scene is expected to have: %Background, %Cards holding [OptionCard]
+## children, and %Overlay / %OverlayAspect / %OverlayArt / %OverlayButton for
+## the feedback card. A drag stage also has a %DropZone; a tap stage does not —
+## see [member tap_to_answer].
 ##
 ## No wording is set here or in any stage scene. The header, the prompt, the
 ## item names and both feedback cards carry their text in their own pixels, and
@@ -72,6 +73,22 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 ## Answers that also count, for a stage with more than one good answer.
 @export var alternate_correct_ids: Array[StringName] = []
 
+@export_group("Interaction")
+## On when the answer is **tapped** rather than dragged — Level 3, which has no
+## tray and no target to carry a card to.
+##
+## It is set in the scene rather than read from the challenge's `interaction`
+## because a tap stage is built differently: it has no %DropZone, and reading it
+## from an optional resource would mean a stage with no level_content silently
+## became a drag stage with nothing to drag to. `verify_level_3` checks the two
+## still agree.
+##
+## A tap stage has no tray at all, so its cards always draw themselves and are
+## always dealt afresh — the two things [member blank_tray] turns on for a stage
+## that does have one — and a spent card is darkened where it stands rather than
+## leaving an empty slot behind.
+@export var tap_to_answer: bool = false
+
 @export_group("Art")
 ## On when this stage's tray has empty slots rather than its items painted in, so
 ## every card draws itself at rest over its slot. Off for Level 1's drawn trays,
@@ -112,7 +129,9 @@ var _answered := false
 ## what the stars are worked out from.
 var _wrong_attempts := 0
 
-@onready var _drop_zone: Control = %DropZone
+## The target a card is carried to. A tap stage has none: see
+## [member tap_to_answer].
+@onready var _drop_zone: Control = get_node_or_null("%DropZone") as Control
 @onready var _cards: Control = %Cards
 @onready var _overlay: Control = %Overlay
 @onready var _overlay_aspect: AspectRatioContainer = %OverlayAspect
@@ -125,11 +144,21 @@ func _ready() -> void:
 	super()
 	_overlay.hide()
 	_overlay_button.pressed.connect(_on_overlay_pressed)
+	# Loose: the card draws itself and its place is dealt rather than painted.
+	# True of a blank tray's slots, and of a tap stage, which has no tray.
+	var loose := blank_tray or tap_to_answer
 	for card in cards():
-		card.draw_at_rest = blank_tray
-		card.dropped.connect(_on_card_dropped)
-	if blank_tray:
+		card.draggable = not tap_to_answer
+		card.draw_at_rest = loose
+		card.keep_art_when_spent = tap_to_answer
+		if tap_to_answer:
+			card.tapped.connect(_on_card_tapped)
+		else:
+			card.dropped.connect(_on_card_dropped)
+	if loose:
 		shuffle_cards()
+	if not tap_to_answer and _drop_zone == null:
+		push_warning("%s: no %%DropZone, so a dragged card has nowhere to land" % name)
 	_show_prompt()
 	_show_header()
 
@@ -184,12 +213,27 @@ func is_correct(option_id: StringName) -> bool:
 func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 	if _answered:
 		return
-	if not _drop_zone.get_global_rect().has_point(at_global):
+	if _drop_zone == null or not _drop_zone.get_global_rect().has_point(at_global):
 		# Let go somewhere that is not the target. That is not an answer — the
 		# child changed their mind or missed — so the card goes back and stays
 		# every bit as pickable as before.
 		card.return_home()
 		return
+	_answer(card)
+
+
+## A tap stage has nowhere to carry a card to, so choosing one is the whole
+## attempt. There is no drop to miss and nothing to slide home.
+func _on_card_tapped(card: OptionCard) -> void:
+	if _answered:
+		return
+	_answer(card)
+
+
+## One wrong-or-right, however the child got here. [method OptionCard.return_home]
+## does nothing for a card that never left its place, so a tap takes this path
+## unchanged.
+func _answer(card: OptionCard) -> void:
 	if is_correct(card.option_id):
 		_answered = true
 		card.freeze()
@@ -202,9 +246,9 @@ func _on_card_dropped(card: OptionCard, at_global: Vector2) -> void:
 		on_correct(card)
 		_show_feedback(correct_card, correct_button_rect, continue_art, correct_art_rect)
 	else:
-		# Actually tried on the target and wrong. The card returns to its slot
-		# greyed out: still visible, so the attempt is not erased, but no longer
-		# pickable, so the same wrong answer cannot be repeated.
+		# Actually chosen, and wrong. The card goes back greyed out: still
+		# visible, so the attempt is not erased, but no longer pickable, so the
+		# same wrong answer cannot be repeated.
 		card.return_home()
 		card.mark_spent()
 		_wrong_attempts += 1

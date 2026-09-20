@@ -153,6 +153,17 @@ A wrong card leaves no icon and a darkened slot. With `blank_tray` off, a
 resting card draws nothing, for a tray with its items painted in; Level 1's
 old drawn trays were that, and no stage uses one now.
 
+**Level 3 taps instead of dragging.** A stage sets `tap_to_answer` and its
+cards answer where they stand: no `%DropZone`, no slide home, and the press is
+the game's usual darken-and-squash, applied to the card's art so the hit area
+does not move under the finger. Such a stage has no tray at all, so its cards
+always draw themselves and are always shuffled — the two things `blank_tray`
+turns on for a stage that has one — and a wrong card stays on screen darkened
+rather than leaving an empty slot, because there is no slot drawn behind it to
+fall back to. `tools/verify_tap_answer.gd` walks both routes through
+`StageScreen`, so a change made for Level 3 cannot quietly break the other
+three.
+
 A blank tray also **shuffles**: each play deals the cards into the scene's slots
 in a new order. The scene still lists its cards in the content file's order,
 which is what `verify_level_*` compares. A drawn tray cannot shuffle, since a
@@ -399,11 +410,13 @@ property that does not exist and fail silently.
 | Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
 | Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
 | Level 2 stages play through | `godot --headless --path . -s res://tools/verify_level_2.gd` |
+| Tap answers, and drag still works | `godot --headless --path . -s res://tools/verify_tap_answer.gd` |
 | Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.
-So does `verify_audio.gd`, which plays a stage to check the answer stings.
+So do `verify_audio.gd`, which plays a stage to check the answer stings, and
+`verify_tap_answer.gd`, which answers one.
 
 **Once music has played, every run ends with `1 resources still in use at exit`.**
 That is the audio server's playback object outliving the scene tree, not a leak
