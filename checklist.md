@@ -230,16 +230,16 @@ unlocks **Little Planter**.
       rather than by eye; the rows' baked-in filled stars are covered with the
       empty star so a row starts empty. The Level 3 intro's Continue and all
       five stages' `done_scene_path` now point at it
-- [ ] **Level 3 has no music track of its own.** `AudioDirectorService.Track`
-      stops at `LEVEL_2`, so the five stages use `MENU`, matching what
-      `level_intro_l3.tscn` already does and letting the hub's loop carry
-      through. A `LEVEL_3` track means an enum entry, an export on the
-      AudioDirector scene and a piece of music to point it at. **⚠**
-- [ ] **Level 3's five Reinforcement Facts have no transcript and no reviewer.**
-      They are drawn into the Correct cards, so nothing renders them and
-      `verify_content` cannot see them, but they are teaching content and they
-      have no voice-over line. The wording is listed in `assets/art/MANIFEST.md`
-      for the teaching-content owner. **⚠**
+- [x] ~~**Level 3 has no music track of its own**~~ **It did — unwired.**
+      `assets/audio/music/level_3.mp3` was in the repo all along; the enum
+      stopped at `LEVEL_2`, so nothing could name it. `Track.LEVEL_3` is 4, and
+      all seven Level 3 screens ask for it. `level_4.mp3` and `level_5.mp3` are
+      there too, still unwired
+- [x] ~~**Level 3's five Reinforcement Facts have no transcript and no
+      reviewer**~~ **Accepted as drawn art**, by the project owner, like the
+      Oops card's wording. They are not fun facts and get no transcript, no
+      `vo_key` and no `verify_content` rule. The wording is listed in
+      `assets/art/MANIFEST.md` for reference
 - [x] ~~**The right answer is the leftmost card in every Level 2 situation.**~~
       **Answered: shuffled per play.** The
       approved table lists the answer first, and the scenes follow the content
