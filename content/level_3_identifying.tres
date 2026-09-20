@@ -35,6 +35,8 @@ prompt_transcript = "I am green and flat. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_2hnhk"), SubResource("Resource_n1cny"), SubResource("Resource_1qecj")])
 correct_option_id = &"leaves"
+header_label_transcript = "Stage 1"
+header_title_transcript = "Identify the Plant Part"
 prompt_vo_key = &"l3_leaves_prompt"
 scene_state = &"highlight_leaves"
 
@@ -61,6 +63,8 @@ prompt_transcript = "I stand tall like a trunk or a straw. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_8chqc"), SubResource("Resource_3ghdj"), SubResource("Resource_2hnhk")])
 correct_option_id = &"stem"
+header_label_transcript = "Stage 2"
+header_title_transcript = "Identify the Plant Part"
 prompt_vo_key = &"l3_stem_prompt"
 scene_state = &"highlight_stem"
 
@@ -71,6 +75,8 @@ prompt_transcript = "I live underground in the soil. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_1qecj"), SubResource("Resource_8chqc"), SubResource("Resource_2hnhk")])
 correct_option_id = &"roots"
+header_label_transcript = "Stage 3"
+header_title_transcript = "Identify the Plant Part"
 prompt_vo_key = &"l3_roots_prompt"
 scene_state = &"highlight_roots"
 
@@ -81,6 +87,8 @@ prompt_transcript = "I am bright and colourful. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_1qecj"), SubResource("Resource_n1cny"), SubResource("Resource_8chqc")])
 correct_option_id = &"flower"
+header_label_transcript = "Stage 4"
+header_title_transcript = "Identify the Plant Part"
 prompt_vo_key = &"l3_flower_prompt"
 scene_state = &"highlight_flower"
 
@@ -91,6 +99,8 @@ prompt_transcript = "I grow after the flower. What am I?"
 interaction = 0
 options = Array[ExtResource("2_p414j")]([SubResource("Resource_2hnhk"), SubResource("Resource_3ghdj"), SubResource("Resource_n1cny")])
 correct_option_id = &"fruit"
+header_label_transcript = "Stage 5"
+header_title_transcript = "Identify the Plant Part"
 prompt_vo_key = &"l3_fruit_prompt"
 scene_state = &"highlight_fruit"
 

@@ -228,7 +228,16 @@ It is the `HeaderSign` component: a stage that holds a `%HeaderSign` has it
 filled from its challenge by `StageScreen`, the same way a `%PromptBubble` is.
 
 Level 1's four headers keep their drawn wording and leave both fields empty.
-Levels 3 and 4 are undecided.
+
+**Level 3 does the same, on its own sign.** `ui_header_blank_l3.png` puts the
+plaque *on top of* the banner rather than above it, so it is a second component,
+`header_sign_l3.tscn`, with its own plate rects — not a texture swap on Level
+2's. All five stages read "Stage N" / "Identify the Plant Part": the same banner
+every time, because a banner that named the part would be the answer.
+
+It is also given **760 px** where Level 2's sign gets 660, since "Identify the
+Plant Part" does not fit the narrower banner at the theme's size. A Level 3
+stage must give it that width. Level 4 is undecided.
 
 ## Fun facts are Level 1's alone — decided
 

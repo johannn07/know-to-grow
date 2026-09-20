@@ -1,7 +1,7 @@
 extends SceneTree
 
 ## Checks every piece of live text laid over art: the prompt bubble and the
-## header sign. That each component is built right, that every wording in
+## header signs. That each component is built right, that every wording in
 ## content/ fits it, and that a stage fills both from its content file.
 ##
 ##   godot --headless --path . -s res://tools/verify_live_text.gd
@@ -13,7 +13,20 @@ extends SceneTree
 ## the width a stage gives it, and must not lose a line or a letter.
 
 const BUBBLE := "res://scenes/components/prompt_bubble.tscn"
-const HEADER := "res://scenes/components/header_sign.tscn"
+
+## The blank header sign each level uses, and the width its stages give it.
+##
+## There is more than one sign. Level 3's plaque sits *on top of* its banner
+## rather than above it, so it is a different shape with its own plate rects,
+## and it is given more width because "Identify the Plant Part" is half again as
+## long as the longest Level 2 banner and will not fit 660 px at the theme's
+## size. A level whose headers are drawn into the art, as Level 1's four are, is
+## absent from here.
+const HEADERS := {
+	&"level_2": ["res://scenes/components/header_sign.tscn", 660.0],
+	&"level_3": ["res://scenes/components/header_sign_l3.tscn", 760.0],
+}
+
 const THEME := "res://themes/ktg_theme.tres"
 const LEVELS: Array[String] = [
 	"res://content/level_1_planting.tres",
@@ -21,11 +34,9 @@ const LEVELS: Array[String] = [
 	"res://content/level_3_identifying.tres",
 	"res://content/level_4_functions.tres",
 ]
-## The widths Level 1's stages give their Prompt and Header slots, in design
-## pixels. Later levels take their numbers from those, and the theme's sizes
-## are chosen at these widths.
+## The width Level 1's stages give their Prompt slot, in design pixels. Later
+## levels take their number from it, and the theme's size is chosen at it.
 const BUBBLE_WIDTH := 964.0
-const HEADER_WIDTH := 660.0
 ## A stage scene to put the components into, and a challenge that uses both.
 const STAGE := "res://scenes/levels/level_1/stage_1.tscn"
 const LIVE_CHALLENGE := &"l2_hard_soil"
@@ -36,21 +47,31 @@ var _failures := 0
 func _initialize() -> void:
 	await process_frame
 	var bubble: PackedScene = load(BUBBLE)
-	var header: PackedScene = load(HEADER)
 	_expect(bubble != null, "prompt_bubble.tscn loads")
-	_expect(header != null, "header_sign.tscn loads")
-	if bubble == null or header == null:
+	if bubble == null:
 		_finish()
 		return
 
 	print("\nPrompt bubble")
 	await _check_component(bubble, BUBBLE_WIDTH, "bubble_art", ["%Text"])
 	await _check_every_prompt_fits(bubble)
-	print("\nHeader sign")
-	await _check_component(header, HEADER_WIDTH, "sign_art", ["%Label", "%Title"])
-	await _check_every_header_fits(header)
+
+	var signs := {}
+	for level_id: StringName in HEADERS:
+		var path: String = HEADERS[level_id][0]
+		var width: float = HEADERS[level_id][1]
+		var scene: PackedScene = load(path)
+		print("\nHeader sign — %s, %s at %d px" % [level_id, path.get_file(), width])
+		_expect(scene != null, "%s loads" % path.get_file())
+		if scene == null:
+			continue
+		signs[level_id] = scene
+		await _check_component(scene, width, "sign_art", ["%Label", "%Title"])
+		await _check_every_header_fits(scene, width, level_id)
+
 	print("\nStage")
-	await _check_stage_fills_them(bubble, header)
+	if signs.has(&"level_2"):
+		await _check_stage_fills_them(bubble, signs[&"level_2"])
 	_finish()
 
 
@@ -114,15 +135,20 @@ func _check_every_prompt_fits(scene: PackedScene) -> void:
 	await process_frame
 
 
-func _check_every_header_fits(scene: PackedScene) -> void:
-	var host := await _host(scene, HEADER_WIDTH)
+## Every header wording of one level, in that level's own sign at the width its
+## stages give it. A plate rect measured off one blank is not on the plates of
+## the other, so the two are never crossed over.
+func _check_every_header_fits(
+	scene: PackedScene, width: float, level_id: StringName
+) -> void:
+	var host := await _host(scene, width)
 	var sign: HeaderSign = host.get_child(0) as HeaderSign
 	var plaque: Label = sign.get_node("%Label")
 	var banner: Label = sign.get_node("%Title")
 	print("  plaque box %dx%d, banner box %dx%d in a %d px wide sign"
-		% [plaque.size.x, plaque.size.y, banner.size.x, banner.size.y, HEADER_WIDTH])
+		% [plaque.size.x, plaque.size.y, banner.size.x, banner.size.y, width])
 	var checked := 0
-	for challenge in _challenges():
+	for challenge in _challenges_of(level_id):
 		if challenge.header_label_transcript.is_empty():
 			continue
 		sign.label_text = challenge.header_label_transcript
@@ -136,7 +162,7 @@ func _check_every_header_fits(scene: PackedScene) -> void:
 					challenge.header_title_transcript]
 		)
 	print("  %d live headers checked" % checked)
-	_expect(checked == 5, "all 5 of Level 2's headers were checked (%d)" % checked)
+	_expect(checked == 5, "all 5 of %s's headers were checked (%d)" % [level_id, checked])
 	host.queue_free()
 	await process_frame
 
@@ -174,6 +200,16 @@ func _adopt(stage: Node, scene: PackedScene, node_name: String) -> Node:
 	node.owner = stage
 	node.unique_name_in_owner = true
 	return node
+
+
+## Just one level's challenges, by the `id` in its content file.
+func _challenges_of(level_id: StringName) -> Array[ChallengeData]:
+	for path in LEVELS:
+		var level: LevelData = load(path) as LevelData
+		if level != null and level.id == level_id:
+			return level.challenges
+	_expect(false, "a content file has id '%s'" % level_id)
+	return []
 
 
 func _challenges() -> Array[ChallengeData]:

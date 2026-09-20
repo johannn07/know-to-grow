@@ -727,10 +727,30 @@ Continue is drawn below the card as `CONTINUE_BELOW_CARD_RECT`.
 
 - **`ui_header_blank_l3.png` is a second `HeaderSign` shape**, not the one in
   `ui/common/`. The brown plaque sits *on top of* the cream banner here rather
-  than above it, so its two plate rects have to be measured off this image and
-  cannot be taken from `header_sign.tscn`. Its plaque carries "Stage N" and its
-  banner "Identify the Plant Part" on all five stages — decided, so the answer
-  is never in the header.
+  than above it, so its two plate rects were measured off this image rather than
+  taken from `header_sign.tscn`. Its plaque carries "Stage N" and its banner
+  "Identify the Plant Part" on all five stages — decided, so the answer is never
+  in the header.
+- **Wired** as `scenes/components/header_sign_l3.tscn`, the same `HeaderSign`
+  script as Level 2's with its own art and plate rects:
+
+  | Plate | On the 1755 x 876 image | In fractions |
+  |---|---|---|
+  | plaque, `%Label` | 360-1490 x 210-455 | `(0.2051, 0.2397) - (0.8490, 0.5194)` |
+  | banner, `%Title` | 110-1650 x 580-770 | `(0.0627, 0.6621) - (0.9402, 0.8790)` |
+
+  The plaque wood runs 300-1555 x 115-545 and the cream banner 70-1690 x
+  567-800; both boxes are inset from those so the text stays off the curved
+  ends and the dark outline.
+
+- **Level 3's sign is given 760 px, not Level 2's 660.** "Identify the Plant
+  Part" is 557 px wide at the theme's 51 px `HeaderTitle`, against a banner that
+  is only 0.8775 of the image wide — 554 px at 660, which does not fit. Widening
+  the sign keeps the type the same size as Level 2's rather than shrinking Level
+  3's words, and at 760 the sign is 379 px tall and the banner box 666 x 82.
+  `tools/verify_live_text.gd` now checks each level's headers against its own
+  sign at its own width, and a Level 3 stage scene must give the sign 760 px or
+  that check stops describing what ships.
 - It is in `levels/level_3/`, not `ui/common/`, because `ui/common/` is art
   *every* level shares and Level 4 ships its own `ui_header_blank_l4.png`.
 - **`ui_tap_the_correct_answer.png` replaces the tray's drawn "Choose a Tool".**
