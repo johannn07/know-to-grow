@@ -5,6 +5,121 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
+## 2026-09-18/20 — Level 2, built end to end
+
+**Where it got to:** Level 2 is playable from its intro to its ending. Five
+situations, a situation select, two badges, a completed-level sign, and a hub
+whose plant has grown into a sprout that offers Level 3. Level 1 was pulled onto
+the same blank tray on the way, and the cards of both levels are now shuffled
+every play. Seven headless suites pass. All merged to `master` and pushed;
+`master` is at `4436c55`.
+
+### What was done, in order
+
+- **Content first.** `content/level_2_monitoring.tres` rewritten to the Figma:
+  its five prompts, three options per situation rather than six, and the
+  approved distractors. Fun facts taken out of Levels 2-4, since only Level 1
+  has a strip — `verify_content` now requires them for Level 1 and forbids them
+  elsewhere, and the voice-over script stopped writing empty rows.
+- **Prompts became live text.** One blank bubble, `ui_prompt_bubble.png`, with
+  the words laid over it as `PromptBubble`. `prompt_transcript` is the one
+  transcript that is rendered, so a prompt change never means re-rendering art.
+- **Headers became live text too**, on the blank sign: `HeaderSign` with a
+  plaque (`header_label_transcript`) and a banner (`header_title_transcript`),
+  both new fields on `ChallengeData`. `tools/verify_live_text.gd` lays every
+  wording in the game into both components and fails if a line would clip.
+- **The blank tray.** `OptionCard.draw_at_rest` and `StageScreen.blank_tray`:
+  where a tray has empty slots, a resting card draws itself; on a drawn tray it
+  draws nothing, because the picture already has the item.
+- **Level 2's own music track**, appended to the `Track` enum — appended, since
+  scenes store the track as a number.
+- **The stage select learned to take any number of rows.** `row_rects`,
+  `close_rect`, `row_art` and `row_art_locked` now come from the scene, so
+  `stage_select_l2.tscn` could have five. A row opens only when it has been
+  reached *and* its stage scene exists.
+- **The completed-level sign and the grown hub**, then **the hub leading on to
+  Level 2**: the play button names the level the plant is waiting on.
+- **Level 2's five situations**, Situation 1 first as the pattern, then 2-5
+  copying its numbers. Chained 1 → 2 → 3 → 4 → 5.
+- **The multi-tap bug fixed** (below).
+- **Cards shuffled every play** on any blank tray.
+- **Level 1 moved onto the blank tray**, all four stages re-anchored, so it
+  shuffles too. Its four drawn trays were deleted afterwards.
+- **Level 2's ending**: Situation 5 → Level 2 Complete → Plant Helper → Green
+  Thumb → "You Completed Level 2!" → hub, where the plant is the new
+  `plant_leafy.png`, labelled SPROUT, and the button offers Level 3.
+
+### Decisions taken
+
+- **Three options per situation**, with the owner's distractor table: S1 Shovel
+  / Watering Can / Sunlight · S2 Pruning Shears / Shovel / Water · S3 Watering
+  Can / Shovel / Fertilizer · S4 Sunlight / Water / Fertilizer · S5 Fertilizer /
+  Pruning Shears / Sunlight.
+- **All five Level 2 headers are the blank sign**, for consistency, even though
+  the Figma drew S1's.
+- **The Figma's wording wins** wherever it disagrees with the content file.
+- **The blank tray is used for Level 1 as well**, overriding the earlier plan to
+  keep its drawn trays.
+- **The score counter is skipped for now**, and the "Click Me" hub beat is
+  skipped entirely — Grow Now goes straight to the grown hub.
+- **Level 2 gives two badges**, Plant Helper then Green Thumb.
+- **The plant after Level 2 is called SPROUT**; the hub then says "Level 3:
+  Identifying" and opens the new intro card, whose Continue returns to the hub
+  until Level 3's stages exist.
+
+### The multi-tap bug, and why the first test passed
+
+Tapping a card is a tiny drag that lets go on the card, so the card slides home.
+A second tap **during** that slide made the card take its half-way point as
+home; the two slides then raced and it came to rest ~1300 px away, off screen,
+where it could never be tapped again. `OptionCard` now keeps the return tween,
+and a tap during a slide finishes that slide first — the home can no longer be
+overwritten.
+
+The first version of the test tapped five times and **passed before the fix**,
+because an odd number of taps happened to re-home the card. A sweep showed every
+double-tap breaks it. The test now does two and three taps at three speeds: five
+of those six cases failed before the fix, all six pass after, and a 30-pattern
+sweep across both levels ends 0 px from the slot.
+
+### Things that turned out to be true, and cost time
+
+- **A shuffle test has to read the slots before `_ready()`.** `cards()` goes
+  through an `@onready` reference, so an un-added scene returns nothing; the
+  authored slots are read off the `%Cards` node directly.
+- **The Level 2 sign's Grow Now is not Level 1's pill.** They look identical and
+  sit at the same x, but differ by ~10/255 on average, so the sign got its own
+  pill cut from itself with Level 1's stadium mask. Checked by compositing the
+  darkened pill back over the sign: no ring of the painted one shows.
+- **Godot rewrites `config/icon` in `project.godot` to a `uid://`** when the
+  editor imports. It is not a change worth keeping in a diff — reverted.
+- **`2 ObjectDB instances were leaked at exit` is a flake**, not a regression.
+  It appears on `--quit` only when the menu music has started first, and two
+  worktrees at earlier commits show it on some runs and not others. It travels
+  with the `1 resources still in use` line `CLAUDE.md` already says to ignore.
+
+### Still in progress
+
+- **Level 3 has nothing but its intro card.** No stage select card, no stages,
+  no content wired to a scene. `level_intro_l3.tscn` returns to the hub.
+- **Two transcripts were corrected to new artwork** and need the teaching-content
+  owner's eye: Level 2's completion line, and Level 3's instruction, which now
+  describes the level as reading *clues*. They join the seven prompts already
+  flagged in `checklist.md` §4.
+- **Level 2 has no score counter**, which the design document specifies as 0/5.
+- `level_select_stub.tscn` is reached by nothing; only the smoke and audio tests
+  still load it.
+- Level 2's intro art says "Tap", but Level 2 is played by dragging.
+
+### Next step
+
+Level 3: it needs a drawn stage select card with its rows, five stage scenes,
+and a decision on whether its headers are live text like Level 2's or drawn like
+Level 1's. Level 3 is multiple choice with no tray, so the card layout is not a
+copy of Level 2's — worth agreeing the shape of one stage before building five.
+
+---
+
 ## 2026-09-18 — DESIGN.md, and the stage select keeps its drawn card
 
 **Where it got to:** the locked decisions are written down, and the stage select

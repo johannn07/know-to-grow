@@ -386,6 +386,9 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       than inert. **`/android/` is gitignored**, so a fresh clone has to
       reinstall it from the editor (Project → Install Android Build Template)
       before a gradle export will run
+- [ ] Godot rewrites `config/icon` in `project.godot` to a `uid://` whenever the
+      editor imports. Harmless, but revert it rather than committing it, so the
+      file keeps one reviewed form
 - [ ] Launcher icons: 192×192 and the three 432×432 adaptive layers
 - [ ] Splash screen art
 - [x] **Export a debug APK to a real phone**, and keep doing it — the owner tests
