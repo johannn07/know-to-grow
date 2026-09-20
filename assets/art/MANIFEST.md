@@ -227,7 +227,6 @@ Notes:
 | `bg_bed_sprout.png` | 851 x 1849 | 2.2 MB |
 | `ui_header_l1_s4.png` | 900 x 426 | 373 KB |
 | `ui_prompt_l1_s4.png` | 1000 x 464 | 426 KB |
-| `ui_tray_l1_s4.png` | 1000 x 462 | 535 KB |
 | `icon_cloud.png` | 300 x 372 | 112 KB |
 | `icon_moon.png` | 300 x 353 | 114 KB |
 | `ui_correct_l1_s4.png` | 800 x 665 | 434 KB |
@@ -471,52 +470,30 @@ flowers the painted-in versions do not have.
   and lifts it to `1.08` on hover — which only a mouse ever sees, since Android
   has no hover state. Change one and change the other.
 
-## Tool trays — delivered
+## Tool trays — the four drawn ones are deleted
 
-| File | Size | Weight |
-|---|---|---|
-| `ui_tray_l1_s1.png` | 1000 x 476 | 522 KB |
-| `ui_tray_l1_s2.png` | 1000 x 487 | 504 KB |
-| `ui_tray_l1_s3.png` | 1000 x 470 | 549 KB |
-| `ui_tray_l1_s4.png` | 1000 x 462 | 535 KB |
+`ui_tray_l1_s1..4.png` were Level 1's trays with each stage's three items
+**drawn into them**, at 1000 x ~470. They are **gone from the repo**: Level 1
+moved to `ui_tray_blank.png` (below) so that its cards could be shuffled, which
+a drawn tray cannot do — a card moved off its own painting would sit on another
+item's picture. Recover them from git history if a drawn tray is ever wanted
+again.
 
-**Retired: no stage uses these now.** Level 1 moved to `ui_tray_blank.png`,
-below, so its cards can be shuffled. Kept until it is decided to delete them.
+Two rules died with them, both of which shaped the code:
 
-Each stage's "Choose a Tool" tray, with its three items **drawn into it**. The
-draggable cards are anchored exactly over those drawn slots, so the tray reads
-as one picture until a card is lifted — and then the drawn item underneath shows
-through, which is what marks the slot the card came from.
+- **A resting card drew nothing**, because the tray already had that item
+  painted in at the right size and place. Drawing both produced a rim inside a
+  rim: standalone cards carry thicker frames than the drawn slots did, by
+  different amounts per family. On the blank tray the card draws itself instead
+  — that is what `blank_tray` switches, and both halves are still in
+  `OptionCard`.
+- **The cards had to stay in the tray's order**, or they sat over the wrong
+  drawn labels. Now the order is the content file's, and where each card lands
+  is dealt afresh every play.
 
-Two things follow, and both are easy to break by accident:
-
-- **The cards must stay in the same order as the items in the tray.** Stage 2's
-  tray is Leaf / Seed / Rock, so its cards are in that order and not the order
-  the content file happens to list them in. Reordering the cards in the editor
-  would leave them sitting over the wrong labels. Each stage script says so at
-  the top.
-- **A resting card draws nothing.** The tray already has that item painted into
-  it, at exactly the right size and place, so the card is only a hit area until
-  it is picked up. Drawing both produced a rim inside a rim: the standalone
-  cards carry thicker frames than the tray's drawn slots, and by different
-  amounts per family — `icon_sun` and `icon_gloves` have noticeably chunkier
-  frames than `icon_shovel` — so no single scaling lines them all up. Not
-  double-drawing is exact by construction, and it holds for every stage.
-  A card that has no artwork yet stays visible, so a missing asset is still a
-  labelled blank rather than an invisible one.
-
-A card becomes visible only while it is being dragged. An option that has been
-tried and was wrong is marked by **tinting its slot** — a rounded translucent
-panel at exactly the card's rect, which is the slot — rather than by putting the
-greyed card back over it, which would reintroduce the same frame mismatch.
-
-The slot rectangles are measured off each tray rather than estimated; the
-measuring script lives beside the generated scenes' history in the commit that
-introduced them, and the numbers are baked into the scenes as anchors.
-
-Option shuffling is gone as a result: a card's position is fixed by the picture
-behind it. That only ever mattered for Level 3, which is multiple choice and has
-no tray.
+What survives unchanged: a wrong option is marked by **tinting its slot** — a
+rounded translucent panel at exactly the card's rect — rather than by putting a
+greyed card back over it.
 
 ## Prompt and fun fact are drawn at a fixed width
 

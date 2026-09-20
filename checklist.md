@@ -337,16 +337,11 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       blank is a real Figma export (`e54af65e…`, 1672 x 941), so it drops in
       cleanly. **The five titles are already in `content/level_2_monitoring.tres`**
 - [x] **Swap in the new empty tool tray** for Level 1 — done. All four stages
-      are on `ui_tray_blank.png` with Level 2's slot anchors, and shuffle.
-      `ui_tray_l1_s1..4.png` are now used by nothing and can be deleted **⚠**
-      It is a newly drawn asset rather than a Figma export, so its proportions
-      differ from `ui_tray_l1_s1.png` (alpha ratio 2.0802 against 2.1008, and
-      shifted down the canvas). Swapping it means **re-measuring the card
-      anchors in all four Level 1 stage scenes**, so it is not a file swap.
-      The card side is built: a stage sets `blank_tray` and its cards draw
-      themselves at rest, while a wrong card leaves a darkened empty slot. So
-      the swap is the texture, `blank_tray = true`, and the re-measured anchors.
-      Levels 3 and 4 undecided
+      are on `ui_tray_blank.png` with Level 2's slot anchors, and shuffle. The
+      tray is a newly drawn asset rather than a Figma export, so its proportions
+      differ and every card anchor was re-measured; it was never a file swap.
+      The four drawn trays, `ui_tray_l1_s1..4.png`, are **deleted** — in git
+      history if they are ever wanted back. Levels 3 and 4 undecided
 - [ ] Item cards for Level 2's six items at the tray's slot size — the three in
       the Figma are Level 1 Stage 1's placeholders, reused in all five situations
 - [ ] Hero plant variants, including versions with roots exposed
