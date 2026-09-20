@@ -758,6 +758,37 @@ Continue is drawn below the card as `CONTINUE_BELOW_CARD_RECT`.
   own `ui_tap_the_correct_function_card.png`, so it is Level 3's alone despite
   the name carrying no `_l3` suffix.
 
+### How a Level 3 stage is laid out
+
+Measured against `scenes/levels/level_3/stage_1.tscn`, which the other four
+copy. At the 1080 x 1920 design resolution:
+
+| Piece | Rect | Notes |
+|---|---|---|
+| `%Background` | full screen | `KEEP_COVERED`, clipped |
+| `%HeaderSign` | 160-920 x 20-399 | 760 wide, the width its banner was fitted at |
+| `%PromptBubble` | 58-1022 x **1000-1457** | 964 wide, Level 1's width; **y varies per stage** |
+| `TapBanner` | 140-940 x 1478-1600 | 800 wide |
+| three cards | y 1610-1900, 260 x 290 | x 90 / 410 / 730, 60 apart |
+
+**The bubble's y is each stage's own decision, and the only thing that moves.**
+The glowing part is drawn into each background at a different height, and a
+964-wide bubble across it hides the answer. Checked in a full-resolution
+composite of all five:
+
+| Stage | Glowing part sits at | Bubble |
+|---|---|---|
+| 1 leaves | y 450-990 | **low**, y 1000 |
+| 2 stem | y 790-1180 | **high**, y 420 |
+| 3 roots | y 1080-1400 | **high**, y 420 |
+| 4 flower | y 440-600 | **low**, y 1000 |
+| 5 fruit | y 790-950 | **low**, y 1000 |
+
+At the low position the bubble sits over the soil beside the sprout mascot,
+which reads as the mascot speaking rather than as a panel dropped on the
+garden. There is no third position: high and low are the only two, and the
+header, banner and cards never move.
+
 ### Stage select — `ui/stage_select/`
 
 | File | Size | Weight |

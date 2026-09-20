@@ -153,6 +153,13 @@ A wrong card leaves no icon and a darkened slot. With `blank_tray` off, a
 resting card draws nothing, for a tray with its items painted in; Level 1's
 old drawn trays were that, and no stage uses one now.
 
+**A Level 3 stage moves its prompt bubble, and nothing else.** The glowing
+part is drawn into each background at a different height, and a full-width
+bubble across it hides the answer. There are two positions — high, `y 420`, and
+low, `y 1000` — and a stage picks the one away from its own highlight. Header,
+tap banner and card row sit identically in all five. The table in
+`assets/art/MANIFEST.md` says which stage uses which and why.
+
 **Level 3 taps instead of dragging.** A stage sets `tap_to_answer` and its
 cards answer where they stand: no `%DropZone`, no slide home, and the press is
 the game's usual darken-and-squash, applied to the card's art so the hit area
@@ -410,13 +417,14 @@ property that does not exist and fail silently.
 | Progress rules | `godot --headless --path . -s res://tools/verify_game_state.gd` |
 | Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
 | Level 2 stages play through | `godot --headless --path . -s res://tools/verify_level_2.gd` |
+| Level 3 stages play through | `godot --headless --path . -s res://tools/verify_level_3.gd` |
 | Tap answers, and drag still works | `godot --headless --path . -s res://tools/verify_tap_answer.gd` |
 | Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.
 So do `verify_audio.gd`, which plays a stage to check the answer stings, and
-`verify_tap_answer.gd`, which answers one.
+`verify_tap_answer.gd` and `verify_level_3.gd`, which answer one.
 
 **Once music has played, every run ends with `1 resources still in use at exit`.**
 That is the audio server's playback object outliving the scene tree, not a leak
