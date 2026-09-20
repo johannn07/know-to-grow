@@ -224,8 +224,12 @@ unlocks **Little Planter**.
       whose highlights are low, and low on 1, 4 and 5. 1 → 2 → 3 → 4 → 5 are
       chained; played by `verify_level_3` and checked in a full-resolution
       composite of all five
-- [ ] **Level 3 intro's Continue still goes back to the hub**, and so does
-      Stage 5. Level 3 has no stage select yet; point both at it once it exists
+- [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with
+      all five rows in it, Stage 1 unlocked and 2-5 grey, in the Level 2
+      pattern. Row rects found by matching each row drawing against the card
+      rather than by eye; the rows' baked-in filled stars are covered with the
+      empty star so a row starts empty. The Level 3 intro's Continue and all
+      five stages' `done_scene_path` now point at it
 - [ ] **Level 3 has no music track of its own.** `AudioDirectorService.Track`
       stops at `LEVEL_2`, so the five stages use `MENU`, matching what
       `level_intro_l3.tscn` already does and letting the hub's loop carry

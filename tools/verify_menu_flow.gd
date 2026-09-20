@@ -64,6 +64,7 @@ func _initialize() -> void:
 		"res://scenes/ui/level_intro_l3.tscn",
 		"res://scenes/ui/stage_select.tscn",
 		"res://scenes/ui/stage_select_l2.tscn",
+		"res://scenes/ui/stage_select_l3.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -238,6 +239,7 @@ func _initialize() -> void:
 		await _check_hub_grows_the_plant(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
+		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l3.tscn", &"level_3")
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)

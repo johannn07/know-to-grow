@@ -1,0 +1,525 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://4mr7i50nws1k" path="res://scripts/ui/stage_select.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://k1ruiahxqblq" path="res://assets/art/backgrounds/bg_garden_stump.png" id="4_bg"]
+[ext_resource type="Texture2D" uid="uid://dypjo2hshtcnb" path="res://assets/art/ui/stage_select/ui_stage_select_l3.png" id="5_card"]
+[ext_resource type="Texture2D" uid="uid://dy5re0uxoeof" path="res://assets/art/ui/stage_select/icon_star_filled.png" id="6_star"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="8_artbtn"]
+[ext_resource type="Texture2D" uid="uid://cych2yn2lpt8x" path="res://assets/art/ui/stage_select/ui_stage_row_1_l3.png" id="1_row"]
+[ext_resource type="Texture2D" uid="uid://br2siado6syit" path="res://assets/art/ui/stage_select/ui_stage_row_2_l3.png" id="2_row"]
+[ext_resource type="Texture2D" uid="uid://64wh6kut2j4s" path="res://assets/art/ui/stage_select/ui_stage_row_3_l3.png" id="3_row"]
+[ext_resource type="Texture2D" uid="uid://bh6wsulkxnabd" path="res://assets/art/ui/stage_select/ui_stage_row_4_l3.png" id="4_row"]
+[ext_resource type="Texture2D" uid="uid://dfuykgj7nl0ij" path="res://assets/art/ui/stage_select/ui_stage_row_5_l3.png" id="5_row"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
+
+[node name="StageSelect" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_screen")
+music_track = 1
+row_rects = Array[Rect2]([Rect2(0.1361, 0.2090, 0.7228, 0.1451), Rect2(0.1374, 0.3487, 0.7228, 0.1426), Rect2(0.1268, 0.4851, 0.7340, 0.1439), Rect2(0.1355, 0.6177, 0.7247, 0.1542), Rect2(0.1311, 0.7720, 0.7334, 0.1476)])
+close_rect = Rect2(0.8191, 0.1186, 0.1342, 0.0813)
+stage_scene_paths = Array[String](["res://scenes/levels/level_3/stage_1.tscn", "res://scenes/levels/level_3/stage_2.tscn", "res://scenes/levels/level_3/stage_3.tscn", "res://scenes/levels/level_3/stage_4.tscn", "res://scenes/levels/level_3/stage_5.tscn"])
+level_id = &"level_3"
+row_art = Array[Texture2D]([ExtResource("1_row"), ExtResource("2_row"), ExtResource("3_row"), ExtResource("4_row"), ExtResource("5_row")])
+row_art_locked = Array[Texture2D]([null, null, null, null, null])
+star_filled = ExtResource("6_star")
+back_scene_path = "res://scenes/ui/hub.tscn"
+
+[node name="Background" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_bg")
+fit = 2
+slot_name = "bg_garden_stump"
+placeholder_color = Color(0.52, 0.82, 0.95, 1)
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 120
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 120
+
+[node name="CardAspect" type="AspectRatioContainer" parent="Center"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+ratio = 0.6671
+
+[node name="Card" type="Control" parent="Center/CardAspect"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="CardArt" type="Control" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("5_card")
+fit = 0
+slot_name = "ui_stage_select_l3"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="RowsArt" type="Control" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Row1Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1361
+anchor_top = 0.2090
+anchor_right = 0.8589
+anchor_bottom = 0.3541
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_stage_row_1_l3"
+hide_when_empty = true
+
+[node name="Row1Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row1Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4858
+anchor_top = 0.4971
+anchor_right = 0.6010
+anchor_bottom = 0.8600
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row1Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row1Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6122
+anchor_top = 0.4971
+anchor_right = 0.7283
+anchor_bottom = 0.8686
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row1Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row1Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7395
+anchor_top = 0.4971
+anchor_right = 0.8555
+anchor_bottom = 0.8686
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row2Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1374
+anchor_top = 0.3487
+anchor_right = 0.8602
+anchor_bottom = 0.4913
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_stage_row_2_l3"
+hide_when_empty = true
+
+[node name="Row2Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row2Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4824
+anchor_top = 0.4797
+anchor_right = 0.5967
+anchor_bottom = 0.8547
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row2Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row2Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6088
+anchor_top = 0.4797
+anchor_right = 0.7240
+anchor_bottom = 0.8517
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row2Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row2Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7360
+anchor_top = 0.4797
+anchor_right = 0.8504
+anchor_bottom = 0.8517
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row3Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1268
+anchor_top = 0.4851
+anchor_right = 0.8608
+anchor_bottom = 0.6289
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_stage_row_3_l3"
+hide_when_empty = true
+
+[node name="Row3Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row3Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4877
+anchor_top = 0.4957
+anchor_right = 0.6020
+anchor_bottom = 0.8674
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row3Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row3Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6139
+anchor_top = 0.4986
+anchor_right = 0.7282
+anchor_bottom = 0.8674
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row3Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row3Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7392
+anchor_top = 0.4957
+anchor_right = 0.8535
+anchor_bottom = 0.8674
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row4Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1355
+anchor_top = 0.6177
+anchor_right = 0.8602
+anchor_bottom = 0.7720
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_stage_row_4_l3"
+hide_when_empty = true
+
+[node name="Row4Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row4Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4837
+anchor_top = 0.5000
+anchor_right = 0.5978
+anchor_bottom = 0.8495
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row4Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row4Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6098
+anchor_top = 0.5000
+anchor_right = 0.7256
+anchor_bottom = 0.8468
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row4Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row4Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7376
+anchor_top = 0.5000
+anchor_right = 0.8525
+anchor_bottom = 0.8468
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row5Art" type="Control" parent="Center/CardAspect/Card/RowsArt"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1311
+anchor_top = 0.7720
+anchor_right = 0.8645
+anchor_bottom = 0.9196
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_stage_row_5_l3"
+hide_when_empty = true
+
+[node name="Row5Star1" type="Control" parent="Center/CardAspect/Card/RowsArt/Row5Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4873
+anchor_top = 0.4860
+anchor_right = 0.6008
+anchor_bottom = 0.8483
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row5Star2" type="Control" parent="Center/CardAspect/Card/RowsArt/Row5Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6119
+anchor_top = 0.4860
+anchor_right = 0.7254
+anchor_bottom = 0.8539
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Row5Star3" type="Control" parent="Center/CardAspect/Card/RowsArt/Row5Art"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7373
+anchor_top = 0.4860
+anchor_right = 0.8508
+anchor_bottom = 0.8483
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "star"
+hide_when_empty = true
+
+[node name="Rows" type="Control" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Row1" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1361
+anchor_top = 0.2090
+anchor_right = 0.8589
+anchor_bottom = 0.3541
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row1Art")
+bounce_art = false
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row2" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1374
+anchor_top = 0.3487
+anchor_right = 0.8602
+anchor_bottom = 0.4913
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row2Art")
+bounce_art = false
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row3" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1268
+anchor_top = 0.4851
+anchor_right = 0.8608
+anchor_bottom = 0.6289
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row3Art")
+bounce_art = false
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row4" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1355
+anchor_top = 0.6177
+anchor_right = 0.8602
+anchor_bottom = 0.7720
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row4Art")
+bounce_art = false
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Row5" type="Button" parent="Center/CardAspect/Card/Rows"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1311
+anchor_top = 0.7720
+anchor_right = 0.8645
+anchor_bottom = 0.9196
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../../RowsArt/Row5Art")
+bounce_art = false
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="CloseButton" type="Button" parent="Center/CardAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8191
+anchor_top = 0.1186
+anchor_right = 0.9533
+anchor_bottom = 0.1999
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")

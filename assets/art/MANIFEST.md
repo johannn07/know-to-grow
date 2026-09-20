@@ -803,14 +803,41 @@ header, banner and cards never move.
 The drawn card with all **five** rows in it, Stage 1 unlocked and 2-5 grey, in
 the Level 2 pattern. Its five row drawings are laid over it.
 
-- **These six are the only Level 3 files not cropped to alpha.** Each row's rect
-  is measured against the card, so cropping each one by its own alpha — which
-  differs by up to 18 px between them — would move them relative to the card by
-  different amounts. They keep the export frames Figma gave them.
-- **The rows still have their three filled stars drawn in.** Per the stage
-  select rule, each must be covered with `icon_star_empty.png` in the image
-  itself before wiring, so a row starts empty and earned stars are drawn on top.
-  Not done yet.
+- **These six are the only Level 3 files not cropped to alpha**, and that is
+  what made them measurable. Each row's rect is found by matching the row
+  against the card; cropping each one by its own alpha — which differs by up to
+  18 px between them — would have moved them relative to the card by different
+  amounts. They keep the export frames Figma gave them, and **all five matched
+  at scale 1.00**, so the rows were exported at the card's own scale.
+- The rects were found by **normalised cross-correlation of each row's gradient
+  magnitude against the card's**, which ignores the colour difference between a
+  coloured row and the grey one painted underneath it. Checked by compositing
+  each row back onto the card at its rect: no grey shows anywhere.
+
+  | Row | Rect on the card, in fractions |
+  |---|---|
+  | 1 | `(0.1361, 0.2090, 0.7228, 0.1451)` |
+  | 2 | `(0.1374, 0.3487, 0.7228, 0.1426)` |
+  | 3 | `(0.1268, 0.4851, 0.7340, 0.1439)` |
+  | 4 | `(0.1355, 0.6177, 0.7247, 0.1542)` |
+  | 5 | `(0.1311, 0.7720, 0.7334, 0.1476)` |
+
+  The close disc is `(0.8191, 0.1186, 0.1342, 0.0813)` — 129 x 117 px at a
+  960-wide card, under the touch floor, so its hotspot is grown past the drawn
+  circle as Level 1's is.
+
+- **The rows' three filled stars have been covered** with `icon_star_empty.png`,
+  in the images themselves, so a row starts empty and earned stars are drawn on
+  top. Each star's gold core was found, grown by 1.132 x 1.146 — the ratio of
+  `icon_star_filled.png`'s full extent to its own gold core, which is how much
+  the dark outline adds — and the empty star composited over it. The same rects
+  are the scene's `RowNStarM` slots, so a filled star lands exactly where the
+  covered one is. Verified in a full-resolution render of the card with all
+  fifteen stars filled.
+- **Each row is its own colour**, not one colour for unlocked and another for
+  locked: green, tan, blue, yellow, purple, top to bottom. The card paints
+  Stages 2-5 grey, so `row_art_locked` is empty and a locked row shows the
+  card's own painting, as Level 2's does.
 
 ### Ending — `ui/screens/`
 
