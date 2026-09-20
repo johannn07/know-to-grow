@@ -1,26 +1,26 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/levels/level_3/stage_1.gd" id="1_stage"]
+[ext_resource type="Script" path="res://scripts/levels/level_3/stage_2.gd" id="1_stage"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
-[ext_resource type="Texture2D" uid="uid://dmgac7dlvrk0e" path="res://assets/art/backgrounds/bg_stage_1_l3.png" id="5_bg"]
+[ext_resource type="Texture2D" uid="uid://bsct1d8c38wt7" path="res://assets/art/backgrounds/bg_stage_2_l3.png" id="5_bg"]
 [ext_resource type="PackedScene" path="res://scenes/components/header_sign_l3.tscn" id="6_header"]
 [ext_resource type="PackedScene" path="res://scenes/components/prompt_bubble.tscn" id="7_bubble"]
 [ext_resource type="Texture2D" uid="uid://d4nsi2ibn8umx" path="res://assets/art/levels/level_3/ui_tap_the_correct_answer.png" id="8_tap"]
-[ext_resource type="Texture2D" uid="uid://cuk6r5abp06cj" path="res://assets/art/levels/level_3/ui_correct_l3_s1.png" id="9_ok"]
+[ext_resource type="Texture2D" uid="uid://c7wige42pymp4" path="res://assets/art/levels/level_3/ui_correct_l3_s2.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://assets/art/levels/level_1/ui_oops_tool.png" id="10_oops"]
 [ext_resource type="Resource" uid="uid://bg2dohoxaf763" path="res://content/level_3_identifying.tres" id="11_content"]
-[ext_resource type="Texture2D" uid="uid://cywc04irmea78" path="res://assets/art/levels/level_3/icon_roots_l3.png" id="12_roots"]
-[ext_resource type="Texture2D" uid="uid://ch8ethb2lswvy" path="res://assets/art/levels/level_3/icon_leaves_l3.png" id="13_leaves"]
-[ext_resource type="Texture2D" uid="uid://blqy2kri3jw8h" path="res://assets/art/levels/level_3/icon_flower_l3.png" id="14_flower"]
+[ext_resource type="Texture2D" uid="uid://ba8wplawtvxyj" path="res://assets/art/levels/level_3/icon_stem_l3.png" id="12_stem"]
+[ext_resource type="Texture2D" uid="uid://bv8a0n5o6d53a" path="res://assets/art/levels/level_3/icon_fruit_l3.png" id="13_fruit"]
+[ext_resource type="Texture2D" uid="uid://cywc04irmea78" path="res://assets/art/levels/level_3/icon_roots_l3.png" id="14_roots"]
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui/buttons/ui_button_continue.png" id="15_continue"]
 [ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui/buttons/ui_button_choose_again.png" id="16_choose_again"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="17_artbtn"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
-[node name="Stage1" type="Control"]
+[node name="Stage2" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,10 +31,10 @@ theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
 music_track = 1
 level_id = &"level_3"
-stage_number = 1
-challenge_id = &"l3_leaves"
+stage_number = 2
+challenge_id = &"l3_stem"
 level_content = ExtResource("11_content")
-correct_option_id = &"leaves"
+correct_option_id = &"stem"
 tap_to_answer = true
 correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
@@ -42,7 +42,7 @@ continue_art = ExtResource("15_continue")
 choose_again_art = ExtResource("16_choose_again")
 correct_button_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
 correct_art_rect = Rect2(0.265, 1.06, 0.47, 0.1707)
-next_stage_path = "res://scenes/levels/level_3/stage_2.tscn"
+next_stage_path = "res://scenes/levels/level_3/stage_3.tscn"
 done_scene_path = "res://scenes/ui/hub.tscn"
 
 [node name="Background" type="Control" parent="."]
@@ -58,7 +58,7 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("5_bg")
 fit = 2
-slot_name = "bg_stage_1_l3"
+slot_name = "bg_stage_2_l3"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
 
 [node name="HeaderSign" parent="." instance=ExtResource("6_header")]
@@ -85,9 +85,9 @@ anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
 offset_left = -482.0
-offset_top = 1000.0
+offset_top = 420.0
 offset_right = 482.0
-offset_bottom = 1457.0
+offset_bottom = 877.0
 grow_horizontal = 2
 grow_vertical = 1
 
@@ -121,35 +121,35 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Roots" parent="Cards" instance=ExtResource("4_card")]
+[node name="Stem" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 90.0
 offset_top = 1610.0
 offset_right = 350.0
 offset_bottom = 1900.0
-option_id = &"roots"
-icon = ExtResource("12_roots")
+option_id = &"stem"
+icon = ExtResource("12_stem")
 
-[node name="Leaves" parent="Cards" instance=ExtResource("4_card")]
+[node name="Fruit" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 410.0
 offset_top = 1610.0
 offset_right = 670.0
 offset_bottom = 1900.0
-option_id = &"leaves"
-icon = ExtResource("13_leaves")
+option_id = &"fruit"
+icon = ExtResource("13_fruit")
 
-[node name="Flower" parent="Cards" instance=ExtResource("4_card")]
+[node name="Roots" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 730.0
 offset_top = 1610.0
 offset_right = 990.0
 offset_bottom = 1900.0
-option_id = &"flower"
-icon = ExtResource("14_flower")
+option_id = &"roots"
+icon = ExtResource("14_roots")
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true
@@ -187,7 +187,7 @@ theme_override_constants/margin_bottom = 240
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-ratio = 0.9107
+ratio = 0.7920
 
 [node name="Card" type="Control" parent="Overlay/Center/OverlayAspect"]
 layout_mode = 2

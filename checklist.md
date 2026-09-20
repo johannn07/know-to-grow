@@ -216,8 +216,26 @@ unlocks **Little Planter**.
       over `bg_garden_stump`, the Level 2 intro's garden, on the Level 2 track.
       The hub's third plant is `plant_leafy.png`, "SPROUT", and its button then
       says "Level 3: Identifying" and opens `level_intro_l3.tscn`
-- [ ] **Level 3 intro's Continue goes back to the hub** — Level 3 has no stage
-      select or stages yet. Point `next_scene_path` at them once they exist
+- [x] **Level 3's five stages**, the first tapped ones. No tray and no drop
+      zone: three cards sit loose on the garden under the "Tap the correct
+      answer." plank, and the question is the background, which draws one part
+      of the plant glowing and the rest grey. Built to Stage 1's numbers, with
+      the prompt bubble the one thing that moves — high on Situations 2 and 3,
+      whose highlights are low, and low on 1, 4 and 5. 1 → 2 → 3 → 4 → 5 are
+      chained; played by `verify_level_3` and checked in a full-resolution
+      composite of all five
+- [ ] **Level 3 intro's Continue still goes back to the hub**, and so does
+      Stage 5. Level 3 has no stage select yet; point both at it once it exists
+- [ ] **Level 3 has no music track of its own.** `AudioDirectorService.Track`
+      stops at `LEVEL_2`, so the five stages use `MENU`, matching what
+      `level_intro_l3.tscn` already does and letting the hub's loop carry
+      through. A `LEVEL_3` track means an enum entry, an export on the
+      AudioDirector scene and a piece of music to point it at. **⚠**
+- [ ] **Level 3's five Reinforcement Facts have no transcript and no reviewer.**
+      They are drawn into the Correct cards, so nothing renders them and
+      `verify_content` cannot see them, but they are teaching content and they
+      have no voice-over line. The wording is listed in `assets/art/MANIFEST.md`
+      for the teaching-content owner. **⚠**
 - [x] ~~**The right answer is the leftmost card in every Level 2 situation.**~~
       **Answered: shuffled per play.** The
       approved table lists the answer first, and the scenes follow the content
