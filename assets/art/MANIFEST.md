@@ -317,9 +317,10 @@ resolution of the drawn card they would have replaced, for the same ~960 px
 slot. Using them meant a visibly softer card and a fresh measurement of every
 row and star rect. The owner's decision is to keep the drawn card instead.
 
-Levels 3 and 4 therefore have **no stage select card yet**. Level 2's situation
-select is `ui_situation_select_l2.png`. A drawn card per level, rows included,
-is what those two need — not a blank one.
+**Level 4 therefore has no stage select card yet.** Level 2's situation select
+is `ui_situation_select_l2.png` and Level 3's is `ui_stage_select_l3.png`, both
+drawn cards with their rows in them. A drawn card, rows included, is what
+Level 4 still needs — not a blank one.
 
 - **They are low resolution.** The drawn card is ~960 px wide on screen and
   these are ~377, so they display at about 2.5x and will look soft. Ask for a
@@ -636,6 +637,142 @@ downscaled to 900 wide, the drawn header's width.
   0.0870)`, 197 x 199 px.
 - Stars checked in a real render with all fifteen earned: every filled star
   sits on its drawn empty one.
+
+## Level 3 — imported, not wired
+
+Imported from the hand-exported `Know To Grow Assets/Level 3` folder. All 25
+files are in the repo and imported, but **no scene uses them yet**. The badge
+and Level 4 folders in that same export are deliberately left out; they belong
+to later steps.
+
+Level 3's question is carried by the **background**, not by a separate diagram:
+each `bg_stage_N_l3.png` draws the whole plant with one part in colour and
+glowing and the rest desaturated to grey. That part is the answer, and the five
+match the `scene_state` values already in `content/level_3_identifying.tres` —
+`highlight_leaves`, `highlight_stem`, `highlight_roots`, `highlight_flower`,
+`highlight_fruit`, in stage order.
+
+### Backgrounds
+
+| File | Size | Weight | Highlights |
+|---|---|---|---|
+| `bg_stage_1_l3.png` | 852 x 1846 | 1.9 MB | leaves |
+| `bg_stage_2_l3.png` | 1024 x 1536 | 1.8 MB | stem |
+| `bg_stage_3_l3.png` | 852 x 1846 | 1.9 MB | roots |
+| `bg_stage_4_l3.png` | 941 x 1672 | 1.8 MB | flower |
+| `bg_stage_5_l3.png` | 851 x 1849 | 1.8 MB | fruit |
+
+Four of the five are the same shape as the `bg_bed_*` family already in the
+repo, so they were taken in at source size with no crop — they are opaque edge
+to edge and there is no alpha margin to remove.
+
+- **`bg_stage_2_l3.png` is the odd one at 1024 x 1536**, a 0.667 aspect against
+  the screen's 0.5625. Drawn `KEEP_COVERED` it scales to 1920 tall and loses
+  about 840 px off the sides, far more than the others lose. Check in a real
+  render that the glowing stem survives the crop before Stage 2 is signed off.
+
+### Answer cards — `levels/level_3/`
+
+Tap targets, one per plant part, with the part's name drawn into the card.
+Cropped to alpha, then scaled to **640 wide**, which is the manifest's 2x rule
+against a ~320 px card slot; at source they were ~3.5x and 1.3 MB each.
+
+| File | Size | Weight |
+|---|---|---|
+| `icon_roots_l3.png` | 640 x 733 | 526 KB |
+| `icon_stem_l3.png` | 640 x 750 | 471 KB |
+| `icon_leaves_l3.png` | 640 x 781 | 421 KB |
+| `icon_flower_l3.png` | 640 x 730 | 473 KB |
+| `icon_fruit_l3.png` | 640 x 739 | 458 KB |
+
+- **They live in `levels/level_3/`, not `items/`.** `items/` holds the
+  *draggable* cards shared across stages; these are tap-only and Level 3's
+  alone, and Level 4 ships its own `icon_stage_N_cM_l4` set rather than reusing
+  them.
+- **`icon_leaves_l3` is the odd one.** It came at 1231 x 1593 where the other
+  four are 1122 x 1402, and with a hard alpha edge where theirs feather out, so
+  after cropping it is about 6% taller in proportion. `OptionCard` centres art
+  in its rect keeping the art's own shape, so it will sit slightly larger than
+  its neighbours. Check it against the other two cards in Stage 1.
+
+### Feedback cards — `levels/level_3/`
+
+Cropped to alpha. Each carries the answer's name and a **Reinforcement Fact**,
+both drawn in, and — like Level 2's — **no Continue button drawn on them**, so
+Continue is drawn below the card as `CONTINUE_BELOW_CARD_RECT`.
+
+| File | Size | Weight | Says |
+|---|---|---|---|
+| `ui_correct_l3_s1.png` | 1122 x 1232 | 1.2 MB | Correct Choice: Leaves — "Leaves capture sunlight and help the plant make food!" |
+| `ui_correct_l3_s2.png` | 1024 x 1293 | 1.3 MB | Correct Choice: Stem — "The stem helps hold the plant upright and carries water to other parts of the plant!" |
+| `ui_correct_l3_s3.png` | 1024 x 1386 | 1.4 MB | Correct Choice: Roots — "Roots hold the plant firmly in the soil and absorb water and nutrients!" |
+| `ui_correct_l3_s4.png` | 1024 x 1396 | 1.4 MB | Correct Choice: Flower — "Flowers help plants reproduce by helping them make seeds!" |
+| `ui_correct_l3_s5.png` | 1024 x 1428 | 1.4 MB | Correct Choice: Fruit — "Fruits protect the seeds and help them develop into new plants!" |
+
+- **The Reinforcement Fact is not a fun fact.** Fun facts are Level 1's alone by
+  decision, and these are drawn into the Correct card rather than shown on a
+  strip of their own. They stay drawn art with no transcript field, which means
+  `verify_content` still requires `fun_fact_transcript` to be empty on Level 3 —
+  but it also means these five sentences have no voice-over line and no
+  reviewer sign-off. Raise with the teaching-content owner before recording.
+- There is **no Oops card for Level 3.** `ui_oops_tool.png` is reused, wording
+  and all, on the owner's decision.
+
+### Header and instruction — `levels/level_3/`
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_header_blank_l3.png` | 1755 x 876 | 1.2 MB |
+| `ui_tap_the_correct_answer.png` | 1903 x 289 | 429 KB |
+
+- **`ui_header_blank_l3.png` is a second `HeaderSign` shape**, not the one in
+  `ui/common/`. The brown plaque sits *on top of* the cream banner here rather
+  than above it, so its two plate rects have to be measured off this image and
+  cannot be taken from `header_sign.tscn`. Its plaque carries "Stage N" and its
+  banner "Identify the Plant Part" on all five stages — decided, so the answer
+  is never in the header.
+- It is in `levels/level_3/`, not `ui/common/`, because `ui/common/` is art
+  *every* level shares and Level 4 ships its own `ui_header_blank_l4.png`.
+- **`ui_tap_the_correct_answer.png` replaces the tray's drawn "Choose a Tool".**
+  Level 3 has no tray, so this wooden plank is the instruction. Level 4 has its
+  own `ui_tap_the_correct_function_card.png`, so it is Level 3's alone despite
+  the name carrying no `_l3` suffix.
+
+### Stage select — `ui/stage_select/`
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_stage_select_l3.png` | 1609 x 2412 | 2.6 MB |
+| `ui_stage_row_1_l3.png` | 1163 x 350 | 381 KB |
+| `ui_stage_row_2_l3.png` | 1163 x 344 | 424 KB |
+| `ui_stage_row_3_l3.png` | 1181 x 347 | 413 KB |
+| `ui_stage_row_4_l3.png` | 1166 x 372 | 402 KB |
+| `ui_stage_row_5_l3.png` | 1180 x 356 | 393 KB |
+
+The drawn card with all **five** rows in it, Stage 1 unlocked and 2-5 grey, in
+the Level 2 pattern. Its five row drawings are laid over it.
+
+- **These six are the only Level 3 files not cropped to alpha.** Each row's rect
+  is measured against the card, so cropping each one by its own alpha — which
+  differs by up to 18 px between them — would move them relative to the card by
+  different amounts. They keep the export frames Figma gave them.
+- **The rows still have their three filled stars drawn in.** Per the stage
+  select rule, each must be covered with `icon_star_empty.png` in the image
+  itself before wiring, so a row starts empty and earned stars are drawn on top.
+  Not done yet.
+
+### Ending — `ui/screens/`
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_level_complete_l3.png` | 1121 x 1289 | 1.4 MB |
+| `ui_level_complete_sign_l3.png` | 1056 x 1418 | 1.3 MB |
+
+Cropped to alpha. The sign has a Grow Now button drawn into it, so it will need
+the same cut-and-lay-back-over treatment as `ui_button_grow_now_sign_l2.png`
+when the ending is built. `ui_level_intro_l3.png` is already in the repo and
+wired to `scenes/ui/level_intro_l3.tscn`; Level 3's badges are still in the
+export folder and come with the ending.
 
 ## Still in the Figma file, not yet extracted
 
