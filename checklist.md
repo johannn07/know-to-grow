@@ -224,6 +224,19 @@ unlocks **Little Planter**.
       whose highlights are low, and low on 1, 4 and 5. 1 → 2 → 3 → 4 → 5 are
       chained; played by `verify_level_3` and checked in a full-resolution
       composite of all five
+- [x] **Level 3's ending**, the same beats as Level 1's: Stage 5 → Level 3
+      Complete → **Mystery Solver** → "You Completed Level 3!" sign → hub. One
+      badge, not Level 2's two, because the badge art names its own level and
+      only Mystery Solver says "You found all the parts of a plant!". The sign's
+      Grow Now is its own pill cut from the sign
+      (`ui_button_grow_now_sign_l3.png`), darken only. All over
+      `bg_stage_5_l3`, the fruiting plant, on the Level 3 track
+- [ ] **The hub stops at three.** `plant_stages`, `plant_stage_names`,
+      `level_scene_paths` and `level_labels` all have three entries, so Grow Now
+      after Level 3 returns to a hub with nothing further to show. The fourth
+      plant is `plant_leafy_with_flower.png` in the Level 4 export and the
+      fourth label is "Level 4: Functions", but the button needs a
+      `level_intro_l4.tscn` to open. Comes with Level 4
 - [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with
       all five rows in it, Stage 1 unlocked and 2-5 grey, in the Level 2
       pattern. Row rects found by matching each row drawing against the card

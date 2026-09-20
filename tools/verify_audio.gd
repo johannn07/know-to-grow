@@ -37,6 +37,9 @@ const LEVEL_3_SCREENS: Array[String] = [
 	"res://scenes/levels/level_3/stage_3.tscn",
 	"res://scenes/levels/level_3/stage_4.tscn",
 	"res://scenes/levels/level_3/stage_5.tscn",
+	"res://scenes/ui/level_complete_l3.tscn",
+	"res://scenes/ui/badge_unlocked_l3.tscn",
+	"res://scenes/ui/level_complete_sign_l3.tscn",
 ]
 
 const LEVEL_SCREENS: Array[String] = [

@@ -65,6 +65,9 @@ func _initialize() -> void:
 		"res://scenes/ui/stage_select.tscn",
 		"res://scenes/ui/stage_select_l2.tscn",
 		"res://scenes/ui/stage_select_l3.tscn",
+		"res://scenes/ui/level_complete_l3.tscn",
+		"res://scenes/ui/badge_unlocked_l3.tscn",
+		"res://scenes/ui/level_complete_sign_l3.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -234,7 +237,21 @@ func _initialize() -> void:
 
 	await process_frame
 	await _check_press_bounce()
-	_check_level_2_ending()
+	_check_ending(&"level_2", [
+		"res://scenes/levels/level_2/stage_5.tscn",
+		"res://scenes/ui/level_complete_l2.tscn",
+		"res://scenes/ui/badge_unlocked_l2.tscn",
+		"res://scenes/ui/badge_unlocked_l2_green_thumb.tscn",
+		"res://scenes/ui/level_complete_sign_l2.tscn",
+		"res://scenes/ui/hub.tscn",
+	])
+	_check_ending(&"level_3", [
+		"res://scenes/levels/level_3/stage_5.tscn",
+		"res://scenes/ui/level_complete_l3.tscn",
+		"res://scenes/ui/badge_unlocked_l3.tscn",
+		"res://scenes/ui/level_complete_sign_l3.tscn",
+		"res://scenes/ui/hub.tscn",
+	])
 	if state != null:
 		await _check_hub_grows_the_plant(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
@@ -245,24 +262,18 @@ func _initialize() -> void:
 	quit(_failures)
 
 
-## Level 2 ends the way Level 1 does, with one more card: Situation 5 leads to
-## Level 2 Complete, then both of its badges, then its sign, whose Grow Now goes
-## to the hub where the plant has grown. Each screen has to name the next.
-func _check_level_2_ending() -> void:
-	var chain: Array[String] = [
-		"res://scenes/levels/level_2/stage_5.tscn",
-		"res://scenes/ui/level_complete_l2.tscn",
-		"res://scenes/ui/badge_unlocked_l2.tscn",
-		"res://scenes/ui/badge_unlocked_l2_green_thumb.tscn",
-		"res://scenes/ui/level_complete_sign_l2.tscn",
-		"res://scenes/ui/hub.tscn",
-	]
+## Every level ends the same shape: its last stage leads to Level Complete,
+## then one badge or two, then its sign, whose Grow Now goes to the hub where
+## the plant has grown. Each screen has to name the next, and a chain that
+## forks anywhere leaves a child stranded on a card with nowhere to go.
+func _check_ending(level_id: StringName, chain: Array) -> void:
 	for i in chain.size() - 1:
 		var node: Node = (load(chain[i]) as PackedScene).instantiate()
 		var next: String = node.get("done_scene_path") if node is StageScreen 			else node.get("next_scene_path")
 		_expect(
 			next == chain[i + 1],
-			"%s leads on to %s" % [chain[i].get_file(), chain[i + 1].get_file()]
+			"%s ending: %s leads on to %s"
+				% [level_id, chain[i].get_file(), chain[i + 1].get_file()]
 		)
 		node.free()
 
@@ -288,6 +299,8 @@ func _check_press_bounce() -> void:
 		["res://scenes/ui/badge_unlocked_l2.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/badge_unlocked_l2_green_thumb.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/level_intro_l3.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/level_complete_l3.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked_l3.tscn", "%ActionButton", "../ButtonArt"],
 	]
 	for case: Array in cases:
 		var screen: Node = await _instantiate(case[0])
@@ -356,8 +369,14 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row3"],
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row4"],
 		["res://scenes/ui/stage_select_l2.tscn", "%Rows/Row5"],
+		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row1"],
+		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row2"],
+		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row3"],
+		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row4"],
+		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row5"],
 		["res://scenes/ui/level_complete_sign.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l2.tscn", "%ActionButton"],
+		["res://scenes/ui/level_complete_sign_l3.tscn", "%ActionButton"],
 		["res://scenes/ui/how_to_play.tscn", "%BackButton"],
 		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton"],
 	]

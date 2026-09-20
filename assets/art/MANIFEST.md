@@ -844,13 +844,33 @@ the Level 2 pattern. Its five row drawings are laid over it.
 | File | Size | Weight |
 |---|---|---|
 | `ui_level_complete_l3.png` | 1121 x 1289 | 1.4 MB |
+| `ui_badge_mystery_solver.png` | 1122 x 1389 | 1.8 MB |
 | `ui_level_complete_sign_l3.png` | 1056 x 1418 | 1.3 MB |
+| `ui_button_grow_now_sign_l3.png` | 777 x 201 | 190 KB |
 
-Cropped to alpha. The sign has a Grow Now button drawn into it, so it will need
-the same cut-and-lay-back-over treatment as `ui_button_grow_now_sign_l2.png`
-when the ending is built. `ui_level_intro_l3.png` is already in the repo and
-wired to `scenes/ui/level_intro_l3.tscn`; Level 3's badges are still in the
-export folder and come with the ending.
+Cropped to alpha. The sequence is Level 1's with Level 2's numbers: Stage 5 →
+`level_complete_l3.tscn` → `badge_unlocked_l3.tscn` →
+`level_complete_sign_l3.tscn` → the hub.
+
+- **The badge is decided by its own artwork.** The seven badges in the export
+  each name what they are for, so which level gets which is not a choice:
+  *Mystery Solver* reads "You found all the parts of a plant!", so it is Level
+  3's. *Plant Power-Up* ("the functions of plant parts") and *Super Grower* are
+  Level 4's, and *Know to Grow Star* ("You finished the game") is the final
+  screen's. Level 3 gets **one** badge, where Level 2 got two.
+- **`ui_button_grow_now_sign_l3.png` is cut from the sign**, the same treatment
+  as Level 1's and Level 2's pills: the green stadium was found by colour in the
+  lower third of `ui_level_complete_sign_l3.png`, cropped at
+  `(0.1430, 0.8244, 0.7358, 0.1417)` of the image and masked to its own stadium
+  so the leaves behind it are not taken too. Laid back over itself at that same
+  rect, so it looks exactly as drawn and only darkens on press — `CardOverlay`
+  derives `bounce_art = false` from the rect falling on the card.
+- **The Correct card and the badge put their Continue below**, over the dim, so
+  those two bounce. The rects are Level 2's scaled by the ratio difference, so
+  the button is the same 423 px wide on screen in all of them.
+- **All three sit over `bg_stage_5_l3.png`**, the fruiting plant — the thing the
+  child has just finished naming. Level 1's ending uses its payoff garden the
+  same way; Level 2's uses its intro's instead.
 
 ## Still in the Figma file, not yet extracted
 
