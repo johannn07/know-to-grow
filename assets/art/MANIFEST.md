@@ -1018,9 +1018,35 @@ The Correct cards are 1106 wide and about 0.86 in shape, so at the overlay's
 | `ui_stage_row_5_l4.png` | 1247 x 400 | 710 KB |
 
 "Level 4 / Functions", Stage 1 green, 2-5 painted grey — the Level 2 and 3
-pattern, so `row_art_locked` will be empty. **Byte copies, not cropped**, so the
-rows can be matched against the card the way Level 3's were. Their drawn stars
-are not covered yet; that happens with the stage select, not here.
+pattern, so `row_art_locked` is empty and a locked row shows the card's own
+painting. **Byte copies, not cropped**, so the rows could be matched against
+the card. **Wired as `scenes/ui/stage_select_l4.tscn`.**
+
+- **Rects found by matching**, as Level 3's: normalised cross-correlation of
+  each row's gradient magnitude against the card's. Rows 2-5 sit at scale
+  **1.00**, row 1 at **0.97** — as Level 2's row 1 did — so its rect is
+  narrower than its own image. Checked by laying each row back over the card:
+  no grey shows.
+
+  | Row | Rect on the card, in fractions |
+  |---|---|
+  | 1 | `(0.1268, 0.1931, 0.7271, 0.1548)` |
+  | 2 | `(0.1353, 0.3462, 0.7258, 0.1435)` |
+  | 3 | `(0.1347, 0.4740, 0.7397, 0.1677)` |
+  | 4 | `(0.1353, 0.6288, 0.7258, 0.1536)` |
+  | 5 | `(0.1347, 0.7642, 0.7530, 0.1612)` |
+
+  The close disc is `(0.8225, 0.1197, 0.1443, 0.0859)`: its orange found by
+  colour, 219 x 193 px on the card, padded 10 px for the outline.
+- **The drawn stars are covered** with `icon_star_empty.png` in the row images
+  themselves, grown from each gold core by Level 3's 1.132 x 1.146. Row 4 is
+  the yellow row, and its plate's gold touches the first star, so the stars
+  were found after a morphological opening, and the three in each row were
+  given the row's largest core, placed on each star's centre line and bottom
+  edge. The same rects are the scene's `RowNStarM` slots.
+- **Checked in a real render**, windowed Godot at 1080 x 1920 with all fifteen
+  stars earned: every filled star sits on its covered one, with no grey
+  showing.
 
 ### Hub plants — `plants/`
 

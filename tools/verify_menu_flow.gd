@@ -69,6 +69,7 @@ func _initialize() -> void:
 		"res://scenes/ui/badge_unlocked_l3.tscn",
 		"res://scenes/ui/level_complete_sign_l3.tscn",
 		"res://scenes/ui/level_intro_l4.tscn",
+		"res://scenes/ui/stage_select_l4.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -258,6 +259,7 @@ func _initialize() -> void:
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l3.tscn", &"level_3")
+		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l4.tscn", &"level_4")
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
@@ -376,6 +378,11 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row3"],
 		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row4"],
 		["res://scenes/ui/stage_select_l3.tscn", "%Rows/Row5"],
+		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row1"],
+		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row2"],
+		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row3"],
+		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row4"],
+		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row5"],
 		["res://scenes/ui/level_complete_sign.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l2.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l3.tscn", "%ActionButton"],

@@ -280,7 +280,10 @@ Answered by the project owner before any Level 4 scene was built:
 - [x] **Level 4 Stages 2-5** — Stage 1's layout, bubble low. The whole level
       now plays 1 → 5 and leads to the hub, which is where Stage 5 goes until
       the ending exists
-- [ ] Level 4 stage select
+- [x] **Level 4 stage select**, `stage_select_l4.tscn` — rows found by
+      matching, stars covered and checked in a real render with all fifteen
+      earned. The intro's Continue and every stage's `done_scene_path` now
+      lead to it; Stage 5 does too until the ending exists
 - [ ] `Track.LEVEL_4` and `Track.LEVEL_5`
 - [ ] Level 4 ending, the three badges, the hub's fifth plant
 - [ ] Finished-game screen

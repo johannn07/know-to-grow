@@ -24,7 +24,7 @@ back_scene_path = "res://scenes/ui/hub.tscn"
 card_art = ExtResource("5_card")
 button_art = ExtResource("6_continue")
 button_rect = Rect2(0.265, 1.0405, 0.47, 0.1149)
-next_scene_path = "res://scenes/ui/hub.tscn"
+next_scene_path = "res://scenes/ui/stage_select_l4.tscn"
 
 [node name="Background" type="Control" parent="."]
 clip_contents = true
