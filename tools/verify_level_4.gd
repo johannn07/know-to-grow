@@ -24,8 +24,9 @@ const STAGE_DIR := "res://scenes/levels/level_4/"
 ## What a Level 4 stage gives its header sign. See tools/verify_live_text.gd.
 const HEADER_WIDTH := 660.0
 ## Where the three cards stand, A to B to C, as the Stage 1 layout sets them.
-## Every stage uses the same three places.
-const CARD_TOPS: Array[float] = [1350.0, 1540.0, 1730.0]
+## Every stage uses the same three places. They are anchored to the bottom edge,
+## so these are their tops on the 1920-tall design screen the check runs at.
+const CARD_TOPS: Array[float] = [1305.0, 1495.0, 1685.0]
 
 var _failures := 0
 var _level: LevelData

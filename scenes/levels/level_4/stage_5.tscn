@@ -123,31 +123,40 @@ mouse_filter = 2
 
 [node name="MakeFood" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 90.0
-offset_top = 1350.0
+offset_top = -615.0
 offset_right = 990.0
-offset_bottom = 1525.0
+offset_bottom = -440.0
+grow_vertical = 0
 option_id = &"fn_make_food"
 icon = ExtResource("12_a")
 
 [node name="Protect" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 90.0
-offset_top = 1540.0
+offset_top = -425.0
 offset_right = 990.0
-offset_bottom = 1715.0
+offset_bottom = -250.0
+grow_vertical = 0
 option_id = &"fn_protect"
 icon = ExtResource("13_b")
 
 [node name="AbsorbWater" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 90.0
-offset_top = 1730.0
+offset_top = -235.0
 offset_right = 990.0
-offset_bottom = 1905.0
+offset_bottom = -60.0
+grow_vertical = 0
 option_id = &"fn_absorb_water"
 icon = ExtResource("14_c")
 

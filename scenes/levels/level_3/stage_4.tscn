@@ -93,17 +93,17 @@ grow_vertical = 1
 
 [node name="TapBanner" type="Control" parent="."]
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.0
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.0
+anchor_bottom = 1.0
 offset_left = -400.0
-offset_top = 1478.0
+offset_top = -482.0
 offset_right = 400.0
-offset_bottom = 1600.0
+offset_bottom = -360.0
 grow_horizontal = 2
-grow_vertical = 1
+grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("8_tap")
@@ -123,31 +123,40 @@ mouse_filter = 2
 
 [node name="Flower" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 90.0
-offset_top = 1610.0
+offset_top = -350.0
 offset_right = 350.0
-offset_bottom = 1900.0
+offset_bottom = -60.0
+grow_vertical = 0
 option_id = &"flower"
 icon = ExtResource("12_flower")
 
 [node name="Leaves" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 410.0
-offset_top = 1610.0
+offset_top = -350.0
 offset_right = 670.0
-offset_bottom = 1900.0
+offset_bottom = -60.0
+grow_vertical = 0
 option_id = &"leaves"
 icon = ExtResource("13_leaves")
 
 [node name="Stem" parent="Cards" instance=ExtResource("4_card")]
 layout_mode = 1
-anchors_preset = 0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
 offset_left = 730.0
-offset_top = 1610.0
+offset_top = -350.0
 offset_right = 990.0
-offset_bottom = 1900.0
+offset_bottom = -60.0
+grow_vertical = 0
 option_id = &"stem"
 icon = ExtResource("14_stem")
 
