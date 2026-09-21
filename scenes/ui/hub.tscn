@@ -21,6 +21,7 @@
 [ext_resource type="FontFile" uid="uid://5dh1bd816wds" path="res://assets/fonts/fredoka_one/fredoka_one_regular.ttf" id="8_myxet"]
 [ext_resource type="Texture2D" uid="uid://birib6hvlxlbl" path="res://assets/art/ui/hub/ui_tab_garden.png" id="9_garden"]
 [ext_resource type="Texture2D" uid="uid://dgqakneykfrq7" path="res://assets/art/ui/hub/ui_tab_badges.png" id="10_badges"]
+[ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="40_topbar"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d56r8"]
 
@@ -156,9 +157,9 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -249.0
+offset_left = -412.0
 offset_top = 65.0
-offset_right = -61.0
+offset_right = -224.0
 offset_bottom = 197.0
 grow_horizontal = 0
 mouse_filter = 2
@@ -447,3 +448,10 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_tab")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_tab")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
 disabled = true
+
+[node name="TopBar" parent="." instance=ExtResource("40_topbar")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_top = 35.0
+offset_bottom = 211.0
+show_back = false

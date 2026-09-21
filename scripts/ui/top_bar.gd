@@ -12,16 +12,25 @@ extends Control
 ## Settings opens the [SettingsOverlay] this bar carries, where music, sound
 ## effects and Main Menu live. It is kept here rather than in every stage scene
 ## so that nineteen stages get it from one place.
+##
+## The hub carries one too, with [member show_back] off: it has settings but no
+## back button, since Android's back gesture already leaves it.
 
 signal back_pressed
 
+## Whether the row has a back button. Off on the hub.
+@export var show_back: bool = true
+
 @onready var _back_button: ArtButton = %BackButton
+@onready var _back_art: ArtSlot = %BackArt
 @onready var _settings_button: ArtButton = %SettingsButton
 @onready var _settings: SettingsOverlay = %Settings
 
 
 func _ready() -> void:
 	_back_button.pressed.connect(back_pressed.emit)
+	_back_button.visible = show_back
+	_back_art.visible = show_back
 	_settings_button.pressed.connect(open_settings)
 
 

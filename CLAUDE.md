@@ -176,6 +176,11 @@ everything else on the stage starts under it at `y 170`. Back goes to the
 level's own stage select through `SubScreen.back_scene_path`, the same place
 Android's back gesture goes.
 
+**The hub has the settings button too, and stage select does not — decided.**
+The hub carries the same `TopBar` with `show_back` off, 35 px lower so the icon
+lines up with the greeting and star pills; the star pill moved left to make
+room.
+
 Settings opens `settings_overlay.tscn`, a card over the stage: music and sound
 effects toggles and a Main Menu button, on its own drawn card with "Settings"
 live on the plank. It closes by the X on its corner, a tap on the dim, or

@@ -544,7 +544,7 @@ providing the art for all of them; nothing here starts before it arrives.
       `tools/verify_top_bar.gd`
   - [x] **Level 4 Stages 4-5 on a 16:9 screen:** the plank covered the flower
         and the fruit. Decided: on those two it sits above the cards
-  - [ ] Should the settings button also be on the hub and stage select?
+  - [x] Settings is also on the hub — decided — and not on stage select
 - [ ] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
       Level 1 is cleared**: not clickable, and drawn with an indicator that
       they are not open yet

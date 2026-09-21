@@ -40,6 +40,7 @@ func _initialize() -> void:
 		for stage_number in range(1, STAGES[level] + 1):
 			await _check_stage(level, stage_number)
 	await _check_toggles()
+	await _check_hub()
 
 	_restore_settings(saved)
 	print("%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
@@ -220,6 +221,47 @@ func _check_toggles() -> void:
 	)
 
 	stage.queue_free()
+	await process_frame
+
+
+func _check_hub() -> void:
+	print("--- the hub ---")
+	var hub: Control = (load("res://scenes/ui/hub.tscn") as PackedScene).instantiate()
+	root.add_child(hub)
+	await process_frame
+	await process_frame
+	var bar := hub.get_node_or_null("%TopBar") as TopBar
+	_expect(bar != null, "hub has a %TopBar")
+	if bar == null:
+		hub.queue_free()
+		return
+	_expect(not (bar.get_node("%BackButton") as Control).visible, "hub shows no back button")
+	_expect(not (bar.get_node("%BackArt") as Control).visible, "hub shows no back arrow")
+	var settings: Control = bar.get_node("%SettingsButton")
+	var rect := settings.get_global_rect()
+	_expect(
+		rect.size.x >= TOUCH and rect.size.y >= TOUCH,
+		"hub settings clears 160 px (is %dx%d)" % [rect.size.x, rect.size.y]
+	)
+	_expect(rect.end.x > hub.size.x * 0.5, "hub settings is on the right")
+	for pill_name in ["GreetingPill", "StarPill"]:
+		var pill: Control = hub.get_node(pill_name)
+		_expect(
+			not pill.get_global_rect().intersects(rect),
+			"hub settings does not cover the %s" % pill_name
+		)
+	var bar_is_last := bar.get_index() == hub.get_child_count() - 1
+	_expect(bar_is_last, "hub row draws over the rest of the hub")
+
+	(settings as ArtButton).pressed.emit()
+	await process_frame
+	_expect(bar.settings_open(), "hub settings opens the card")
+	hub.notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+	await process_frame
+	_expect(not bar.settings_open(), "Android back closes the card on the hub")
+	_expect(hub.is_inside_tree(), "and stays on the hub")
+
+	hub.queue_free()
 	await process_frame
 
 

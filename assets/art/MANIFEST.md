@@ -431,7 +431,7 @@ taken to 430 to match the others.
 | File | Size | Weight | Slot |
 |---|---|---|---|
 | `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28 |
-| `ui_button_settings.png` | 430 x 430 | 235 KB | `%SettingsArt`, 136 x 136, right, 28 px in |
+| `ui_button_settings.png` | 430 x 430 | 235 KB | `%SettingsArt`, 136 x 136, right, 28 px in; on the hub the row sits 35 px lower |
 | `ui_button_music.png` | 422 x 444 | 249 KB | the card's `%MusicArt`, 240 x 248 |
 | `ui_button_sfx.png` | 426 x 443 | 258 KB | the card's `%SfxArt`, 240 x 248 |
 
