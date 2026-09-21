@@ -1,0 +1,89 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bfkx02bnyrcmt" path="res://scripts/ui/game_complete_overlay.gd" id="1_overlay"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://dw7inrfhy5n5k" path="res://assets/art/ui/screens/ui_game_completion.png" id="4_card"]
+[ext_resource type="Script" uid="uid://cyclelgt5qlyo" path="res://scripts/ui/hold_button.gd" id="5_hold"]
+
+[node name="GameComplete" type="Control"]
+z_index = 100
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_overlay")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="CardArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -410.0
+offset_top = 70.0
+offset_right = 410.0
+offset_bottom = 1073.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_card")
+fit = 1
+slot_name = "ui_game_completion"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="ContinueButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -430.0
+offset_top = 1105.0
+offset_right = 430.0
+offset_bottom = 1295.0
+grow_horizontal = 2
+theme_type_variation = &"PrimaryButton"
+text = "Continue Playing"
+
+[node name="NewGameButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -430.0
+offset_top = 1320.0
+offset_right = 430.0
+offset_bottom = 1510.0
+grow_horizontal = 2
+theme_type_variation = &"PrimaryButton"
+text = "New Game"
+script = ExtResource("5_hold")
+
+[node name="HintLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -430.0
+offset_top = 1515.0
+offset_right = 430.0
+offset_bottom = 1580.0
+grow_horizontal = 2
+text = "Press and hold to start a New Game"
+horizontal_alignment = 1
+vertical_alignment = 1

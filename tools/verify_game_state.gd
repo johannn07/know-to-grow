@@ -86,6 +86,17 @@ func _initialize() -> void:
 	_expect(_state.stars_for(&"level_2", 1) == 2, "level 2 stage 1 survives with its 2 stars")
 	_expect(_state.total_stars() == 14, "the total survives (got %d)" % _state.total_stars())
 
+	# --- the finished-game screen comes up once per save ---
+	_state.reset()
+	_expect(not _state.finished_shown(), "a fresh start has not shown the finished screen")
+	_state.mark_finished_shown()
+	_state.load_progress()
+	_expect(_state.finished_shown(), "having shown it survives a reload")
+	_state.reset()
+	_expect(not _state.finished_shown(), "a New Game clears it")
+	_state.load_progress()
+	_expect(not _state.finished_shown(), "and the cleared flag is what is saved")
+
 	# --- nonsense is refused rather than filed ---
 	_state.reset()
 	_state.record_stage_cleared(&"", 1, 0)

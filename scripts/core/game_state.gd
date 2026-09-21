@@ -35,10 +35,16 @@ signal progress_changed
 
 const SAVE_PATH := "user://progress.cfg"
 const SAVE_SECTION := "stars"
+const FLAGS_SECTION := "flags"
 const MAX_STARS := 3
 
 ## Stars per stage, keyed by [method _key]. Absent means never finished.
 var _stars: Dictionary[String, int] = {}
+
+## Whether the finished-game screen has already come up. It appears by itself
+## the first time the hub shows the fully grown plant, and only that once, so
+## the fact has to outlive closing the game. See [method mark_finished_shown].
+var _finished_shown := false
 
 
 func _ready() -> void:
@@ -101,10 +107,26 @@ func total_stars() -> int:
 	return sum
 
 
+## True once the finished-game screen has been shown on this save.
+func finished_shown() -> bool:
+	return _finished_shown
+
+
+## Records that the finished-game screen has come up, so the hub does not bring
+## it back on every visit. A New Game clears it along with everything else.
+func mark_finished_shown() -> void:
+	if _finished_shown:
+		return
+	_finished_shown = true
+	save_progress()
+	progress_changed.emit()
+
+
 ## Wipes progress. For a "start over" control, and for tests that need a known
 ## state — call it before asserting anything about stars.
 func reset() -> void:
 	_stars.clear()
+	_finished_shown = false
 	save_progress()
 	progress_changed.emit()
 
@@ -113,6 +135,8 @@ func save_progress() -> void:
 	var file := ConfigFile.new()
 	for key in _stars:
 		file.set_value(SAVE_SECTION, key, _stars[key])
+	if _finished_shown:
+		file.set_value(FLAGS_SECTION, "finished_shown", true)
 	var error := file.save(SAVE_PATH)
 	if error != OK:
 		push_warning("GameState: could not save to %s (error %d)" % [SAVE_PATH, error])
@@ -120,10 +144,14 @@ func save_progress() -> void:
 
 func load_progress() -> void:
 	_stars.clear()
+	_finished_shown = false
 	var file := ConfigFile.new()
 	# A missing file is the normal first run, not a problem worth reporting. So
 	# is a file with no stars in it, which is what reset() leaves behind.
-	if file.load(SAVE_PATH) != OK or not file.has_section(SAVE_SECTION):
+	if file.load(SAVE_PATH) != OK:
+		return
+	_finished_shown = file.get_value(FLAGS_SECTION, "finished_shown", false) == true
+	if not file.has_section(SAVE_SECTION):
 		return
 	for key in file.get_section_keys(SAVE_SECTION):
 		var value: Variant = file.get_value(SAVE_SECTION, key, 0)

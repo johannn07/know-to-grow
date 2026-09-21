@@ -1071,6 +1071,10 @@ taller in proportion than the sprout (0.75 against 0.88), so in the hub's
 | `ui_level_complete_sign_l4.png` | 1037 x 1416 | 1.5 MB |
 | `ui_game_completion.png` | 1087 x 1330 | 1.7 MB |
 
+`ui_game_completion.png` is **wired** in `scenes/ui/game_complete.tscn`, an
+820 x 1003 slot at y 70 over the hub, with Continue Playing and New Game below
+it on the primary plate.
+
 Cropped to alpha. The intro reads "Level 4 / Plant power time!", and is
 **wired** as `scenes/ui/level_intro_l4.tscn` at its own card ratio, 0.837; Level 4
 Complete "Plant powers unlocked!"; the sign "You Completed Level 4!" with Grow

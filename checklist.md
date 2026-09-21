@@ -287,26 +287,31 @@ Answered by the project owner before any Level 4 scene was built:
       lead to it; Stage 5 does too until the ending exists
 - [x] `Track.LEVEL_4` (5) — `level_4.mp3`, looping, on the intro, stage select
       and all five stages
-- [ ] `Track.LEVEL_5` — `level_5.mp3`, for the finished-game screen alone
+- [x] `Track.LEVEL_5` (6) — `level_5.mp3`, looping, for the finished-game card
+      alone; the hub's own track comes back when it closes
 - [x] **Level 4's ending** — Stage 5 → Level 4 Complete → Plant Power-Up →
       Super Grower → Know to Grow Star → "You Completed Level 4!" (Grow Now,
       its own pill cut from the sign, darken only) → the hub, now showing the
       fruiting plant as "FRUIT". All over `bg_stage_5_l4`, on the Level 4 track.
       Past Level 4, Play offers Level 4 again until the finished-game screen
       exists
-- [ ] **Finished-game screen** — decided 2026-09-21. `ui_game_completion.png`,
-      "Hooray! You did it!", on `Track.LEVEL_5`
-  - [ ] It **appears by itself the first time the hub shows the fruiting
+- [x] **Finished-game screen** — decided 2026-09-21. `ui_game_completion.png`,
+      "Hooray! You did it!", on `Track.LEVEL_5`. `scenes/ui/game_complete.tscn`,
+      a `GameCompleteOverlay` the hub lays over itself
+  - [x] It **appears by itself the first time the hub shows the fruiting
         plant** — Grow Now after Level 4 lands on the hub, and the overlay
-        comes up over it. Only the first time: a later visit to the hub with
-        the fruit already grown does not bring it back, so the "shown" fact
-        needs saving in `GameState`
-  - [ ] **Two buttons below the card, on `ui_button_primary`**: **New Game**
-        and **Continue Playing**. Row or column is ours to choose; they sit
-        under the overlay card, not on it
-  - [ ] New Game clears progress and starts again from the seed —
-        **press-and-hold**, since there is always a save by then; Continue
-        Playing closes the overlay and leaves the child on the finished hub
+        comes up over it. Only the first time: `GameState` saves
+        `finished_shown`, and New Game clears it
+  - [x] **Two buttons below the card, on `ui_button_primary`**, in a
+        **column**: Continue Playing above New Game, 860 x 190 each, so
+        "Continue Playing" fits the plate at the theme's 76 px. A line under
+        them says "Press and hold to start a New Game". Checked in a windowed
+        render; the stack ends above the hub's tab bar
+  - [x] New Game clears progress and starts again from the seed —
+        **press-and-hold**, 1.5 s, on the new `HoldButton`, whose pale fill
+        runs across the plate while held; the hub redraws at the seed in
+        place. Continue Playing closes the overlay and leaves the child on the
+        finished hub
   - [ ] The hub's Play past Level 4, which offers Level 4 again as a stopgap,
         needs its real destination once this exists
 - [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with

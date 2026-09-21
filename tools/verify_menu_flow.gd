@@ -270,6 +270,7 @@ func _initialize() -> void:
 	])
 	if state != null:
 		await _check_hub_grows_the_plant(state)
+		await _check_finished_game(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l3.tscn", &"level_3")
@@ -555,6 +556,102 @@ func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 		)
 		hub.queue_free()
 		await process_frame
+	state.reset()
+
+
+## The finished-game card comes up by itself the first time the hub shows the
+## fully grown plant, and never again on that save. Continue Playing lifts it
+## off; New Game has to be held, and a hold starts again from the seed.
+func _check_finished_game(state: GameStateStore) -> void:
+	var audio := root.get_node_or_null("/root/AudioDirector") as AudioDirectorService
+	var all_levels := [[&"level_1", 4], [&"level_2", 5], [&"level_3", 5], [&"level_4", 5]]
+
+	# --- not before the last level is done ---
+	state.reset()
+	for level: Array in all_levels:
+		for n in range(1, level[1] + 1):
+			if not (level[0] == &"level_4" and n == 5):
+				state.record_stage_cleared(level[0], n, 0)
+	var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
+	_expect(hub.finished_card() == null, "finished card: not up with Level 4 one stage short")
+	hub.queue_free()
+	await process_frame
+
+	# --- the first time the fruit shows, it comes up by itself ---
+	state.record_stage_cleared(&"level_4", 5, 0)
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	var card: GameCompleteOverlay = hub.finished_card()
+	_expect(card != null, "finished card: comes up by itself the first time the fruit shows")
+	_expect(state.finished_shown(), "finished card: having come up is saved")
+	if audio != null:
+		_expect(audio.current_track() == AudioDirectorService.Track.LEVEL_5,
+			"finished card: plays the level 5 track")
+	if card == null:
+		hub.queue_free()
+		await process_frame
+		return
+	var continue_button: Button = card.get_node("%ContinueButton")
+	var new_game: HoldButton = card.get_node("%NewGameButton")
+	var art: Control = card.get_node("%CardArt")
+	_expect(art.mouse_filter == Control.MOUSE_FILTER_IGNORE, "finished card: its art ignores input")
+	for button: Button in [continue_button, new_game]:
+		_expect(button.theme_type_variation == &"PrimaryButton",
+			"finished card: %s is on the primary plate" % button.name)
+		_expect(button.size.x >= 160.0 and button.size.y >= 160.0,
+			"finished card: %s clears 160 px (is %dx%d)" % [button.name, button.size.x, button.size.y])
+		_expect(button.position.y >= art.position.y + art.size.y,
+			"finished card: %s sits below the card" % button.name)
+	_expect(new_game.require_hold, "finished card: New Game has to be held")
+
+	# --- Continue Playing lifts it off and the hub's music comes back ---
+	continue_button.pressed.emit()
+	await process_frame
+	_expect(hub.finished_card() == null, "finished card: Continue Playing closes it")
+	if audio != null:
+		_expect(audio.current_track() == AudioDirectorService.Track.MENU,
+			"finished card: the hub's own track comes back")
+	_expect(state.total_stars() > 0, "finished card: Continue Playing keeps the progress")
+	hub.queue_free()
+	await process_frame
+
+	# --- and it does not come back ---
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	_expect(hub.finished_card() == null, "finished card: does not come back on the next visit")
+	hub.queue_free()
+	await process_frame
+
+	# --- New Game: a tap does nothing, a hold starts again ---
+	state.reset()
+	for level: Array in all_levels:
+		for n in range(1, level[1] + 1):
+			state.record_stage_cleared(level[0], n, 0)
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	card = hub.finished_card()
+	new_game = card.get_node("%NewGameButton")
+	var cancelled := [false]
+	new_game.hold_cancelled.connect(func() -> void: cancelled[0] = true)
+	new_game.button_down.emit()
+	await process_frame
+	new_game.button_up.emit()
+	new_game.pressed.emit()
+	await process_frame
+	_expect(cancelled[0], "finished card: letting go of New Game early cancels the hold")
+	_expect(state.total_stars() > 0 and hub.finished_card() != null,
+		"finished card: a tap on New Game wipes nothing")
+	new_game.button_down.emit()
+	await process_frame
+	_expect(new_game.get_node("HoldFill").visible or new_game.progress() > 0.0,
+		"finished card: holding shows its progress")
+	await create_timer(new_game.hold_seconds + 0.3).timeout
+	_expect(state.total_stars() == 0 and not state.finished_shown(),
+		"finished card: a full hold on New Game wipes progress")
+	await process_frame
+	_expect(hub.finished_card() == null and hub.growth_stage() == 0,
+		"finished card: after New Game the hub is back to the seed")
+	_expect((hub.get_node("%PlayButton") as Button).text == "Level 1: Grow a Seed",
+		"finished card: and Play offers Level 1 again")
+	hub.queue_free()
+	await process_frame
 	state.reset()
 
 

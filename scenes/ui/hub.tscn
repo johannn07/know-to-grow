@@ -16,6 +16,7 @@
 [ext_resource type="Resource" uid="uid://bg2dohoxaf763" path="res://content/level_3_identifying.tres" id="16_level_3"]
 [ext_resource type="Texture2D" uid="uid://cvnjty3y2sdi7" path="res://assets/art/plants/plant_leafy_with_flower_and_fruit.png" id="17_fruit"]
 [ext_resource type="Resource" uid="uid://cy8jncr3f30ly" path="res://content/level_4_functions.tres" id="18_level_4"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_complete.tscn" id="19_finished"]
 [ext_resource type="Texture2D" uid="uid://cs58a4b3s71fj" path="res://assets/art/ui/hub/ui_tab_lessons.png" id="8_lessons"]
 [ext_resource type="FontFile" uid="uid://5dh1bd816wds" path="res://assets/fonts/fredoka_one/fredoka_one_regular.ttf" id="8_myxet"]
 [ext_resource type="Texture2D" uid="uid://birib6hvlxlbl" path="res://assets/art/ui/hub/ui_tab_garden.png" id="9_garden"]
@@ -64,6 +65,7 @@ plant_stage_names = Array[String](["SEED", "ROOT", "SPROUT", "FLOWER", "FRUIT"])
 growth_levels = Array[Resource]([ExtResource("12_level_1"), ExtResource("14_level_2"), ExtResource("16_level_3"), ExtResource("18_level_4")])
 level_scene_paths = Array[String](["res://scenes/ui/level_intro.tscn", "res://scenes/ui/level_intro_l2.tscn", "res://scenes/ui/level_intro_l3.tscn", "res://scenes/ui/level_intro_l4.tscn", "res://scenes/ui/level_intro_l4.tscn"])
 level_labels = Array[String](["Level 1: Grow a Seed", "Level 2: Help Your Plant", "Level 3: Identifying", "Level 4: Functions", "Level 4: Functions"])
+finished_overlay = ExtResource("19_finished")
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true

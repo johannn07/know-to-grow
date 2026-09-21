@@ -28,6 +28,7 @@ enum Track {
 	LEVEL_2,
 	LEVEL_3,
 	LEVEL_4,
+	LEVEL_5, ## The finished-game screen alone.
 }
 
 ## How many effects can overlap before the oldest is cut off. A tap landing on
@@ -40,6 +41,7 @@ const SFX_VOICES := 4
 @export var level_2_music: AudioStream
 @export var level_3_music: AudioStream
 @export var level_4_music: AudioStream
+@export var level_5_music: AudioStream
 
 @export_group("Effects")
 ## Any button, anywhere. Connected for a whole screen by [SubScreen].
@@ -102,6 +104,7 @@ func music_for(track: Track) -> AudioStream:
 		Track.LEVEL_2: return level_2_music
 		Track.LEVEL_3: return level_3_music
 		Track.LEVEL_4: return level_4_music
+		Track.LEVEL_5: return level_5_music
 	return null
 
 

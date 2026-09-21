@@ -88,7 +88,7 @@ func _initialize() -> void:
 	# --- every stream the director promises actually exists ---
 	for track in [AudioDirectorService.Track.MENU, AudioDirectorService.Track.LEVEL_1,
 			AudioDirectorService.Track.LEVEL_2, AudioDirectorService.Track.LEVEL_3,
-			AudioDirectorService.Track.LEVEL_4]:
+			AudioDirectorService.Track.LEVEL_4, AudioDirectorService.Track.LEVEL_5]:
 		_expect(_audio.music_for(track) != null, "track %d has a stream" % track)
 	for named in [["tap", _audio.tap], ["correct", _audio.correct_answer],
 			["wrong", _audio.wrong_answer]]:
@@ -100,14 +100,15 @@ func _initialize() -> void:
 			and AudioDirectorService.Track.LEVEL_1 == 2
 			and AudioDirectorService.Track.LEVEL_2 == 3
 			and AudioDirectorService.Track.LEVEL_3 == 4
-			and AudioDirectorService.Track.LEVEL_4 == 5,
+			and AudioDirectorService.Track.LEVEL_4 == 5
+			and AudioDirectorService.Track.LEVEL_5 == 6,
 		"tracks keep the numbers the scenes stored (a new one goes at the end)"
 	)
 
 	# --- music loops, or a screen falls silent after one play ---
 	for track in [AudioDirectorService.Track.MENU, AudioDirectorService.Track.LEVEL_1,
 			AudioDirectorService.Track.LEVEL_2, AudioDirectorService.Track.LEVEL_3,
-			AudioDirectorService.Track.LEVEL_4]:
+			AudioDirectorService.Track.LEVEL_4, AudioDirectorService.Track.LEVEL_5]:
 		var stream := _audio.music_for(track)
 		if stream is AudioStreamMP3:
 			_expect((stream as AudioStreamMP3).loop, "track %d loops" % track)

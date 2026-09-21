@@ -12,6 +12,11 @@ extends SubScreen
 ## before it — the completed-level sign's Grow Now leads straight here, and the
 ## hub simply shows what the plant has become.
 ##
+## **The first time it shows the plant fully grown, it brings up the finished-game
+## card by itself** — [member finished_overlay], over the garden. That is where
+## Grow Now after the last level lands. Whether it has come up is saved, so it
+## does not return on every visit; New Game on it starts again from the seed.
+##
 ## The text nodes are looked up leniently. This screen is still being laid out
 ## in the editor, and a card that gets moved or removed there should change how
 ## the hub looks, not stop it working — an unresolved %UniqueName aborts _ready()
@@ -49,16 +54,79 @@ extends SubScreen
 ## stage; a level only counts once every level before it is cleared.
 @export var growth_levels: Array[LevelData] = []
 
+@export_group("Finished game")
+## The "Hooray! You did it!" card, laid over the hub the first time every level
+## in [member growth_levels] is cleared. See [GameCompleteOverlay].
+@export var finished_overlay: PackedScene
+## What plays while it is up. The hub's own track comes back when it closes.
+@export var finished_music: AudioDirectorService.Track = AudioDirectorService.Track.LEVEL_5
+
 @onready var _play_button: Button = %PlayButton
+
+## The finished-game card while it is up, else null.
+var _finished: GameCompleteOverlay = null
 
 
 func _ready() -> void:
 	super()
 	_set_label_text("%GreetingLabel", player_greeting)
+	_play_button.pressed.connect(_on_play_pressed)
+	_refresh()
+	if is_fully_grown() and progress != null and not progress.finished_shown():
+		show_finished()
+
+
+## Everything on the hub that follows from progress.
+func _refresh() -> void:
 	_set_label_text("%StarLabel", str(progress.total_stars() if progress != null else star_count))
 	_show_plant()
 	_play_button.text = level_label()
-	_play_button.pressed.connect(_on_play_pressed)
+
+
+## True once every level that grows the plant is cleared.
+func is_fully_grown() -> bool:
+	return not growth_levels.is_empty() and growth_stage() >= growth_levels.size()
+
+
+## Brings up the finished-game card and records that it has been seen.
+func show_finished() -> void:
+	if finished_overlay == null or _finished != null:
+		return
+	_finished = finished_overlay.instantiate() as GameCompleteOverlay
+	if _finished == null:
+		push_warning("Hub: finished_overlay is not a GameCompleteOverlay")
+		return
+	add_child(_finished)
+	# The card arrives after _ready dressed the hub's own buttons.
+	dress_every_button(_finished)
+	_finished.continue_playing.connect(_close_finished)
+	_finished.new_game.connect(_on_new_game)
+	if progress != null:
+		progress.mark_finished_shown()
+	if audio != null:
+		audio.play_music(finished_music)
+
+
+## The finished-game card, while it is up.
+func finished_card() -> GameCompleteOverlay:
+	return _finished
+
+
+func _close_finished() -> void:
+	if _finished != null:
+		_finished.queue_free()
+		_finished = null
+	if audio != null:
+		audio.play_music(music_track)
+
+
+## Starts again from the seed, here on the hub: progress is wiped and the hub
+## redraws, which is the same thing a reload would show without the flash.
+func _on_new_game() -> void:
+	if progress != null:
+		progress.reset()
+	_close_finished()
+	_refresh()
 
 
 ## Shows the plant at the stage progress has reached, and names it on the sign.
