@@ -5,6 +5,133 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
+## 2026-09-21 — Level 4 and the finished game, built end to end
+
+**Where it got to:** the whole game plays through. Level 4 runs from the hub
+through its intro, a five-row stage select and five tapped stages, then Level 4
+Complete, three badges and the completed-level sign, back to a hub with the
+fruiting plant — where the finished-game card comes up by itself, once. Ten
+headless suites pass. Built on `level-4` in fourteen commits; **not merged and
+not pushed**.
+
+### What was done, in order
+
+1. **`art/import level 4`** — all 39 files from the export's `Level 4` folder,
+   into `backgrounds/`, `levels/level_4/`, `plants/`, `ui/stage_select/` and
+   `ui/screens/`. Stage select card and rows left uncropped for matching.
+2. **`docs/level 4 decisions …`** — the owner's answers (below), and §9 of the
+   checklist: the post-Level-4 feature list (back buttons, hub tabs locked until
+   Level 1, swipeable stage select, Garden, 3 x 4 badge grid, Options, Credits).
+3. **`ui/hub's fourth plant and the level 4 intro`** — the flower once Level 3
+   is cleared; `level_intro_l4.tscn`. Closes Level 3's dead-end Grow Now.
+4. **`ui/level 4 header on level 2's sign`** — the delivered blank header *is*
+   the shared `ui_header_blank.png`; the duplicate was deleted. Header
+   transcripts "Stage N" / the part added to the content.
+5. **`levels/tap stages can keep their card order`** — `StageScreen.keep_card_order`.
+6. **`art/crop level 4 cards to the drawn card`** — see "cost time" below.
+7. **`levels/level 4 stage 1`**, then **`stages 2 to 5`** — after full-resolution
+   mock-ups of all five were shown to and approved by the owner.
+   `verify_level_4.gd` added.
+8. **`ui/level 4 stage select`** — rows matched, stars covered, checked in a
+   windowed render with all fifteen earned.
+9. **`audio/level 4 track`** — `Track.LEVEL_4` (5).
+10. **`ui/level 4 ending`** — three badges imported from `Badges/`, Grow Now cut
+    from the sign, the hub's fifth plant.
+11. **`docs/…`** ×2 — the finished-game screen, New Game / Continue, and the
+    press-and-hold decision, onto the checklist.
+12. **`ui/finished-game screen`** — `game_complete.tscn` over the hub,
+    `Track.LEVEL_5` (6), `HoldButton`, and the saved `finished_shown` flag.
+
+### Decisions taken (all by the owner)
+
+- **Header:** plaque "Stage N", banner the part — "Roots" … "Fruit" — with the
+  "Tap the correct function card." plank. It turned out to be Level 2's sign.
+- **Cards keep their drawn A/B/C order, never shuffled.** The Correct cards name
+  the answer by a drawn letter, "Correct Match: B". Consequence: the answer is B
+  on four of five stages.
+- **Layout approved from mock-ups:** the plank sits under the header, three
+  900 x 175 cards stack at the bottom, the bubble is high (y 370) on Stage 1 —
+  the roots glow inside the pot — and low (y 885) on Stages 2-5.
+- **The Oops card is Level 1's again**, "That's not the right tool" and all.
+- **Badges per level are 1 / 2 / 1 / 3.** Level 4: Plant Power-Up → Super
+  Grower → Know to Grow Star.
+- **One wording for "make food": "Help make food using sunlight."** Two cards
+  are drawn "Make food…" and need re-exporting (checklist §4).
+- **Level 4's Reinforcement Facts are accepted as drawn art**, like Level 3's.
+- **Finished-game card:** comes up by itself the first time the hub shows the
+  fruit; Continue Playing and New Game below it, on the primary plate. Column
+  chosen by us, since "Continue Playing" needs 860 px at the theme's size.
+- **New Game is press-and-hold whenever there is a save.** On the finished card
+  there always is.
+- **Main menu gets New Game / Continue**, Continue only with a save — on the
+  checklist, not built. Saving per stage clear already existed.
+
+### Things that turned out to be true, and cost time
+
+- **The export pads images with near-invisible haze.** The header and twelve
+  of the fifteen cards carried 100-170 px of alpha-under-32 margin, which a
+  plain alpha crop keeps. It made the header look a different shape from
+  Level 2's (it is identical) and made Stage 2-5 cards draw a third smaller
+  than Stage 1's. **Crop new art at alpha 32, not alpha 0.** The screens'
+  margins are soft drop shadows and were left alone.
+- **A failed import can sit in a commit unnoticed.** `ui_correct_l4_s4.png`
+  was recorded `valid=false` in the first import and nothing loaded it until
+  Stage 4 existed. Removing the flag and reimporting fixed it with the same
+  uid. `grep -rl "valid=false" assets --include=*.import` is now worth running
+  after any bulk import.
+- **The yellow stage row defeats colour detection.** Its plate's gold touches
+  the first star. Found after a morphological opening; all three stars in a row
+  then take the row's largest core, placed by their bottom edge.
+- **A windowed Godot run can render headlessly-built screens.** A `-s` script
+  that sets `root.size`, waits for `frame_post_draw` and saves
+  `root.get_texture().get_image()` gives Godot's own render at 1080 x 1920 —
+  better than PIL composites. It lives in the session scratchpad, not the repo.
+- **Checking the dim by eye is unreliable.** Screenshots looked undimmed; the
+  pixels were at 55% of the raw background, exactly the 0.45 dim.
+
+### Still in progress
+
+- **Nothing in Level 4 or the finished card has been played on a phone or in
+  the editor.** Windowed renders cover the layout, not the feel — the hold's
+  1.5 s in particular, and the cards' 15 px gap to the bottom edge on a
+  gesture-navigation phone.
+- **The hub's Play after everything is cleared** still reads "Level 4:
+  Functions" and replays Level 4, the stopgap. Where it should lead is
+  undecided.
+- **Two Level 4 cards read "Make food using sunlight."** against the chosen
+  "Help make food…", and one lacks a full stop. Art from the owner.
+- **"Press and hold to start a New Game"** is live text we wrote, not design
+  document wording.
+- **`level-4` is not merged into `master` and not pushed.**
+
+### Next step
+
+**Merge `level-4`** once the owner has played it, then **the main menu's New
+Game / Continue** (checklist §9): "Start Game" becomes New Game, a Continue
+appears above it only when a stage has been cleared, and New Game is a
+`HoldButton` with `require_hold` on whenever there is a save — the component
+already exists and does a plain tap when it is off. The reset it performs is
+the same one the finished card uses. After that, §9's list in the owner's
+order, once their art arrives.
+
+### Verification state
+
+| Check | Result |
+|---|---|
+| Project loads | clean, apart from the known audio line |
+| `verify_level_1.gd` | PASS |
+| `verify_level_2.gd` | PASS |
+| `verify_level_3.gd` | PASS |
+| `verify_level_4.gd` | PASS — 5 stages, fixed A/B/C order, drift incl. interaction |
+| `verify_tap_answer.gd` | PASS — incl. a tap stage keeping its order over 30 plays |
+| `verify_menu_flow.gd` | PASS — all four endings, hub seed → fruit, the finished card |
+| `verify_game_state.gd` | PASS — incl. `finished_shown` saved and cleared |
+| `verify_audio.gd` | PASS — `LEVEL_4` is 5, `LEVEL_5` is 6, both loop |
+| `verify_live_text.gd` | PASS — three signs, 15 headers, 19 prompts |
+| `verify_content.gd` | PASS — 19 challenges, 57 voice-over lines |
+
+---
+
 ## 2026-09-20/21 — Level 3, built end to end
 
 **Where it got to:** Level 3 is playable from the hub through its intro, a
