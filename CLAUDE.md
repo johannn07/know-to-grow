@@ -155,10 +155,28 @@ old drawn trays were that, and no stage uses one now.
 
 **A Level 3 stage moves its prompt bubble, and nothing else.** The glowing
 part is drawn into each background at a different height, and a full-width
-bubble across it hides the answer. There are two positions — high, `y 420`, and
-low, `y 1000` — and a stage picks the one away from its own highlight. Header,
-tap banner and card row sit identically in all five. The table in
+bubble across it hides the answer. There are two positions — high, `y 570`, and
+low, `y 1000` measured from the bottom — and a stage picks the one away from its
+own highlight. Header, tap banner and card row sit identically in all five. The table in
 `assets/art/MANIFEST.md` says which stage uses which and why.
+
+**A stage is laid out from both edges — decided.** Most phones are 20:9, about
+1080 x 2436, not the 1080 x 1920 the stages were drawn at, and the extra height
+arrives at the bottom. So the answers — cards, trays, Level 1's fun fact, a
+Level 3 tap banner and every *low* prompt bubble — are anchored to the **bottom**,
+60 px off the edge. The top bar, header and every *high* bubble are anchored to
+the **top**. The extra height opens up between the two, over the plant. Anything
+new on a stage picks the edge it belongs to; a y measured from the top on
+something that belongs at the bottom is how the answers ended up floating over
+the plant on a real phone.
+
+**Every stage has the top bar — decided.** `scenes/components/top_bar.tscn`:
+back on the left, music then effects on the right, one row, 160 px hotspots, and
+everything else on the stage starts under it at `y 170`. Back goes to the
+level's own stage select through `SubScreen.back_scene_path`, the same place
+Android's back gesture goes. The toggles mute the `Music` and `SFX` buses —
+never `VO` — and are saved to `user://settings.cfg`, apart from progress so New
+Game does not reset them.
 
 **Level 3 taps instead of dragging.** A stage sets `tap_to_answer` and its
 cards answer where they stand: no `%DropZone`, no slide home, and the press is
@@ -433,12 +451,14 @@ property that does not exist and fail silently.
 | Level 4 stages play through | `godot --headless --path . -s res://tools/verify_level_4.gd` |
 | Tap answers, and drag still works | `godot --headless --path . -s res://tools/verify_tap_answer.gd` |
 | Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
+| Top bar on all 19 stages, and the sound toggles | `godot --headless --path . -s res://tools/verify_top_bar.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.
 So do `verify_audio.gd`, which plays a stage to check the answer stings, and
 `verify_tap_answer.gd`, `verify_level_3.gd` and `verify_level_4.gd`, which
-answer one.
+answer one. `verify_top_bar.gd` writes `user://settings.cfg` but puts back
+whatever was there.
 
 **Once music has played, every run ends with `1 resources still in use at exit`.**
 That is the audio server's playback object outliving the scene tree, not a leak

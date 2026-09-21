@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui/buttons/ui_button_continue.png" id="16_continue"]
 [ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui/buttons/ui_button_choose_again.png" id="17_choose_again"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="18_artbtn"]
+[ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="40_topbar"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -29,6 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
+back_scene_path = "res://scenes/ui/stage_select_l2.tscn"
 music_track = 3
 level_id = &"level_2"
 stage_number = 5
@@ -69,9 +71,9 @@ anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
 offset_left = -330.0
-offset_top = 30.0
+offset_top = 180.0
 offset_right = 330.0
-offset_bottom = 280.0
+offset_bottom = 430.0
 grow_horizontal = 2
 grow_vertical = 1
 
@@ -84,9 +86,9 @@ anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
 offset_left = -475.0
-offset_top = 330.0
+offset_top = 480.0
 offset_right = 489.0
-offset_bottom = 787.0
+offset_bottom = 937.0
 grow_horizontal = 2
 grow_vertical = 1
 
@@ -192,6 +194,10 @@ grow_horizontal = 2
 grow_vertical = 2
 option_id = &"sunlight"
 icon = ExtResource("15_card_3")
+
+[node name="TopBar" parent="." instance=ExtResource("40_topbar")]
+unique_name_in_owner = true
+layout_mode = 1
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

@@ -25,6 +25,10 @@ const MIN_TOUCH := 160.0
 
 @onready var _back_button: Button = get_node_or_null("%BackButton") as Button
 
+## The back / music / effects row a stage carries. Its back goes wherever this
+## screen's back goes, so the button and the gesture cannot disagree.
+@onready var _top_bar: TopBar = get_node_or_null("%TopBar") as TopBar
+
 ## What the child has finished so far. Fetched rather than named: see the note
 ## on [GameStateStore] for why `GameState` cannot be written directly here. Null
 ## only if the autoload is missing, so screens that read it should say so rather
@@ -40,6 +44,8 @@ const MIN_TOUCH := 160.0
 func _ready() -> void:
 	if _back_button != null:
 		_back_button.pressed.connect(go_back)
+	if _top_bar != null:
+		_top_bar.back_pressed.connect(go_back)
 	if audio != null:
 		audio.play_music(music_track)
 	dress_every_button(self)

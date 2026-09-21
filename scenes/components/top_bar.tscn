@@ -1,0 +1,143 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" uid="uid://bs50ujmsorn8j" path="res://scripts/ui/top_bar.gd" id="1_bar"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="3_artbtn"]
+[ext_resource type="Texture2D" uid="uid://c1nkyn2hlo3un" path="res://assets/art/ui/buttons/ui_button_nav_back.png" id="4_back"]
+[ext_resource type="Texture2D" uid="uid://buhobajchs3d5" path="res://assets/art/ui/buttons/ui_button_music.png" id="5_music"]
+[ext_resource type="Texture2D" uid="uid://ddvtv5lccvt4c" path="res://assets/art/ui/buttons/ui_button_sfx.png" id="6_sfx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_invisible"]
+
+[node name="TopBar" type="Control"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 176.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("1_bar")
+
+[node name="BackArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 30.0
+offset_top = 28.0
+offset_right = 162.0
+offset_bottom = 164.0
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_back")
+slot_name = "ui_button_nav_back"
+placeholder_color = Color(0.55, 0.36, 0.2, 1)
+
+[node name="MusicArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+offset_left = -338.0
+offset_top = 28.0
+offset_right = -206.0
+offset_bottom = 164.0
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("5_music")
+slot_name = "ui_button_music"
+placeholder_color = Color(0.55, 0.36, 0.2, 1)
+
+[node name="MusicStrike" type="Control" parent="MusicArt"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SfxArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+offset_left = -162.0
+offset_top = 28.0
+offset_right = -30.0
+offset_bottom = 164.0
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("6_sfx")
+slot_name = "ui_button_sfx"
+placeholder_color = Color(0.55, 0.36, 0.2, 1)
+
+[node name="SfxStrike" type="Control" parent="SfxArt"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BackButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 176.0
+offset_bottom = 176.0
+script = ExtResource("3_artbtn")
+art_path = NodePath("../BackArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_invisible")
+
+[node name="MusicButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+offset_left = -352.0
+offset_top = 16.0
+offset_right = -192.0
+offset_bottom = 176.0
+script = ExtResource("3_artbtn")
+art_path = NodePath("../MusicArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_invisible")
+
+[node name="SfxButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+offset_left = -176.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 176.0
+script = ExtResource("3_artbtn")
+art_path = NodePath("../SfxArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_invisible")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_invisible")

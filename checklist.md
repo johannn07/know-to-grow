@@ -536,7 +536,17 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 Requested 2026-09-21, to be built **once Level 4 is finished**. The owner is
 providing the art for all of them; nothing here starts before it arrives.
 
-- [ ] **Back buttons** on the screens and overlays that need one to navigate
+- [ ] **Back buttons** on the screens and overlays that need one to navigate.
+      **Stages done:** every stage has the top bar, back to its level's stage
+      select. Hub, stage select and the overlays still to decide
+- [x] **Top bar on all 19 stages** — back left, music and effects right, one
+      row; the toggles mute the Music / SFX buses and are saved in
+      `user://settings.cfg`. `tools/verify_top_bar.gd`
+  - [ ] Off-state art for music and effects — a code-drawn strike until then
+  - [ ] **Level 4 Stages 4-5 on a 16:9 screen:** the plank now covers the
+        flower and the fruit. Fine on 20:9. Needs a layout decision
+  - [ ] Should Music / SFX also be on the hub and stage select, or only in
+        Options when that screen exists?
 - [ ] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
       Level 1 is cleared**: not clickable, and drawn with an indicator that
       they are not open yet

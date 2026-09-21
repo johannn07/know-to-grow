@@ -35,6 +35,15 @@ enum Track {
 ## top of a correct answer is normal, so one player is not enough.
 const SFX_VOICES := 4
 
+## The child's sound choices, kept apart from `user://progress.cfg` on purpose:
+## New Game wipes progress, and it should not also turn the music back on.
+const SETTINGS_PATH := "user://settings.cfg"
+const SETTINGS_SECTION := "sound"
+
+## Fires when music or effects are switched on or off, so every on-screen
+## toggle can redraw itself, not only the one that was pressed.
+signal sound_changed
+
 @export_group("Music")
 @export var menu_music: AudioStream
 @export var level_1_music: AudioStream
@@ -51,6 +60,8 @@ const SFX_VOICES := 4
 
 var _current := Track.NONE
 var _next_voice := 0
+var _music_on := true
+var _sfx_on := true
 
 @onready var _music: AudioStreamPlayer = $Music
 @onready var _voices: Array[AudioStreamPlayer] = []
@@ -62,6 +73,7 @@ func _ready() -> void:
 			_voices.append(child)
 	if _voices.is_empty():
 		push_warning("AudioDirector: no SFX players in the scene, so effects are silent")
+	_load_settings()
 
 
 ## Starts a track, or does nothing if it is already the one playing. This is
@@ -134,3 +146,61 @@ func play_correct() -> void:
 
 func play_wrong() -> void:
 	play_sfx(wrong_answer)
+
+
+## Whether music is heard. Switching it off mutes the Music bus rather than
+## stopping the player, so switching it back on picks the loop up mid-phrase
+## instead of starting it again.
+func is_music_on() -> bool:
+	return _music_on
+
+
+## Whether effects are heard: taps and the answer stings. Voice-over has its own
+## bus and is left alone, since it carries the prompt.
+func is_sfx_on() -> bool:
+	return _sfx_on
+
+
+func set_music_on(on: bool) -> void:
+	_music_on = on
+	_apply_mutes()
+	_save_settings()
+	sound_changed.emit()
+
+
+func set_sfx_on(on: bool) -> void:
+	_sfx_on = on
+	_apply_mutes()
+	_save_settings()
+	sound_changed.emit()
+
+
+func _apply_mutes() -> void:
+	_mute_bus(&"Music", not _music_on)
+	_mute_bus(&"SFX", not _sfx_on)
+
+
+func _mute_bus(bus_name: StringName, mute: bool) -> void:
+	var index := AudioServer.get_bus_index(bus_name)
+	if index < 0:
+		push_warning("AudioDirector: no '%s' bus in the bus layout" % bus_name)
+		return
+	AudioServer.set_bus_mute(index, mute)
+
+
+func _load_settings() -> void:
+	var file := ConfigFile.new()
+	# A missing file is the normal first run: both stay on.
+	if file.load(SETTINGS_PATH) == OK:
+		_music_on = bool(file.get_value(SETTINGS_SECTION, "music_on", true))
+		_sfx_on = bool(file.get_value(SETTINGS_SECTION, "sfx_on", true))
+	_apply_mutes()
+
+
+func _save_settings() -> void:
+	var file := ConfigFile.new()
+	file.set_value(SETTINGS_SECTION, "music_on", _music_on)
+	file.set_value(SETTINGS_SECTION, "sfx_on", _sfx_on)
+	var error := file.save(SETTINGS_PATH)
+	if error != OK:
+		push_warning("AudioDirector: could not save to %s (error %d)" % [SETTINGS_PATH, error])

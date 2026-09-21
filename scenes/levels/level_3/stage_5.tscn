@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui/buttons/ui_button_continue.png" id="15_continue"]
 [ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui/buttons/ui_button_choose_again.png" id="16_choose_again"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="17_artbtn"]
+[ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="40_topbar"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -29,6 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_stage")
+back_scene_path = "res://scenes/ui/stage_select_l3.tscn"
 music_track = 4
 level_id = &"level_3"
 stage_number = 5
@@ -69,26 +71,26 @@ anchor_top = 0.0
 anchor_right = 0.5
 anchor_bottom = 0.0
 offset_left = -380.0
-offset_top = 20.0
+offset_top = 170.0
 offset_right = 380.0
-offset_bottom = 399.0
+offset_bottom = 549.0
 grow_horizontal = 2
 grow_vertical = 1
 
 [node name="PromptBubble" parent="." instance=ExtResource("7_bubble")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.0
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.0
+anchor_bottom = 1.0
 offset_left = -482.0
-offset_top = 1000.0
+offset_top = -920.0
 offset_right = 482.0
-offset_bottom = 1457.0
+offset_bottom = -463.0
 grow_horizontal = 2
-grow_vertical = 1
+grow_vertical = 0
 
 [node name="TapBanner" type="Control" parent="."]
 layout_mode = 1
@@ -158,6 +160,10 @@ offset_bottom = -60.0
 grow_vertical = 0
 option_id = &"leaves"
 icon = ExtResource("14_leaves")
+
+[node name="TopBar" parent="." instance=ExtResource("40_topbar")]
+unique_name_in_owner = true
+layout_mode = 1
 
 [node name="Overlay" type="Control" parent="."]
 unique_name_in_owner = true

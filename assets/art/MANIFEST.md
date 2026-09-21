@@ -421,6 +421,25 @@ These are separate from the stage item icons already in the game
 (`icon_shovel.png` and friends): those are the draggable cards, drawn without a
 disc behind them. These carry the coloured disc the stage select rows use.
 
+## Top bar — `ui/buttons/`
+
+The back / music / effects row on every stage, `scenes/components/top_bar.tscn`.
+Cut from one delivered sheet at alpha 32; no haze margin.
+
+| File | Size | Weight | Slot |
+|---|---|---|---|
+| `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28 |
+| `ui_button_music.png` | 422 x 444 | 249 KB | `%MusicArt`, 132 x 136, right, 206 px in |
+| `ui_button_sfx.png` | 426 x 443 | 258 KB | `%SfxArt`, 132 x 136, right, 30 px in |
+
+Each sits in a 160 x 160 hotspot 16 px in from the top and side edges.
+`ui_button_nav_back.png` is not `ui_button_back.png`, which is How To Play's X.
+
+**Not delivered: off-state art for music and effects.** Until it exists, a
+switched-off toggle is its on-state art dimmed to 0.55 with a red strike drawn
+across it in code. Set `music_off_art` / `sfx_off_art` on `TopBar` and the strike
+goes. Same size as the on-state art.
+
 ## Buttons — delivered
 
 | File | Size | Weight | Drawn over |
@@ -761,15 +780,18 @@ Continue is drawn below the card as `CONTINUE_BELOW_CARD_RECT`.
 ### How a Level 3 stage is laid out
 
 Measured against `scenes/levels/level_3/stage_1.tscn`, which the other four
-copy. At the 1080 x 1920 design resolution:
+copy. At the 1080 x 1920 design resolution — on a taller phone, everything
+marked *from the bottom* keeps its distance from the bottom edge, and the extra
+height opens up between the two groups:
 
 | Piece | Rect | Notes |
 |---|---|---|
 | `%Background` | full screen | `KEEP_COVERED`, clipped |
-| `%HeaderSign` | 160-920 x 20-399 | 760 wide, the width its banner was fitted at |
-| `%PromptBubble` | 58-1022 x **1000-1457** | 964 wide, Level 1's width; **y varies per stage** |
-| `TapBanner` | 140-940 x 1478-1600 | 800 wide |
-| three cards | y 1610-1900, 260 x 290 | x 90 / 410 / 730, 60 apart |
+| `%TopBar` | 0-1080 x 0-176 | back, music, effects; see "Top bar" |
+| `%HeaderSign` | 160-920 x 170-549 | 760 wide, the width its banner was fitted at |
+| `%PromptBubble` | 58-1022 x **570-1027** or **1000-1457** | 964 wide, Level 1's width; **y varies per stage**; low is *from the bottom* |
+| `TapBanner` | 140-940 x 1438-1560 | 800 wide, *from the bottom* |
+| three cards | y 1570-1860, 260 x 290 | x 90 / 410 / 730, 60 apart, *from the bottom*, 60 px off the edge |
 
 **The bubble's y is each stage's own decision, and the only thing that moves.**
 The glowing part is drawn into each background at a different height, and a
@@ -778,11 +800,11 @@ composite of all five:
 
 | Stage | Glowing part sits at | Bubble |
 |---|---|---|
-| 1 leaves | y 450-990 | **low**, y 1000 |
-| 2 stem | y 790-1180 | **high**, y 420 |
-| 3 roots | y 1080-1400 | **high**, y 420 |
-| 4 flower | y 440-600 | **low**, y 1000 |
-| 5 fruit | y 790-950 | **low**, y 1000 |
+| 1 leaves | y 450-990 | **low**, y 1000 from the bottom |
+| 2 stem | y 790-1180 | **high**, y 570 |
+| 3 roots | y 1080-1400 | **high**, y 570 |
+| 4 flower | y 440-600 | **low**, y 1000 from the bottom |
+| 5 fruit | y 790-950 | **low**, y 1000 from the bottom |
 
 At the low position the bubble sits over the soil beside the sprout mascot,
 which reads as the mascot speaking rather than as a panel dropped on the
@@ -985,10 +1007,11 @@ copy, and checked first in a full-resolution composite of all five. At the
 | Piece | Rect | Notes |
 |---|---|---|
 | `%Background` | full screen | `KEEP_COVERED`, clipped |
-| `%HeaderSign` | 210-870 x 20-245 | Level 2's sign at its 660 px |
-| `TapBanner` | 90-990 x 255-360 | straight under the header |
-| `%PromptBubble` | 58-1022 x **370-827** or **885-1342** | 964 wide; **y varies per stage** |
-| three cards | 90-990 x 1350-1525 / 1540-1715 / 1730-1905 | A, B, C; never shuffled |
+| `%TopBar` | 0-1080 x 0-176 | back, music, effects; see "Top bar" |
+| `%HeaderSign` | 210-870 x 170-395 | Level 2's sign at its 660 px |
+| `TapBanner` | 90-990 x 405-510 | straight under the header |
+| `%PromptBubble` | 58-1022 x **520-977** or **885-1342** | 964 wide; **y varies per stage**; low is *from the bottom* |
+| three cards | 90-990 x 1305-1480 / 1495-1670 / 1685-1860 | A, B, C; never shuffled; *from the bottom*, 60 px off the edge |
 
 **The plank is under the header, not above the cards** as in Level 3. Three
 stacked 5:1 cards at 900 wide need the bottom 560 px, and Stage 1's roots are
@@ -996,11 +1019,16 @@ drawn inside the pot down to y 1305, so nothing else fits between them.
 
 | Stage | Glowing part sits at | Bubble |
 |---|---|---|
-| 1 roots | y 960-1305, in the pot | **high**, y 370 |
-| 2 stem | y 360-900 | **low**, y 885 |
-| 3 leaves | y 420-900 | **low**, y 885 |
-| 4 flower | y 300-570 | **low**, y 885 |
-| 5 fruit | y 315-555 | **low**, y 885 |
+| 1 roots | y 960-1305, in the pot | **high**, y 520 |
+| 2 stem | y 360-900 | **low**, y 885 from the bottom |
+| 3 leaves | y 420-900 | **low**, y 885 from the bottom |
+| 4 flower | y 300-570 | **low**, y 885 from the bottom |
+| 5 fruit | y 315-555 | **low**, y 885 from the bottom |
+
+**Open: on a 16:9 screen the plank covers Stages 4 and 5's answer.** Since the
+top bar pushed the header and plank down 150 px, the plank's 405-510 lands on
+the flower and the fruit. On a 20:9 phone the garden is scaled up and they
+clear it. Not yet decided how to fix it.
 
 The Correct cards are 1106 wide and about 0.86 in shape, so at the overlay's
 900 px a card is ~1050 tall and Continue is `Rect2(0.265, 1.06, 0.47, 0.1606)`
