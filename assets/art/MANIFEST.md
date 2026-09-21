@@ -872,6 +872,146 @@ Cropped to alpha. The sequence is Level 1's with Level 2's numbers: Stage 5 →
   child has just finished naming. Level 1's ending uses its payoff garden the
   same way; Level 2's uses its intro's instead.
 
+## Level 4 — imported, not wired
+
+Imported from the hand-exported `Know To Grow Assets/Level 4` folder: all 39
+files, and **no scene uses them yet**. The badges (*Plant Power-Up*, *Super
+Grower*, *Know to Grow Star*) are in the export's `Badges` folder and are left
+for the ending, as Level 3's were.
+
+Level 4 is tapped like Level 3, and its question is again carried by the
+**background**: the same potted plant each time, with the part being asked
+about glowing. The five run roots, stem, leaves, flower, fruit — the stage
+order already in `content/level_4_functions.tres`.
+
+### Backgrounds — `backgrounds/`
+
+| File | Size | Weight | Highlights |
+|---|---|---|---|
+| `bg_stage_1_l4.png` | 852 x 1846 | 2.2 MB | roots, drawn through the pot |
+| `bg_stage_2_l4.png` | 852 x 1846 | 1.9 MB | stem |
+| `bg_stage_3_l4.png` | 851 x 1849 | 2.0 MB | leaves |
+| `bg_stage_4_l4.png` | 852 x 1846 | 2.1 MB | flower |
+| `bg_stage_5_l4.png` | 851 x 1849 | 2.1 MB | fruit |
+
+Byte copies, opaque, no crop. All five are the `bg_bed_*` shape, so none has
+Level 3 Stage 2's side-crop problem.
+
+### Answer cards — `levels/level_4/`
+
+Fifteen: **three per stage, drawn per stage**, `icon_stage_N_cM_l4` where `cM`
+is the card's position A/B/C. Wide function strips — an icon and a sentence —
+rather than Level 3's square part cards. Cropped to alpha and **kept at source
+resolution**: the card slot is not laid out yet, and at ~2120 px they are only
+about 2.2x a full-width slot, so there was nothing to gain by guessing one.
+
+| File | Size | Weight | Says |
+|---|---|---|---|
+| `icon_stage_1_c1_l4.png` | 1982 x 395 | 534 KB | Make food using sunlight. |
+| `icon_stage_1_c2_l4.png` | 2032 x 402 | 655 KB | Absorb water and nutrients and hold the plant in the soil. |
+| `icon_stage_1_c3_l4.png` | 2012 x 400 | 558 KB | Protect the seeds. |
+| `icon_stage_2_c1_l4.png` | 2123 x 596 | 765 KB | Support the plant and carry water and nutrients. |
+| `icon_stage_2_c2_l4.png` | 2122 x 586 | 739 KB | Protect the seeds. (apple icon) |
+| `icon_stage_2_c3_l4.png` | 2123 x 658 | 783 KB | Make food using sunlight. |
+| `icon_stage_3_c1_l4.png` | 2126 x 643 | 780 KB | Hold the plant firmly in the soil. |
+| `icon_stage_3_c2_l4.png` | 2123 x 576 | 751 KB | Help make food using sunlight. |
+| `icon_stage_3_c3_l4.png` | 2125 x 661 | 731 KB | Protect the seeds. |
+| `icon_stage_4_c1_l4.png` | 2121 x 674 | 780 KB | Absorb water from the soil. |
+| `icon_stage_4_c2_l4.png` | 2141 x 688 | 758 KB | Help the plant reproduce and make seeds. |
+| `icon_stage_4_c3_l4.png` | 2128 x 682 | 827 KB | Carry water to the leaves |
+| `icon_stage_5_c1_l4.png` | 2123 x 576 | 751 KB | Help make food using sunlight. |
+| `icon_stage_5_c2_l4.png` | 2125 x 661 | 731 KB | Protect the seeds. |
+| `icon_stage_5_c3_l4.png` | 2121 x 674 | 780 KB | Absorb water from the soil. |
+
+- **Stage 1's three are a thinner shape** — about 5:1 against the others'
+  3.3:1. Check them side by side with a later stage once they are on screen.
+- **Stage 5's cards are Stage 3's and Stage 4's files again**, byte for byte
+  (`s5_c1` = `s3_c2`, `s5_c2` = `s3_c3`, `s5_c3` = `s4_c1`).
+  Kept as separate files so each stage owns its three, as the export names them.
+- **Every card's text and order agree with the content file, except two.**
+  The option `fn_make_food` is drawn *"Make food using sunlight."* on Stages 1
+  and 2 but *"Help make food using sunlight."* on 3 and 5, while the content
+  has one shared label, "Help make food…". And Stage 4's *"Carry water to the
+  leaves"* has no full stop. Both are transcript bookkeeping for when the
+  stages are built, under the Figma-wins rule — the first one means splitting
+  a shared option.
+
+### Feedback cards — `levels/level_4/`
+
+Cropped to alpha. Each names its match by letter and carries a Reinforcement
+Fact, both drawn in, with **no Continue drawn on the card** — Level 3's
+pattern, so Continue goes below it.
+
+| File | Size | Weight | Says |
+|---|---|---|---|
+| `ui_correct_l4_s1.png` | 1106 x 1291 | 1.4 MB | Correct Match: B — "Roots hold the plant in the soil and absorb water and nutrients." |
+| `ui_correct_l4_s2.png` | 1106 x 1341 | 1.4 MB | Correct Match: A — "The stem supports the plant and helps move water and nutrients to different parts." |
+| `ui_correct_l4_s3.png` | 1106 x 1341 | 1.4 MB | Correct Match: B — "Leaves use sunlight to help the plant make its own food." |
+| `ui_correct_l4_s4.png` | 1106 x 1341 | 1.4 MB | Correct Match: B — "Flowers help plants reproduce and produce seeds for new plants." |
+| `ui_correct_l4_s5.png` | 1106 x 1351 | 1.3 MB | Correct Match: B — "Fruits protect the seeds inside and help them develop." |
+
+- **The letters are drawn in, so the cards cannot be shuffled.** A Level 4
+  stage must keep its cards in A/B/C order, or "Correct Match: B" points at the
+  wrong card. That is the one thing that does not carry over from Level 3,
+  whose cards are always shuffled. The letters do match the `cM` positions and
+  each challenge's `correct_option_id`.
+- No Oops card; `ui_oops_tool.png` is reused, as for Level 3.
+
+### Header and instruction — `levels/level_4/`
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_header_blank_l4.png` | 1672 x 890 | 775 KB |
+| `ui_tap_the_correct_function_card.png` | 2066 x 241 | 426 KB |
+
+- **`ui_header_blank_l4.png` is Level 2's shape** — a small plaque *above* a
+  wide cream banner — not Level 3's plaque-on-banner. Whether it can reuse
+  `header_sign.tscn`'s plate rects has to be measured. Its wording is
+  undecided (`CLAUDE.md`).
+- The plank reads "Tap the correct function card." and replaces Level 3's
+  "Tap the correct answer."
+
+### Stage select — `ui/stage_select/`
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_stage_select_l4.png` | 1656 x 2481 | 4.3 MB |
+| `ui_stage_row_1_l4.png` | 1244 x 397 | 717 KB |
+| `ui_stage_row_2_l4.png` | 1202 x 356 | 691 KB |
+| `ui_stage_row_3_l4.png` | 1225 x 416 | 754 KB |
+| `ui_stage_row_4_l4.png` | 1202 x 381 | 737 KB |
+| `ui_stage_row_5_l4.png` | 1247 x 400 | 710 KB |
+
+"Level 4 / Functions", Stage 1 green, 2-5 painted grey — the Level 2 and 3
+pattern, so `row_art_locked` will be empty. **Byte copies, not cropped**, so the
+rows can be matched against the card the way Level 3's were. Their drawn stars
+are not covered yet; that happens with the stage select, not here.
+
+### Hub plants — `plants/`
+
+| File | Size | Weight |
+|---|---|---|
+| `plant_leafy_with_flower.png` | 1317 x 1746 | 1.6 MB |
+| `plant_leafy_with_flower_and_fruit.png` | 1320 x 1722 | 1.8 MB |
+
+The hub's fourth and fifth plant states: flowering, then flowering with a
+tomato. Cropped to alpha.
+
+### Ending and game completion — `ui/screens/`
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_level_intro_l4.png` | 1109 x 1325 | 1.4 MB |
+| `ui_level_complete_l4.png` | 1121 x 1266 | 1.5 MB |
+| `ui_level_complete_sign_l4.png` | 1037 x 1416 | 1.5 MB |
+| `ui_game_completion.png` | 1087 x 1330 | 1.7 MB |
+
+Cropped to alpha. The intro reads "Level 4 / Plant power time!"; Level 4
+Complete "Plant powers unlocked!"; the sign "You Completed Level 4!" with Grow
+Now painted on it, which will need its pill cut as Levels 1-3's were. The game
+completion card, "Hooray! You did it!", is the finished-game screen and is
+not Level 4's alone.
+
 ## Still in the Figma file, not yet extracted
 
 The `.fig` contains roughly **170 unique full-resolution assets** — effectively
