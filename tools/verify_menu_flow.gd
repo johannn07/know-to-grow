@@ -24,18 +24,24 @@ func _initialize() -> void:
 
 	var menu: Node = await _instantiate("res://scenes/ui/main_menu.tscn")
 	if menu != null:
-		_expect(menu.has_node("%StartButton"), "menu has %StartButton")
+		_expect(menu.has_node("%ContinueButton"), "menu has %ContinueButton")
+		_expect(menu.has_node("%NewGameButton"), "menu has %NewGameButton")
 		_expect(menu.has_node("%HowToPlayButton"), "menu has %HowToPlayButton")
 		_expect_scene(menu.start_scene_path, "menu.start_scene_path")
 		_expect_scene(menu.how_to_play_scene_path, "menu.how_to_play_scene_path")
 
-		var start: Button = menu.get_node("%StartButton")
-		_expect(start.pressed.get_connections().size() == 1, "StartButton is connected")
+		var new_game: HoldButton = menu.get_node("%NewGameButton")
+		var continue_button: Button = menu.get_node("%ContinueButton")
+		_expect(new_game.held.get_connections().size() == 1, "NewGameButton's hold is connected")
+		_expect(continue_button.pressed.get_connections().size() == 1, "ContinueButton is connected")
 		_expect(
-			start.has_theme_stylebox("normal", "PrimaryButton"),
+			new_game.has_theme_stylebox("normal", "PrimaryButton"),
 			"PrimaryButton variation resolves in the theme"
 		)
-		_expect(start.size.y >= 160.0, "StartButton is >= 160 px tall (is %d)" % start.size.y)
+		_expect(new_game.text == "New Game", "the first button reads New Game (is '%s')" % new_game.text)
+		_expect(new_game.size.y >= 160.0, "NewGameButton is >= 160 px tall (is %d)" % new_game.size.y)
+		_expect(continue_button.size.y >= 160.0,
+			"ContinueButton is >= 160 px tall (is %d)" % continue_button.size.y)
 
 		var how: Button = menu.get_node("%HowToPlayButton")
 		_expect(how.size.y >= 160.0, "HowToPlayButton is >= 160 px tall (is %d)" % how.size.y)
@@ -46,7 +52,16 @@ func _initialize() -> void:
 				slot.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 				"ArtSlot '%s' ignores input" % slot.name
 			)
+
+		# --- With no save: no Continue, and New Game is a plain tap ---
+		_expect(not continue_button.visible, "no save: Continue is hidden")
+		_expect(not new_game.require_hold, "no save: New Game is a plain tap")
+		_expect(not (menu.get_node("%HoldHint") as Control).visible, "no save: no hold hint")
 		menu.queue_free()
+		await process_frame
+
+	if state != null:
+		await _check_menu_with_a_save(state)
 
 	for path in [
 		"res://scenes/ui/hub.tscn",
@@ -296,6 +311,35 @@ func _check_ending(level_id: StringName, chain: Array) -> void:
 		node.free()
 
 
+## A save changes the title screen: Continue appears above New Game, and New
+## Game has to be held so a stray tap cannot wipe the garden. Leaves progress
+## empty, as it found it.
+func _check_menu_with_a_save(state: GameStateStore) -> void:
+	state.record_stage_cleared(&"level_1", 1, 0)
+	var menu: Node = await _instantiate("res://scenes/ui/main_menu.tscn")
+	if menu == null:
+		state.reset()
+		return
+	var continue_button: Button = menu.get_node("%ContinueButton")
+	var new_game: HoldButton = menu.get_node("%NewGameButton")
+	var hint: Label = menu.get_node("%HoldHint")
+	_expect(continue_button.visible, "save: Continue is shown")
+	_expect(continue_button.position.y < new_game.position.y, "save: Continue sits above New Game")
+	_expect(new_game.require_hold, "save: New Game has to be held")
+	_expect(hint.visible, "save: the hold hint is shown")
+	_expect(hint.position.y > new_game.position.y, "save: the hint sits under New Game")
+
+	# Nowhere to go, so the handlers can run without changing the scene.
+	menu.start_scene_path = ""
+	new_game.pressed.emit()
+	_expect(state.has_progress(), "save: a plain tap on New Game keeps the save")
+	new_game.held.emit()
+	_expect(not state.has_progress(), "save: holding New Game wipes the save")
+	menu.queue_free()
+	await process_frame
+	state.reset()
+
+
 ## A press should squash what the child can see and let it spring back. A themed
 ## button bounces itself; a hotspot bounces the art under it, never itself,
 ## since scaling an invisible hotspot only moves where the tap lands.
@@ -308,7 +352,7 @@ func _check_press_bounce() -> void:
 	# button is themed and is its own art, and the three overlay cards put their
 	# Continue *below* the card, over the dim.
 	var cases: Array = [
-		["res://scenes/ui/main_menu.tscn", "%StartButton", ""],
+		["res://scenes/ui/main_menu.tscn", "%NewGameButton", ""],
 		["res://scenes/ui/level_intro.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/level_intro_l2.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/level_complete.tscn", "%ActionButton", "../ButtonArt"],

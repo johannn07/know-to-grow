@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://cnw4v5fosdy2c" path="res://assets/art/characters/mascot_sprout.png" id="7_sprout"]
 [ext_resource type="Texture2D" uid="uid://b14n36e3hjxbl" path="res://assets/art/characters/mascot_flower.png" id="8_flower"]
 [ext_resource type="Texture2D" uid="uid://cjtdbenvy7wa8" path="res://assets/art/effects/fx_leaves.png" id="9_leaves"]
+[ext_resource type="Script" uid="uid://cyclelgt5qlyo" path="res://scripts/ui/hold_button.gd" id="10_hold"]
 
 [node name="MainMenu" type="Control" unique_id=211196414]
 layout_mode = 3
@@ -156,13 +157,28 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="StartButton" type="Button" parent="Foreground/Column" unique_id=1562304778]
+[node name="ContinueButton" type="Button" parent="Foreground/Column"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(760, 190)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"PrimaryButton"
-text = "Start Game"
+text = "Continue"
+
+[node name="NewGameButton" type="Button" parent="Foreground/Column" unique_id=1562304778]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(760, 190)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PrimaryButton"
+text = "New Game"
+script = ExtResource("10_hold")
+
+[node name="HoldHint" type="Label" parent="Foreground/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Press and hold to start a New Game"
+horizontal_alignment = 1
 
 [node name="HowToPlayButton" type="Button" parent="Foreground/Column" unique_id=1417964607]
 unique_name_in_owner = true

@@ -107,6 +107,13 @@ func total_stars() -> int:
 	return sum
 
 
+## Whether there is a save worth continuing, and worth guarding: any stage
+## cleared at all. The main menu shows Continue, and makes New Game a hold, on
+## this.
+func has_progress() -> bool:
+	return not _stars.is_empty()
+
+
 ## True once the finished-game screen has been shown on this save.
 func finished_shown() -> bool:
 	return _finished_shown

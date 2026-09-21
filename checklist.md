@@ -589,14 +589,16 @@ providing the art for all of them; nothing here starts before it arrives.
 
 Built one at a time, after the finished-game screen.
 
-- [ ] **Main menu: "Start Game" becomes "New Game"**, and a **"Continue"**
+- [x] **Main menu: "Start Game" becomes "New Game"**, and a **"Continue"**
       button sits above it **only when there is saved progress**
-- [ ] **Continue** picks up where the saved progress left off — the hub, with
+- [x] **Continue** picks up where the saved progress left off — the hub, with
       the plant as far as it has grown
-- [ ] **New Game** clears progress and starts from the seed. It shares the
+- [x] **New Game** clears progress and starts from the seed. It shares the
       reset with the finished-game screen's New Game. **Decided: press-and-hold
       whenever there is an existing save**, so one stray tap cannot wipe a
-      child's progress; with nothing saved it is an ordinary tap
+      child's progress; with nothing saved it is an ordinary tap. Built: `GameStateStore.has_progress()`, and the
+      finished card's "Press and hold to start a New Game" hint under it while
+      the hold is needed
 - [x] **Saving per stage clear already happens.** `GameState.record_stage_cleared`
       writes `user://progress.cfg` the moment a stage — or a Level 2 situation —
       is cleared, and loads it on start. Nothing new is needed for it; "is
