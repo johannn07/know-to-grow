@@ -75,7 +75,7 @@ whole wordmark is unreadable at launcher size. Background: warm cream,
 | `icon_app_background.png` | 432 x 432 | 1 KB | Android adaptive background, flat cream |
 | `icon_app_monochrome.png` | 432 x 432 | 7 KB | Android 13 themed icon: the magnifier's shape in white |
 | `icon_app_192.png` | 192 x 192 | 15 KB | Android legacy launcher icon, cream square |
-| `icon_app_1024.png` | 1024 x 1024 | 145 KB | `application/config/icon`: the window, and iOS when its preset has no icons |
+| `icon_app_1024.png` | 1024 x 1024 | 145 KB | `application/config/icon`: the window and the editor |
 | `ui_boot_splash.png` | 1080 x 1920 | 316 KB | `application/boot_splash/image`: the logo 860 wide, centred, on transparent over the cream `bg_color` |
 
 - The magnifier is only ~320 px across in `logo.png`, so the 1024 icon is

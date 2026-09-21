@@ -519,19 +519,8 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [x] **Export a debug APK to a real phone**, and keep doing it — the owner tests
       each build on a device as it lands. Touch targets that feel fine with a
       mouse are often too small for a six-year-old
-- [x] **iOS export preset** — `preset.1` in `export_presets.cfg`, bundle id
-      `com.johannn.ktg` like Android, arm64, iOS 14+, iPhone and iPad,
-      `export_project_only` on. From Windows it writes an **Xcode project**, not
-      an `.ipa`; building, signing and running it needs a Mac with Xcode
-- [ ] **Apple Team ID** — the preset holds the placeholder `XXXXXXXXXX`, only so
-      Godot will export; it is not a real team. The Xcode project runs in the
-      iOS Simulator as it is. For a real device, pick a team in Xcode's Signing
-      & Capabilities, or put the real ID in the preset: a free Apple ID's
-      Personal Team installs on your own device for 7 days; TestFlight and the
-      App Store need the paid Developer account (99 USD a year). The ID is not
-      a secret. Kept here, not as a comment, because Godot strips comments from
-      `export_presets.cfg` when it saves
-- [ ] iPad is 4:3, which the layout has never been checked at — see §8
+- [x] **Android only — decided 2026-09-22.** An iOS preset was added and then
+      removed at the owner's request; there is no iOS build
 - [ ] Test on two real devices: one cheap, one current
 - [ ] Store listing, screenshots, privacy policy, and the Play Console
       "designed for families" declarations
