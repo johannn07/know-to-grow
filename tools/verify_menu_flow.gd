@@ -402,17 +402,6 @@ func _check_press_bounce() -> void:
 		screen.queue_free()
 		await process_frame
 
-	# The stage select close button has no separate art — its X is part of the
-	# card — so a press must neither move the hotspot nor fail.
-	var select: Node = await _instantiate("res://scenes/ui/stage_select.tscn")
-	if select != null:
-		var close: ArtButton = select.get_node("%CloseButton")
-		close.button_down.emit()
-		await create_timer(PressBounce.PRESS_SECONDS + 0.05).timeout
-		_expect(close.scale == Vector2.ONE, "stage_select close hotspot stays put when pressed")
-		close.button_up.emit()
-		select.queue_free()
-		await process_frame
 
 	await _check_art_over_art_darkens_only()
 
@@ -449,6 +438,10 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row3"],
 		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row4"],
 		["res://scenes/ui/stage_select_l4.tscn", "%Rows/Row5"],
+		["res://scenes/ui/stage_select.tscn", "%CloseButton"],
+		["res://scenes/ui/stage_select_l2.tscn", "%CloseButton"],
+		["res://scenes/ui/stage_select_l3.tscn", "%CloseButton"],
+		["res://scenes/ui/stage_select_l4.tscn", "%CloseButton"],
 		["res://scenes/ui/level_complete_sign.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l2.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l3.tscn", "%ActionButton"],

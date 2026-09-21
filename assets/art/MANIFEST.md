@@ -461,6 +461,19 @@ taken to 430 to match the others.
 The row's two sit in 160 x 160 hotspots 16 px in from the top and side edges.
 `ui_button_nav_back.png` is not `ui_button_back.png`, which is How To Play's X.
 
+## Stage select X — `ui/stage_select/`
+
+Each card's X disc, cut out of the card itself with a circle mask and laid back
+over it at the same rect as `%CloseArt`, so the close button has something to
+darken. Re-cut it if a card is re-rendered.
+
+| File | Size | Weight | Slot |
+|---|---|---|---|
+| `ui_button_close_l1.png` | 232 x 232 | cut from `ui_stage_select_l1.png` | `%CloseArt`, Rect2(0.8463, 0.1059, 0.1421, 0.0945) of the card |
+| `ui_button_close_l2.png` | 222 x 222 | cut from `ui_situation_select_l2.png` | `%CloseArt`, Rect2(0.8456, 0.1076, 0.1446, 0.0971) |
+| `ui_button_close_l3.png` | 238 x 238 | cut from `ui_stage_select_l3.png` | `%CloseArt`, Rect2(0.8129, 0.114, 0.1479, 0.0987) |
+| `ui_button_close_l4.png` | 240 x 240 | cut from `ui_stage_select_l4.png` | `%CloseArt`, Rect2(0.8225, 0.11, 0.1449, 0.0967) |
+
 ## Stage select arrows — `ui/buttons/`
 
 Page to the previous or next level's stage select. Cut from one delivered

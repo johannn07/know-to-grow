@@ -388,6 +388,7 @@ bounces unless it says otherwise.
 | Button | Sits on | Press | Set where |
 |---|---|---|---|
 | Stage select rows ×4 | the row painted into the card | darken | the scene |
+| Stage select X | the X painted into the card; `%CloseArt` is it cut out | darken | the scene |
 | How To Play's X and LET'S GO | the controls painted into the screen | darken | the scene |
 | Continue / Choose Again on a feedback card | the button painted into the card | darken | derived |
 | Stage 4's Continue | below the card, nothing behind | darken + squash | derived |

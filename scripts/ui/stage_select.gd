@@ -17,8 +17,9 @@ extends SubScreen
 ## Each row hotspot is an [ArtButton] pointed at its row art, so a press tints
 ## the whole row — stars included, since they are its children. It does not
 ## bounce: the row art covers a row painted into the card, and shrinking it would
-## uncover that one (see CLAUDE.md). The close button is an ArtButton with no
-## art: its X is part of the card, so there is nothing separate to move.
+## uncover that one (see CLAUDE.md). The close button works the same way: its
+## X is painted into the card, so %CloseArt is that disc cut out of the card and
+## laid back over it, there only to be darkened on a press.
 ##
 ## **The four levels' stage selects are pages of one strip.** A swipe to the
 ## left, or the arrow on the right, slides this card out and the next level's in;
