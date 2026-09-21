@@ -451,11 +451,8 @@ Drawn 880 x 1001, centred on the screen.
   top-right corner leaves, in a 160 px hotspot.
 - The two toggles (240 x 248) and Main Menu sit on the cream.
 
-**Not delivered: the Credits card.** `%CardArt` in
-`scenes/components/credits_overlay.tscn`, **940 x 1300**, centred, slot
-`ui_credits_card`. Laid out like the Settings card: the blank sign at 600 px
-reading "Credits", the round back arrow top-left, and a scrolling list of live
-text in the `CreditsText` theme style.
+**Credits need no art** — decided. They are live text rolling up over a near-black
+dim, `scenes/components/credits_overlay.tscn`, with no card behind them.
 
 ## Buttons — delivered
 

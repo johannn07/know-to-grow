@@ -15,8 +15,8 @@ extends Control
 ## the project owner.
 ##
 ## It only reports the first two. The hub owns what happens next: the music, the
-## reset, the reload. Credits is handled here, since it only opens a card over
-## this one and changes nothing.
+## reset, the reload. Credits is handled here, since it only rolls text over
+## this card and changes nothing.
 
 ## Close the card and stay on the finished garden.
 signal continue_playing

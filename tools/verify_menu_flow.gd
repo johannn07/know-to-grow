@@ -608,17 +608,32 @@ func _check_finished_game(state: GameStateStore) -> void:
 	_expect(credits_button.get_global_rect().end.y <= card.get_viewport_rect().size.y,
 		"finished card: Credits is on screen")
 
-	# --- Credits opens its card, and closes back to this one ---
+	# --- Credits rolls up the screen, and a tap ends it early ---
 	var credits: CreditsOverlay = card.get_node("%Credits")
 	_expect(not credits.is_open(), "credits: starts closed")
 	credits_button.pressed.emit()
 	_expect(credits.is_open(), "credits: the button opens it")
-	var credit_text: Label = credits.get_node("%Text")
-	_expect(credit_text.text.contains("Fredoka One") and credit_text.text.contains("Godot"),
-		"credits: names the font and the engine, whose licences ask for it")
-	(credits.get_node("%CloseButton") as ArtButton).pressed.emit()
-	_expect(not credits.is_open(), "credits: the round back arrow closes it")
-	_expect(hub.finished_card() == card, "credits: closing it leaves the finished card up")
+	var credit_lines: Control = credits.get_node("%Lines")
+	var all_text := ""
+	for line in credit_lines.get_children():
+		if line is Label:
+			all_text += (line as Label).text + "
+"
+	for name_needed: String in ["ChatGPT", "LudoLoon Studio", "Towball", "CC BY 4.0", "Fredoka One", "Godot"]:
+		_expect(all_text.contains(name_needed), "credits: names %s" % name_needed)
+	for i in 3:
+		await process_frame
+	var first_y := credit_lines.position.y
+	for i in 10:
+		await process_frame
+	_expect(credit_lines.position.y < first_y,
+		"credits: the text rolls upwards (%d -> %d)" % [first_y, credit_lines.position.y])
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.pressed = false
+	(credits.get_node("%Dim") as ColorRect).gui_input.emit(release)
+	_expect(not credits.is_open(), "credits: a tap ends them early")
+	_expect(hub.finished_card() == card, "credits: closing them leaves the finished card up")
 
 	# --- Continue Playing lifts it off and the hub's music comes back ---
 	continue_button.pressed.emit()

@@ -428,10 +428,11 @@ the open content questions, not bugs.
       `verify_audio` checks it; its screens will ask for it as they are built.
       Levels 3 and 4 get a `Track` each the same way — **appended to the end of
       the enum**, since scenes store a track as its number
-- [ ] **The music is third-party and its licence is unconfirmed.** The tracks
-      arrived named after another game's soundtrack and are now on GitHub under
-      neutral names, which hides the provenance without changing it. **⚠**
-      Settle this before release
+- [x] **The music's source and licence — settled 2026-09-21.** "On the Farm"
+      by LudoLoon Studio (royalty free, commercial use allowed, credit asked)
+      and Towball's Crossing Deluxe by Towball (CC BY 4.0), both on itch.io.
+      Both ask for credit, which the finished-game Credits give. Which file
+      came from which pack is not recorded
 - [ ] Voice-over ≈63 lines per language (19 prompts + 19 fun facts + ~25 item
       names). **Record a scratch version on your phone this week** — a kids' game
       lives or dies on whether the prompt is spoken, and timing needs testing long
@@ -559,11 +560,15 @@ providing the art for all of them; nothing here starts before it arrives.
       icon drawn darker. Credits moved to the finished-game card
   - [x] Settings card art — delivered; "Settings" is live text on its plank,
         and it closes by How To Play's X
-- [x] **Credits** — on the finished-game card, below New Game. Opens a
-      scrolling card, `scenes/components/credits_overlay.tscn`
-  - [ ] **Names for Game design, Art, Music and Sound effects** — they read "To
-        be confirmed". Music waits on the licence question in §5
-  - [ ] Credits card art, 940 x 1300 — a cream placeholder until then
+- [x] **Credits** — on the finished-game card, below New Game. Plain text
+      rolling up the screen, `scenes/components/credits_overlay.tscn`; closes
+      itself at the end or on a tap. Art: ChatGPT. Music: "On the Farm" by
+      LudoLoon Studio (royalty free, credit asked) and Towball's Crossing
+      Deluxe by Towball (CC BY 4.0), both from itch.io
+  - [ ] **Sound effects source** — one of the owner's itch.io collection: 400
+        Sounds Pack (Chequered Ink), Ultimate UI SFX Pack (JDSherbert) or 500+
+        Character Voice Audio Files (Dillon Becker). Reads "Source to be
+        confirmed" until known
 
 ### New Game and Continue — requested 2026-09-21
 
