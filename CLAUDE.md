@@ -173,9 +173,9 @@ three.
 
 **Level 4 taps too, but never shuffles — decided.** Its Correct cards name the
 answer by a drawn letter, "Correct Match: B", so its cards must stay in the
-A/B/C order they are drawn in (`icon_stage_N_cM_l4`, M = A/B/C). A tap stage
-that keeps its order has to say so; do not let Level 4 inherit Level 3's
-shuffle.
+A/B/C order they are drawn in (`icon_stage_N_cM_l4`, M = A/B/C). Every Level 4
+stage sets `StageScreen.keep_card_order`, which skips the deal;
+`verify_tap_answer.gd` checks it holds.
 
 A blank tray also **shuffles**: each play deals the cards into the scene's slots
 in a new order. The scene still lists its cards in the content file's order,

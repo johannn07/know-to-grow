@@ -34,6 +34,7 @@ func _initialize() -> void:
 		_state.reset()
 
 	await _check_tap_stage()
+	await _check_kept_order()
 	await _check_drag_stage_is_unchanged()
 
 	if _state != null:
@@ -151,9 +152,38 @@ func _check_drag_stage_is_unchanged() -> void:
 	await process_frame
 
 
-func _rig(tap: bool) -> StageScreen:
+## Level 4 taps but must not shuffle: its Correct cards name the answer by a
+## drawn letter. With keep_card_order on, every play leaves each card in the
+## place the scene gave it. Thirty plays, since a shuffle of three leaves the
+## order unchanged one time in six.
+func _check_kept_order() -> void:
+	print("--- tap stage keeping its card order ---")
+	var authored: StageScreen = (load(RIG) as PackedScene).instantiate()
+	var placed: Array = []
+	for card in authored.get_node("%Cards").get_children():
+		placed.append(_place_of(card))
+	authored.free()
+
+	var kept := true
+	for i in 30:
+		var stage := await _rig(true, true)
+		var dealt: Array = []
+		for card in stage.cards():
+			dealt.append(_place_of(card))
+		kept = kept and dealt == placed
+		stage.queue_free()
+		await process_frame
+	_expect(kept, "over 30 plays every card stayed in the place the scene gave it")
+
+
+func _place_of(card: Control) -> String:
+	return "%.1f,%.1f,%.1f,%.1f" % [card.anchor_left, card.anchor_top, card.offset_left, card.offset_top]
+
+
+func _rig(tap: bool, keep_order: bool = false) -> StageScreen:
 	var stage: StageScreen = (load(RIG) as PackedScene).instantiate()
 	stage.tap_to_answer = tap
+	stage.keep_card_order = keep_order
 	root.add_child(stage)
 	stage.set_deferred("size", Vector2(1080.0, 1920.0))
 	await _settle()

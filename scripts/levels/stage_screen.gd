@@ -88,6 +88,12 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 ## that does have one — and a spent card is darkened where it stands rather than
 ## leaving an empty slot behind.
 @export var tap_to_answer: bool = false
+## On to keep the cards where the scene puts them instead of dealing them afresh
+## each play. Level 4's Correct cards name the answer by a drawn letter,
+## "Correct Match: B", so its cards must stay in their drawn A/B/C order or the
+## letter points at the wrong one. Only matters to a stage whose cards would
+## otherwise be shuffled: see [member tap_to_answer] and [member blank_tray].
+@export var keep_card_order: bool = false
 
 @export_group("Art")
 ## On when this stage's tray has empty slots rather than its items painted in, so
@@ -155,7 +161,7 @@ func _ready() -> void:
 			card.tapped.connect(_on_card_tapped)
 		else:
 			card.dropped.connect(_on_card_dropped)
-	if loose:
+	if loose and not keep_card_order:
 		shuffle_cards()
 	if not tap_to_answer and _drop_zone == null:
 		push_warning("%s: no %%DropZone, so a dragged card has nowhere to land" % name)
