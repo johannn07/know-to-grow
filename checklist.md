@@ -516,6 +516,14 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [x] **Export a debug APK to a real phone**, and keep doing it — the owner tests
       each build on a device as it lands. Touch targets that feel fine with a
       mouse are often too small for a six-year-old
+- [x] **iOS export preset** — `preset.1` in `export_presets.cfg`, bundle id
+      `com.johannn.ktg` like Android, arm64, iOS 14+, iPhone and iPad,
+      `export_project_only` on. From Windows it writes an **Xcode project**, not
+      an `.ipa`; building, signing and running it needs a Mac with Xcode
+- [ ] **Apple Team ID** in the iOS preset — export refuses to run without one.
+      Needs an Apple Developer account (99 USD a year); a free account can only
+      sideload to your own device for 7 days
+- [ ] iPad is 4:3, which the layout has never been checked at — see §8
 - [ ] Test on two real devices: one cheap, one current
 - [ ] Store listing, screenshots, privacy policy, and the Play Console
       "designed for families" declarations
