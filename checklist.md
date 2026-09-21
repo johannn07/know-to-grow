@@ -189,7 +189,8 @@ unlocks **Little Planter**.
       `tools/verify_game_state.gd`
 - [x] ~~Decide whether Start Game resumes or always restarts~~ **Answered:
       neither.** Play always opens the stage select and the child picks. Resume
-      falls out of it, since cleared rows stay unlocked
+      falls out of it, since cleared rows stay unlocked. **Superseded
+      2026-09-21** by New Game / Continue on the main menu — see §9
 - [x] `AudioDirector` autoload — routes music and effects to the existing buses,
       and keeps a track playing across a scene change so walking hub → level
       overlay → stage select does not restart it. Checked by
@@ -293,7 +294,20 @@ Answered by the project owner before any Level 4 scene was built:
       fruiting plant as "FRUIT". All over `bg_stage_5_l4`, on the Level 4 track.
       Past Level 4, Play offers Level 4 again until the finished-game screen
       exists
-- [ ] Finished-game screen
+- [ ] **Finished-game screen** — decided 2026-09-21. `ui_game_completion.png`,
+      "Hooray! You did it!", on `Track.LEVEL_5`
+  - [ ] It **appears by itself the first time the hub shows the fruiting
+        plant** — Grow Now after Level 4 lands on the hub, and the overlay
+        comes up over it. Only the first time: a later visit to the hub with
+        the fruit already grown does not bring it back, so the "shown" fact
+        needs saving in `GameState`
+  - [ ] **Two buttons below the card, on `ui_button_primary`**: **New Game**
+        and **Continue Playing**. Row or column is ours to choose; they sit
+        under the overlay card, not on it
+  - [ ] New Game clears progress and starts again from the seed; Continue
+        Playing closes the overlay and leaves the child on the finished hub
+  - [ ] The hub's Play past Level 4, which offers Level 4 again as a stopgap,
+        needs its real destination once this exists
 - [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with
       all five rows in it, Stage 1 unlocked and 2-5 grey, in the Level 2
       pattern. Row rects found by matching each row drawing against the card
@@ -530,6 +544,23 @@ providing the art for all of them; nothing here starts before it arrives.
 - [ ] **Options screen** — music on/off and SFX on/off icons, Exit / Back to
       main menu, and a Credits button
 - [ ] **Credits screen** — credits for the assets used, reached from Options
+
+### New Game and Continue — requested 2026-09-21
+
+Built one at a time, after the finished-game screen.
+
+- [ ] **Main menu: "Start Game" becomes "New Game"**, and a **"Continue"**
+      button sits above it **only when there is saved progress**
+- [ ] **Continue** picks up where the saved progress left off — the hub, with
+      the plant as far as it has grown
+- [ ] **New Game** clears progress and starts from the seed. It shares the
+      reset with the finished-game screen's New Game. Wiping a child's progress
+      from one tap is worth asking the owner about: a confirm, or a hold, as
+      the parent-gate idea in `CLAUDE.md` suggests. **⚠**
+- [x] **Saving per stage clear already happens.** `GameState.record_stage_cleared`
+      writes `user://progress.cfg` the moment a stage — or a Level 2 situation —
+      is cleared, and loads it on start. Nothing new is needed for it; "is
+      there saved progress" is whether any stage is cleared
 
 ---
 
