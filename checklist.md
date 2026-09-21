@@ -569,10 +569,9 @@ providing the art for all of them; nothing here starts before it arrives.
       itself at the end or on a tap. Art: ChatGPT. Music: "On the Farm" by
       LudoLoon Studio (royalty free, credit asked) and Towball's Crossing
       Deluxe by Towball (CC BY 4.0), both from itch.io
-  - [ ] **Sound effects source** — one of the owner's itch.io collection: 400
-        Sounds Pack (Chequered Ink), Ultimate UI SFX Pack (JDSherbert) or 500+
-        Character Voice Audio Files (Dillon Becker). Reads "Source to be
-        confirmed" until known
+  - [x] **Sound effects source** — "400 Sounds Pack" by Chequered Ink,
+        ci.itch.io/400-sounds-pack. Free for commercial use, credit optional;
+        credited anyway
 
 ### New Game and Continue — requested 2026-09-21
 

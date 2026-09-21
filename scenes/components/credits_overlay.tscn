@@ -141,7 +141,19 @@ autowrap_mode = 3
 
 [node name="Line10" type="Label" parent="Lines"]
 layout_mode = 2
-text = "Source to be confirmed"
+text = "“400 Sounds Pack”"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Line10Author" type="Label" parent="Lines"]
+layout_mode = 2
+text = "by Chequered Ink"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Line10Link" type="Label" parent="Lines"]
+layout_mode = 2
+text = "ci.itch.io"
 horizontal_alignment = 1
 autowrap_mode = 3
 
