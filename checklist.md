@@ -557,7 +557,8 @@ providing the art for all of them; nothing here starts before it arrives.
 - [x] **Settings overlay** (was "Options screen") — a card headed Settings with
       music and SFX toggles and Main Menu, opened from the top bar. Off is the
       icon drawn darker. Credits moved to the finished-game card
-  - [ ] Settings card art, 940 x 900 — a cream placeholder until then
+  - [x] Settings card art — delivered; "Settings" is live text on its plank,
+        and it closes by How To Play's X
 - [x] **Credits** — on the finished-game card, below New Game. Opens a
       scrolling card, `scenes/components/credits_overlay.tscn`
   - [ ] **Names for Game design, Art, Music and Sound effects** — they read "To

@@ -7,8 +7,8 @@ extends Control
 ## level. The two toggles talk to the [AudioDirectorService] directly, which
 ## saves the choice, so nothing about them passes through the screen.
 ##
-## It closes three ways, because a five-year-old will try all of them: the round
-## back arrow on the card, a tap on the dimmed garden around it, and Android's
+## It closes three ways, because a five-year-old will try all of them: the X on
+## the card's corner, a tap on the dimmed garden around it, and Android's
 ## back gesture — [SubScreen] asks [method is_open] before treating that gesture
 ## as leaving the screen.
 ##

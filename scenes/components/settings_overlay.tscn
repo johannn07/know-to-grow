@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="3_artbtn"]
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="4_theme"]
-[ext_resource type="PackedScene" path="res://scenes/components/header_sign.tscn" id="5_header"]
-[ext_resource type="Texture2D" uid="uid://c1nkyn2hlo3un" path="res://assets/art/ui/buttons/ui_button_nav_back.png" id="6_back"]
+[ext_resource type="Texture2D" uid="uid://d217j0lhsrcjh" path="res://assets/art/ui/screens/ui_settings_card.png" id="5_card"]
+[ext_resource type="Texture2D" uid="uid://37cnsxcc3k0v" path="res://assets/art/ui/buttons/ui_button_back.png" id="6_close"]
 [ext_resource type="Texture2D" uid="uid://buhobajchs3d5" path="res://assets/art/ui/buttons/ui_button_music.png" id="7_music"]
 [ext_resource type="Texture2D" uid="uid://ddvtv5lccvt4c" path="res://assets/art/ui/buttons/ui_button_sfx.png" id="8_sfx"]
 
@@ -34,22 +34,40 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0.55)
 
 [node name="CardArt" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -470.0
-offset_top = -420.0
-offset_right = 470.0
-offset_bottom = 480.0
+offset_left = -440.0
+offset_top = -500.0
+offset_right = 440.0
+offset_bottom = 501.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
+texture = ExtResource("5_card")
 slot_name = "ui_settings_card"
 placeholder_color = Color(0.93, 0.86, 0.7, 1)
+
+[node name="Title" type="Label" parent="CardArt"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2757
+anchor_top = 0.0585
+anchor_right = 0.7091
+anchor_bottom = 0.1671
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"HeaderLabel"
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
 
 [node name="CardBlocker" type="Control" parent="."]
 layout_mode = 1
@@ -58,27 +76,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -470.0
-offset_top = -420.0
-offset_right = 470.0
-offset_bottom = 480.0
+offset_left = -440.0
+offset_top = -500.0
+offset_right = 440.0
+offset_bottom = 501.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="HeaderSign" parent="." instance=ExtResource("5_header")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -520.0
-offset_right = 300.0
-offset_bottom = -315.0
-grow_horizontal = 2
-grow_vertical = 2
-title_text = "Settings"
 
 [node name="CloseArt" type="Control" parent="."]
 unique_name_in_owner = true
@@ -88,16 +91,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -452.0
-offset_top = -400.0
-offset_right = -320.0
-offset_bottom = -264.0
+offset_left = 296.0
+offset_top = -526.0
+offset_right = 432.0
+offset_bottom = -404.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("2_slot")
-texture = ExtResource("6_back")
-slot_name = "ui_button_nav_back"
+texture = ExtResource("6_close")
+slot_name = "ui_button_back"
 placeholder_color = Color(0.55, 0.36, 0.2, 1)
 
 [node name="CloseButton" type="Button" parent="."]
@@ -108,10 +111,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -466.0
-offset_top = -414.0
-offset_right = -306.0
-offset_bottom = -250.0
+offset_left = 284.0
+offset_top = -545.0
+offset_right = 444.0
+offset_bottom = -385.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_artbtn")
@@ -131,9 +134,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -290.0
-offset_top = -184.0
+offset_top = -200.0
 offset_right = -50.0
-offset_bottom = 64.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -151,9 +154,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -290.0
-offset_top = -184.0
+offset_top = -200.0
 offset_right = -50.0
-offset_bottom = 64.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_artbtn")
@@ -173,9 +176,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 50.0
-offset_top = -184.0
+offset_top = -200.0
 offset_right = 290.0
-offset_bottom = 64.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -193,9 +196,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 50.0
-offset_top = -184.0
+offset_top = -200.0
 offset_right = 290.0
-offset_bottom = 64.0
+offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_artbtn")
@@ -215,9 +218,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -330.0
-offset_top = 180.0
+offset_top = 150.0
 offset_right = 330.0
-offset_bottom = 370.0
+offset_bottom = 340.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"PrimaryButton"

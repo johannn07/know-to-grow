@@ -430,7 +430,7 @@ taken to 430 to match the others.
 
 | File | Size | Weight | Slot |
 |---|---|---|---|
-| `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28; and the card's `%CloseArt` |
+| `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28 |
 | `ui_button_settings.png` | 430 x 430 | 235 KB | `%SettingsArt`, 136 x 136, right, 28 px in |
 | `ui_button_music.png` | 422 x 444 | 249 KB | the card's `%MusicArt`, 240 x 248 |
 | `ui_button_sfx.png` | 426 x 443 | 258 KB | the card's `%SfxArt`, 240 x 248 |
@@ -441,11 +441,15 @@ The row's two sit in 160 x 160 hotspots 16 px in from the top and side edges.
 A switched-off toggle is its own art drawn at 0.45 brightness — decided, no
 separate off-state drawing.
 
-**Not delivered: the Settings card.** `%CardArt`, **940 x 900**, centred on the
-screen, slot `ui_settings_card`. A cream placeholder until then. Its header is
-the blank sign, `ui_header_blank.png`, at 600 px with "Settings" on the banner
-and the plaque left empty; the round back arrow sits in the card's top-left
-corner, 18 px in.
+**The Settings card** is `ui/screens/ui_settings_card.png`, **1052 x 1197**, 564 KB,
+cropped at alpha 32 — a cream board with a blank wooden plank across the top.
+Drawn 880 x 1001, centred on the screen.
+
+- **"Settings" is live text on the plank**, in the `HeaderLabel` style, between
+  the two rivets: `(0.2757, 0.0585)` to `(0.7091, 0.1671)` of the card.
+- **Close is How To Play's X**, `ui_button_back.png`, 136 x 122 over the card's
+  top-right corner leaves, in a 160 px hotspot.
+- The two toggles (240 x 248) and Main Menu sit on the cream.
 
 **Not delivered: the Credits card.** `%CardArt` in
 `scenes/components/credits_overlay.tscn`, **940 x 1300**, centred, slot

@@ -177,8 +177,9 @@ level's own stage select through `SubScreen.back_scene_path`, the same place
 Android's back gesture goes.
 
 Settings opens `settings_overlay.tscn`, a card over the stage: music and sound
-effects toggles and a Main Menu button. It closes by its round back arrow, a
-tap on the dim, or Android's back, which closes the card rather than leaving
+effects toggles and a Main Menu button, on its own drawn card with "Settings"
+live on the plank. It closes by the X on its corner, a tap on the dim, or
+Android's back, which closes the card rather than leaving
 the stage. The toggles mute the `Music` and `SFX` buses — never `VO` — draw
 their own art darker when off, and are saved to `user://settings.cfg`, apart
 from progress so New Game does not reset them.

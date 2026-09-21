@@ -152,8 +152,12 @@ func _check_toggles() -> void:
 		ResourceLoader.exists(card.main_menu_path),
 		"Main Menu leads somewhere real ('%s')" % card.main_menu_path
 	)
-	var header: HeaderSign = card.get_node("HeaderSign")
-	_expect(header.title_text == "Settings", "the card is headed Settings")
+	var title: Label = card.get_node("%Title")
+	_expect(title.text == "Settings", "the card is headed Settings")
+	_expect(
+		(card.get_node("%CardArt") as ArtSlot).texture != null,
+		"the card has its art"
+	)
 
 	var music_art: ArtSlot = card.get_node("%MusicArt")
 	var sfx_art: ArtSlot = card.get_node("%SfxArt")
@@ -197,7 +201,7 @@ func _check_toggles() -> void:
 
 	# Three ways out, none of which leaves the stage.
 	(card.get_node("%CloseButton") as ArtButton).pressed.emit()
-	_expect(not bar.settings_open(), "the round back arrow closes the card")
+	_expect(not bar.settings_open(), "the X closes the card")
 
 	bar.open_settings()
 	var release := InputEventMouseButton.new()
