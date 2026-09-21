@@ -423,22 +423,29 @@ disc behind them. These carry the coloured disc the stage select rows use.
 
 ## Top bar — `ui/buttons/`
 
-The back / music / effects row on every stage, `scenes/components/top_bar.tscn`.
-Cut from one delivered sheet at alpha 32; no haze margin.
+The back / settings row on every stage, `scenes/components/top_bar.tscn`, and
+the Settings card it opens, `scenes/components/settings_overlay.tscn`. Cut at
+alpha 32; no haze margin. The settings icon was delivered at 1254 square and
+taken to 430 to match the others.
 
 | File | Size | Weight | Slot |
 |---|---|---|---|
-| `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28 |
-| `ui_button_music.png` | 422 x 444 | 249 KB | `%MusicArt`, 132 x 136, right, 206 px in |
-| `ui_button_sfx.png` | 426 x 443 | 258 KB | `%SfxArt`, 132 x 136, right, 30 px in |
+| `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28; and the card's `%CloseArt` |
+| `ui_button_settings.png` | 430 x 430 | 235 KB | `%SettingsArt`, 136 x 136, right, 28 px in |
+| `ui_button_music.png` | 422 x 444 | 249 KB | the card's `%MusicArt`, 240 x 248 |
+| `ui_button_sfx.png` | 426 x 443 | 258 KB | the card's `%SfxArt`, 240 x 248 |
 
-Each sits in a 160 x 160 hotspot 16 px in from the top and side edges.
+The row's two sit in 160 x 160 hotspots 16 px in from the top and side edges.
 `ui_button_nav_back.png` is not `ui_button_back.png`, which is How To Play's X.
 
-**Not delivered: off-state art for music and effects.** Until it exists, a
-switched-off toggle is its on-state art dimmed to 0.55 with a red strike drawn
-across it in code. Set `music_off_art` / `sfx_off_art` on `TopBar` and the strike
-goes. Same size as the on-state art.
+A switched-off toggle is its own art drawn at 0.45 brightness — decided, no
+separate off-state drawing.
+
+**Not delivered: the Settings card.** `%CardArt`, **940 x 900**, centred on the
+screen, slot `ui_settings_card`. A cream placeholder until then. Its header is
+the blank sign, `ui_header_blank.png`, at 600 px with "Settings" on the banner
+and the plaque left empty; the round back arrow sits in the card's top-left
+corner, 18 px in.
 
 ## Buttons — delivered
 
@@ -787,7 +794,7 @@ height opens up between the two groups:
 | Piece | Rect | Notes |
 |---|---|---|
 | `%Background` | full screen | `KEEP_COVERED`, clipped |
-| `%TopBar` | 0-1080 x 0-176 | back, music, effects; see "Top bar" |
+| `%TopBar` | 0-1080 x 0-176 | back and settings; see "Top bar" |
 | `%HeaderSign` | 160-920 x 170-549 | 760 wide, the width its banner was fitted at |
 | `%PromptBubble` | 58-1022 x **570-1027** or **1000-1457** | 964 wide, Level 1's width; **y varies per stage**; low is *from the bottom* |
 | `TapBanner` | 140-940 x 1438-1560 | 800 wide, *from the bottom* |
@@ -1007,7 +1014,7 @@ copy, and checked first in a full-resolution composite of all five. At the
 | Piece | Rect | Notes |
 |---|---|---|
 | `%Background` | full screen | `KEEP_COVERED`, clipped |
-| `%TopBar` | 0-1080 x 0-176 | back, music, effects; see "Top bar" |
+| `%TopBar` | 0-1080 x 0-176 | back and settings; see "Top bar" |
 | `%HeaderSign` | 210-870 x 170-395 | Level 2's sign at its 660 px |
 | `TapBanner` | 90-990 x 405-510 | straight under the header |
 | `%PromptBubble` | 58-1022 x **520-977** or **885-1342** | 964 wide; **y varies per stage**; low is *from the bottom* |

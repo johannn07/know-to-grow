@@ -25,7 +25,7 @@ const MIN_TOUCH := 160.0
 
 @onready var _back_button: Button = get_node_or_null("%BackButton") as Button
 
-## The back / music / effects row a stage carries. Its back goes wherever this
+## The back / settings row a stage carries. Its back goes wherever this
 ## screen's back goes, so the button and the gesture cannot disagree.
 @onready var _top_bar: TopBar = get_node_or_null("%TopBar") as TopBar
 
@@ -86,7 +86,11 @@ func _on_any_button_down() -> void:
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		go_back()
+		# With the settings card up, the gesture means "close this", not "leave".
+		if _top_bar != null and _top_bar.settings_open():
+			_top_bar.close_settings()
+		else:
+			go_back()
 
 
 func go_back() -> void:

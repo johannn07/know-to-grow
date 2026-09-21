@@ -171,12 +171,17 @@ something that belongs at the bottom is how the answers ended up floating over
 the plant on a real phone.
 
 **Every stage has the top bar — decided.** `scenes/components/top_bar.tscn`:
-back on the left, music then effects on the right, one row, 160 px hotspots, and
+back on the left, settings on the right, one row, 160 px hotspots, and
 everything else on the stage starts under it at `y 170`. Back goes to the
 level's own stage select through `SubScreen.back_scene_path`, the same place
-Android's back gesture goes. The toggles mute the `Music` and `SFX` buses —
-never `VO` — and are saved to `user://settings.cfg`, apart from progress so New
-Game does not reset them.
+Android's back gesture goes.
+
+Settings opens `settings_overlay.tscn`, a card over the stage: music and sound
+effects toggles and a Main Menu button. It closes by its round back arrow, a
+tap on the dim, or Android's back, which closes the card rather than leaving
+the stage. The toggles mute the `Music` and `SFX` buses — never `VO` — draw
+their own art darker when off, and are saved to `user://settings.cfg`, apart
+from progress so New Game does not reset them.
 
 **Level 3 taps instead of dragging.** A stage sets `tap_to_answer` and its
 cards answer where they stand: no `%DropZone`, no slide home, and the press is
@@ -451,7 +456,7 @@ property that does not exist and fail silently.
 | Level 4 stages play through | `godot --headless --path . -s res://tools/verify_level_4.gd` |
 | Tap answers, and drag still works | `godot --headless --path . -s res://tools/verify_tap_answer.gd` |
 | Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
-| Top bar on all 19 stages, and the sound toggles | `godot --headless --path . -s res://tools/verify_top_bar.gd` |
+| Top bar on all 19 stages, and the Settings card | `godot --headless --path . -s res://tools/verify_top_bar.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.

@@ -1,17 +1,18 @@
 extends SceneTree
 
-## Checks the back / music / effects row on every stage.
+## Checks the back / settings row on every stage, and the Settings card.
 ##
 ##   godot --headless --path . -s res://tools/verify_top_bar.gd
 ##
 ## Every one of the 19 stages carries a [TopBar]. This walks them all and checks
 ## the things that break quietly: that the row is there and under the feedback
-## overlay, that all three buttons clear 160 px and are wired, that the row sits
+## overlay, that both buttons clear 160 px and are wired, that the row sits
 ## above the header rather than on it, and that back leads to the stage's own
 ## level select rather than falling through to the main menu default.
 ##
-## It then flips music and effects off and on and checks the audio buses, the
-## saved file, and that a second row already on screen redraws itself.
+## It then opens Settings and checks the card: every way of closing it, that
+## Android's back closes it rather than leaving the stage, and that music and
+## effects flip the audio buses, save, and darken their own art.
 ##
 ## Toggling writes `user://settings.cfg`. Whatever was there before is put back
 ## at the end, so a run does not change the sound settings on this machine.
@@ -74,7 +75,7 @@ func _check_stage(level: int, stage_number: int) -> void:
 	)
 
 	var lowest := 0.0
-	for button_name in ["%BackButton", "%MusicButton", "%SfxButton"]:
+	for button_name in ["%BackButton", "%SettingsButton"]:
 		var button: ArtButton = bar.get_node(button_name)
 		var rect := button.get_global_rect()
 		lowest = maxf(lowest, rect.end.y)
@@ -89,18 +90,16 @@ func _check_stage(level: int, stage_number: int) -> void:
 		_expect(button.art != null, "%s %s has its art" % [label, button_name])
 
 	var back: Rect2 = (bar.get_node("%BackButton") as Control).get_global_rect()
-	var music: Rect2 = (bar.get_node("%MusicButton") as Control).get_global_rect()
-	var sfx: Rect2 = (bar.get_node("%SfxButton") as Control).get_global_rect()
+	var settings: Rect2 = (bar.get_node("%SettingsButton") as Control).get_global_rect()
 	_expect(
-		is_equal_approx(back.position.y, music.position.y)
-			and is_equal_approx(music.position.y, sfx.position.y),
-		"%s all three buttons stand in one row" % label
+		is_equal_approx(back.position.y, settings.position.y),
+		"%s both buttons stand in one row" % label
 	)
 	_expect(
-		back.end.x < stage.size.x * 0.5 and music.position.x > stage.size.x * 0.5
-			and music.end.x <= sfx.position.x,
-		"%s back is on the left, music then effects on the right" % label
+		back.end.x < stage.size.x * 0.5 and settings.position.x > stage.size.x * 0.5,
+		"%s back is on the left, settings on the right" % label
 	)
+	_expect(not bar.settings_open(), "%s settings starts closed" % label)
 
 	# The header is whichever of the two a stage uses: Level 1 draws its own.
 	var header := stage.get_node_or_null("%HeaderSign") as Control
@@ -119,7 +118,7 @@ func _check_stage(level: int, stage_number: int) -> void:
 
 
 func _check_toggles() -> void:
-	print("--- music and effects ---")
+	print("--- the settings card ---")
 	var audio := root.get_node_or_null("/root/AudioDirector") as AudioDirectorService
 	_expect(audio != null, "AudioDirector is loaded")
 	if audio == null:
@@ -127,33 +126,54 @@ func _check_toggles() -> void:
 	audio.set_music_on(true)
 	audio.set_sfx_on(true)
 
-	var first: StageScreen = (load("res://scenes/levels/level_2/stage_1.tscn") as PackedScene).instantiate()
-	var second: StageScreen = (load("res://scenes/levels/level_3/stage_1.tscn") as PackedScene).instantiate()
-	root.add_child(first)
-	root.add_child(second)
+	var stage: StageScreen = (load("res://scenes/levels/level_2/stage_1.tscn") as PackedScene).instantiate()
+	root.add_child(stage)
 	await process_frame
-	var bar: TopBar = first.get_node("%TopBar")
-	var other: TopBar = second.get_node("%TopBar")
+	await process_frame
+	var bar: TopBar = stage.get_node("%TopBar")
+	var card: SettingsOverlay = bar.get_node("%Settings")
+
+	(bar.get_node("%SettingsButton") as ArtButton).pressed.emit()
+	await process_frame
+	_expect(bar.settings_open(), "settings button opens the card")
+	_expect(
+		card.get_global_rect().size.is_equal_approx(stage.get_viewport_rect().size),
+		"the card's dim covers the whole screen (is %s)" % card.get_global_rect().size
+	)
+	for button_name in ["%CloseButton", "%MusicButton", "%SfxButton", "%MainMenuButton"]:
+		var button: BaseButton = card.get_node(button_name)
+		var rect := button.get_global_rect()
+		_expect(
+			rect.size.x >= TOUCH and rect.size.y >= TOUCH,
+			"%s clears 160 px (is %dx%d)" % [button_name, rect.size.x, rect.size.y]
+		)
+		_expect(button.pressed.get_connections().size() >= 1, "%s is connected" % button_name)
+	_expect(
+		ResourceLoader.exists(card.main_menu_path),
+		"Main Menu leads somewhere real ('%s')" % card.main_menu_path
+	)
+	var header: HeaderSign = card.get_node("HeaderSign")
+	_expect(header.title_text == "Settings", "the card is headed Settings")
+
+	var music_art: ArtSlot = card.get_node("%MusicArt")
+	var sfx_art: ArtSlot = card.get_node("%SfxArt")
 	var music_bus := AudioServer.get_bus_index(&"Music")
 	var sfx_bus := AudioServer.get_bus_index(&"SFX")
 	var vo_bus := AudioServer.get_bus_index(&"VO")
+	_expect(music_art.self_modulate == Color.WHITE, "music starts on, at full brightness")
 
-	_expect(not (bar.get_node("%MusicStrike") as Control).visible, "music starts on, unstruck")
-
-	(bar.get_node("%MusicButton") as ArtButton).pressed.emit()
+	(card.get_node("%MusicButton") as ArtButton).pressed.emit()
 	_expect(not audio.is_music_on(), "music button switches music off")
 	_expect(AudioServer.is_bus_mute(music_bus), "Music bus is muted")
 	_expect(not AudioServer.is_bus_mute(sfx_bus), "effects are left alone")
-	_expect((bar.get_node("%MusicStrike") as Control).visible, "music button shows it is off")
-	_expect(
-		(other.get_node("%MusicStrike") as Control).visible,
-		"a second row on screen shows it too"
-	)
+	_expect(music_art.self_modulate.v < 0.6, "music art is drawn darker")
+	_expect(sfx_art.self_modulate == Color.WHITE, "effects art is not")
 
-	(bar.get_node("%SfxButton") as ArtButton).pressed.emit()
+	(card.get_node("%SfxButton") as ArtButton).pressed.emit()
 	_expect(not audio.is_sfx_on(), "effects button switches effects off")
 	_expect(AudioServer.is_bus_mute(sfx_bus), "SFX bus is muted")
 	_expect(not AudioServer.is_bus_mute(vo_bus), "voice-over is never muted by it")
+	_expect(sfx_art.self_modulate.v < 0.6, "effects art is drawn darker")
 
 	var file := ConfigFile.new()
 	_expect(file.load(SETTINGS) == OK, "the choice is saved")
@@ -163,22 +183,44 @@ func _check_toggles() -> void:
 		"both are saved as off"
 	)
 
-	(bar.get_node("%MusicButton") as ArtButton).pressed.emit()
-	(bar.get_node("%SfxButton") as ArtButton).pressed.emit()
+	(card.get_node("%MusicButton") as ArtButton).pressed.emit()
+	(card.get_node("%SfxButton") as ArtButton).pressed.emit()
 	_expect(audio.is_music_on() and audio.is_sfx_on(), "pressing again switches both back on")
 	_expect(
 		not AudioServer.is_bus_mute(music_bus) and not AudioServer.is_bus_mute(sfx_bus),
 		"both buses are heard again"
 	)
 	_expect(
-		not (bar.get_node("%MusicStrike") as Control).visible
-			and not (bar.get_node("%SfxStrike") as Control).visible,
-		"neither button is struck through"
+		music_art.self_modulate == Color.WHITE and sfx_art.self_modulate == Color.WHITE,
+		"both are back at full brightness"
 	)
 
-	first.queue_free()
-	second.queue_free()
+	# Three ways out, none of which leaves the stage.
+	(card.get_node("%CloseButton") as ArtButton).pressed.emit()
+	_expect(not bar.settings_open(), "the round back arrow closes the card")
+
+	bar.open_settings()
+	var release := InputEventMouseButton.new()
+	release.button_index = MOUSE_BUTTON_LEFT
+	release.pressed = false
+	(card.get_node("%Dim") as ColorRect).gui_input.emit(release)
+	_expect(not bar.settings_open(), "a tap on the dim closes the card")
+
+	bar.open_settings()
+	stage.notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
 	await process_frame
+	_expect(not bar.settings_open(), "Android back closes the card")
+	_expect(
+		stage.is_inside_tree() and get_current_scene_path() != stage.back_scene_path,
+		"and stays on the stage rather than going back"
+	)
+
+	stage.queue_free()
+	await process_frame
+
+
+func get_current_scene_path() -> String:
+	return current_scene.scene_file_path if current_scene != null else ""
 
 
 func _read_settings() -> Variant:
