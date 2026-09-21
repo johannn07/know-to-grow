@@ -961,13 +961,15 @@ pattern, so Continue goes below it.
 
 | File | Size | Weight |
 |---|---|---|
-| `ui_header_blank_l4.png` | 1672 x 890 | 775 KB |
 | `ui_tap_the_correct_function_card.png` | 2066 x 241 | 426 KB |
 
-- **`ui_header_blank_l4.png` is Level 2's shape** — a small plaque *above* a
-  wide cream banner — not Level 3's plaque-on-banner. Whether it can reuse
-  `header_sign.tscn`'s plate rects has to be measured. Its wording is
-  undecided (`CLAUDE.md`).
+- **Level 4's blank header was removed: it is `ui/common/ui_header_blank.png`.**
+  Delivered as `ui_header_blank_l4.png`, 1672 x 890, but only y 169-732 is sign;
+  the rest was an alpha-under-32 haze the import's crop kept. Cropped to the
+  sign and scaled to 900 wide, it matches the shared blank pixel for pixel, so
+  Level 4 uses `header_sign.tscn` at Level 2's 660 px with no plate rects of its
+  own. Its wording, "Stage N" / the part, is in the content file and checked
+  by `verify_live_text`.
 - The plank reads "Tap the correct function card." and replaces Level 3's
   "Tap the correct answer."
 

@@ -263,8 +263,9 @@ It is also given **760 px** where Level 2's sign gets 660, since "Identify the
 Plant Part" does not fit the narrower banner at the theme's size. A Level 3
 stage must give it that width.
 
-**Level 4 names the part — decided.** Its sign, `ui_header_blank_l4.png`, is
-Level 2's shape, plaque above banner, and reads "Stage N" / the part: "Roots",
+**Level 4 names the part — decided.** It uses Level 2's sign,
+`header_sign.tscn` at 660 px — its delivered blank turned out to be the same
+drawing — and reads "Stage N" / the part: "Roots",
 "Stem", "Leaves", "Flower", "Fruit". The prompt already names the part, so the
 banner gives nothing away here.
 

@@ -20,11 +20,13 @@ const BUBBLE := "res://scenes/components/prompt_bubble.tscn"
 ## rather than above it, so it is a different shape with its own plate rects,
 ## and it is given more width because "Identify the Plant Part" is half again as
 ## long as the longest Level 2 banner and will not fit 660 px at the theme's
-## size. A level whose headers are drawn into the art, as Level 1's four are, is
-## absent from here.
+## size. Level 4's blank was delivered as its own file but is Level 2's drawing,
+## so it uses Level 2's sign at Level 2's width. A level whose headers are drawn
+## into the art, as Level 1's four are, is absent from here.
 const HEADERS := {
 	&"level_2": ["res://scenes/components/header_sign.tscn", 660.0],
 	&"level_3": ["res://scenes/components/header_sign_l3.tscn", 760.0],
+	&"level_4": ["res://scenes/components/header_sign.tscn", 660.0],
 }
 
 const THEME := "res://themes/ktg_theme.tres"
