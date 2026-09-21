@@ -31,7 +31,7 @@ should still tell you what it is in a scene's `ext_resource` list.
 | Folder | Holds |
 |---|---|
 | `backgrounds/` | `bg_*` — full-screen scenery, drawn `KEEP_COVERED` |
-| `branding/` | `logo.png` |
+| `branding/` | `logo.png`, the app icons `icon_app_*`, the boot splash |
 | `characters/` | `mascot_*` |
 | `effects/` | `fx_*` |
 | `plants/` | `plant_*` — the hub's growth stages |
@@ -61,6 +61,28 @@ All seven are in the repo and wired into `scenes/ui/main_menu.tscn`.
 | `mascot_flower.png` | 760 x 991 | 731 KB |
 | `fx_leaves.png` | 1600 x 2166 | 336 KB |
 | `ui_button_primary.png` | 576 x 210 | 11 KB |
+
+### App icon and boot splash — `branding/`
+
+Made from `logo.png`, not delivered separately. The icon is the logo's
+magnifying glass with the sprout in it, cut out of the "O" of KNOW, since the
+whole wordmark is unreadable at launcher size. Background: warm cream,
+`Color(0.992157, 0.960784, 0.886275)`, #FDF5E2 — decided by the owner.
+
+| File | Size | Weight | Used as |
+|---|---|---|---|
+| `icon_app_foreground.png` | 432 x 432 | 38 KB | Android adaptive foreground, and the Android 12 splash icon; magnifier 272 px inside the 288 px safe zone |
+| `icon_app_background.png` | 432 x 432 | 1 KB | Android adaptive background, flat cream |
+| `icon_app_monochrome.png` | 432 x 432 | 7 KB | Android 13 themed icon: the magnifier's shape in white |
+| `icon_app_192.png` | 192 x 192 | 15 KB | Android legacy launcher icon, cream square |
+| `icon_app_1024.png` | 1024 x 1024 | 145 KB | `application/config/icon`: the window, and iOS when its preset has no icons |
+| `ui_boot_splash.png` | 1080 x 1920 | 316 KB | `application/boot_splash/image`: the logo 860 wide, centred, on transparent over the cream `bg_color` |
+
+- The magnifier is only ~320 px across in `logo.png`, so the 1024 icon is
+  upscaled and slightly soft. A larger source would sharpen it.
+- The boot splash is held for 1.5 s (`minimum_display_time`), or it would only
+  flash while the game loads. The Android window background is the same cream,
+  so there is no black frame between Android's splash and Godot's.
 
 Notes:
 

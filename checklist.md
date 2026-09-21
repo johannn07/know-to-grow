@@ -512,8 +512,10 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [ ] Godot rewrites `config/icon` in `project.godot` to a `uid://` whenever the
       editor imports. Harmless, but revert it rather than committing it, so the
       file keeps one reviewed form
-- [ ] Launcher icons: 192×192 and the three 432×432 adaptive layers
-- [ ] Splash screen art
+- [x] Launcher icons: 192×192 and the adaptive foreground, background and
+      monochrome layers — the logo's magnifier on cream
+- [x] Splash screen — the logo on cream, held 1.5 s; Android 12's splash shows
+      the magnifier on the same cream
 - [x] **Export a debug APK to a real phone**, and keep doing it — the owner tests
       each build on a device as it lands. Touch targets that feel fine with a
       mouse are often too small for a six-year-old
