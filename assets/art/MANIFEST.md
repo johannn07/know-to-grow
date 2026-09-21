@@ -600,11 +600,18 @@ the width of their Level 1 sibling where one exists; the rest are at source size
 | `ui_button_grow_now_sign_l2.png` | 720 x 227 | 195 KB | the Grow Now pill **cut from** `ui_level_complete_sign_l2.png` with `ui_button_grow_now_sign.png`'s stadium mask, laid back over itself at `(0.1685, 0.7927, 0.663, 0.1617)` of the sign. Not the Level 1 pill: the two are drawn slightly differently |
 | `ui_level_intro_l3.png` | 1122 x 1402 | 1.4 MB | "Level 3 — Detective time! Read each clue and find which plant part it describes." |
 | `plant_leafy.png` | 650 x 735 | 434 KB | leafy sprout with roots in a mound of soil — the hub's plant once Level 2 is cleared, "SPROUT"; cropped to alpha and scaled to 650 wide like `plant_sprout` |
-| `ui_correct_l2_s1.png` | 800 x 547 | 349 KB | Correct Answer, Shovel |
-| `ui_correct_l2_s2.png` | 800 x 622 | 447 KB | Correct Answer, Pruning Shears |
-| `ui_correct_l2_s3.png` | 800 x 588 | 394 KB | Correct Answer, Water |
-| `ui_correct_l2_s5.png` | 800 x 570 | 389 KB | Correct Answer, Fertilizer |
+| `ui_correct_l2_s1.png` | 1180 x 977 | 1.1 MB | Correct Answer, Shovel |
+| `ui_correct_l2_s2.png` | 1229 x 1024 | 995 KB | Correct Answer, Pruning Shears |
+| `ui_correct_l2_s3.png` | 1231 x 1025 | 963 KB | Correct Answer, Water |
+| `ui_correct_l2_s5.png` | 1253 x 991 | 1.2 MB | Correct Answer, Fertilizer |
 | `ui_prompt_bubble.png` | 1000 x 474 | 364 KB | the sprout's speech bubble with **no text in it** — every prompt, Levels 1-4 |
+
+**The four Level 2 Correct cards were re-taken from the originals** in
+`Know To Grow Assets/Level 2/Situations/situationN_correct_answer.png`, cropped at
+alpha 32 and kept at source size. The first import had scaled them to 800 wide
+with 20-80 px of haze on each side, so the drawing showed ~740 px wide and the
+explanation was too small to read on a phone. Level 2 stages also give the
+feedback card 30 px side margins, not 90, so a landscape card draws ~1020 wide.
 
 Notes:
 
