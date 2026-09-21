@@ -520,9 +520,14 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       `com.johannn.ktg` like Android, arm64, iOS 14+, iPhone and iPad,
       `export_project_only` on. From Windows it writes an **Xcode project**, not
       an `.ipa`; building, signing and running it needs a Mac with Xcode
-- [ ] **Apple Team ID** in the iOS preset — export refuses to run without one.
-      Needs an Apple Developer account (99 USD a year); a free account can only
-      sideload to your own device for 7 days
+- [ ] **Apple Team ID** — the preset holds the placeholder `XXXXXXXXXX`, only so
+      Godot will export; it is not a real team. The Xcode project runs in the
+      iOS Simulator as it is. For a real device, pick a team in Xcode's Signing
+      & Capabilities, or put the real ID in the preset: a free Apple ID's
+      Personal Team installs on your own device for 7 days; TestFlight and the
+      App Store need the paid Developer account (99 USD a year). The ID is not
+      a secret. Kept here, not as a comment, because Godot strips comments from
+      `export_presets.cfg` when it saves
 - [ ] iPad is 4:3, which the layout has never been checked at — see §8
 - [ ] Test on two real devices: one cheap, one current
 - [ ] Store listing, screenshots, privacy policy, and the Play Console
