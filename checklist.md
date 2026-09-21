@@ -231,12 +231,13 @@ unlocks **Little Planter**.
       Grow Now is its own pill cut from the sign
       (`ui_button_grow_now_sign_l3.png`), darken only. All over
       `bg_stage_5_l3`, the fruiting plant, on the Level 3 track
-- [ ] **The hub stops at three.** `plant_stages`, `plant_stage_names`,
+- [x] ~~**The hub stops at three.**~~ **Fixed: it has four.** `plant_stages`, `plant_stage_names`,
       `level_scene_paths` and `level_labels` all have three entries, so Grow Now
       after Level 3 returns to a hub with nothing further to show. The fourth
       plant is `plant_leafy_with_flower.png` in the Level 4 export and the
       fourth label is "Level 4: Functions", but the button needs a
-      `level_intro_l4.tscn` to open. Comes with Level 4
+      `level_intro_l4.tscn` to open. Comes with Level 4. Now the flower
+      shows once Level 3 is cleared and Play reads "Level 4: Functions"
 
 ### Level 4 — decided 2026-09-21
 
@@ -265,8 +266,10 @@ Answered by the project owner before any Level 4 scene was built:
   that need re-exporting
 - **Level 4's Reinforcement Facts are accepted as drawn art**, like Level 3's
 
-- [ ] Hub's fourth plant and `level_intro_l4.tscn` — also closes Level 3's
-      Grow Now
+- [x] Hub's fourth plant and `level_intro_l4.tscn` — also closes Level 3's
+      Grow Now. The intro's Continue leads back to the hub, on the menu track,
+      until the Level 4 stage select and `Track.LEVEL_4` exist — the way Level
+      3's intro started
 - [ ] Level 4 header sign, fixed card order, Stages 1-5
 - [ ] Level 4 stage select
 - [ ] `Track.LEVEL_4` and `Track.LEVEL_5`

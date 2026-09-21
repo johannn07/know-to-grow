@@ -995,7 +995,10 @@ are not covered yet; that happens with the stage select, not here.
 | `plant_leafy_with_flower_and_fruit.png` | 1320 x 1722 | 1.8 MB |
 
 The hub's fourth and fifth plant states: flowering, then flowering with a
-tomato. Cropped to alpha.
+tomato. Cropped to alpha. **`plant_leafy_with_flower` is wired** as the hub's
+fourth `plant_stages` entry, "FLOWER", shown once Level 3 is cleared. It is
+taller in proportion than the sprout (0.75 against 0.88), so in the hub's
+`KEEP_ASPECT` slot it draws at the same height and about 70 px narrower.
 
 ### Ending and game completion — `ui/screens/`
 
@@ -1006,7 +1009,8 @@ tomato. Cropped to alpha.
 | `ui_level_complete_sign_l4.png` | 1037 x 1416 | 1.5 MB |
 | `ui_game_completion.png` | 1087 x 1330 | 1.7 MB |
 
-Cropped to alpha. The intro reads "Level 4 / Plant power time!"; Level 4
+Cropped to alpha. The intro reads "Level 4 / Plant power time!", and is
+**wired** as `scenes/ui/level_intro_l4.tscn` at its own card ratio, 0.837; Level 4
 Complete "Plant powers unlocked!"; the sign "You Completed Level 4!" with Grow
 Now painted on it, which will need its pill cut as Levels 1-3's were. The game
 completion card, "Hooray! You did it!", is the finished-game screen and is
