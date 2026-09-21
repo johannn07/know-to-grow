@@ -5,6 +5,130 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
+## 2026-09-20/21 — Level 3, built end to end
+
+**Where it got to:** Level 3 is playable from the hub through its intro, a
+five-row stage select, five tapped stages, Level 3 Complete, the Mystery Solver
+badge and its completed-level sign, back to the hub. It is the first level
+answered by **tapping** rather than dragging, with no tray at all. Nine headless
+suites pass. Built on `level-3` in eight commits, merged to `master` and pushed.
+
+### What was done, in order
+
+1. **`art/import level 3`** — all 25 files from the export's `Level 3` folder,
+   sorted into `backgrounds/`, `levels/level_3/`, `ui/stage_select/` and
+   `ui/screens/`. The five answer cards were taken to 640 wide (the 2x rule);
+   everything else at source size, cropped to alpha **except** the stage select
+   card and its rows, left uncropped so they could be measured against each
+   other.
+2. **`ui/level 3 header sign`** — `header_sign_l3.tscn`, a second `HeaderSign`
+   with its own plate rects, because this sign puts the plaque *on top of* the
+   banner. Header transcripts added: "Stage N" / "Identify the Plant Part".
+   `verify_live_text` now checks each level against its own sign.
+3. **`levels/tap to answer`** — `StageScreen.tap_to_answer`, with
+   `OptionCard.draggable` and `keep_art_when_spent`. Both routes meet in one
+   `_answer()`. New `tools/verify_tap_answer.gd` walks both routes on a borrowed
+   Level 2 stage, so the shared code is covered independently of any level.
+4. **`levels/level 3 stage 1`** — the pattern stage, and `verify_level_3.gd`,
+   which walks the stage chain so later stages needed no change to it.
+5. **`levels/level 3 stages 2 to 5`** — from Stage 1's numbers.
+6. **`ui/level 3 stage select`** — `stage_select_l3.tscn`, rows found by
+   matching, stars covered, wired to the intro and all five stages.
+7. **`audio/level 3 track`** — `Track.LEVEL_3` (4) for all Level 3 screens.
+8. **`ui/level 3 ending`** — Level 3 Complete → Mystery Solver → sign → hub.
+
+### Decisions taken
+
+- **Level 3 taps, with no tray.** Three answer cards sit loose on the garden
+  under the "Tap the correct answer." plank. A wrong card stays on screen,
+  darkened where it stands, since there is no slot behind it to fall back to.
+- **The Oops card is Level 1's, "That's not the right tool" and all.** Accepted.
+- **Header wording: "Stage N" / "Identify the Plant Part"** on all five — never
+  the part's name, which would be the answer.
+- **Header, prompt bubble, tap plank and cards all on screen.** The owner chose
+  both the bubble and the plank.
+- **The five Reinforcement Facts drawn into the Correct cards are accepted as
+  art**, like the Oops card's wording — no transcript, no `vo_key`, no rule.
+- **Level 3's header sign is 760 px wide**, not Level 2's 660. "Identify the
+  Plant Part" measures 557 px at the theme's 51 px and the banner is only 554
+  at 660. A wider sign keeps the type the same size as Level 2's rather than
+  shrinking Level 3's.
+- **The prompt bubble has two positions, and a stage picks one.** The question
+  is drawn into the background — one part of the plant glowing, the rest grey —
+  at a different height per stage, and a full-width bubble hid the answer on
+  three of five. High (y 420) for Stages 2 and 3, low (y 1000) for 1, 4 and 5.
+  Nothing else moves.
+- **`tap_to_answer` is set in the scene, not read from `interaction`**, because
+  a tap stage is built without a `%DropZone` and `level_content` is optional.
+  `verify_level_3` asserts the two agree.
+- **Level 3 gets one badge, Mystery Solver.** Not a choice: every badge in the
+  export names what it is for, and it is the only one that says "You found all
+  the parts of a plant!". Plant Power-Up and Super Grower are Level 4's; Know
+  to Grow Star is the finished-game screen's.
+- **The ending sits over `bg_stage_5_l3.png`**, the fruiting plant.
+
+### Things that turned out to be true, and cost time
+
+- **Composite before building.** Mocking all five stages at 1080 x 1920 in PIL
+  before writing a scene is what found the bubble covering the answer. Headless
+  cannot see it; the composites are the closest thing to F5 without the editor.
+- **Stage select rows can be matched, not measured.** Normalised
+  cross-correlation of *gradient magnitude* finds each coloured row over the
+  grey one painted into the card, and all five matched at scale 1.00 — which is
+  why the import left those six files uncropped.
+- **Covering a star needs its outline.** The gold core is what colour detection
+  finds, but the drawn star is ~13% larger with its dark outline. The ratio was
+  measured off `icon_star_filled.png` itself, and the same rects became the
+  scene's star slots, so earned stars land exactly.
+- **A pill cut from a sign needs its own stadium mask**, or the leaves behind
+  it come away with it.
+- **The Level 3 music was in the repo all along.** `level_3.mp3` existed; only
+  the enum entry was missing. `level_4.mp3` and `level_5.mp3` are there too.
+- **Large Bash heredocs holding GDScript or `.tscn` text break on quoting.**
+  Writing the generator to the scratchpad with Write and running it is reliable.
+
+### Still in progress
+
+- **Nothing in Level 3 has been seen in the editor.** Everything is verified
+  headless plus full-resolution composites, which are arithmetic rather than
+  Godot's own render. Stage 2's background is the odd 1024 x 1536 one and loses
+  ~840 px off the sides under `KEEP_COVERED`.
+- **The hub stops at three.** Grow Now after Level 3 returns to a hub with no
+  fourth plant and no fourth level. `plant_leafy_with_flower.png` is in the
+  Level 4 export; the button needs `level_intro_l4.tscn`.
+- **`icon_leaves_l3` was exported differently** — larger source, hard alpha
+  edge — and sits ~6% taller than its neighbours in a row.
+- **Stage 1's prompt orphans its last word**: "What am / I?". Fixing it means
+  widening the shared bubble's text inset, which touches all 19 prompts.
+
+### Next step
+
+**F5 through Level 3 in the editor**, then **Level 4**. Level 4's export is
+already in Downloads: five backgrounds, three answer cards *per stage*
+(`icon_stage_N_cM_l4`, not a shared set), a blank header, a "Tap the correct
+function card" plank, stage select and rows, the ending, and the game
+completion screen. It is also tapped, so `tap_to_answer` and the Level 3 layout
+should carry over; the header wording and whether the bubble-placement rule
+applies are the first two things to settle. Its first task is the hub's fourth
+plant and `level_intro_l4.tscn`, which also closes the end of Level 3.
+
+### Verification state
+
+| Check | Result |
+|---|---|
+| Project loads | clean, apart from the known audio line |
+| `verify_level_1.gd` | PASS |
+| `verify_level_2.gd` | PASS |
+| `verify_level_3.gd` | PASS — 5 stages, tap route, drift incl. interaction |
+| `verify_tap_answer.gd` | PASS — tap and drag routes through `StageScreen` |
+| `verify_menu_flow.gd` | PASS — incl. both endings and all press feedback |
+| `verify_game_state.gd` | PASS |
+| `verify_audio.gd` | PASS — `LEVEL_3` is 4 and loops |
+| `verify_live_text.gd` | PASS — both signs, 10 headers, 19 prompts |
+| `verify_content.gd` | PASS — 19 challenges, 57 voice-over lines |
+
+---
+
 ## 2026-09-18/20 — Level 2, built end to end
 
 **Where it got to:** Level 2 is playable from its intro to its ending. Five
@@ -503,10 +627,10 @@ Ordered by what unblocks the most.
    with "Click Me" on the plant, then the hub with the plant grown. No art has
    been delivered for any of them. `GameState.is_level_cleared()` already
    answers the question the hub will need to ask.
-3. **Levels 2, 3 and 4.** Stages, overlays, progress and audio all exist, so
-   each is mostly art extraction and wiring: a `Track` per level in
-   `AudioDirectorService` (the MP3s are in the repo) and a `level_id` on each
-   stage scene. Level 3 is multiple choice with no tray.
+3. **Level 4.** Levels 2 and 3 are built. Level 4 is tapped like Level 3, so
+   `tap_to_answer` and Level 3's layout carry over; it needs its own `Track`
+   (`level_4.mp3` is in the repo), the hub's fourth plant and
+   `level_intro_l4.tscn`.
 4. **Three missing effects** — pickup and drop on a dragged card, and a bounce
    when one returns home. Nothing delivered for them.
 
