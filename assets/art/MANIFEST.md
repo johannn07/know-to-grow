@@ -976,6 +976,36 @@ pattern, so Continue goes below it.
 - The plank reads "Tap the correct function card." and replaces Level 3's
   "Tap the correct answer."
 
+### How a Level 4 stage is laid out
+
+Measured against `scenes/levels/level_4/stage_1.tscn`, which the other four
+copy, and checked first in a full-resolution composite of all five. At the
+1080 x 1920 design resolution:
+
+| Piece | Rect | Notes |
+|---|---|---|
+| `%Background` | full screen | `KEEP_COVERED`, clipped |
+| `%HeaderSign` | 210-870 x 20-245 | Level 2's sign at its 660 px |
+| `TapBanner` | 90-990 x 255-360 | straight under the header |
+| `%PromptBubble` | 58-1022 x **370-827** or **885-1342** | 964 wide; **y varies per stage** |
+| three cards | 90-990 x 1350-1525 / 1540-1715 / 1730-1905 | A, B, C; never shuffled |
+
+**The plank is under the header, not above the cards** as in Level 3. Three
+stacked 5:1 cards at 900 wide need the bottom 560 px, and Stage 1's roots are
+drawn inside the pot down to y 1305, so nothing else fits between them.
+
+| Stage | Glowing part sits at | Bubble |
+|---|---|---|
+| 1 roots | y 960-1305, in the pot | **high**, y 370 |
+| 2 stem | y 360-900 | **low**, y 885 |
+| 3 leaves | y 420-900 | **low**, y 885 |
+| 4 flower | y 300-570 | **low**, y 885 |
+| 5 fruit | y 315-555 | **low**, y 885 |
+
+The Correct cards are 1106 wide and about 0.86 in shape, so at the overlay's
+900 px a card is ~1050 tall and Continue is `Rect2(0.265, 1.06, 0.47, 0.1606)`
+— the same 423 x 169 px on screen as Level 3's.
+
 ### Stage select — `ui/stage_select/`
 
 | File | Size | Weight |

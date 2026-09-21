@@ -9,8 +9,8 @@ extends Resource
 ## reads is drawn into [member prompt_art]; see art/MANIFEST.md.
 
 enum Interaction {
-	TAP, ## Level 3: tap an answer card.
-	DRAG_TO_ZONE, ## Levels 1, 2 and 4: drag an item onto a target area.
+	TAP, ## Levels 3 and 4: tap an answer card.
+	DRAG_TO_ZONE, ## Levels 1 and 2: drag an item onto a target area.
 }
 
 @export var id: StringName = &""

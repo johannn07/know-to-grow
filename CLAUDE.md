@@ -430,13 +430,15 @@ property that does not exist and fail silently.
 | Audio wiring | `godot --headless --path . -s res://tools/verify_audio.gd` |
 | Level 2 stages play through | `godot --headless --path . -s res://tools/verify_level_2.gd` |
 | Level 3 stages play through | `godot --headless --path . -s res://tools/verify_level_3.gd` |
+| Level 4 stages play through | `godot --headless --path . -s res://tools/verify_level_4.gd` |
 | Tap answers, and drag still works | `godot --headless --path . -s res://tools/verify_tap_answer.gd` |
 | Live text fits its art (prompts, headers) | `godot --headless --path . -s res://tools/verify_live_text.gd` |
 
 `verify_game_state.gd` **writes to `user://progress.cfg`**, so running it clears
 whatever progress is on the machine. It resets to empty afterwards.
 So do `verify_audio.gd`, which plays a stage to check the answer stings, and
-`verify_tap_answer.gd` and `verify_level_3.gd`, which answer one.
+`verify_tap_answer.gd`, `verify_level_3.gd` and `verify_level_4.gd`, which
+answer one.
 
 **Once music has played, every run ends with `1 resources still in use at exit`.**
 That is the audio server's playback object outliving the scene tree, not a leak

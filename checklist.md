@@ -270,7 +270,14 @@ Answered by the project owner before any Level 4 scene was built:
       Grow Now. The intro's Continue leads back to the hub, on the menu track,
       until the Level 4 stage select and `Track.LEVEL_4` exist — the way Level
       3's intro started
-- [ ] Level 4 header sign, fixed card order, Stages 1-5
+- [x] Level 4 header — Level 2's sign, since the delivered blank is the same
+      drawing
+- [x] Fixed card order — `StageScreen.keep_card_order`
+- [x] **Level 4 Stage 1** — roots, bubble high, the layout the rest copy.
+      `verify_level_4.gd` walks the stage chain and checks the cards stay A,
+      B, C. Leads to the hub, on the menu track, until the stage select and
+      `Track.LEVEL_4` exist
+- [ ] Level 4 Stages 2-5, bubble low
 - [ ] Level 4 stage select
 - [ ] `Track.LEVEL_4` and `Track.LEVEL_5`
 - [ ] Level 4 ending, the three badges, the hub's fifth plant
