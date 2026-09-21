@@ -135,7 +135,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 70
-theme_override_constants/margin_top = 90
+theme_override_constants/margin_top = 340
 theme_override_constants/margin_right = 70
 theme_override_constants/margin_bottom = 90
 
@@ -190,5 +190,5 @@ text = "HOW TO PLAY"
 [node name="BottomSpacer" type="Control" parent="Foreground/Column" unique_id=1881620067]
 layout_mode = 2
 size_flags_vertical = 3
-size_flags_stretch_ratio = 1.35
+size_flags_stretch_ratio = 0.4
 mouse_filter = 2
