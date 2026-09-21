@@ -171,6 +171,12 @@ fall back to. `tools/verify_tap_answer.gd` walks both routes through
 `StageScreen`, so a change made for Level 3 cannot quietly break the other
 three.
 
+**Level 4 taps too, but never shuffles — decided.** Its Correct cards name the
+answer by a drawn letter, "Correct Match: B", so its cards must stay in the
+A/B/C order they are drawn in (`icon_stage_N_cM_l4`, M = A/B/C). A tap stage
+that keeps its order has to say so; do not let Level 4 inherit Level 3's
+shuffle.
+
 A blank tray also **shuffles**: each play deals the cards into the scene's slots
 in a new order. The scene still lists its cards in the content file's order,
 which is what `verify_level_*` compares. A drawn tray cannot shuffle, since a
@@ -255,7 +261,12 @@ every time, because a banner that named the part would be the answer.
 
 It is also given **760 px** where Level 2's sign gets 660, since "Identify the
 Plant Part" does not fit the narrower banner at the theme's size. A Level 3
-stage must give it that width. Level 4 is undecided.
+stage must give it that width.
+
+**Level 4 names the part — decided.** Its sign, `ui_header_blank_l4.png`, is
+Level 2's shape, plaque above banner, and reads "Stage N" / the part: "Roots",
+"Stem", "Leaves", "Flower", "Fruit". The prompt already names the part, so the
+banner gives nothing away here.
 
 ## Fun facts are Level 1's alone — decided
 

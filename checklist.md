@@ -237,6 +237,41 @@ unlocks **Little Planter**.
       plant is `plant_leafy_with_flower.png` in the Level 4 export and the
       fourth label is "Level 4: Functions", but the button needs a
       `level_intro_l4.tscn` to open. Comes with Level 4
+
+### Level 4 — decided 2026-09-21
+
+Answered by the project owner before any Level 4 scene was built:
+
+- **Header:** plaque "Stage N", banner the plant part — "Roots", "Stem",
+  "Leaves", "Flower", "Fruit" — on the Level 4 sign, with the "Tap the correct
+  function card." plank under it
+- **Cards stay in A/B/C order, never shuffled.** The Correct cards name their
+  answer by a drawn letter ("Correct Match: B"), so a shuffled card would put
+  the letter on the wrong one
+- **Layout:** mock all five stages at full resolution first and place the
+  prompt bubble clear of each glowing part, as Level 3 did
+- **Wrong answer:** Level 1's Oops card, reused as for Level 3
+- **Three badges:** Plant Power-Up → Super Grower → Know to Grow Star. Badge
+  count per level is now 1 / 2 / 1 / 3
+- **Ending:** Stage 5 → Level 4 Complete → the three badges → "You Completed
+  Level 4!" sign → Grow Now → hub with the fruiting plant → finished-game
+  screen ("Hooray! You did it!") → hub, still replayable
+- **Hub plants:** `plant_leafy_with_flower` once Level 3 is cleared,
+  `plant_leafy_with_flower_and_fruit` once Level 4 is
+- **Music:** `level_4.mp3` for every Level 4 screen, `level_5.mp3` for the
+  finished-game screen alone
+- **One wording for "make food": "Help make food using sunlight."** The art
+  draws it both ways; the owner chose consistency. See §4 for the two cards
+  that need re-exporting
+- **Level 4's Reinforcement Facts are accepted as drawn art**, like Level 3's
+
+- [ ] Hub's fourth plant and `level_intro_l4.tscn` — also closes Level 3's
+      Grow Now
+- [ ] Level 4 header sign, fixed card order, Stages 1-5
+- [ ] Level 4 stage select
+- [ ] `Track.LEVEL_4` and `Track.LEVEL_5`
+- [ ] Level 4 ending, the three badges, the hub's fifth plant
+- [ ] Finished-game screen
 - [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with
       all five rows in it, Stage 1 unlocked and 2-5 grey, in the Level 2
       pattern. Row rects found by matching each row drawing against the card
@@ -271,8 +306,11 @@ unlocks **Little Planter**.
       sharper, smaller, skippable and translatable, and reuses art already paid
       for. This decision blocks the animation brief
 - [ ] Final completion screen — plant blooms and sparkles, "Fantastic! You know
-      the parts of a plant and what each part does!"
-- [ ] Sound toggle and exit, behind a press-and-hold or parent gate
+      the parts of a plant and what each part does!" **Superseded by the
+      delivered art**, `ui_game_completion.png`, "Hooray! You did it!" — see
+      Level 4 above
+- [ ] Sound toggle and exit, behind a press-and-hold or parent gate. **Now part
+      of the Options screen in §9**; the gate is still undecided
 - [ ] Resume after the app is backgrounded mid-level
 
 ## 4 · Content
@@ -318,6 +356,13 @@ the open content questions, not bugs.
 - [x] **Only Level 1 has fun facts.** Decided. The transcripts and voice-over
       keys are out of Levels 2-4, `verify_content` requires them for Level 1 and
       forbids them elsewhere, and the recording script drops from 76 lines to 58
+- [ ] **Two Level 4 cards need re-exporting to read "Help make food using
+      sunlight."** The owner chose that wording for every card, but
+      `icon_stage_1_c1_l4.png` and `icon_stage_2_c3_l4.png` are drawn "Make
+      food using sunlight." Until they are re-exported, those two cards do not
+      match their transcript. At the same time, `icon_stage_4_c3_l4.png`
+      "Carry water to the leaves" is the only card drawn without a full stop.
+      Art from the owner
 - [ ] Content lock: walk all 19 stages on a phone with whoever owns the teaching
       content, then freeze the wording. Changes after voice-over is recorded mean
       re-recording
@@ -443,6 +488,26 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       `expand` must stay harmless at both ends
 - [ ] Reduce-motion consideration for the particle and celebration effects
 - [ ] Frame rate on the cheap test device
+
+## 9 · After Level 4 — features from the owner
+
+Requested 2026-09-21, to be built **once Level 4 is finished**. The owner is
+providing the art for all of them; nothing here starts before it arrives.
+
+- [ ] **Back buttons** on the screens and overlays that need one to navigate
+- [ ] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
+      Level 1 is cleared**: not clickable, and drawn with an indicator that
+      they are not open yet
+  - [ ] **Lessons** opens stage select
+  - [ ] **Stage select swipes between levels.** Swiping left goes to the next
+        level's stage select, swiping right to the previous one
+  - [ ] **Garden** shows the hub backgrounds in order, from Level 1's seed to
+        the finished game's plant with a tomato
+  - [ ] **Badges** is a 3 x 4 grid of badge displays. Nothing to show before
+        the first badge, which is why it opens with Level 1
+- [ ] **Options screen** — music on/off and SFX on/off icons, Exit / Back to
+      main menu, and a Credits button
+- [ ] **Credits screen** — credits for the assets used, reached from Options
 
 ---
 
