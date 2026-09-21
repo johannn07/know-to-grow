@@ -8,8 +8,9 @@ extends SubScreen
 ## **The tabs along the bottom open once Level 1 is cleared**, and until then
 ## are drawn in grey and do not answer — the same grey the locked stage rows use.
 ## Lessons goes to the stage select of the level the plant is waiting on, which
-## can then be paged left and right. Garden and Badges have nowhere to go yet,
-## so their buttons stay disabled.
+## can then be paged left and right. Garden shows the plant at each stage it
+## has grown through. Badges has nowhere to go yet, so its button stays
+## disabled.
 ##
 ## The star count and the plant come from [GameStateStore]. **The plant grows one
 ## stage for each level cleared, in order**: a seed in its pot at the start,
@@ -46,6 +47,10 @@ extends SubScreen
 @export var lesson_scene_paths: Array[String] = []
 ## The Lessons icon while the tabs are still locked.
 @export var lessons_icon_locked: Texture2D
+## Where Garden leads.
+@export_file("*.tscn") var garden_scene_path: String = ""
+## The Garden icon while the tabs are still locked.
+@export var garden_icon_locked: Texture2D
 
 @export_group("Placeholder state")
 ## Greeting above the garden. The child is never asked to type a name.
@@ -80,9 +85,11 @@ const LOCKED_LABEL_COLOR := Color(0.55, 0.55, 0.55, 1.0)
 
 @onready var _play_button: Button = %PlayButton
 @onready var _lessons_button: Button = %LessonsButton
+@onready var _garden_button: Button = %GardenButton
 
-## The Lessons icon as the scene draws it, put back once the tab opens.
+## Each tab's icon as the scene draws it, put back once the tab opens.
 var _lessons_icon: Texture2D = null
+var _garden_icon: Texture2D = null
 
 ## The finished-game card while it is up, else null.
 var _finished: GameCompleteOverlay = null
@@ -93,9 +100,9 @@ func _ready() -> void:
 	_set_label_text("%GreetingLabel", player_greeting)
 	_play_button.pressed.connect(_on_play_pressed)
 	_lessons_button.pressed.connect(_on_lessons_pressed)
-	var icon := _tab_icon(_lessons_button)
-	if icon != null:
-		_lessons_icon = icon.texture
+	_garden_button.pressed.connect(_go_to.bind(garden_scene_path))
+	_lessons_icon = _drawn_icon(_lessons_button)
+	_garden_icon = _drawn_icon(_garden_button)
 	_refresh()
 	if is_fully_grown() and progress != null and not progress.finished_shown():
 		show_finished()
@@ -107,6 +114,7 @@ func _refresh() -> void:
 	_show_plant()
 	_play_button.text = level_label()
 	_gate_tab(_lessons_button, _lessons_icon, lessons_icon_locked)
+	_gate_tab(_garden_button, _garden_icon, garden_icon_locked)
 
 
 ## True once every level that grows the plant is cleared.
@@ -170,14 +178,7 @@ func _show_plant() -> void:
 ## How many of [member growth_levels] are cleared, counting from the first and
 ## stopping at the first that is not. 0 is the seed.
 func growth_stage() -> int:
-	var stage := 0
-	if progress == null:
-		return stage
-	for level in growth_levels:
-		if level == null or not progress.is_level_cleared(level.id, level.challenges.size()):
-			break
-		stage += 1
-	return stage
+	return 0 if progress == null else progress.levels_cleared_in_order(growth_levels)
 
 
 ## Fills a label if the scene still has one under that name, and says so quietly
@@ -248,9 +249,18 @@ func _tab_icon(button: Button) -> ArtSlot:
 	return button.get_parent().get_node_or_null("Content/Icon") as ArtSlot
 
 
+## What a tab's icon shows in the scene, before any locking.
+func _drawn_icon(button: Button) -> Texture2D:
+	var icon := _tab_icon(button)
+	return null if icon == null else icon.texture
+
+
 func _on_lessons_pressed() -> void:
-	var path := lesson_scene_path()
+	_go_to(lesson_scene_path())
+
+
+func _go_to(path: String) -> void:
 	if path.is_empty() or not ResourceLoader.exists(path):
-		push_warning("Hub: lesson scene is unset or missing: '%s'" % path)
+		push_warning("Hub: tab scene is unset or missing: '%s'" % path)
 		return
 	get_tree().change_scene_to_file(path)

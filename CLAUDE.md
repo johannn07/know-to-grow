@@ -365,6 +365,10 @@ not a blank one.
   offered once this one is cleared, so a child never pages onto a level they
   have not reached. The card's side margins are 150 px to leave the arrows a
   gutter; a narrower card puts Level 2's rows under the 160 px floor.
+- **Garden pages the same way, inside one scene** — `garden.tscn`, the plant
+  at each stage it has grown through, stopping at the one it has reached. Both
+  read swipes through `SwipeTracker`, and "how far the plant has grown" is
+  `GameStateStore.levels_cleared_in_order`, shared with the hub.
 - Level 2's is `stage_select_l2.tscn`. Its card paints Situations 2–5 locked,
   so `row_art_locked` is empty and a locked row shows the card's painting. A
   reached row stays closed until its stage scene exists.

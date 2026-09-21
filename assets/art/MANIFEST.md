@@ -112,6 +112,7 @@ All seven are in the repo and wired into `scenes/ui/hub.tscn`.
 | `ui_tab_lessons.png` | 260 x 203 | 68 KB | `BottomNav` |
 | `ui_tab_lessons_locked.png` | 260 x 203 | 39 KB | `BottomNav`, set by `hub_screen.gd` until Level 1 is cleared: `ui_tab_lessons.png` in greyscale, lifted to the locked rows' grey |
 | `ui_tab_garden.png` | 260 x 269 | 80 KB | `BottomNav` |
+| `ui_tab_garden_locked.png` | 260 x 269 | 51 KB | `BottomNav` until Level 1 is cleared: `ui_tab_garden.png` in the same grey as the Lessons one |
 | `ui_tab_badges.png` | 260 x 275 | 72 KB | `BottomNav` |
 | `bg_sign.png` | 1086 x 1448 | 1.0 MB | `BgSign` |
 
@@ -460,6 +461,14 @@ taken to 430 to match the others.
 
 The row's two sit in 160 x 160 hotspots 16 px in from the top and side edges.
 `ui_button_nav_back.png` is not `ui_button_back.png`, which is How To Play's X.
+
+## Garden — `scenes/ui/garden.tscn`
+
+No art of its own: the hub's pieces rearranged. `bg_garden_stump.png` fills the
+whole screen here (the hub shifts it 207 px up behind its bottom nav), the five
+`plant_*.png` stand centred on the stump in a 600 x 686 `%Plant` slot, the
+header is Level 2's blank sign at 660 wide, `y 180`, and the arrows are stage
+select's.
 
 ## Stage select X — `ui/stage_select/`
 

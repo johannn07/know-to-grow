@@ -99,6 +99,19 @@ func is_level_cleared(level_id: StringName, stage_count: int) -> bool:
 	return stage_count > 0 and stages_cleared(level_id) >= stage_count
 
 
+## How many of [param levels] are cleared, counting from the first and stopping
+## at the first that is not — so a level cleared out of order does not count.
+## This is how far the plant has grown: the hub shows it, the Garden pages up to
+## it.
+func levels_cleared_in_order(levels: Array[LevelData]) -> int:
+	var count := 0
+	for level in levels:
+		if level == null or not is_level_cleared(level.id, level.challenges.size()):
+			break
+		count += 1
+	return count
+
+
 ## Every star earned anywhere, which is what the hub counts.
 func total_stars() -> int:
 	var sum := 0

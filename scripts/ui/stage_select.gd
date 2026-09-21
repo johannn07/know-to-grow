@@ -78,13 +78,6 @@ extends SubScreen
 ## Drawn over the rest. Usually left empty, since the row art already has them.
 @export var star_empty: Texture2D
 
-## How far a finger has to travel sideways, in design pixels, before a drag is a
-## swipe. About a tenth of the screen: further than a wobbly tap, short enough
-## for a small hand.
-const SWIPE_MIN := 120.0
-## A swipe has to be this much more sideways than up-and-down, so a slip while
-## tapping a row does not turn the page.
-const SWIPE_SLOPE := 1.5
 ## How long the card takes to slide out, and the next one to slide in.
 const PAGE_SECONDS := 0.2
 
@@ -93,8 +86,7 @@ const PAGE_SECONDS := 0.2
 ## for it.
 static var _arrive_from: int = 0
 
-var _press_at := Vector2.ZERO
-var _pressing := false
+var _swipe := SwipeTracker.new()
 var _paging := false
 
 @onready var _center: Control = %Center
@@ -244,32 +236,10 @@ func _set_slide(x: float) -> void:
 	_center.offset_right = x
 
 
-## Watches every press and release, not just the ones on empty card, because a
-## swipe usually starts on a row. A release that turns out to be a swipe is
-## swallowed here so the row under it is not opened as well.
-##
-## Mouse events only: a touch arrives as an emulated mouse press on the phone,
-## and a real one on the desktop, so reading touches too would count it twice.
+## A release that turns out to be a swipe is swallowed, so the row it started
+## on is not opened as well. See [SwipeTracker].
 func _input(event: InputEvent) -> void:
-	var click := event as InputEventMouseButton
-	if click == null or click.button_index != MOUSE_BUTTON_LEFT:
-		return
-	if click.pressed:
-		_press_at = click.position
-		_pressing = true
-		return
-	if not _pressing:
-		return
-	_pressing = false
-	var direction := swipe_direction(click.position - _press_at)
+	var direction := _swipe.feed(event)
 	if direction != 0 and has_page(direction):
 		get_viewport().set_input_as_handled()
 		turn_page(direction)
-
-
-## Which page a drag of [param travel] asks for: a swipe to the left moves on a
-## level, to the right goes back one, and anything short or steep is not a swipe.
-static func swipe_direction(travel: Vector2) -> int:
-	if absf(travel.x) < SWIPE_MIN or absf(travel.x) < absf(travel.y) * SWIPE_SLOPE:
-		return 0
-	return 1 if travel.x < 0.0 else -1

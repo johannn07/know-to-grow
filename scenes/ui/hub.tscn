@@ -24,6 +24,7 @@
 [ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="40_topbar"]
 [ext_resource type="Texture2D" uid="uid://djkfka36tty41" path="res://assets/art/ui/hub/ui_tab_lessons_locked.png" id="41_lessons_locked"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="42_artbtn"]
+[ext_resource type="Texture2D" uid="uid://cu5h54w0w7qw5" path="res://assets/art/ui/hub/ui_tab_garden_locked.png" id="43_garden_locked"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d56r8"]
 
@@ -71,6 +72,8 @@ level_labels = Array[String](["Level 1: Grow a Seed", "Level 2: Help Your Plant"
 finished_overlay = ExtResource("19_finished")
 lesson_scene_paths = Array[String](["res://scenes/ui/stage_select.tscn", "res://scenes/ui/stage_select_l2.tscn", "res://scenes/ui/stage_select_l3.tscn", "res://scenes/ui/stage_select_l4.tscn", "res://scenes/ui/stage_select_l4.tscn"])
 lessons_icon_locked = ExtResource("41_lessons_locked")
+garden_scene_path = "res://scenes/ui/garden.tscn"
+garden_icon_locked = ExtResource("43_garden_locked")
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true
@@ -396,6 +399,8 @@ offset_right = -54.0
 offset_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("42_artbtn")
+art_path = NodePath("../Content")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_tab")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_tab")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_tab")

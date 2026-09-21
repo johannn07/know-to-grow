@@ -65,6 +65,7 @@ func _initialize() -> void:
 
 	for path in [
 		"res://scenes/ui/hub.tscn",
+		"res://scenes/ui/garden.tscn",
 		"res://scenes/ui/how_to_play.tscn",
 		"res://scenes/ui/level_select_stub.tscn",
 		"res://scenes/ui/level_intro.tscn",
@@ -155,13 +156,13 @@ func _initialize() -> void:
 			_expect(
 				play.size.y >= 160.0, "hub %%PlayButton is >= 160 px tall (is %d)" % play.size.y
 			)
-			# Garden and Badges are drawn but have nowhere to go yet. They must
-			# stay disabled: a tab that looks live and does nothing teaches a
-			# child that tapping does not work. Lessons depends on progress, so
-			# it is checked in _check_lessons_and_pages.
+			# Badges is drawn but has nowhere to go yet. It must stay disabled:
+			# a tab that looks live and does nothing teaches a child that
+			# tapping does not work. Lessons and Garden depend on progress, so
+			# they are checked in _check_lessons_and_pages and _check_garden.
 			for tab_name in ["%LessonsButton", "%GardenButton", "%BadgesButton"]:
 				var tab: Button = screen.get_node(tab_name)
-				if tab_name != "%LessonsButton":
+				if tab_name == "%BadgesButton":
 					_expect(tab.disabled, "hub %s is disabled until it has a destination" % tab_name)
 				_expect(
 					tab.size.x >= 160.0 and tab.size.y >= 160.0,
@@ -293,6 +294,7 @@ func _initialize() -> void:
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l3.tscn", &"level_3")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l4.tscn", &"level_4")
 		await _check_lessons_and_pages(state)
+		await _check_garden(state)
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
@@ -632,10 +634,10 @@ func _check_lessons_and_pages(state: GameStateStore) -> void:
 		await process_frame
 
 	# --- a swipe turns the page, and the next one slides in ---
-	_expect(StageSelect.swipe_direction(Vector2(-300, 20)) == 1, "swipe: left moves on a level")
-	_expect(StageSelect.swipe_direction(Vector2(300, -20)) == -1, "swipe: right goes back one")
-	_expect(StageSelect.swipe_direction(Vector2(-60, 0)) == 0, "swipe: a short drag is a tap")
-	_expect(StageSelect.swipe_direction(Vector2(-200, 400)) == 0, "swipe: a steep drag is not a swipe")
+	_expect(SwipeTracker.direction(Vector2(-300, 20)) == 1, "swipe: left moves on a level")
+	_expect(SwipeTracker.direction(Vector2(300, -20)) == -1, "swipe: right goes back one")
+	_expect(SwipeTracker.direction(Vector2(-60, 0)) == 0, "swipe: a short drag is a tap")
+	_expect(SwipeTracker.direction(Vector2(-200, 400)) == 0, "swipe: a steep drag is not a swipe")
 	var first: StageSelect = await _instantiate(pages[0]) as StageSelect
 	if first != null:
 		var press := InputEventMouseButton.new()
@@ -662,6 +664,103 @@ func _check_lessons_and_pages(state: GameStateStore) -> void:
 		_expect(not second.is_paging(), "swipe: no page past the level the child has reached")
 		second.queue_free()
 		await process_frame
+	state.reset()
+
+
+## Garden is locked like Lessons until Level 1 is cleared. It opens on the plant
+## as it is now, centred, and pages back towards the seed and forward again —
+## never past the stage the plant has reached.
+func _check_garden(state: GameStateStore) -> void:
+	state.reset()
+	var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
+	var hub_stages: Array[Texture2D] = []
+	var hub_names: Array[String] = []
+	var hub_levels: Array[LevelData] = []
+	if hub != null:
+		var garden_tab: Button = hub.get_node("%GardenButton")
+		var icon: ArtSlot = garden_tab.get_parent().get_node("Content/Icon")
+		_expect(garden_tab.disabled, "garden tab: locked before Level 1 is cleared")
+		_expect(
+			hub.garden_icon_locked != null and icon.texture == hub.garden_icon_locked,
+			"garden tab: drawn grey while locked"
+		)
+		_expect(garden_tab.pressed.get_connections().size() == 1, "garden tab: %GardenButton is connected")
+		_expect_scene(hub.garden_scene_path, "hub garden_scene_path")
+		hub_stages = hub.plant_stages
+		hub_names = hub.plant_stage_names
+		hub_levels = hub.growth_levels
+		hub.queue_free()
+		await process_frame
+	for stage_number in range(1, 5):
+		state.record_stage_cleared(&"level_1", stage_number, 0)
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	if hub != null:
+		var garden_tab: Button = hub.get_node("%GardenButton")
+		var icon: ArtSlot = garden_tab.get_parent().get_node("Content/Icon")
+		_expect(not garden_tab.disabled, "garden tab: open once Level 1 is cleared")
+		_expect(icon.texture != hub.garden_icon_locked, "garden tab: drawn in colour once open")
+		hub.queue_free()
+		await process_frame
+
+	# Level 1 and 2 cleared: the plant is a sprout, and the seed and root are
+	# behind it.
+	for stage_number in range(1, 6):
+		state.record_stage_cleared(&"level_2", stage_number, 0)
+	var garden: GardenScreen = await _instantiate("res://scenes/ui/garden.tscn") as GardenScreen
+	if garden == null:
+		_expect(false, "garden loads")
+		state.reset()
+		return
+	_expect(
+		garden.plant_stages == hub_stages and garden.plant_stage_names == hub_names
+			and garden.growth_levels == hub_levels,
+		"garden: the same plants, names and levels as the hub"
+	)
+	var plant: ArtSlot = garden.get_node("%Plant")
+	var sign: HeaderSign = garden.get_node("%HeaderSign")
+	var previous: Button = garden.get_node("%PreviousButton")
+	var next: Button = garden.get_node("%NextButton")
+	_expect(
+		is_equal_approx(plant.get_global_rect().get_center().x, 540.0),
+		"garden: the plant is centred (at x %d)" % plant.get_global_rect().get_center().x
+	)
+	_expect(garden.shown_stage() == 2 and plant.texture == garden.plant_stages[2],
+		"garden: opens on the plant as it is now, the sprout")
+	_expect(sign.label_text == "My Plant" and sign.title_text == "SPROUT",
+		"garden: the sign reads My Plant / SPROUT (is %s / %s)" % [sign.label_text, sign.title_text])
+	_expect(previous.visible and not next.visible, "garden: at the sprout, only the way back is offered")
+	for button: Button in [previous, next]:
+		_expect(button.pressed.get_connections().size() == 1, "garden %s is connected" % button.name)
+		_expect(button.size.x >= 160.0 and button.size.y >= 160.0,
+			"garden %s clears 160 px (is %dx%d)" % [button.name, button.size.x, button.size.y])
+	garden.turn_page(1)
+	_expect(not garden.is_paging(), "garden: no page past the stage the plant has reached")
+
+	var press := InputEventMouseButton.new()
+	press.button_index = MOUSE_BUTTON_LEFT
+	press.pressed = true
+	press.position = Vector2(300, 900)
+	garden._input(press)
+	var lift := press.duplicate() as InputEventMouseButton
+	lift.pressed = false
+	lift.position = Vector2(700, 880)
+	garden._input(lift)
+	_expect(garden.is_paging(), "garden: a swipe to the right steps back")
+	await create_timer(garden.PAGE_SECONDS * 2.0 + 0.2).timeout
+	_expect(not garden.is_paging() and garden.shown_stage() == 1 and sign.title_text == "ROOT",
+		"garden: and lands on the root")
+	_expect(previous.visible and next.visible, "garden: at the root, both ways are offered")
+	garden.turn_page(-1)
+	await create_timer(garden.PAGE_SECONDS * 2.0 + 0.2).timeout
+	_expect(garden.shown_stage() == 0 and plant.texture == garden.plant_stages[0]
+		and not previous.visible and next.visible, "garden: the seed is the start of the strip")
+	# Every name the sign can show has to fit its banner.
+	for stage_name in garden.plant_stage_names:
+		sign.title_text = stage_name
+		await process_frame
+		_expect(sign.text_fits(), "garden: '%s' fits the sign" % stage_name)
+	garden.queue_free()
+	await process_frame
 	state.reset()
 
 

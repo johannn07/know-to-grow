@@ -1,0 +1,181 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/garden_screen.gd" id="1_garden"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://k1ruiahxqblq" path="res://assets/art/backgrounds/bg_garden_stump.png" id="4_bg"]
+[ext_resource type="Texture2D" uid="uid://c50xt3o5edhw2" path="res://assets/art/plants/plant_seed_pot.png" id="5_seed"]
+[ext_resource type="Texture2D" uid="uid://df2ew1520xccu" path="res://assets/art/plants/plant_sprout.png" id="6_sprout"]
+[ext_resource type="Texture2D" uid="uid://4r6r0pxfsyqv" path="res://assets/art/plants/plant_leafy.png" id="7_leafy"]
+[ext_resource type="Texture2D" uid="uid://bld2346ygd8v3" path="res://assets/art/plants/plant_leafy_with_flower.png" id="8_flower"]
+[ext_resource type="Texture2D" uid="uid://cvnjty3y2sdi7" path="res://assets/art/plants/plant_leafy_with_flower_and_fruit.png" id="9_fruit"]
+[ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="10_level_1"]
+[ext_resource type="Resource" uid="uid://dkswoxvpud5gj" path="res://content/level_2_monitoring.tres" id="11_level_2"]
+[ext_resource type="Resource" uid="uid://bg2dohoxaf763" path="res://content/level_3_identifying.tres" id="12_level_3"]
+[ext_resource type="Resource" uid="uid://cy8jncr3f30ly" path="res://content/level_4_functions.tres" id="13_level_4"]
+[ext_resource type="PackedScene" path="res://scenes/components/header_sign.tscn" id="14_header"]
+[ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="15_topbar"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="16_artbtn"]
+[ext_resource type="Texture2D" uid="uid://ch5xg5rfu0c8a" path="res://assets/art/ui/buttons/ui_button_arrow_left.png" id="17_arrow_left"]
+[ext_resource type="Texture2D" uid="uid://clnfih443ddp7" path="res://assets/art/ui/buttons/ui_button_arrow_right.png" id="18_arrow_right"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
+
+[node name="Garden" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_garden")
+plant_stages = Array[Texture2D]([ExtResource("5_seed"), ExtResource("6_sprout"), ExtResource("7_leafy"), ExtResource("8_flower"), ExtResource("9_fruit")])
+plant_stage_names = Array[String](["SEED", "ROOT", "SPROUT", "FLOWER", "FRUIT"])
+growth_levels = Array[Resource]([ExtResource("10_level_1"), ExtResource("11_level_2"), ExtResource("12_level_3"), ExtResource("13_level_4")])
+back_scene_path = "res://scenes/ui/hub.tscn"
+music_track = 1
+
+[node name="Background" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_bg")
+fit = 2
+slot_name = "bg_garden_stump"
+placeholder_color = Color(0.56, 0.81, 0.35, 1)
+
+[node name="Slide" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Plant" type="Control" parent="Slide"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -313.0
+offset_right = 300.0
+offset_bottom = 373.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("5_seed")
+slot_name = "plant_seed_pot"
+placeholder_color = Color(0.85, 0.5, 0.3, 1)
+
+[node name="HeaderSign" parent="." instance=ExtResource("14_header")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -330.0
+offset_top = 180.0
+offset_right = 330.0
+offset_bottom = 405.0
+grow_horizontal = 2
+grow_vertical = 1
+label_text = "My Plant"
+title_text = "SEED"
+
+[node name="PreviousArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 22.0
+offset_top = -50.0
+offset_right = 132.0
+offset_bottom = 50.0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("17_arrow_left")
+slot_name = "ui_button_arrow_left"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+
+[node name="NextArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -50.0
+offset_right = -22.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("18_arrow_right")
+slot_name = "ui_button_arrow_right"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+
+[node name="PreviousButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -80.0
+offset_right = 157.0
+offset_bottom = 80.0
+grow_vertical = 2
+script = ExtResource("16_artbtn")
+art_path = NodePath("../PreviousArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="NextButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -157.0
+offset_top = -80.0
+offset_right = 3.0
+offset_bottom = 80.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("16_artbtn")
+art_path = NodePath("../NextArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="TopBar" parent="." instance=ExtResource("15_topbar")]
+unique_name_in_owner = true
+layout_mode = 1
