@@ -901,7 +901,7 @@ Level 3 Stage 2's side-crop problem.
 
 Fifteen: **three per stage, drawn per stage**, `icon_stage_N_cM_l4` where `cM`
 is the card's position A/B/C. Wide function strips — an icon and a sentence —
-rather than Level 3's square part cards. Cropped to alpha and **kept at source
+rather than Level 3's square part cards. Cropped to the drawn card and **kept at source
 resolution**: the card slot is not laid out yet, and at ~2120 px they are only
 about 2.2x a full-width slot, so there was nothing to gain by guessing one.
 
@@ -910,21 +910,24 @@ about 2.2x a full-width slot, so there was nothing to gain by guessing one.
 | `icon_stage_1_c1_l4.png` | 1982 x 395 | 534 KB | Make food using sunlight. |
 | `icon_stage_1_c2_l4.png` | 2032 x 402 | 655 KB | Absorb water and nutrients and hold the plant in the soil. |
 | `icon_stage_1_c3_l4.png` | 2012 x 400 | 558 KB | Protect the seeds. |
-| `icon_stage_2_c1_l4.png` | 2123 x 596 | 765 KB | Support the plant and carry water and nutrients. |
-| `icon_stage_2_c2_l4.png` | 2122 x 586 | 739 KB | Protect the seeds. (apple icon) |
-| `icon_stage_2_c3_l4.png` | 2123 x 658 | 783 KB | Make food using sunlight. |
-| `icon_stage_3_c1_l4.png` | 2126 x 643 | 780 KB | Hold the plant firmly in the soil. |
-| `icon_stage_3_c2_l4.png` | 2123 x 576 | 751 KB | Help make food using sunlight. |
-| `icon_stage_3_c3_l4.png` | 2125 x 661 | 731 KB | Protect the seeds. |
-| `icon_stage_4_c1_l4.png` | 2121 x 674 | 780 KB | Absorb water from the soil. |
-| `icon_stage_4_c2_l4.png` | 2141 x 688 | 758 KB | Help the plant reproduce and make seeds. |
-| `icon_stage_4_c3_l4.png` | 2128 x 682 | 827 KB | Carry water to the leaves |
-| `icon_stage_5_c1_l4.png` | 2123 x 576 | 751 KB | Help make food using sunlight. |
-| `icon_stage_5_c2_l4.png` | 2125 x 661 | 731 KB | Protect the seeds. |
-| `icon_stage_5_c3_l4.png` | 2121 x 674 | 780 KB | Absorb water from the soil. |
+| `icon_stage_2_c1_l4.png` | 2109 x 417 | 749 KB | Support the plant and carry water and nutrients. |
+| `icon_stage_2_c2_l4.png` | 2105 x 418 | 725 KB | Protect the seeds. (apple icon) |
+| `icon_stage_2_c3_l4.png` | 2108 x 420 | 766 KB | Make food using sunlight. |
+| `icon_stage_3_c1_l4.png` | 2111 x 420 | 769 KB | Hold the plant firmly in the soil. |
+| `icon_stage_3_c2_l4.png` | 2107 x 420 | 741 KB | Help make food using sunlight. |
+| `icon_stage_3_c3_l4.png` | 2105 x 421 | 718 KB | Protect the seeds. |
+| `icon_stage_4_c1_l4.png` | 2106 x 419 | 760 KB | Absorb water from the soil. |
+| `icon_stage_4_c2_l4.png` | 2132 x 421 | 745 KB | Help the plant reproduce and make seeds. |
+| `icon_stage_4_c3_l4.png` | 2117 x 421 | 813 KB | Carry water to the leaves |
+| `icon_stage_5_c1_l4.png` | 2107 x 420 | 741 KB | Help make food using sunlight. |
+| `icon_stage_5_c2_l4.png` | 2105 x 421 | 718 KB | Protect the seeds. |
+| `icon_stage_5_c3_l4.png` | 2106 x 419 | 760 KB | Absorb water from the soil. |
 
-- **Stage 1's three are a thinner shape** — about 5:1 against the others'
-  3.3:1. Check them side by side with a later stage once they are on screen.
+- **All fifteen are the same 5:1 shape.** Stages 2-5 were exported with
+  100-170 px of near-invisible haze (alpha under 32) around the card, which a
+  plain alpha crop kept, so they looked 3.3:1 and drew a third smaller than
+  Stage 1's in the same slot. They are cropped at alpha 32, to the drawn edge,
+  as the header was.
 - **Stage 5's cards are Stage 3's and Stage 4's files again**, byte for byte
   (`s5_c1` = `s3_c2`, `s5_c2` = `s3_c3`, `s5_c3` = `s4_c1`).
   Kept as separate files so each stage owns its three, as the export names them.
