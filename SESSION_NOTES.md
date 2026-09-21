@@ -5,6 +5,135 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
+## 2026-09-21 (later) — Phone fixes, the top bar, Settings, Credits and iOS
+
+**Where it got to:** the owner played the game on an Infinix GT 20 Pro, a 20:9
+phone, and reported answers floating over the plant, a double Continue on
+Level 1 Stage 3 and unreadable Level 2 Correct cards. All three are fixed.
+Every stage now has a back / settings row, the hub has settings too, Settings
+is a drawn card with music, sound effects and Main Menu, and Credits roll up
+the finished-game card as plain text. Eleven headless suites pass. Built on
+`ui/answers-pinned-to-bottom` in twelve commits, and the iOS preset on
+`setup/ios-export` in three; **neither is merged or pushed**.
+
+The last session's notes said `level-4` was not merged. It was: `master`,
+`level-4` and `origin/master` were already the same commit when this session
+started.
+
+### What was done, in order
+
+1. **`ui/level 3 and 4 answers pinned to the bottom edge`** — the cause of
+   the floating answers. Stages were measured from the top on a 1080 x 1920
+   screen; a 20:9 phone is ~1080 x 2436 and `canvas_items` + `expand` adds
+   the extra height at the bottom. Cards and Level 3's tap plank now anchor
+   to the bottom, 60 px off the edge.
+2. **`ui/level 1 tray and fun fact lifted off the bottom edge`** — Levels 1
+   and 2 were already bottom-anchored; Level 1's fun fact sat 4 px from the
+   edge, and moved up 56 px with its tray.
+3. **`setup/ios export`** (on `setup/ios-export`) — asked for by the owner.
+   Bundle id `com.johannn.ktg`, arm64, iOS 14+, iPhone and iPad, project-only
+   export. Then a placeholder Team ID, `XXXXXXXXXX`, so Godot will export at
+   all, and the preset as the editor rewrote it with every default.
+4. **`ui/top bar with back, music and sound effects on every stage`** —
+   `scenes/components/top_bar.tscn`, headers and high bubbles 150 px down,
+   low bubbles measured from the bottom, `AudioDirector` mutes the `Music` /
+   `SFX` buses and saves `user://settings.cfg`, `tools/verify_top_bar.gd`.
+   Stage back had been falling through to the main menu; it now goes to the
+   level's stage select.
+5. **`ui/settings card replaces the music and effects buttons`** — the
+   owner delivered a settings icon and moved the toggles onto a Settings
+   card. Off became "drawn darker"; the code-drawn strike was scrapped.
+6. **`levels/level 4 stages 4 and 5 put the plank above the cards`** — see
+   the decision below.
+7. **`ui/credits on the finished-game card`**, then **`ui/credits roll up the
+   screen as plain text`** — first a card, then, at the owner's request, a
+   film-style roll that closes itself.
+8. **`ui/settings card art, with its title on the plank and an X to close`**
+   — the delivered board, "Settings" as live text on its plank, How To
+   Play's X on the corner.
+9. **`fix/level 1 stage 3's continue covers the painted one`** (+ a hotspot
+   follow-up) and **`art/level 2 correct cards from the originals, drawn
+   wider`**.
+10. **`ui/settings button on the hub`**.
+
+### Decisions taken (all by the owner)
+
+- **Answers fixed at the bottom, 60 px margin; room at the top for a row of
+  buttons.** Recorded in CLAUDE.md as "a stage is laid out from both edges".
+- **The top row is back (left) and settings (right).** Music and effects live
+  on the Settings card, which also has Main Menu. The hub gets settings; stage
+  select does not.
+- **Settings closes by an X on its corner**, a tap on the dim, or Android back.
+- **A switched-off toggle is its icon drawn darker.** No strike, no off art.
+- **Level 4 Stages 4-5 put their plank just above the cards**, since under
+  the header it covered the flower and the fruit on 16:9. Stages 1-3 keep it
+  under the header.
+- **Credits are plain rolling text on the finished-game card**, below New Game.
+  Art: ChatGPT. Music: "On the Farm" by LudoLoon Studio and Towball's Crossing
+  Deluxe by Towball, both itch.io. Sound effects: unknown.
+- **The credits card scrapped from Options** — Options became Settings, with no
+  Credits button.
+- **iOS uses a placeholder Team ID** until there is an Apple account.
+
+### Things that turned out to be true, and cost time
+
+- **A render script that errors in a window hangs, it does not exit.** A `-s`
+  script that touches an autoload before its first `await process_frame`
+  fails, and a windowed Godot stops at the debugger and waits forever. Always
+  `await process_frame` first, and run renders under `timeout`.
+- **The Level 2 Correct cards were 800 px copies with 20-80 px of haze a
+  side.** The originals are in `Downloads/Know To Grow Assets/Level 2/
+  Situations/`. Worth checking the other levels' older imports the same way.
+- **Level 1 Stage 3's card paints its Continue 15 px higher** than Stages 1-2.
+  One shared rect is only safe once each card's painted button is measured.
+- **The Godot editor was open all session and rewrites `export_presets.cfg`**
+  with whatever preset list it loaded. It also briefly locked a scene during a
+  branch switch. Close it before switching branches.
+- **Both music packs ask for credit**: LudoLoon Studio's page asks for it by
+  name, and Towball's is CC BY 4.0. That settled checklist §5's licence item.
+- **Toggling sound in a killed test left `sfx_on=false` on disk.** The file
+  was deleted; `verify_top_bar` now restores whatever it found.
+
+### Still in progress
+
+- **Nothing here has been played on the phone yet**, only rendered at 1080 x
+  1920 and 1080 x 2436.
+- **Sound effects' source**: one of the owner's itch.io collection, unknown
+  which. Credits say "Source to be confirmed".
+- **`export_presets.cfg` is modified, uncommitted, on
+  `ui/answers-pinned-to-bottom`** — the editor wrote in the iOS preset,
+  identical to `setup/ios-export`'s. Belongs to that branch.
+- **16:9 compromises:** Level 1's prompt bubble overlaps the top of the soil
+  bed; the Level 4 header just touches the tomato on Stage 5.
+- **iPad (4:3) is unchecked**, and the iOS build needs a Mac to finish.
+- **New Game / Continue on the main menu** is still unbuilt — it was the top
+  item before the phone test pre-empted it.
+
+### Next step
+
+**Play `ui/answers-pinned-to-bottom` on the phone**, then merge both branches.
+After that, the main menu's New Game / Continue (checklist §9), as planned at
+the end of the last session.
+
+### Verification state
+
+| Check | Result |
+|---|---|
+| Project loads | the known audio line, and a "2 ObjectDB instances leaked" warning that `master` shows too |
+| `verify_level_1.gd` | PASS — incl. Stage 3's own Continue rect |
+| `verify_level_2.gd` | PASS |
+| `verify_level_3.gd` | PASS |
+| `verify_level_4.gd` | PASS — card tops now 1305 / 1495 / 1685 |
+| `verify_tap_answer.gd` | PASS |
+| `verify_menu_flow.gd` | PASS — incl. Credits rolling, naming the sources |
+| `verify_game_state.gd` | PASS |
+| `verify_audio.gd` | PASS |
+| `verify_live_text.gd` | PASS |
+| `verify_content.gd` | PASS |
+| `verify_top_bar.gd` | PASS — 19 stages, the Settings card, the hub |
+
+---
+
 ## 2026-09-21 — Level 4 and the finished game, built end to end
 
 **Where it got to:** the whole game plays through. Level 4 runs from the hub
