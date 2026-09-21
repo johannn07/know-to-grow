@@ -541,8 +541,8 @@ providing the art for all of them; nothing here starts before it arrives.
       select. Hub, stage select and the overlays still to decide
 - [x] **Top bar on all 19 stages** — back left, settings right, one row.
       `tools/verify_top_bar.gd`
-  - [ ] **Level 4 Stages 4-5 on a 16:9 screen:** the plank now covers the
-        flower and the fruit. Fine on 20:9. Needs a layout decision
+  - [x] **Level 4 Stages 4-5 on a 16:9 screen:** the plank covered the flower
+        and the fruit. Decided: on those two it sits above the cards
   - [ ] Should the settings button also be on the hub and stage select?
 - [ ] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
       Level 1 is cleared**: not clickable, and drawn with an indicator that

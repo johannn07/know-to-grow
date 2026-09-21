@@ -1016,8 +1016,8 @@ copy, and checked first in a full-resolution composite of all five. At the
 | `%Background` | full screen | `KEEP_COVERED`, clipped |
 | `%TopBar` | 0-1080 x 0-176 | back and settings; see "Top bar" |
 | `%HeaderSign` | 210-870 x 170-395 | Level 2's sign at its 660 px |
-| `TapBanner` | 90-990 x 405-510 | straight under the header |
-| `%PromptBubble` | 58-1022 x **520-977** or **885-1342** | 964 wide; **y varies per stage**; low is *from the bottom* |
+| `TapBanner` | 90-990 x 405-510 | straight under the header; **Stages 4-5: 1190-1295, above the cards, *from the bottom*** |
+| `%PromptBubble` | 58-1022 x **520-977** or **885-1342** (Stages 4-5: **770-1227**) | 964 wide; **y varies per stage**; low is *from the bottom* |
 | three cards | 90-990 x 1305-1480 / 1495-1670 / 1685-1860 | A, B, C; never shuffled; *from the bottom*, 60 px off the edge |
 
 **The plank is under the header, not above the cards** as in Level 3. Three
@@ -1029,13 +1029,15 @@ drawn inside the pot down to y 1305, so nothing else fits between them.
 | 1 roots | y 960-1305, in the pot | **high**, y 520 |
 | 2 stem | y 360-900 | **low**, y 885 from the bottom |
 | 3 leaves | y 420-900 | **low**, y 885 from the bottom |
-| 4 flower | y 300-570 | **low**, y 885 from the bottom |
-| 5 fruit | y 315-555 | **low**, y 885 from the bottom |
+| 4 flower | y 300-570 | **low**, y 770 from the bottom, plank below it |
+| 5 fruit | y 315-555 | **low**, y 770 from the bottom, plank below it |
 
-**Open: on a 16:9 screen the plank covers Stages 4 and 5's answer.** Since the
-top bar pushed the header and plank down 150 px, the plank's 405-510 lands on
-the flower and the fruit. On a 20:9 phone the garden is scaled up and they
-clear it. Not yet decided how to fix it.
+**Stages 4 and 5 put the plank above the cards — decided.** With the top bar
+pushing the header down 150 px, a plank under the header landed on the flower
+and the fruit on a 16:9 screen. On those two stages it sits 10 px above the
+cards instead, and the low bubble rises by the plank's 115 px to clear it.
+Stages 1-3 keep it under the header: Stage 1's roots run down into the pot, where
+a plank above the cards would cover them.
 
 The Correct cards are 1106 wide and about 0.86 in shape, so at the overlay's
 900 px a card is ~1050 tall and Continue is `Rect2(0.265, 1.06, 0.47, 0.1606)`
