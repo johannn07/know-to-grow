@@ -284,7 +284,9 @@ Answered by the project owner before any Level 4 scene was built:
       matching, stars covered and checked in a real render with all fifteen
       earned. The intro's Continue and every stage's `done_scene_path` now
       lead to it; Stage 5 does too until the ending exists
-- [ ] `Track.LEVEL_4` and `Track.LEVEL_5`
+- [x] `Track.LEVEL_4` (5) — `level_4.mp3`, looping, on the intro, stage select
+      and all five stages
+- [ ] `Track.LEVEL_5` — `level_5.mp3`, for the finished-game screen alone
 - [ ] Level 4 ending, the three badges, the hub's fifth plant
 - [ ] Finished-game screen
 - [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with

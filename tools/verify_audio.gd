@@ -41,6 +41,15 @@ const LEVEL_3_SCREENS: Array[String] = [
 	"res://scenes/ui/badge_unlocked_l3.tscn",
 	"res://scenes/ui/level_complete_sign_l3.tscn",
 ]
+const LEVEL_4_SCREENS: Array[String] = [
+	"res://scenes/ui/level_intro_l4.tscn",
+	"res://scenes/ui/stage_select_l4.tscn",
+	"res://scenes/levels/level_4/stage_1.tscn",
+	"res://scenes/levels/level_4/stage_2.tscn",
+	"res://scenes/levels/level_4/stage_3.tscn",
+	"res://scenes/levels/level_4/stage_4.tscn",
+	"res://scenes/levels/level_4/stage_5.tscn",
+]
 
 const LEVEL_SCREENS: Array[String] = [
 	"res://scenes/ui/level_intro.tscn",
@@ -73,7 +82,8 @@ func _initialize() -> void:
 
 	# --- every stream the director promises actually exists ---
 	for track in [AudioDirectorService.Track.MENU, AudioDirectorService.Track.LEVEL_1,
-			AudioDirectorService.Track.LEVEL_2, AudioDirectorService.Track.LEVEL_3]:
+			AudioDirectorService.Track.LEVEL_2, AudioDirectorService.Track.LEVEL_3,
+			AudioDirectorService.Track.LEVEL_4]:
 		_expect(_audio.music_for(track) != null, "track %d has a stream" % track)
 	for named in [["tap", _audio.tap], ["correct", _audio.correct_answer],
 			["wrong", _audio.wrong_answer]]:
@@ -84,13 +94,15 @@ func _initialize() -> void:
 		AudioDirectorService.Track.MENU == 1
 			and AudioDirectorService.Track.LEVEL_1 == 2
 			and AudioDirectorService.Track.LEVEL_2 == 3
-			and AudioDirectorService.Track.LEVEL_3 == 4,
+			and AudioDirectorService.Track.LEVEL_3 == 4
+			and AudioDirectorService.Track.LEVEL_4 == 5,
 		"tracks keep the numbers the scenes stored (a new one goes at the end)"
 	)
 
 	# --- music loops, or a screen falls silent after one play ---
 	for track in [AudioDirectorService.Track.MENU, AudioDirectorService.Track.LEVEL_1,
-			AudioDirectorService.Track.LEVEL_2, AudioDirectorService.Track.LEVEL_3]:
+			AudioDirectorService.Track.LEVEL_2, AudioDirectorService.Track.LEVEL_3,
+			AudioDirectorService.Track.LEVEL_4]:
 		var stream := _audio.music_for(track)
 		if stream is AudioStreamMP3:
 			_expect((stream as AudioStreamMP3).loop, "track %d loops" % track)
@@ -117,6 +129,8 @@ func _initialize() -> void:
 		await _expect_track(path, AudioDirectorService.Track.LEVEL_2, "level 2")
 	for path in LEVEL_3_SCREENS:
 		await _expect_track(path, AudioDirectorService.Track.LEVEL_3, "level 3")
+	for path in LEVEL_4_SCREENS:
+		await _expect_track(path, AudioDirectorService.Track.LEVEL_4, "level 4")
 
 	# --- and the music does not restart between them ---
 	_audio.stop_music()
