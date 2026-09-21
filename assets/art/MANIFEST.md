@@ -447,6 +447,12 @@ the blank sign, `ui_header_blank.png`, at 600 px with "Settings" on the banner
 and the plaque left empty; the round back arrow sits in the card's top-left
 corner, 18 px in.
 
+**Not delivered: the Credits card.** `%CardArt` in
+`scenes/components/credits_overlay.tscn`, **940 x 1300**, centred, slot
+`ui_credits_card`. Laid out like the Settings card: the blank sign at 600 px
+reading "Credits", the round back arrow top-left, and a scrolling list of live
+text in the `CreditsText` theme style.
+
 ## Buttons — delivered
 
 | File | Size | Weight | Drawn over |

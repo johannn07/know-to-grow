@@ -592,9 +592,10 @@ func _check_finished_game(state: GameStateStore) -> void:
 		return
 	var continue_button: Button = card.get_node("%ContinueButton")
 	var new_game: HoldButton = card.get_node("%NewGameButton")
+	var credits_button: Button = card.get_node("%CreditsButton")
 	var art: Control = card.get_node("%CardArt")
 	_expect(art.mouse_filter == Control.MOUSE_FILTER_IGNORE, "finished card: its art ignores input")
-	for button: Button in [continue_button, new_game]:
+	for button: Button in [continue_button, new_game, credits_button]:
 		_expect(button.theme_type_variation == &"PrimaryButton",
 			"finished card: %s is on the primary plate" % button.name)
 		_expect(button.size.x >= 160.0 and button.size.y >= 160.0,
@@ -602,6 +603,22 @@ func _check_finished_game(state: GameStateStore) -> void:
 		_expect(button.position.y >= art.position.y + art.size.y,
 			"finished card: %s sits below the card" % button.name)
 	_expect(new_game.require_hold, "finished card: New Game has to be held")
+	_expect(credits_button.position.y > new_game.position.y + new_game.size.y,
+		"finished card: Credits is below New Game")
+	_expect(credits_button.get_global_rect().end.y <= card.get_viewport_rect().size.y,
+		"finished card: Credits is on screen")
+
+	# --- Credits opens its card, and closes back to this one ---
+	var credits: CreditsOverlay = card.get_node("%Credits")
+	_expect(not credits.is_open(), "credits: starts closed")
+	credits_button.pressed.emit()
+	_expect(credits.is_open(), "credits: the button opens it")
+	var credit_text: Label = credits.get_node("%Text")
+	_expect(credit_text.text.contains("Fredoka One") and credit_text.text.contains("Godot"),
+		"credits: names the font and the engine, whose licences ask for it")
+	(credits.get_node("%CloseButton") as ArtButton).pressed.emit()
+	_expect(not credits.is_open(), "credits: the round back arrow closes it")
+	_expect(hub.finished_card() == card, "credits: closing it leaves the finished card up")
 
 	# --- Continue Playing lifts it off and the hub's music comes back ---
 	continue_button.pressed.emit()

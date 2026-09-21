@@ -558,7 +558,11 @@ providing the art for all of them; nothing here starts before it arrives.
       music and SFX toggles and Main Menu, opened from the top bar. Off is the
       icon drawn darker. Credits moved to the finished-game card
   - [ ] Settings card art, 940 x 900 — a cream placeholder until then
-- [ ] **Credits** — on the finished-game card, below New Game
+- [x] **Credits** — on the finished-game card, below New Game. Opens a
+      scrolling card, `scenes/components/credits_overlay.tscn`
+  - [ ] **Names for Game design, Art, Music and Sound effects** — they read "To
+        be confirmed". Music waits on the licence question in §5
+  - [ ] Credits card art, 940 x 1300 — a cream placeholder until then
 
 ### New Game and Continue — requested 2026-09-21
 

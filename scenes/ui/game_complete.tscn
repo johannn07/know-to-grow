@@ -5,6 +5,7 @@
 [ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
 [ext_resource type="Texture2D" uid="uid://dw7inrfhy5n5k" path="res://assets/art/ui/screens/ui_game_completion.png" id="4_card"]
 [ext_resource type="Script" uid="uid://cyclelgt5qlyo" path="res://scripts/ui/hold_button.gd" id="5_hold"]
+[ext_resource type="PackedScene" path="res://scenes/components/credits_overlay.tscn" id="6_credits"]
 
 [node name="GameComplete" type="Control"]
 z_index = 100
@@ -87,3 +88,21 @@ grow_horizontal = 2
 text = "Press and hold to start a New Game"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CreditsButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -430.0
+offset_top = 1600.0
+offset_right = 430.0
+offset_bottom = 1790.0
+grow_horizontal = 2
+theme_type_variation = &"PrimaryButton"
+text = "Credits"
+
+[node name="Credits" parent="." instance=ExtResource("6_credits")]
+unique_name_in_owner = true
+layout_mode = 1
