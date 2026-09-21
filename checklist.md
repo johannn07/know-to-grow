@@ -287,7 +287,12 @@ Answered by the project owner before any Level 4 scene was built:
 - [x] `Track.LEVEL_4` (5) — `level_4.mp3`, looping, on the intro, stage select
       and all five stages
 - [ ] `Track.LEVEL_5` — `level_5.mp3`, for the finished-game screen alone
-- [ ] Level 4 ending, the three badges, the hub's fifth plant
+- [x] **Level 4's ending** — Stage 5 → Level 4 Complete → Plant Power-Up →
+      Super Grower → Know to Grow Star → "You Completed Level 4!" (Grow Now,
+      its own pill cut from the sign, darken only) → the hub, now showing the
+      fruiting plant as "FRUIT". All over `bg_stage_5_l4`, on the Level 4 track.
+      Past Level 4, Play offers Level 4 again until the finished-game screen
+      exists
 - [ ] Finished-game screen
 - [x] **Level 3's stage select**, `stage_select_l3.tscn` — the drawn card with
       all five rows in it, Stage 1 unlocked and 2-5 grey, in the Level 2

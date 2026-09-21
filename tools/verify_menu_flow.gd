@@ -70,6 +70,11 @@ func _initialize() -> void:
 		"res://scenes/ui/level_complete_sign_l3.tscn",
 		"res://scenes/ui/level_intro_l4.tscn",
 		"res://scenes/ui/stage_select_l4.tscn",
+		"res://scenes/ui/level_complete_l4.tscn",
+		"res://scenes/ui/badge_unlocked_l4.tscn",
+		"res://scenes/ui/badge_unlocked_l4_super_grower.tscn",
+		"res://scenes/ui/badge_unlocked_l4_know_to_grow_star.tscn",
+		"res://scenes/ui/level_complete_sign_l4.tscn",
 	]:
 		var screen: Node = await _instantiate(path)
 		if screen == null:
@@ -254,6 +259,15 @@ func _initialize() -> void:
 		"res://scenes/ui/level_complete_sign_l3.tscn",
 		"res://scenes/ui/hub.tscn",
 	])
+	_check_ending(&"level_4", [
+		"res://scenes/levels/level_4/stage_5.tscn",
+		"res://scenes/ui/level_complete_l4.tscn",
+		"res://scenes/ui/badge_unlocked_l4.tscn",
+		"res://scenes/ui/badge_unlocked_l4_super_grower.tscn",
+		"res://scenes/ui/badge_unlocked_l4_know_to_grow_star.tscn",
+		"res://scenes/ui/level_complete_sign_l4.tscn",
+		"res://scenes/ui/hub.tscn",
+	])
 	if state != null:
 		await _check_hub_grows_the_plant(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
@@ -305,6 +319,10 @@ func _check_press_bounce() -> void:
 		["res://scenes/ui/level_complete_l3.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/badge_unlocked_l3.tscn", "%ActionButton", "../ButtonArt"],
 		["res://scenes/ui/level_intro_l4.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/level_complete_l4.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked_l4.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked_l4_super_grower.tscn", "%ActionButton", "../ButtonArt"],
+		["res://scenes/ui/badge_unlocked_l4_know_to_grow_star.tscn", "%ActionButton", "../ButtonArt"],
 	]
 	for case: Array in cases:
 		var screen: Node = await _instantiate(case[0])
@@ -386,6 +404,7 @@ func _check_art_over_art_darkens_only() -> void:
 		["res://scenes/ui/level_complete_sign.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l2.tscn", "%ActionButton"],
 		["res://scenes/ui/level_complete_sign_l3.tscn", "%ActionButton"],
+		["res://scenes/ui/level_complete_sign_l4.tscn", "%ActionButton"],
 		["res://scenes/ui/how_to_play.tscn", "%BackButton"],
 		["res://scenes/ui/how_to_play.tscn", "%LetsGoButton"],
 	]
@@ -482,26 +501,30 @@ func _check_progress_reaches_the_rows(
 
 ## The hub's plant is how a finished level shows: seed until Level 1 is cleared,
 ## the rooted seed after, the leafy sprout once Level 2 is too, the flower once
-## Level 3 is. A level part way through must not count.
+## Level 3 is, the fruit once Level 4 is. A level part way through must not count.
 func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 	var plays := {
 		0: ["Level 1: Grow a Seed", "res://scenes/ui/level_intro.tscn"],
 		1: ["Level 2: Help Your Plant", "res://scenes/ui/level_intro_l2.tscn"],
 		2: ["Level 3: Identifying", "res://scenes/ui/level_intro_l3.tscn"],
 		3: ["Level 4: Functions", "res://scenes/ui/level_intro_l4.tscn"],
+		# Nothing is left past Level 4; Play offers it again until the
+		# finished-game screen exists.
+		4: ["Level 4: Functions", "res://scenes/ui/level_intro_l4.tscn"],
 	}
-	# [stages cleared in Levels 1, 2 and 3, plant stage, its name]
+	# [stages cleared in Levels 1 to 4, plant stage, its name]
 	for case: Array in [
-		[0, 0, 0, 0, "SEED"], [3, 0, 0, 0, "SEED"], [4, 0, 0, 1, "ROOT"],
-		[4, 4, 0, 1, "ROOT"], [4, 5, 0, 2, "SPROUT"], [4, 5, 4, 2, "SPROUT"],
-		[4, 5, 5, 3, "FLOWER"],
+		[0, 0, 0, 0, 0, "SEED"], [3, 0, 0, 0, 0, "SEED"], [4, 0, 0, 0, 1, "ROOT"],
+		[4, 4, 0, 0, 1, "ROOT"], [4, 5, 0, 0, 2, "SPROUT"], [4, 5, 4, 0, 2, "SPROUT"],
+		[4, 5, 5, 0, 3, "FLOWER"], [4, 5, 5, 4, 3, "FLOWER"], [4, 5, 5, 5, 4, "FRUIT"],
 	]:
 		var level_1: int = case[0]
 		var level_2: int = case[1]
 		var level_3: int = case[2]
-		var want_stage: int = case[3]
-		var want_name: String = case[4]
-		var cleared := "%d/%d/%d of Levels 1-3 cleared" % [level_1, level_2, level_3]
+		var level_4: int = case[3]
+		var want_stage: int = case[4]
+		var want_name: String = case[5]
+		var cleared := "%d/%d/%d/%d of Levels 1-4 cleared" % [level_1, level_2, level_3, level_4]
 		state.reset()
 		for stage_number in range(1, level_1 + 1):
 			state.record_stage_cleared(&"level_1", stage_number, 0)
@@ -509,6 +532,8 @@ func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 			state.record_stage_cleared(&"level_2", stage_number, 0)
 		for stage_number in range(1, level_3 + 1):
 			state.record_stage_cleared(&"level_3", stage_number, 0)
+		for stage_number in range(1, level_4 + 1):
+			state.record_stage_cleared(&"level_4", stage_number, 0)
 		var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
 		if hub == null:
 			continue

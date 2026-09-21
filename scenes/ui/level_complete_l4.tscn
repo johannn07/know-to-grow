@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dy56ohdmekxqu" path="res://scripts/ui/card_overlay.gd" id="1_screen"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://iguwuowwkuva" path="res://assets/art/backgrounds/bg_stage_5_l4.png" id="4_bg"]
+[ext_resource type="Texture2D" uid="uid://yjckqef2g3w7" path="res://assets/art/ui/screens/ui_level_complete_l4.png" id="5_card"]
+[ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui/buttons/ui_button_continue.png" id="7_button"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="8_artbtn"]
+[ext_resource type="AudioStream" uid="uid://2rnnyxy0vrrf" path="res://assets/audio/sfx/level_complete.wav" id="9_sting"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
+
+[node name="LevelCompleteL4" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_screen")
+music_track = 5
+arrival_sfx = ExtResource("9_sting")
+back_scene_path = "res://scenes/ui/hub.tscn"
+card_art = ExtResource("5_card")
+button_art = ExtResource("7_button")
+button_rect = Rect2(0.2650, 1.0624, 0.4700, 0.1298)
+next_scene_path = "res://scenes/ui/badge_unlocked_l4.tscn"
+
+[node name="Background" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_bg")
+fit = 2
+slot_name = "bg_stage_5_l4"
+placeholder_color = Color(0.52, 0.82, 0.95, 1)
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 90
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 90
+theme_override_constants/margin_bottom = 273
+
+[node name="OverlayAspect" type="AspectRatioContainer" parent="Center"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+ratio = 0.8855
+
+[node name="Card" type="Control" parent="Center/OverlayAspect"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CardArt" type="Control" parent="Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_level_complete_l4"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="BannerArt" type="Control" parent="Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "banner"
+hide_when_empty = true
+
+[node name="ButtonArt" type="Control" parent="Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2650
+anchor_top = 1.0624
+anchor_right = 0.7350
+anchor_bottom = 1.1922
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+fit = 0
+slot_name = "ui_button_continue"
+hide_when_empty = true
+
+[node name="ActionButton" type="Button" parent="Center/OverlayAspect/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2650
+anchor_top = 1.0624
+anchor_right = 0.7350
+anchor_bottom = 1.1922
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../ButtonArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")

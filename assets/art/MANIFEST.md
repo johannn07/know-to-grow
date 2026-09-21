@@ -1056,7 +1056,8 @@ the card. **Wired as `scenes/ui/stage_select_l4.tscn`.**
 | `plant_leafy_with_flower_and_fruit.png` | 1320 x 1722 | 1.8 MB |
 
 The hub's fourth and fifth plant states: flowering, then flowering with a
-tomato. Cropped to alpha. **`plant_leafy_with_flower` is wired** as the hub's
+tomato. Cropped to alpha. `plant_leafy_with_flower_and_fruit` is the fifth,
+"FRUIT", once Level 4 is cleared. **`plant_leafy_with_flower` is wired** as the hub's
 fourth `plant_stages` entry, "FLOWER", shown once Level 3 is cleared. It is
 taller in proportion than the sprout (0.75 against 0.88), so in the hub's
 `KEEP_ASPECT` slot it draws at the same height and about 70 px narrower.
@@ -1073,9 +1074,35 @@ taller in proportion than the sprout (0.75 against 0.88), so in the hub's
 Cropped to alpha. The intro reads "Level 4 / Plant power time!", and is
 **wired** as `scenes/ui/level_intro_l4.tscn` at its own card ratio, 0.837; Level 4
 Complete "Plant powers unlocked!"; the sign "You Completed Level 4!" with Grow
-Now painted on it, which will need its pill cut as Levels 1-3's were. The game
-completion card, "Hooray! You did it!", is the finished-game screen and is
-not Level 4's alone.
+Now painted on it. The game completion card, "Hooray! You did it!", is the
+finished-game screen and is not Level 4's alone.
+
+**Wired as the Level 4 ending**, over `bg_stage_5_l4.png`, the fruiting plant,
+on the Level 4 track: Stage 5 → `level_complete_l4.tscn` →
+`badge_unlocked_l4.tscn` → `badge_unlocked_l4_super_grower.tscn` →
+`badge_unlocked_l4_know_to_grow_star.tscn` → `level_complete_sign_l4.tscn` →
+the hub. Checked in a windowed render.
+
+| File | Size | Weight |
+|---|---|---|
+| `ui_badge_plant_power_up.png` | 1122 x 1385 | 1.7 MB |
+| `ui_badge_super_grower.png` | 1122 x 1385 | 1.7 MB |
+| `ui_badge_know_to_grow_star.png` | 1122 x 1387 | 1.7 MB |
+| `ui/buttons/ui_button_grow_now_sign_l4.png` | 812 x 250 | 234 KB |
+
+- **Three badges, decided by the owner**: Plant Power-Up ("You unlocked the
+  functions of plant parts!"), Super Grower, then Know to Grow Star ("You
+  finished the game and became a plant pro!"). Imported from the export's
+  `Badges` folder, cropped at alpha 32. Each overlay is Mystery Solver's with
+  its own ratio, and every vertical fraction rescaled so Continue and the Badge
+  Unlock banner are the same size on screen.
+- **Level 4 Complete** puts Continue below the card at Level 3's on-screen
+  size, `Rect2(0.2650, 1.0624, 0.4700, 0.1298)`.
+- **Grow Now is cut from the sign**, as Levels 1-3's were: the pill measured
+  along clean columns between the letters, x 136-948 and y 1159-1409 on the
+  sign, `Rect2(0.1311, 0.8185, 0.7830, 0.1766)`, and masked to its own stadium
+  so the leaves above stay on the sign. Laid back over itself, it darkens
+  without squashing; pressed, no ring shows.
 
 ## Still in the Figma file, not yet extracted
 
