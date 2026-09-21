@@ -479,7 +479,8 @@ flowers the painted-in versions do not have.
 |---|---|
 | Back / X | `Rect2(0.8055, 0.0574, 0.1628, 0.1276)` |
 | LET'S GO | `Rect2(0.1442, 0.8009, 0.6705, 0.1824)` |
-| Continue | `Rect2(0.1818, 0.7705, 0.6105, 0.1532)` |
+| Continue, Stages 1-2 | `Rect2(0.1818, 0.7705, 0.6105, 0.1532)` |
+| Continue, Stage 3 | `Rect2(0.1793, 0.7545, 0.6118, 0.1572)`, hotspot `Rect2(0.1976, 0.7693, 0.5913, 0.118)` |
 | Continue, Stage 4 | `Rect2(0.265, 1.06, 0.47, 0.1707)` |
 | Choose Again | `Rect2(0.2736, 0.6849, 0.5130, 0.2345)` |
 
@@ -490,6 +491,12 @@ flowers the painted-in versions do not have.
 - The two feedback buttons are placed in code by `StageScreen`, from
   `CONTINUE_ART_RECT` and `CHOOSE_AGAIN_ART_RECT`, because the card underneath
   changes per stage. The two on How To Play are anchored in the scene.
+- **Stage 3's card paints its Continue 15 px higher** than Stages 1 and 2's — body
+  at y 787-903 of 1016 against 802-915 — so the shared rect left the painted
+  button's top edge showing above the new one. Its scene sets its own
+  `correct_art_rect` and `correct_button_rect`, scaled from Stage 1's against
+  the measured body. Checking a new card means measuring its green body, not
+  assuming it matches.
 - **Stage 4's Continue sits below its card, not on it** — which is where the y
   past 1.0 comes from: the rects are fractions of the card, and this one starts
   past its bottom edge. Its Correct card is Level 2's and has no Continue
