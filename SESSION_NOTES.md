@@ -5,16 +5,17 @@ is the build state; this is the narrative behind it. Newest session first.
 
 ---
 
-## 2026-09-21 (later) — Phone fixes, the top bar, Settings, Credits and iOS
+## 2026-09-21/22 — Phone fixes, Settings, Credits, app icon, New Game / Continue
 
 **Where it got to:** the owner played the game on an Infinix GT 20 Pro, a 20:9
 phone, and reported answers floating over the plant, a double Continue on
 Level 1 Stage 3 and unreadable Level 2 Correct cards. All three are fixed.
 Every stage now has a back / settings row, the hub has settings too, Settings
-is a drawn card with music, sound effects and Main Menu, and Credits roll up
-the finished-game card as plain text. Eleven headless suites pass. Built on
-`ui/answers-pinned-to-bottom` in twelve commits, and the iOS preset on
-`setup/ios-export` in three; **neither is merged or pushed**.
+is a drawn card with music, sound effects and Main Menu, Credits roll up the
+finished-game card, the app has its icon and boot splash, and the main menu
+has New Game / Continue. An iOS preset was added and then dropped. Eleven
+headless suites pass on `master`. **Everything is merged into `master` and
+pushed**, at `fae6b49` before these notes.
 
 The last session's notes said `level-4` was not merged. It was: `master`,
 `level-4` and `origin/master` were already the same commit when this session
@@ -30,10 +31,8 @@ started.
 2. **`ui/level 1 tray and fun fact lifted off the bottom edge`** — Levels 1
    and 2 were already bottom-anchored; Level 1's fun fact sat 4 px from the
    edge, and moved up 56 px with its tray.
-3. **`setup/ios export`** (on `setup/ios-export`) — asked for by the owner.
-   Bundle id `com.johannn.ktg`, arm64, iOS 14+, iPhone and iPad, project-only
-   export. Then a placeholder Team ID, `XXXXXXXXXX`, so Godot will export at
-   all, and the preset as the editor rewrote it with every default.
+3. **`setup/ios export`** + two follow-ups — asked for by the owner, merged,
+   then **removed** at the end of the session (step 14).
 4. **`ui/top bar with back, music and sound effects on every stage`** —
    `scenes/components/top_bar.tscn`, headers and high bubbles 150 px down,
    low bubbles measured from the bottom, `AudioDirector` mutes the `Music` /
@@ -54,7 +53,23 @@ started.
 9. **`fix/level 1 stage 3's continue covers the painted one`** (+ a hotspot
    follow-up) and **`art/level 2 correct cards from the originals, drawn
    wider`**.
-10. **`ui/settings button on the hub`**.
+10. **`ui/settings button on the hub`** — the stages' `TopBar` with
+    `show_back` off.
+11. **`setup/app icon and boot splash`** — the logo's magnifier and sprout,
+    cut from the "O" of KNOW, on cream as the launcher icon (legacy, adaptive,
+    themed) and Android 12 splash icon; the whole logo on cream as Godot's
+    boot splash, held 1.5 s; the Android window background cream too. Checked
+    in a built debug APK. `project.godot` and `export_presets.cfg` changed,
+    both asked for.
+12. **Merged and pushed** `ui/answers-pinned-to-bottom` (fast-forward) and
+    the iOS branch (merge commit), in a temporary worktree so the open
+    editor's files were not switched under it.
+13. **`ui/main menu new game and continue`** — "Start Game" is New Game.
+    With a save, Continue appears above it and New Game becomes a
+    `HoldButton` with the finished card's hint and reset. New
+    `GameStateStore.has_progress()`. Merged and pushed.
+14. **`setup/remove the ios export preset`** — Android only. The local
+    `setup/ios-export` branch was deleted. Pushed.
 
 ### Decisions taken (all by the owner)
 
@@ -71,9 +86,11 @@ started.
 - **Credits are plain rolling text on the finished-game card**, below New Game.
   Art: ChatGPT. Music: "On the Farm" by LudoLoon Studio and Towball's Crossing
   Deluxe by Towball, both itch.io. Sound effects: unknown.
-- **The credits card scrapped from Options** — Options became Settings, with no
-  Credits button.
-- **iOS uses a placeholder Team ID** until there is an Apple account.
+- **Options became Settings, with no Credits button.**
+- **App icon: the logo's magnifier on warm cream**, #FDF5E2; the splash is the
+  whole logo on the same cream.
+- **The main menu's New Game hold shows the same hint** as the finished card.
+- **Android only.** The iOS preset was built, merged and then removed.
 
 ### Things that turned out to be true, and cost time
 
@@ -86,46 +103,56 @@ started.
   Situations/`. Worth checking the other levels' older imports the same way.
 - **Level 1 Stage 3's card paints its Continue 15 px higher** than Stages 1-2.
   One shared rect is only safe once each card's painted button is measured.
-- **The Godot editor was open all session and rewrites `export_presets.cfg`**
-  with whatever preset list it loaded. It also briefly locked a scene during a
-  branch switch. Close it before switching branches.
+- **The Godot editor rewrites `export_presets.cfg` and `project.godot`** from
+  whatever it loaded — it put the iOS preset back into a branch that did not
+  have it, and keeps moving `config/icon` below the splash lines. Close the
+  editor before switching branches or editing either file, and discard the
+  `config/icon` reorder rather than committing it.
+- **`master` can be moved without a checkout**: `git fetch . <branch>:master`
+  fast-forwards it while another branch is checked out, which kept the open
+  editor's files still.
 - **Both music packs ask for credit**: LudoLoon Studio's page asks for it by
   name, and Towball's is CC BY 4.0. That settled checklist §5's licence item.
-- **Toggling sound in a killed test left `sfx_on=false` on disk.** The file
-  was deleted; `verify_top_bar` now restores whatever it found.
+- **Godot 4.7's splash settings** are `boot_splash/image`, `bg_color`,
+  `stretch_mode` and `minimum_display_time` — `fullsize` is gone — and the
+  default display time of 0 only flashes the splash.
 
 ### Still in progress
 
-- **Nothing here has been played on the phone yet**, only rendered at 1080 x
-  1920 and 1080 x 2436.
-- **Sound effects' source**: one of the owner's itch.io collection, unknown
-  which. Credits say "Source to be confirmed".
-- **`export_presets.cfg` is modified, uncommitted, on
-  `ui/answers-pinned-to-bottom`** — the editor wrote in the iOS preset,
-  identical to `setup/ios-export`'s. Belongs to that branch.
+- **Nothing from this session has been played on the phone**, only rendered at
+  1080 x 1920 and 1080 x 2436 and, for the icons, checked inside a built APK.
+- **Sound effects' source**: one of three itch.io packs, unknown which.
+  Credits say "Source to be confirmed".
 - **16:9 compromises:** Level 1's prompt bubble overlaps the top of the soil
-  bed; the Level 4 header just touches the tomato on Stage 5.
-- **iPad (4:3) is unchecked**, and the iOS build needs a Mac to finish.
-- **New Game / Continue on the main menu** is still unbuilt — it was the top
-  item before the phone test pre-empted it.
+  bed; the Level 4 header touches the tomato on Stage 5; on the main menu with
+  a save, How To Play overlaps the flower mascot.
+- **The 1024 px project icon is slightly soft** — the magnifier is only ~320
+  px in `logo.png`.
+- **Android tablets (4:3)** are still unchecked (checklist §8).
+- **Hub tabs, swipeable stage select, Garden, Badges and other back buttons**
+  (checklist §9) wait on the owner's art.
 
 ### Next step
 
-**Play `ui/answers-pinned-to-bottom` on the phone**, then merge both branches.
-After that, the main menu's New Game / Continue (checklist §9), as planned at
-the end of the last session.
+**Export a fresh APK from `master` and play it on the phone**, end to end:
+the layout at 20:9, the top bar and Settings card, the app icon and splash,
+New Game / Continue with a save and without, and the Credits roll. Then
+whatever that test turns up, and after it checklist §9's hub tabs once their
+art arrives.
 
 ### Verification state
 
+On `master` at `fae6b49`:
+
 | Check | Result |
 |---|---|
-| Project loads | the known audio line, and a "2 ObjectDB instances leaked" warning that `master` shows too |
+| Project loads | the known audio line, and a "2 ObjectDB instances leaked" warning that has been there since before this session |
 | `verify_level_1.gd` | PASS — incl. Stage 3's own Continue rect |
 | `verify_level_2.gd` | PASS |
 | `verify_level_3.gd` | PASS |
 | `verify_level_4.gd` | PASS — card tops now 1305 / 1495 / 1685 |
 | `verify_tap_answer.gd` | PASS |
-| `verify_menu_flow.gd` | PASS — incl. Credits rolling, naming the sources |
+| `verify_menu_flow.gd` | PASS — incl. New Game / Continue with and without a save, and Credits |
 | `verify_game_state.gd` | PASS |
 | `verify_audio.gd` | PASS |
 | `verify_live_text.gd` | PASS |
