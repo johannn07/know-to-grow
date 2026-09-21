@@ -304,7 +304,8 @@ Answered by the project owner before any Level 4 scene was built:
   - [ ] **Two buttons below the card, on `ui_button_primary`**: **New Game**
         and **Continue Playing**. Row or column is ours to choose; they sit
         under the overlay card, not on it
-  - [ ] New Game clears progress and starts again from the seed; Continue
+  - [ ] New Game clears progress and starts again from the seed —
+        **press-and-hold**, since there is always a save by then; Continue
         Playing closes the overlay and leaves the child on the finished hub
   - [ ] The hub's Play past Level 4, which offers Level 4 again as a stopgap,
         needs its real destination once this exists
@@ -554,9 +555,9 @@ Built one at a time, after the finished-game screen.
 - [ ] **Continue** picks up where the saved progress left off — the hub, with
       the plant as far as it has grown
 - [ ] **New Game** clears progress and starts from the seed. It shares the
-      reset with the finished-game screen's New Game. Wiping a child's progress
-      from one tap is worth asking the owner about: a confirm, or a hold, as
-      the parent-gate idea in `CLAUDE.md` suggests. **⚠**
+      reset with the finished-game screen's New Game. **Decided: press-and-hold
+      whenever there is an existing save**, so one stray tap cannot wipe a
+      child's progress; with nothing saved it is an ordinary tap
 - [x] **Saving per stage clear already happens.** `GameState.record_stage_cleared`
       writes `user://progress.cfg` the moment a stage — or a Level 2 situation —
       is cleared, and loads it on start. Nothing new is needed for it; "is
