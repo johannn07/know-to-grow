@@ -41,7 +41,7 @@ correct_card = ExtResource("9_ok")
 wrong_card = ExtResource("10_oops")
 continue_art = ExtResource("16_continue")
 choose_again_art = ExtResource("17_choose_again")
-correct_button_rect = Rect2(0.1976, 0.7693, 0.5913, 0.118)
+correct_button_rect = Rect2(0.1976, 0.7643, 0.5913, 0.128)
 correct_art_rect = Rect2(0.1793, 0.7545, 0.6118, 0.1572)
 next_stage_path = "res://scenes/levels/level_1/stage_4.tscn"
 
