@@ -66,6 +66,7 @@ func _initialize() -> void:
 	for path in [
 		"res://scenes/ui/hub.tscn",
 		"res://scenes/ui/garden.tscn",
+		"res://scenes/ui/badges.tscn",
 		"res://scenes/ui/how_to_play.tscn",
 		"res://scenes/ui/level_select_stub.tscn",
 		"res://scenes/ui/level_intro.tscn",
@@ -156,14 +157,10 @@ func _initialize() -> void:
 			_expect(
 				play.size.y >= 160.0, "hub %%PlayButton is >= 160 px tall (is %d)" % play.size.y
 			)
-			# Badges is drawn but has nowhere to go yet. It must stay disabled:
-			# a tab that looks live and does nothing teaches a child that
-			# tapping does not work. Lessons and Garden depend on progress, so
-			# they are checked in _check_lessons_and_pages and _check_garden.
+			# Whether a tab is open depends on progress, so that is checked in
+			# _check_lessons_and_pages, _check_garden and _check_badges.
 			for tab_name in ["%LessonsButton", "%GardenButton", "%BadgesButton"]:
 				var tab: Button = screen.get_node(tab_name)
-				if tab_name == "%BadgesButton":
-					_expect(tab.disabled, "hub %s is disabled until it has a destination" % tab_name)
 				_expect(
 					tab.size.x >= 160.0 and tab.size.y >= 160.0,
 					"hub %s clears 160 px (is %dx%d)" % [tab_name, tab.size.x, tab.size.y]
@@ -295,6 +292,7 @@ func _initialize() -> void:
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l4.tscn", &"level_4")
 		await _check_lessons_and_pages(state)
 		await _check_garden(state)
+		await _check_badges(state)
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
@@ -760,6 +758,85 @@ func _check_garden(state: GameStateStore) -> void:
 		await process_frame
 		_expect(sign.text_fits(), "garden: '%s' fits the sign" % stage_name)
 	garden.queue_free()
+	await process_frame
+	state.reset()
+
+
+## Badges is locked like the other tabs until Level 1 — which earns the first
+## badge — is cleared. Its grid shows every badge, the earned ones in colour and
+## tappable; a tap opens the badge large with "Tap to close", and a tap closes it.
+func _check_badges(state: GameStateStore) -> void:
+	state.reset()
+	var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
+	if hub != null:
+		var tab: Button = hub.get_node("%BadgesButton")
+		var icon: ArtSlot = tab.get_parent().get_node("Content/Icon")
+		_expect(tab.disabled, "badges tab: locked before Level 1 is cleared")
+		_expect(hub.badges_icon_locked != null and icon.texture == hub.badges_icon_locked,
+			"badges tab: drawn grey while locked")
+		_expect(tab.pressed.get_connections().size() == 1, "badges tab: %BadgesButton is connected")
+		_expect_scene(hub.badges_scene_path, "hub badges_scene_path")
+		hub.queue_free()
+		await process_frame
+
+	# Levels 1 and 2 cleared: Little Planter, Plant Helper and Green Thumb.
+	for stage_number in range(1, 5):
+		state.record_stage_cleared(&"level_1", stage_number, 0)
+	for stage_number in range(1, 6):
+		state.record_stage_cleared(&"level_2", stage_number, 0)
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	if hub != null:
+		var tab: Button = hub.get_node("%BadgesButton")
+		_expect(not tab.disabled, "badges tab: open once Level 1 is cleared")
+		hub.queue_free()
+		await process_frame
+	var screen: BadgesScreen = await _instantiate("res://scenes/ui/badges.tscn") as BadgesScreen
+	if screen == null:
+		_expect(false, "badges loads")
+		state.reset()
+		return
+	var grid: GridContainer = screen.get_node("%Grid")
+	_expect(grid.columns == 3 and screen.cell_count() == 9,
+		"badges: a 3 x 3 grid (%d cells)" % screen.cell_count())
+	_expect(screen.badges.size() == 7 and screen.badges_locked.size() == 7
+		and screen.badge_levels.size() == 7, "badges: seven badges, each with a grey one and a level")
+	var sign: HeaderSign = screen.get_node("%HeaderSign")
+	_expect(sign.title_text == "3 of 7", "badges: the sign counts 3 of 7 (is %s)" % sign.title_text)
+	_expect(sign.text_fits(), "badges: the sign text fits")
+	for i in screen.cell_count():
+		var cell: Button = grid.get_node("Badge%d" % (i + 1))
+		var art: ArtSlot = cell.get_node("Badge%dArt" % (i + 1))
+		var earned: bool = i < 3
+		_expect(cell.disabled == not earned,
+			"badges: Badge%d is %s" % [i + 1, "open" if earned else "closed"])
+		if i < 7:
+			var want: Texture2D = screen.badges[i] if earned else screen.badges_locked[i]
+			_expect(art.texture == want,
+				"badges: Badge%d drawn %s" % [i + 1, "in colour" if earned else "grey"])
+		else:
+			_expect(art.texture == null and art.hide_when_empty, "badges: Badge%d is an empty cell" % (i + 1))
+		_expect(cell.size.x >= 160.0 and cell.size.y >= 160.0,
+			"badges: Badge%d clears 160 px (is %dx%d)" % [i + 1, cell.size.x, cell.size.y])
+		_expect(cell.get_global_rect().end.y <= 1920.0, "badges: Badge%d is on screen" % (i + 1))
+	var view: Control = screen.get_node("%BadgeView")
+	_expect(not view.visible, "badges: no badge open at first")
+	screen.open_badge(4)
+	_expect(not view.visible, "badges: a badge not yet earned does not open")
+	(grid.get_node("Badge2") as Button).pressed.emit()
+	var view_art: ArtSlot = screen.get_node("%BadgeViewArt")
+	_expect(view.visible and view_art.texture == screen.badges[1], "badges: tapping Plant Helper opens it")
+	_expect((screen.get_node("%TapToClose") as Label).text == "Tap to close", "badges: it says Tap to close")
+	_expect(_find_by_name(view, "ActionButton") == null and _find_by_name(view, "BannerArt") == null,
+		"badges: no Continue and no banner on it")
+	screen._notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+	_expect(not view.visible, "badges: Android back closes the badge rather than the screen")
+	screen.open_badge(0)
+	var tap := InputEventMouseButton.new()
+	tap.button_index = MOUSE_BUTTON_LEFT
+	tap.pressed = false
+	screen._on_view_input(tap)
+	_expect(not view.visible, "badges: a tap closes it")
+	screen.queue_free()
 	await process_frame
 	state.reset()
 

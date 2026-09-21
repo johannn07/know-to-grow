@@ -1,0 +1,387 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/badges_screen.gd" id="1_badges"]
+[ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
+[ext_resource type="Theme" uid="uid://ddiq5de3ppim6" path="res://themes/ktg_theme.tres" id="3_theme"]
+[ext_resource type="Texture2D" uid="uid://k1ruiahxqblq" path="res://assets/art/backgrounds/bg_garden_stump.png" id="4_bg"]
+[ext_resource type="PackedScene" path="res://scenes/components/header_sign.tscn" id="5_header"]
+[ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="6_topbar"]
+[ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="7_artbtn"]
+[ext_resource type="Texture2D" uid="uid://doih6p41ivxgb" path="res://assets/art/ui/screens/ui_badge_little_planter.png" id="b_little_planter"]
+[ext_resource type="Texture2D" uid="uid://cajtae1t8mkj2" path="res://assets/art/ui/screens/ui_badge_little_planter_locked.png" id="g_little_planter"]
+[ext_resource type="Texture2D" uid="uid://dwp7lmih8if0j" path="res://assets/art/ui/screens/ui_badge_plant_helper.png" id="b_plant_helper"]
+[ext_resource type="Texture2D" uid="uid://book4jskqbk50" path="res://assets/art/ui/screens/ui_badge_plant_helper_locked.png" id="g_plant_helper"]
+[ext_resource type="Texture2D" uid="uid://vqssl3u8tq5a" path="res://assets/art/ui/screens/ui_badge_green_thumb.png" id="b_green_thumb"]
+[ext_resource type="Texture2D" uid="uid://cca5eqte0cfa4" path="res://assets/art/ui/screens/ui_badge_green_thumb_locked.png" id="g_green_thumb"]
+[ext_resource type="Texture2D" uid="uid://cdislwgda7gqm" path="res://assets/art/ui/screens/ui_badge_mystery_solver.png" id="b_mystery_solver"]
+[ext_resource type="Texture2D" uid="uid://bpeeohqnl4j3w" path="res://assets/art/ui/screens/ui_badge_mystery_solver_locked.png" id="g_mystery_solver"]
+[ext_resource type="Texture2D" uid="uid://vmw0he7noqy8" path="res://assets/art/ui/screens/ui_badge_plant_power_up.png" id="b_plant_power_up"]
+[ext_resource type="Texture2D" uid="uid://b2w6yxkxs1u0l" path="res://assets/art/ui/screens/ui_badge_plant_power_up_locked.png" id="g_plant_power_up"]
+[ext_resource type="Texture2D" uid="uid://c8c88xwaxjjdi" path="res://assets/art/ui/screens/ui_badge_super_grower.png" id="b_super_grower"]
+[ext_resource type="Texture2D" uid="uid://khejctr5tbcp" path="res://assets/art/ui/screens/ui_badge_super_grower_locked.png" id="g_super_grower"]
+[ext_resource type="Texture2D" uid="uid://btry24ct486j7" path="res://assets/art/ui/screens/ui_badge_know_to_grow_star.png" id="b_know_to_grow_star"]
+[ext_resource type="Texture2D" uid="uid://cfh68hs6rrauf" path="res://assets/art/ui/screens/ui_badge_know_to_grow_star_locked.png" id="g_know_to_grow_star"]
+[ext_resource type="Resource" uid="uid://dl63c4m1i6qv0" path="res://content/level_1_planting.tres" id="l_level_1"]
+[ext_resource type="Resource" uid="uid://dkswoxvpud5gj" path="res://content/level_2_monitoring.tres" id="l_level_2"]
+[ext_resource type="Resource" uid="uid://bg2dohoxaf763" path="res://content/level_3_identifying.tres" id="l_level_3"]
+[ext_resource type="Resource" uid="uid://cy8jncr3f30ly" path="res://content/level_4_functions.tres" id="l_level_4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
+
+[node name="Badges" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_badges")
+badges = Array[Texture2D]([ExtResource("b_little_planter"), ExtResource("b_plant_helper"), ExtResource("b_green_thumb"), ExtResource("b_mystery_solver"), ExtResource("b_plant_power_up"), ExtResource("b_super_grower"), ExtResource("b_know_to_grow_star")])
+badges_locked = Array[Texture2D]([ExtResource("g_little_planter"), ExtResource("g_plant_helper"), ExtResource("g_green_thumb"), ExtResource("g_mystery_solver"), ExtResource("g_plant_power_up"), ExtResource("g_super_grower"), ExtResource("g_know_to_grow_star")])
+badge_levels = Array[Resource]([ExtResource("l_level_1"), ExtResource("l_level_2"), ExtResource("l_level_2"), ExtResource("l_level_3"), ExtResource("l_level_4"), ExtResource("l_level_4"), ExtResource("l_level_4")])
+back_scene_path = "res://scenes/ui/hub.tscn"
+music_track = 1
+
+[node name="Background" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("4_bg")
+fit = 2
+slot_name = "bg_garden_stump"
+placeholder_color = Color(0.56, 0.81, 0.35, 1)
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.3)
+
+[node name="HeaderSign" parent="." instance=ExtResource("5_header")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -330.0
+offset_top = 180.0
+offset_right = 330.0
+offset_bottom = 405.0
+grow_horizontal = 2
+grow_vertical = 1
+label_text = "My Badges"
+title_text = "0 of 7"
+
+[node name="Grid" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -480.0
+offset_top = 450.0
+offset_right = 480.0
+offset_bottom = 1620.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 30
+theme_override_constants/v_separation = 30
+columns = 3
+
+[node name="Badge1" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge1Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge1Art" type="Control" parent="Grid/Badge1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_little_planter")
+slot_name = "ui_badge_little_planter"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge2" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge2Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge2Art" type="Control" parent="Grid/Badge2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_plant_helper")
+slot_name = "ui_badge_plant_helper"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge3" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge3Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge3Art" type="Control" parent="Grid/Badge3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_green_thumb")
+slot_name = "ui_badge_green_thumb"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge4" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge4Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge4Art" type="Control" parent="Grid/Badge4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_mystery_solver")
+slot_name = "ui_badge_mystery_solver"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge5" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge5Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge5Art" type="Control" parent="Grid/Badge5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_plant_power_up")
+slot_name = "ui_badge_plant_power_up"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge6" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge6Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge6Art" type="Control" parent="Grid/Badge6"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_super_grower")
+slot_name = "ui_badge_super_grower"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge7" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge7Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge7Art" type="Control" parent="Grid/Badge7"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("g_know_to_grow_star")
+slot_name = "ui_badge_know_to_grow_star"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge8" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge8Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge8Art" type="Control" parent="Grid/Badge8"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+slot_name = "badge_slot_8"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="Badge9" type="Button" parent="Grid"]
+custom_minimum_size = Vector2(300, 370)
+layout_mode = 2
+script = ExtResource("7_artbtn")
+art_path = NodePath("Badge9Art")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="Badge9Art" type="Control" parent="Grid/Badge9"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+slot_name = "badge_slot_9"
+placeholder_color = Color(0.85, 0.85, 0.8, 1)
+hide_when_empty = true
+
+[node name="TopBar" parent="." instance=ExtResource("6_topbar")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="BadgeView" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="BadgeView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Center" type="CenterContainer" parent="BadgeView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="BadgeView/Center"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 50
+
+[node name="Card" type="Control" parent="BadgeView/Center/Column"]
+custom_minimum_size = Vector2(860, 1070)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BadgeViewArt" type="Control" parent="BadgeView/Center/Column/Card"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+slot_name = "ui_badge"
+placeholder_color = Color(0.98, 0.96, 0.89, 1)
+
+[node name="TapToClose" type="Label" parent="BadgeView/Center/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tap to close"
+horizontal_alignment = 1

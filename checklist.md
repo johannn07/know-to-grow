@@ -549,10 +549,10 @@ providing the art for all of them; nothing here starts before it arrives.
   - [x] **Level 4 Stages 4-5 on a 16:9 screen:** the plank covered the flower
         and the fruit. Decided: on those two it sits above the cards
   - [x] Settings is also on the hub — decided — and not on stage select
-- [ ] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
+- [x] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
       Level 1 is cleared**: not clickable, and drawn with an indicator that
-      they are not open yet. Lessons and Garden do; the indicator is the
-      tab's icon and name in the locked rows' grey
+      they are not open yet; the indicator is the tab's icon and name in the
+      locked rows' grey
   - [x] **Lessons** opens the stage select of the level the plant is waiting on
   - [x] **Stage select swipes between levels.** Swiping left goes to the next
         level's stage select, swiping right to the previous one; arrows at the
@@ -562,8 +562,11 @@ providing the art for all of them; nothing here starts before it arrives.
         the finished game's plant with a tomato, centred on the stump, "My
         Plant" / the stage on the sign. Swipe or arrows; like Lessons it stops
         at the stage the plant has reached, and opens on it
-  - [ ] **Badges** is a 3 x 4 grid of badge displays. Nothing to show before
-        the first badge, which is why it opens with Level 1
+  - [x] **Badges** is a 3 x 3 grid — decided, down from 3 x 4 so only two
+        cells are empty. Earned badges in colour, the rest grey; tapping an
+        earned one shows it large with "Tap to close" and no banner or
+        Continue. Nothing to show before the first badge, which is why it opens
+        with Level 1
 - [x] **Settings overlay** (was "Options screen") — a card headed Settings with
       music and SFX toggles and Main Menu, opened from the top bar. Off is the
       icon drawn darker. Credits moved to the finished-game card

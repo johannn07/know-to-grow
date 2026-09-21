@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://djkfka36tty41" path="res://assets/art/ui/hub/ui_tab_lessons_locked.png" id="41_lessons_locked"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="42_artbtn"]
 [ext_resource type="Texture2D" uid="uid://cu5h54w0w7qw5" path="res://assets/art/ui/hub/ui_tab_garden_locked.png" id="43_garden_locked"]
+[ext_resource type="Texture2D" uid="uid://dj28l2yuv1e33" path="res://assets/art/ui/hub/ui_tab_badges_locked.png" id="44_badges_locked"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d56r8"]
 
@@ -74,6 +75,8 @@ lesson_scene_paths = Array[String](["res://scenes/ui/stage_select.tscn", "res://
 lessons_icon_locked = ExtResource("41_lessons_locked")
 garden_scene_path = "res://scenes/ui/garden.tscn"
 garden_icon_locked = ExtResource("43_garden_locked")
+badges_scene_path = "res://scenes/ui/badges.tscn"
+badges_icon_locked = ExtResource("44_badges_locked")
 
 [node name="Background" type="Control" parent="." unique_id=2017061660]
 clip_contents = true
@@ -453,6 +456,8 @@ offset_right = -53.0
 offset_bottom = 47.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("42_artbtn")
+art_path = NodePath("../Content")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_tab")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_tab")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_tab")
