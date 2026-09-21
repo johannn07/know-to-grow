@@ -277,7 +277,9 @@ Answered by the project owner before any Level 4 scene was built:
       `verify_level_4.gd` walks the stage chain and checks the cards stay A,
       B, C. Leads to the hub, on the menu track, until the stage select and
       `Track.LEVEL_4` exist
-- [ ] Level 4 Stages 2-5, bubble low
+- [x] **Level 4 Stages 2-5** — Stage 1's layout, bubble low. The whole level
+      now plays 1 → 5 and leads to the hub, which is where Stage 5 goes until
+      the ending exists
 - [ ] Level 4 stage select
 - [ ] `Track.LEVEL_4` and `Track.LEVEL_5`
 - [ ] Level 4 ending, the three badges, the hub's fifth plant
