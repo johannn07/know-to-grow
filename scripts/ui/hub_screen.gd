@@ -3,8 +3,13 @@ extends SubScreen
 ## The hub: the screen between the main menu and a level.
 ##
 ## It shows who is playing, what their plant has grown into so far, and the one
-## level that is next. The three tabs along the bottom are part of the drawn
-## design but have nowhere to go yet, so their buttons stay disabled.
+## level that is next.
+##
+## **The tabs along the bottom open once Level 1 is cleared**, and until then
+## are drawn in grey and do not answer — the same grey the locked stage rows use.
+## Lessons goes to the stage select of the level the plant is waiting on, which
+## can then be paged left and right. Garden and Badges have nowhere to go yet,
+## so their buttons stay disabled.
 ##
 ## The star count and the plant come from [GameStateStore]. **The plant grows one
 ## stage for each level cleared, in order**: a seed in its pot at the start,
@@ -34,6 +39,14 @@ extends SubScreen
 ## rather than repeating "Start Game", which the main menu already says.
 @export var level_labels: Array[String] = ["Level 1: Grow a Seed"]
 
+@export_group("Tabs")
+## Where Lessons leads at each stage of the plant, same order as [member
+## plant_stages]: the stage select of the level that stage is waiting on. Past
+## the last entry it keeps leading to the last one.
+@export var lesson_scene_paths: Array[String] = []
+## The Lessons icon while the tabs are still locked.
+@export var lessons_icon_locked: Texture2D
+
 @export_group("Placeholder state")
 ## Greeting above the garden. The child is never asked to type a name.
 @export var player_greeting: String = "Hello, Little Gardener!"
@@ -61,7 +74,15 @@ extends SubScreen
 ## What plays while it is up. The hub's own track comes back when it closes.
 @export var finished_music: AudioDirectorService.Track = AudioDirectorService.Track.LEVEL_5
 
+## A locked tab's name, lighter than the theme's brown the way the locked rows'
+## lettering is.
+const LOCKED_LABEL_COLOR := Color(0.55, 0.55, 0.55, 1.0)
+
 @onready var _play_button: Button = %PlayButton
+@onready var _lessons_button: Button = %LessonsButton
+
+## The Lessons icon as the scene draws it, put back once the tab opens.
+var _lessons_icon: Texture2D = null
 
 ## The finished-game card while it is up, else null.
 var _finished: GameCompleteOverlay = null
@@ -71,6 +92,10 @@ func _ready() -> void:
 	super()
 	_set_label_text("%GreetingLabel", player_greeting)
 	_play_button.pressed.connect(_on_play_pressed)
+	_lessons_button.pressed.connect(_on_lessons_pressed)
+	var icon := _tab_icon(_lessons_button)
+	if icon != null:
+		_lessons_icon = icon.texture
 	_refresh()
 	if is_fully_grown() and progress != null and not progress.finished_shown():
 		show_finished()
@@ -81,6 +106,7 @@ func _refresh() -> void:
 	_set_label_text("%StarLabel", str(progress.total_stars() if progress != null else star_count))
 	_show_plant()
 	_play_button.text = level_label()
+	_gate_tab(_lessons_button, _lessons_icon, lessons_icon_locked)
 
 
 ## True once every level that grows the plant is cleared.
@@ -187,3 +213,44 @@ func _for_stage(entries: Array[String]) -> String:
 	if entries.is_empty():
 		return ""
 	return entries[mini(growth_stage(), entries.size() - 1)]
+
+
+## True once Level 1 is cleared, which is what opens the tabs.
+func tabs_unlocked() -> bool:
+	return growth_stage() >= 1
+
+
+## Where Lessons leads now.
+func lesson_scene_path() -> String:
+	return _for_stage(lesson_scene_paths)
+
+
+## Opens a tab or locks it, and draws it to match: its own icon and the theme's
+## lettering when open, the grey drawing and grey lettering when not.
+func _gate_tab(button: Button, icon_open: Texture2D, icon_locked: Texture2D) -> void:
+	var open := tabs_unlocked()
+	button.disabled = not open
+	var icon := _tab_icon(button)
+	if icon != null and icon_open != null and icon_locked != null:
+		icon.texture = icon_open if open else icon_locked
+	var label: Label = button.get_parent().get_node_or_null("Content/TabLabel") as Label
+	if label == null:
+		return
+	if open:
+		label.remove_theme_color_override(&"font_color")
+	else:
+		label.add_theme_color_override(&"font_color", LOCKED_LABEL_COLOR)
+
+
+## A tab's icon: the ArtSlot drawn beside its hotspot. Looked up leniently, like
+## the hub's labels, since the nav is still being arranged in the editor.
+func _tab_icon(button: Button) -> ArtSlot:
+	return button.get_parent().get_node_or_null("Content/Icon") as ArtSlot
+
+
+func _on_lessons_pressed() -> void:
+	var path := lesson_scene_path()
+	if path.is_empty() or not ResourceLoader.exists(path):
+		push_warning("Hub: lesson scene is unset or missing: '%s'" % path)
+		return
+	get_tree().change_scene_to_file(path)

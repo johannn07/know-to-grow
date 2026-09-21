@@ -551,10 +551,13 @@ providing the art for all of them; nothing here starts before it arrives.
   - [x] Settings is also on the hub — decided — and not on stage select
 - [ ] **Hub tabs — Lessons, Garden, Badges.** All three stay **locked until
       Level 1 is cleared**: not clickable, and drawn with an indicator that
-      they are not open yet
-  - [ ] **Lessons** opens stage select
-  - [ ] **Stage select swipes between levels.** Swiping left goes to the next
-        level's stage select, swiping right to the previous one
+      they are not open yet. Lessons does; its indicator is its icon and name
+      in the locked rows' grey
+  - [x] **Lessons** opens the stage select of the level the plant is waiting on
+  - [x] **Stage select swipes between levels.** Swiping left goes to the next
+        level's stage select, swiping right to the previous one; arrows at the
+        screen's middle edges do the same. The strip stops at the level the
+        child has reached — a level is offered once the one before is cleared
   - [ ] **Garden** shows the hub backgrounds in order, from Level 1's seed to
         the finished game's plant with a tomato
   - [ ] **Badges** is a 3 x 4 grid of badge displays. Nothing to show before

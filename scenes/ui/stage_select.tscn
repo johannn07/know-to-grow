@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://bwjoyen5nfsw8" path="res://assets/art/ui/stage_select/ui_stage_row_4.png" id="4u_row"]
 [ext_resource type="Texture2D" uid="uid://by8uww2owljq" path="res://assets/art/ui/stage_select/ui_stage_row_4_locked.png" id="4_locked_row"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="8_artbtn"]
+[ext_resource type="Texture2D" uid="uid://ch5xg5rfu0c8a" path="res://assets/art/ui/buttons/ui_button_arrow_left.png" id="9_arrow_left"]
+[ext_resource type="Texture2D" uid="uid://clnfih443ddp7" path="res://assets/art/ui/buttons/ui_button_arrow_right.png" id="10_arrow_right"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -36,6 +38,7 @@ row_art_locked = Array[Texture2D]([ExtResource("1_locked_row"), ExtResource("2_l
 star_filled = ExtResource("6_star")
 star_empty = ExtResource("7_star_empty")
 back_scene_path = "res://scenes/ui/hub.tscn"
+next_page_path = "res://scenes/ui/stage_select_l2.tscn"
 
 [node name="Background" type="Control" parent="." unique_id=1095638558]
 clip_contents = true
@@ -63,6 +66,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0.45)
 
 [node name="Center" type="MarginContainer" parent="." unique_id=1307534507]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -70,9 +74,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 60
+theme_override_constants/margin_left = 150
 theme_override_constants/margin_top = 120
-theme_override_constants/margin_right = 60
+theme_override_constants/margin_right = 150
 theme_override_constants/margin_bottom = 120
 
 [node name="CardAspect" type="AspectRatioContainer" parent="Center" unique_id=1345664489]
@@ -443,6 +447,84 @@ anchor_bottom = 0.1963
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_artbtn")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="PreviousArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 22.0
+offset_top = -50.0
+offset_right = 132.0
+offset_bottom = 50.0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("9_arrow_left")
+slot_name = "ui_button_arrow_left"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+
+[node name="NextArt" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -50.0
+offset_right = -22.0
+offset_bottom = 50.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_slot")
+texture = ExtResource("10_arrow_right")
+slot_name = "ui_button_arrow_right"
+placeholder_color = Color(0.98, 0.78, 0.25, 1)
+
+[node name="PreviousButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_top = -80.0
+offset_right = 157.0
+offset_bottom = 80.0
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../PreviousArt")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
+
+[node name="NextButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -157.0
+offset_top = -80.0
+offset_right = 3.0
+offset_bottom = 80.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("8_artbtn")
+art_path = NodePath("../NextArt")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")

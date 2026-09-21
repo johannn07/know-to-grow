@@ -359,6 +359,12 @@ not a blank one.
   star slots. Check it in a real render with all stars filled, not headless.
 - Level 1's unlocked rows are the drawn `ui_stage_row_1..4.png`. The locked rows
   still come from `tools/build_stage_rows.py`, which now writes only those four.
+- **The four stage selects are pages of one strip.** A sideways swipe, or the
+  arrows at the screen's middle edges, slides to the level either side, set by
+  `previous_page_path` / `next_page_path` in each scene. The next level is only
+  offered once this one is cleared, so a child never pages onto a level they
+  have not reached. The card's side margins are 150 px to leave the arrows a
+  gutter; a narrower card puts Level 2's rows under the 160 px floor.
 - Level 2's is `stage_select_l2.tscn`. Its card paints Situations 2–5 locked,
   so `row_art_locked` is empty and a locked row shows the card's painting. A
   reached row stays closed until its stage scene exists.

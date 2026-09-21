@@ -155,12 +155,14 @@ func _initialize() -> void:
 			_expect(
 				play.size.y >= 160.0, "hub %%PlayButton is >= 160 px tall (is %d)" % play.size.y
 			)
-			# The three tabs are drawn but have nowhere to go yet. They must stay
-			# disabled: a tab that looks live and does nothing teaches a child
-			# that tapping does not work.
+			# Garden and Badges are drawn but have nowhere to go yet. They must
+			# stay disabled: a tab that looks live and does nothing teaches a
+			# child that tapping does not work. Lessons depends on progress, so
+			# it is checked in _check_lessons_and_pages.
 			for tab_name in ["%LessonsButton", "%GardenButton", "%BadgesButton"]:
 				var tab: Button = screen.get_node(tab_name)
-				_expect(tab.disabled, "hub %s is disabled until it has a destination" % tab_name)
+				if tab_name != "%LessonsButton":
+					_expect(tab.disabled, "hub %s is disabled until it has a destination" % tab_name)
 				_expect(
 					tab.size.x >= 160.0 and tab.size.y >= 160.0,
 					"hub %s clears 160 px (is %dx%d)" % [tab_name, tab.size.x, tab.size.y]
@@ -290,6 +292,7 @@ func _initialize() -> void:
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l3.tscn", &"level_3")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l4.tscn", &"level_4")
+		await _check_lessons_and_pages(state)
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
@@ -542,6 +545,131 @@ func _check_progress_reaches_the_rows(
 		)
 	screen.queue_free()
 	await process_frame
+
+
+## Lessons is locked, and drawn grey, until Level 1 is cleared, then leads to
+## the stage select of the level the plant is waiting on. The four stage selects
+## are pages of one strip: each links to its neighbours both ways, offers the
+## next only once its own level is cleared, and turns on a sideways swipe.
+func _check_lessons_and_pages(state: GameStateStore) -> void:
+	var pages: Array[String] = [
+		"res://scenes/ui/stage_select.tscn",
+		"res://scenes/ui/stage_select_l2.tscn",
+		"res://scenes/ui/stage_select_l3.tscn",
+		"res://scenes/ui/stage_select_l4.tscn",
+	]
+
+	# --- the hub's Lessons tab ---
+	state.reset()
+	var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
+	if hub != null:
+		var lessons: Button = hub.get_node("%LessonsButton")
+		var icon: ArtSlot = lessons.get_parent().get_node("Content/Icon")
+		var label: Label = lessons.get_parent().get_node("Content/TabLabel")
+		_expect(lessons.disabled, "lessons: locked before Level 1 is cleared")
+		_expect(
+			hub.lessons_icon_locked != null and icon.texture == hub.lessons_icon_locked,
+			"lessons: drawn grey while locked"
+		)
+		_expect(label.has_theme_color_override(&"font_color"), "lessons: its name is grey while locked")
+		_expect(lessons.pressed.get_connections().size() == 1, "lessons: %LessonsButton is connected")
+		_expect(
+			hub.lesson_scene_paths.size() == hub.plant_stages.size(),
+			"lessons: a destination for every plant stage"
+		)
+		for i in hub.lesson_scene_paths.size():
+			_expect_scene(hub.lesson_scene_paths[i], "hub lesson_scene_paths[%d]" % i)
+		hub.queue_free()
+		await process_frame
+	for stage_number in range(1, 5):
+		state.record_stage_cleared(&"level_1", stage_number, 0)
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	if hub != null:
+		var lessons: Button = hub.get_node("%LessonsButton")
+		var icon: ArtSlot = lessons.get_parent().get_node("Content/Icon")
+		var label: Label = lessons.get_parent().get_node("Content/TabLabel")
+		_expect(not lessons.disabled, "lessons: open once Level 1 is cleared")
+		_expect(
+			icon.texture != null and icon.texture != hub.lessons_icon_locked,
+			"lessons: drawn in colour once open"
+		)
+		_expect(not label.has_theme_color_override(&"font_color"), "lessons: its name is brown once open")
+		_expect(hub.lesson_scene_path() == pages[1], "lessons: after Level 1 it opens Level 2's stages")
+		hub.queue_free()
+		await process_frame
+
+	# --- the strip is linked both ways; Level 1 cleared, so it is Levels 1-2 ---
+	for i in pages.size():
+		var select: StageSelect = await _instantiate(pages[i]) as StageSelect
+		if select == null:
+			continue
+		var label := pages[i].get_file()
+		var want_previous := pages[i - 1] if i > 0 else ""
+		var want_next := pages[i + 1] if i + 1 < pages.size() else ""
+		_expect(select.previous_page_path == want_previous, "%s: left goes to '%s'" % [label, want_previous])
+		_expect(select.next_page_path == want_next, "%s: right goes to '%s'" % [label, want_next])
+		var card: Control = select.get_node("%CardArt")
+		for side in ["Previous", "Next"]:
+			var button: Button = select.get_node("%" + side + "Button")
+			var art: ArtSlot = select.get_node("%" + side + "Art") as ArtSlot
+			_expect(button.pressed.get_connections().size() == 1, "%s %sButton is connected" % [label, side])
+			_expect(
+				button.size.x >= 160.0 and button.size.y >= 160.0,
+				"%s %sButton clears 160 px (is %dx%d)" % [label, side, button.size.x, button.size.y]
+			)
+			_expect(art != null and art.texture != null, "%s %sArt has its arrow" % [label, side])
+			# The arrows live in the gutters, so they cannot hide a row or the X.
+			if art != null:
+				_expect(
+					not art.get_global_rect().intersects(card.get_global_rect()),
+					"%s %sArt stays clear of the card" % [label, side]
+				)
+		var want_left := i > 0
+		var want_right := i == 0
+		_expect(
+			(select.get_node("%PreviousButton") as Button).visible == want_left,
+			"%s: left arrow %s" % [label, "shown" if want_left else "hidden"]
+		)
+		_expect(
+			(select.get_node("%NextButton") as Button).visible == want_right
+				and (select.get_node("%NextArt") as CanvasItem).visible == want_right,
+			"%s: right arrow %s with Level 1 cleared" % [label, "shown" if want_right else "hidden"]
+		)
+		select.queue_free()
+		await process_frame
+
+	# --- a swipe turns the page, and the next one slides in ---
+	_expect(StageSelect.swipe_direction(Vector2(-300, 20)) == 1, "swipe: left moves on a level")
+	_expect(StageSelect.swipe_direction(Vector2(300, -20)) == -1, "swipe: right goes back one")
+	_expect(StageSelect.swipe_direction(Vector2(-60, 0)) == 0, "swipe: a short drag is a tap")
+	_expect(StageSelect.swipe_direction(Vector2(-200, 400)) == 0, "swipe: a steep drag is not a swipe")
+	var first: StageSelect = await _instantiate(pages[0]) as StageSelect
+	if first != null:
+		var press := InputEventMouseButton.new()
+		press.button_index = MOUSE_BUTTON_LEFT
+		press.pressed = true
+		press.position = Vector2(800, 900)
+		first._input(press)
+		var lift := press.duplicate() as InputEventMouseButton
+		lift.pressed = false
+		lift.position = Vector2(400, 920)
+		first._input(lift)
+		_expect(first.is_paging(), "swipe: dragging Level 1's card left turns the page")
+		# Freed before its tween ends, so the scene never actually changes here.
+		first.queue_free()
+		await process_frame
+	var second: StageSelect = await _instantiate(pages[1]) as StageSelect
+	if second != null:
+		var center: Control = second.get_node("%Center")
+		_expect(center.offset_left > 0.0, "swipe: Level 2's card arrives from the right")
+		await create_timer(StageSelect.PAGE_SECONDS + 0.2).timeout
+		_expect(is_zero_approx(center.offset_left), "swipe: and comes to rest in place")
+		# Level 2 is not cleared, so there is no page on to Level 3.
+		second.turn_page(1)
+		_expect(not second.is_paging(), "swipe: no page past the level the child has reached")
+		second.queue_free()
+		await process_frame
+	state.reset()
 
 
 ## The hub's plant is how a finished level shows: seed until Level 1 is cleared,

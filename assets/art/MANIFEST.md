@@ -110,6 +110,7 @@ All seven are in the repo and wired into `scenes/ui/hub.tscn`.
 | `ui_avatar.png` | 260 x 249 | 80 KB | `GreetingPill/Avatar` |
 | `ui_star.png` | 180 x 183 | 36 KB | `StarPill/Star` |
 | `ui_tab_lessons.png` | 260 x 203 | 68 KB | `BottomNav` |
+| `ui_tab_lessons_locked.png` | 260 x 203 | 39 KB | `BottomNav`, set by `hub_screen.gd` until Level 1 is cleared: `ui_tab_lessons.png` in greyscale, lifted to the locked rows' grey |
 | `ui_tab_garden.png` | 260 x 269 | 80 KB | `BottomNav` |
 | `ui_tab_badges.png` | 260 x 275 | 72 KB | `BottomNav` |
 | `bg_sign.png` | 1086 x 1448 | 1.0 MB | `BgSign` |
@@ -459,6 +460,18 @@ taken to 430 to match the others.
 
 The row's two sit in 160 x 160 hotspots 16 px in from the top and side edges.
 `ui_button_nav_back.png` is not `ui_button_back.png`, which is How To Play's X.
+
+## Stage select arrows — `ui/buttons/`
+
+Page to the previous or next level's stage select. Cut from one delivered
+1774 x 887 sheet, trimmed to the arrow and taken to 256 wide. Each sits
+centred on its edge of the screen in a 160 x 160 hotspot, in the gutter the
+card's 150 px side margins leave, so it never covers the card.
+
+| File | Size | Weight | Slot |
+|---|---|---|---|
+| `ui_button_arrow_left.png` | 256 x 230 | 49 KB | `%PreviousArt`, 110 x 100, 22 px in from the left, centred |
+| `ui_button_arrow_right.png` | 256 x 231 | 49 KB | `%NextArt`, 110 x 100, 22 px in from the right, centred |
 
 A switched-off toggle is its own art drawn at 0.45 brightness — decided, no
 separate off-state drawing.
