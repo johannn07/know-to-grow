@@ -7,6 +7,11 @@ extends Control
 ## level. The two toggles talk to the [AudioDirectorService] directly, which
 ## saves the choice, so nothing about them passes through the screen.
 ##
+## Credits sits above Main Menu, but only once the game has been finished
+## through to the end — before that the button is hidden and Main Menu takes the
+## space, so the card looks no different to a child still playing. The finished
+## card offers Credits too; this is the way back to them afterwards.
+##
 ## It closes three ways, because a five-year-old will try all of them: the X on
 ## the card's corner, a tap on the dimmed garden around it, and Android's
 ## back gesture — [SubScreen] asks [method is_open] before treating that gesture
@@ -26,6 +31,8 @@ const OFF_TINT := Color(0.45, 0.45, 0.45, 1.0)
 @onready var _music_button: ArtButton = %MusicButton
 @onready var _sfx_button: ArtButton = %SfxButton
 @onready var _main_menu_button: Button = %MainMenuButton
+@onready var _credits_button: Button = %CreditsButton
+@onready var _credits: CreditsOverlay = %Credits
 @onready var _music_art: ArtSlot = %MusicArt
 @onready var _sfx_art: ArtSlot = %SfxArt
 
@@ -33,6 +40,17 @@ const OFF_TINT := Color(0.45, 0.45, 0.45, 1.0)
 @onready var _audio: AudioDirectorService = (
 	get_node_or_null("/root/AudioDirector") as AudioDirectorService
 )
+
+## Whether the game has been finished, which is what Credits waits on. Fetched
+## for the same reason as [member _audio].
+@onready var _progress: GameStateStore = get_node_or_null("/root/GameState") as GameStateStore
+
+## Where Main Menu sits with Credits above it, taken from the scene so the two
+## slots stay a layout decision rather than a number typed in here.
+var _menu_slot := Vector2.ZERO
+## Where Main Menu sits on its own: centred over both slots, so a card without
+## Credits is not bottom-heavy.
+var _menu_slot_alone := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -47,6 +65,11 @@ func _ready() -> void:
 	_music_button.pressed.connect(_on_music_pressed)
 	_sfx_button.pressed.connect(_on_sfx_pressed)
 	_main_menu_button.pressed.connect(_on_main_menu_pressed)
+	_credits_button.pressed.connect(_credits.open)
+	_menu_slot = Vector2(_main_menu_button.offset_top, _main_menu_button.offset_bottom)
+	var height := _menu_slot.y - _menu_slot.x
+	var middle := (_credits_button.offset_top + _menu_slot.y) * 0.5
+	_menu_slot_alone = Vector2(middle - height * 0.5, middle + height * 0.5)
 	_dim.gui_input.connect(_on_dim_input)
 	if _audio != null:
 		_audio.sound_changed.connect(_refresh)
@@ -60,9 +83,15 @@ func open() -> void:
 
 
 func close() -> void:
+	# With the credits rolling, closing means closing those: the card is behind
+	# them, and Android's back should peel one layer at a time.
+	if _credits.is_open():
+		_credits.close()
+		return
 	# A press cut short by the card vanishing must not leave its art dark.
 	for button: ArtButton in [_close_button, _music_button, _sfx_button]:
 		button.clear_tint()
+	_credits.close()
 	hide()
 
 
@@ -104,6 +133,11 @@ func _on_main_menu_pressed() -> void:
 
 
 func _refresh() -> void:
+	var finished := _progress != null and _progress.finished_shown()
+	_credits_button.visible = finished
+	var slot := _menu_slot if finished else _menu_slot_alone
+	_main_menu_button.offset_top = slot.x
+	_main_menu_button.offset_bottom = slot.y
 	var music_on := _audio == null or _audio.is_music_on()
 	var sfx_on := _audio == null or _audio.is_sfx_on()
 	# self_modulate, because [ArtButton] owns `modulate` for its press tint.

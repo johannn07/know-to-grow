@@ -14,11 +14,16 @@ extends SceneTree
 ## Android's back closes it rather than leaving the stage, and that music and
 ## effects flip the audio buses, save, and darken their own art.
 ##
+## It also checks that Credits only appears on the card once the game has been
+## finished, which means marking it finished — so this writes
+## `user://progress.cfg` as well, and puts that back too.
+##
 ## Toggling writes `user://settings.cfg`. Whatever was there before is put back
 ## at the end, so a run does not change the sound settings on this machine.
 
 const TOUCH := 160.0
 const SETTINGS := "user://settings.cfg"
+const PROGRESS := "user://progress.cfg"
 
 ## Where back leads from each level's stages.
 const SELECT := {
@@ -34,15 +39,18 @@ var _failures := 0
 
 func _initialize() -> void:
 	await process_frame
-	var saved: Variant = _read_settings()
+	var saved: Variant = _read_saved(SETTINGS)
+	var saved_progress: Variant = _read_saved(PROGRESS)
 
 	for level: int in STAGES:
 		for stage_number in range(1, STAGES[level] + 1):
 			await _check_stage(level, stage_number)
 	await _check_toggles()
 	await _check_hub()
+	await _check_credits()
 
-	_restore_settings(saved)
+	_restore_saved(SETTINGS, saved)
+	_restore_saved(PROGRESS, saved_progress)
 	print("%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(_failures)
 
@@ -265,21 +273,83 @@ func _check_hub() -> void:
 	await process_frame
 
 
+## Credits on the Settings card: hidden until the game has been finished, and
+## once it is there, it rolls over the card and hands the card back afterwards.
+func _check_credits() -> void:
+	print("--- credits on the settings card ---")
+	var progress := root.get_node_or_null("/root/GameState") as GameStateStore
+	_expect(progress != null, "GameState is loaded")
+	if progress == null:
+		return
+	progress.reset()
+
+	var stage: StageScreen = (load("res://scenes/levels/level_2/stage_1.tscn") as PackedScene).instantiate()
+	root.add_child(stage)
+	await process_frame
+	await process_frame
+	var bar: TopBar = stage.get_node("%TopBar")
+	var card: SettingsOverlay = bar.get_node("%Settings")
+	var credits_button: Button = card.get_node("%CreditsButton")
+	var menu_button: Button = card.get_node("%MainMenuButton")
+	var credits: CreditsOverlay = card.get_node("%Credits")
+
+	bar.open_settings()
+	await process_frame
+	_expect(not credits_button.visible, "unfinished game: no Credits on the card")
+	var alone := menu_button.get_global_rect()
+	card.close()
+
+	progress.mark_finished_shown()
+	bar.open_settings()
+	await process_frame
+	_expect(credits_button.visible, "finished game: Credits is on the card")
+	var rect := credits_button.get_global_rect()
+	_expect(
+		rect.size.x >= TOUCH and rect.size.y >= TOUCH,
+		"Credits clears 160 px (is %dx%d)" % [rect.size.x, rect.size.y]
+	)
+	var card_rect := (card.get_node("%CardArt") as Control).get_global_rect()
+	_expect(card_rect.encloses(rect), "Credits sits on the card")
+	var moved := menu_button.get_global_rect()
+	_expect(card_rect.encloses(moved), "Main Menu still sits on the card")
+	_expect(rect.end.y <= moved.position.y, "Credits sits above Main Menu")
+	_expect(
+		not is_equal_approx(alone.position.y, moved.position.y),
+		"Main Menu moves down to make room (%d -> %d)" % [alone.position.y, moved.position.y]
+	)
+
+	credits_button.pressed.emit()
+	await process_frame
+	_expect(credits.is_open(), "Credits opens the roll")
+	stage.notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+	await process_frame
+	_expect(not credits.is_open(), "Android back closes the roll")
+	_expect(bar.settings_open(), "and leaves the settings card up")
+	stage.notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+	await process_frame
+	_expect(not bar.settings_open(), "a second back closes the card")
+	_expect(stage.is_inside_tree(), "and stays on the stage")
+
+	progress.reset()
+	stage.queue_free()
+	await process_frame
+
+
 func get_current_scene_path() -> String:
 	return current_scene.scene_file_path if current_scene != null else ""
 
 
-func _read_settings() -> Variant:
-	if not FileAccess.file_exists(SETTINGS):
+func _read_saved(path: String) -> Variant:
+	if not FileAccess.file_exists(path):
 		return null
-	return FileAccess.get_file_as_string(SETTINGS)
+	return FileAccess.get_file_as_string(path)
 
 
-func _restore_settings(saved: Variant) -> void:
+func _restore_saved(path: String, saved: Variant) -> void:
 	if saved == null:
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(SETTINGS))
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	else:
-		var file := FileAccess.open(SETTINGS, FileAccess.WRITE)
+		var file := FileAccess.open(path, FileAccess.WRITE)
 		file.store_string(saved)
 		file.close()
 	# The running AudioDirector still holds the test's last choice; that dies

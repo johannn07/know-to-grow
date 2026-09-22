@@ -1,4 +1,4 @@
-[gd_scene format=3]
+﻿[gd_scene format=3]
 
 [ext_resource type="Script" uid="uid://cgni7gd5untfv" path="res://scripts/ui/settings_overlay.gd" id="1_settings"]
 [ext_resource type="Script" uid="uid://b60e68y8t08n7" path="res://scripts/ui/art_slot.gd" id="2_slot"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://37cnsxcc3k0v" path="res://assets/art/ui/buttons/ui_button_back.png" id="6_close"]
 [ext_resource type="Texture2D" uid="uid://buhobajchs3d5" path="res://assets/art/ui/buttons/ui_button_music.png" id="7_music"]
 [ext_resource type="Texture2D" uid="uid://ddvtv5lccvt4c" path="res://assets/art/ui/buttons/ui_button_sfx.png" id="8_sfx"]
+[ext_resource type="PackedScene" path="res://scenes/components/credits_overlay.tscn" id="9_credits"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_invisible"]
 
@@ -134,9 +135,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -290.0
-offset_top = -200.0
+offset_top = -270.0
 offset_right = -50.0
-offset_bottom = 48.0
+offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -154,9 +155,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -290.0
-offset_top = -200.0
+offset_top = -270.0
 offset_right = -50.0
-offset_bottom = 48.0
+offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_artbtn")
@@ -176,9 +177,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 50.0
-offset_top = -200.0
+offset_top = -270.0
 offset_right = 290.0
-offset_bottom = 48.0
+offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
@@ -196,9 +197,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 50.0
-offset_top = -200.0
+offset_top = -270.0
 offset_right = 290.0
-offset_bottom = 48.0
+offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_artbtn")
@@ -209,6 +210,24 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_invisible")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_invisible")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_invisible")
 
+[node name="CreditsButton" type="Button" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = 20.0
+offset_right = 330.0
+offset_bottom = 190.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"PrimaryButton"
+text = "Credits"
+
 [node name="MainMenuButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
@@ -218,10 +237,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -330.0
-offset_top = 150.0
+offset_top = 210.0
 offset_right = 330.0
-offset_bottom = 340.0
+offset_bottom = 380.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"PrimaryButton"
 text = "Main Menu"
+
+[node name="Credits" parent="." instance=ExtResource("9_credits")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
