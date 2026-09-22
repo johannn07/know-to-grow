@@ -294,6 +294,7 @@ func _show_prompt() -> void:
 	var challenge: ChallengeData = _challenge("bubble")
 	if challenge != null:
 		bubble.text = challenge.prompt_transcript
+	bubble.pulse()
 
 
 ## Writes the plaque and banner onto a blank header sign. A stage without a

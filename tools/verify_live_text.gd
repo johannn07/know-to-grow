@@ -190,6 +190,15 @@ func _check_stage_fills_them(bubble_scene: PackedScene, header_scene: PackedScen
 		"stage fills the plaque: \"%s\"" % header.label_text)
 	_expect(header.title_text == challenge.header_title_transcript,
 		"stage fills the banner: \"%s\"" % header.title_text)
+
+	# The bubble pops in when the stage opens, then comes to rest untouched.
+	await process_frame
+	_expect(bubble.is_pulsing(), "the bubble pulses as the stage opens")
+	await create_timer(2.6).timeout
+	_expect(not bubble.is_pulsing() and bubble.scale.is_equal_approx(Vector2.ONE)
+			and bubble.modulate.is_equal_approx(Color.WHITE),
+		"and comes to rest at full size and colour")
+	_expect(bubble.text_fits(), "the prompt still fits once it has settled")
 	stage.queue_free()
 	await process_frame
 
