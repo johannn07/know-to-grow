@@ -63,6 +63,41 @@ texture_margin_right = 115.0
 texture_margin_bottom = 85.0
 modulate_color = Color(0.82, 0.82, 0.82, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_compact_normal"]
+content_margin_left = 16.0
+content_margin_top = 22.0
+content_margin_right = 16.0
+content_margin_bottom = 26.0
+bg_color = Color(0.98, 0.96, 0.89, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 9
+border_color = Color(0.44, 0.31, 0.19, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0, 0, 0, 0.16)
+shadow_size = 6
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_compact_pressed"]
+content_margin_left = 16.0
+content_margin_top = 26.0
+content_margin_right = 16.0
+content_margin_bottom = 22.0
+bg_color = Color(0.91, 0.88, 0.78, 1)
+border_width_left = 5
+border_width_top = 9
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.44, 0.31, 0.19, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
 [resource]
 default_font = ExtResource("2_font")
 default_font_size = 44
@@ -80,6 +115,11 @@ Button/styles/focus = SubResource("StyleBoxEmpty_focus")
 Button/styles/hover = SubResource("StyleBoxFlat_secondary_normal")
 Button/styles/normal = SubResource("StyleBoxFlat_secondary_normal")
 Button/styles/pressed = SubResource("StyleBoxFlat_secondary_pressed")
+CompactButton/base_type = &"Button"
+CompactButton/styles/disabled = SubResource("StyleBoxFlat_compact_normal")
+CompactButton/styles/hover = SubResource("StyleBoxFlat_compact_normal")
+CompactButton/styles/normal = SubResource("StyleBoxFlat_compact_normal")
+CompactButton/styles/pressed = SubResource("StyleBoxFlat_compact_pressed")
 HeaderLabel/base_type = &"Label"
 HeaderLabel/colors/font_color = Color(0.97, 0.97, 0.97, 1)
 HeaderLabel/colors/font_outline_color = Color(0.25, 0.06, 0, 1)

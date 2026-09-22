@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://b14n36e3hjxbl" path="res://assets/art/characters/mascot_flower.png" id="8_flower"]
 [ext_resource type="Texture2D" uid="uid://cjtdbenvy7wa8" path="res://assets/art/effects/fx_leaves.png" id="9_leaves"]
 [ext_resource type="Script" uid="uid://cyclelgt5qlyo" path="res://scripts/ui/hold_button.gd" id="10_hold"]
+[ext_resource type="PackedScene" path="res://scenes/components/exit_overlay.tscn" id="11_exit"]
 
 [node name="MainMenu" type="Control" unique_id=211196414]
 layout_mode = 3
@@ -182,19 +183,21 @@ horizontal_alignment = 1
 
 [node name="SmallButtons" type="HBoxContainer" parent="Foreground/Column"]
 layout_mode = 2
-theme_override_constants/separation = 40
+theme_override_constants/separation = 24
 alignment = 1
 
 [node name="HowToPlayButton" type="Button" parent="Foreground/Column/SmallButtons" unique_id=1417964607]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(430, 160)
+custom_minimum_size = Vector2(368, 160)
 layout_mode = 2
+theme_type_variation = &"CompactButton"
 text = "HOW TO PLAY"
 
 [node name="ExitButton" type="Button" parent="Foreground/Column/SmallButtons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(430, 160)
+custom_minimum_size = Vector2(368, 160)
 layout_mode = 2
+theme_type_variation = &"CompactButton"
 text = "EXIT"
 
 [node name="BottomSpacer" type="Control" parent="Foreground/Column" unique_id=1881620067]
@@ -202,3 +205,7 @@ layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.4
 mouse_filter = 2
+
+[node name="ExitOverlay" parent="." instance=ExtResource("11_exit")]
+unique_name_in_owner = true
+layout_mode = 1

@@ -75,6 +75,15 @@ All seven are in the repo and wired into `scenes/ui/main_menu.tscn`.
 | `fx_leaves.png` | 1600 x 2166 | 336 KB |
 | `ui_button_primary.png` | 576 x 210 | 11 KB |
 
+### Exit card — `ui/screens/`
+
+`ui_exit_card.png`, **1136 x 1385**, 1.4 MB, supplied by the owner as a webp and
+saved as PNG. "Are you sure you want to exit?" is drawn in; its lower half is
+blank cream. `scenes/components/exit_overlay.tscn` draws it at **1000 x 1219**,
+centred, and lays the theme's own plates on the blank: Yes (cream `Button`) and
+No (green `PrimaryButton`), 300 x 170 each, 195 px below the card's centre.
+Moving the buttons means checking them against the blank in a real render.
+
 ### App icon and boot splash — `branding/`
 
 Made from `logo.png`, not delivered separately. The icon is the logo's

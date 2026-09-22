@@ -10,8 +10,9 @@ extends Control
 ## save there is nothing to lose and it is a plain tap. Its hint line shows only
 ## while the hold is needed.
 ##
-## Exit closes the app, the same as Android's back gesture here. It is hidden
-## on the web build, where a page cannot close its own tab and the button would
+## Exit, and Android's back gesture here, open the [ExitOverlay] to ask first;
+## only its Yes closes the app. Back again while it is up closes the card. Exit
+## is hidden on the web build, where a page cannot close its own tab and the button would
 ## do nothing. Progress is saved as it is earned, so leaving loses nothing.
 ##
 ## Destinations are exported rather than hardcoded so the flow can be re-pointed
@@ -27,6 +28,7 @@ extends Control
 @onready var _hold_hint: Label = %HoldHint
 @onready var _how_to_play_button: Button = %HowToPlayButton
 @onready var _exit_button: Button = %ExitButton
+@onready var _exit_overlay: ExitOverlay = %ExitOverlay
 
 ## Sound. This screen is not a [SubScreen] — there is nowhere behind the title
 ## to go back to — so it fetches the director and starts the music itself.
@@ -42,7 +44,8 @@ func _ready() -> void:
 	_continue_button.pressed.connect(_on_continue_pressed)
 	_new_game_button.held.connect(_on_new_game_held)
 	_how_to_play_button.pressed.connect(_on_how_to_play_pressed)
-	_exit_button.pressed.connect(_on_exit_pressed)
+	_exit_button.pressed.connect(_exit_overlay.open)
+	_exit_overlay.exit_confirmed.connect(_on_exit_confirmed)
 	_exit_button.visible = not OS.has_feature("web")
 	_show_save_state()
 	if _audio != null:
@@ -58,9 +61,13 @@ func _ready() -> void:
 
 
 func _notification(what: int) -> void:
-	# Android's system back gesture on the title screen means "leave the game".
+	# Android's system back gesture on the title screen means "leave the game",
+	# asked the same way the Exit button asks.
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		get_tree().quit()
+		if _exit_overlay.is_open():
+			_exit_overlay.close()
+		else:
+			_exit_overlay.open()
 
 
 ## Whether there is a save to continue from, and so to guard.
@@ -90,7 +97,7 @@ func _on_how_to_play_pressed() -> void:
 	_change_scene(how_to_play_scene_path)
 
 
-func _on_exit_pressed() -> void:
+func _on_exit_confirmed() -> void:
 	get_tree().quit()
 
 

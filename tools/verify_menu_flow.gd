@@ -50,6 +50,38 @@ func _initialize() -> void:
 		_expect(exit_button.pressed.get_connections().size() == 1, "ExitButton is connected")
 		_expect(exit_button.size.y >= 160.0,
 			"ExitButton is >= 160 px tall (is %d)" % exit_button.size.y)
+		# The small row sits under New Game and must not stick out past it.
+		var row_width: float = exit_button.get_global_rect().end.x - how.get_global_rect().position.x
+		_expect(row_width <= new_game.size.x,
+			"How To Play + Exit (%d) are no wider than New Game (%d)" % [row_width, new_game.size.x])
+
+		# Exit asks first. The menu's own handler quits, so it is taken off
+		# before Yes is pressed here.
+		var overlay: ExitOverlay = menu.get_node("%ExitOverlay")
+		var yes: Button = overlay.get_node("%YesButton")
+		var no: Button = overlay.get_node("%NoButton")
+		_expect(not overlay.is_open(), "exit card is closed at first")
+		exit_button.pressed.emit()
+		_expect(overlay.is_open(), "Exit opens the exit card rather than quitting")
+		await process_frame
+		_expect(yes.size.y >= 160.0 and yes.size.x >= 160.0,
+			"exit card's Yes clears 160 px (is %dx%d)" % [yes.size.x, yes.size.y])
+		_expect(no.size.y >= 160.0 and no.size.x >= 160.0,
+			"exit card's No clears 160 px (is %dx%d)" % [no.size.x, no.size.y])
+		no.pressed.emit()
+		_expect(not overlay.is_open(), "No closes the exit card")
+		menu.notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+		_expect(overlay.is_open(), "Android back on the title asks before leaving")
+		menu.notification(Node.NOTIFICATION_WM_GO_BACK_REQUEST)
+		_expect(not overlay.is_open(), "Android back again closes the exit card")
+		for connection: Dictionary in overlay.exit_confirmed.get_connections():
+			overlay.exit_confirmed.disconnect(connection["callable"])
+		var confirmed: Array[bool] = [false]
+		overlay.exit_confirmed.connect(func() -> void: confirmed[0] = true)
+		overlay.open()
+		yes.pressed.emit()
+		_expect(confirmed[0], "Yes confirms the exit")
+		overlay.close()
 
 		# An ArtSlot must never swallow a tap meant for a button underneath it.
 		for slot in _find_art_slots(menu):
