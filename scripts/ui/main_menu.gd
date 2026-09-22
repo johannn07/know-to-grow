@@ -1,6 +1,6 @@
 extends Control
 
-## Title screen: Continue, New Game and How To Play, all sized for a
+## Title screen: Continue, New Game, How To Play and Exit, all sized for a
 ## five-year-old's thumb.
 ##
 ## Continue appears only when there is a save — any stage cleared — and picks up
@@ -9,6 +9,10 @@ extends Control
 ## decided by the project owner, so one stray tap cannot wipe a garden; with no
 ## save there is nothing to lose and it is a plain tap. Its hint line shows only
 ## while the hold is needed.
+##
+## Exit closes the app, the same as Android's back gesture here. It is hidden
+## on the web build, where a page cannot close its own tab and the button would
+## do nothing. Progress is saved as it is earned, so leaving loses nothing.
 ##
 ## Destinations are exported rather than hardcoded so the flow can be re-pointed
 ## from the Inspector as real screens replace the stubs.
@@ -22,6 +26,7 @@ extends Control
 @onready var _new_game_button: HoldButton = %NewGameButton
 @onready var _hold_hint: Label = %HoldHint
 @onready var _how_to_play_button: Button = %HowToPlayButton
+@onready var _exit_button: Button = %ExitButton
 
 ## Sound. This screen is not a [SubScreen] — there is nowhere behind the title
 ## to go back to — so it fetches the director and starts the music itself.
@@ -37,6 +42,8 @@ func _ready() -> void:
 	_continue_button.pressed.connect(_on_continue_pressed)
 	_new_game_button.held.connect(_on_new_game_held)
 	_how_to_play_button.pressed.connect(_on_how_to_play_pressed)
+	_exit_button.pressed.connect(_on_exit_pressed)
+	_exit_button.visible = not OS.has_feature("web")
 	_show_save_state()
 	if _audio != null:
 		_audio.play_music(AudioDirectorService.Track.MENU)
@@ -81,6 +88,10 @@ func _on_new_game_held() -> void:
 
 func _on_how_to_play_pressed() -> void:
 	_change_scene(how_to_play_scene_path)
+
+
+func _on_exit_pressed() -> void:
+	get_tree().quit()
 
 
 func _change_scene(path: String) -> void:

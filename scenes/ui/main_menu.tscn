@@ -180,12 +180,22 @@ layout_mode = 2
 text = "Press and hold to start a New Game"
 horizontal_alignment = 1
 
-[node name="HowToPlayButton" type="Button" parent="Foreground/Column" unique_id=1417964607]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(470, 160)
+[node name="SmallButtons" type="HBoxContainer" parent="Foreground/Column"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="HowToPlayButton" type="Button" parent="Foreground/Column/SmallButtons" unique_id=1417964607]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(430, 160)
+layout_mode = 2
 text = "HOW TO PLAY"
+
+[node name="ExitButton" type="Button" parent="Foreground/Column/SmallButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(430, 160)
+layout_mode = 2
+text = "EXIT"
 
 [node name="BottomSpacer" type="Control" parent="Foreground/Column" unique_id=1881620067]
 layout_mode = 2

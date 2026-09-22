@@ -46,6 +46,11 @@ func _initialize() -> void:
 		var how: Button = menu.get_node("%HowToPlayButton")
 		_expect(how.size.y >= 160.0, "HowToPlayButton is >= 160 px tall (is %d)" % how.size.y)
 
+		var exit_button: Button = menu.get_node("%ExitButton")
+		_expect(exit_button.pressed.get_connections().size() == 1, "ExitButton is connected")
+		_expect(exit_button.size.y >= 160.0,
+			"ExitButton is >= 160 px tall (is %d)" % exit_button.size.y)
+
 		# An ArtSlot must never swallow a tap meant for a button underneath it.
 		for slot in _find_art_slots(menu):
 			_expect(
