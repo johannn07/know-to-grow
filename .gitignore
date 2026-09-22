@@ -19,3 +19,8 @@ Thumbs.db
 *.apk
 *.aab
 *.keystore
+
+# Exported builds (web zip, APK) — made from the editor, never committed.
+# builds/.gdignore stays, so Godot never imports an exported build back in.
+builds/*
+!builds/.gdignore
