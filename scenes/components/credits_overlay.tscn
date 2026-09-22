@@ -44,7 +44,85 @@ text = "Know To Grow"
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[node name="Subtitle" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Improving Grade 3 Learners’ Understanding of Plant Parts and Their Functions Through an Interactive Game-Based Learning Application"
+horizontal_alignment = 1
+autowrap_mode = 3
+
 [node name="Gap1" type="Control" parent="Lines"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MembersHeading" type="Label" parent="Lines"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Members"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member1" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Zamantha Faith P. Aro"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member2" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Rejilyn Cairo"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member3" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Athia Zheen Camingawan"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member4" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Ma. Cristina Israel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member5" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Mabel Kate Marinas"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member6" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Daniella Cassandra P. Nabua"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member7" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Chelsie Shane Ngo"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member8" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Hazel Joyce J. Presbitero"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member9" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Leslie Tadlip"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Member10" type="Label" parent="Lines"]
+layout_mode = 2
+text = "Rhean Yanesh Togle"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="GapMembers" type="Control" parent="Lines"]
 custom_minimum_size = Vector2(0, 70)
 layout_mode = 2
 mouse_filter = 2
