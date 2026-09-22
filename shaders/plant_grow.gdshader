@@ -3,7 +3,7 @@
 //
 // Only on the hub's plant, and only for the second or so it is growing; the
 // hub swaps back to the plain sway afterwards, so this costs nothing the rest
-// of the time. It sways exactly as wind_sway does meanwhile.
+// of the time. It sways and breathes exactly as wind_sway does meanwhile.
 shader_type canvas_item;
 
 #include "res://shaders/wind_sway.gdshaderinc"
@@ -22,7 +22,7 @@ float hash(vec2 p) {
 }
 
 void vertex() {
-	VERTEX.x += wind_offset(TIME, UV);
+	VERTEX += alive_offset(TIME, UV);
 	tint = COLOR;
 }
 

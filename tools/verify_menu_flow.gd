@@ -90,6 +90,9 @@ func _initialize() -> void:
 				"ArtSlot '%s' ignores input" % slot.name
 			)
 		_expect_falling_leaves(menu, "main_menu.tscn")
+		for mascot_name in ["MascotLeft", "MascotRight"]:
+			_expect_alive(menu.find_child(mascot_name, true, false) as CanvasItem,
+				"main menu %s" % mascot_name)
 
 		# --- With no save: no Continue, and New Game is a plain tap ---
 		_expect(not continue_button.visible, "no save: Continue is hidden")
@@ -986,6 +989,15 @@ func _check_hub_grows_in(state: GameStateStore) -> void:
 	_expect(not hub.is_growing(), "grow in: it finishes")
 	_expect(plant.material != null and plant.material.resource_path.ends_with("wind_sway.tres"),
 		"grow in: the plant goes back to the sway afterwards")
+	_expect_alive(plant, "hub plant")
+	# The grow shader sways and breathes in step with the sway it hands back to,
+	# or the plant would jump at the swap.
+	var resting_material := plant.material as ShaderMaterial
+	var grow_material: ShaderMaterial = hub.grow_material
+	for parameter: StringName in [&"sway_px", &"speed", &"phase", &"breath_px", &"breath_speed"]:
+		_expect(resting_material.get_shader_parameter(parameter)
+				== grow_material.get_shader_parameter(parameter),
+			"grow in: growing and resting agree on %s" % parameter)
 	_expect(plant.get_parent().get_node_or_null("PlantBefore") == null,
 		"grow in: the old plant is removed")
 	_expect(plant.scale.is_equal_approx(Vector2.ONE), "grow in: the bounce ends at full size")
@@ -1189,6 +1201,16 @@ func _expect_falling_leaves(screen: Node, label: String) -> void:
 		_expect(fall.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 			"%s falling leaves ignore input" % label)
 		_expect(fall.leaf_sheet != null, "%s falling leaves have their sheet" % label)
+
+
+## Breathes and sways: the shared wind shader, with a breath worth seeing.
+func _expect_alive(node: CanvasItem, label: String) -> void:
+	var material := null if node == null else node.material as ShaderMaterial
+	_expect(material != null and material.shader != null
+			and material.shader.resource_path.ends_with("wind_sway.gdshader"),
+		"%s sways in the wind" % label)
+	var breath: Variant = null if material == null else material.get_shader_parameter(&"breath_px")
+	_expect(breath is float and breath > 0.0, "%s breathes" % label)
 
 
 func _expect_scene(path: String, label: String) -> void:

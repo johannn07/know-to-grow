@@ -1,4 +1,5 @@
-// Leans a plant in the wind: the top of the image moves, the base stays put.
+// Leans a plant in the wind and lets it breathe: the top of the image moves,
+// the base stays put.
 //
 // It moves the image's corners, not its pixels. The plant art is cropped tight
 // to its edges, so shifting pixels inside the image would cut leaves off at
@@ -10,5 +11,5 @@ shader_type canvas_item;
 #include "res://shaders/wind_sway.gdshaderinc"
 
 void vertex() {
-	VERTEX.x += wind_offset(TIME, UV);
+	VERTEX += alive_offset(TIME, UV);
 }

@@ -19,6 +19,8 @@ shader = ExtResource("14_sway_shader")
 shader_parameter/sway_px = 12.0
 shader_parameter/speed = 0.9
 shader_parameter/phase = 2.4
+shader_parameter/breath_px = 7.0
+shader_parameter/breath_speed = 0.33
 
 [node name="MainMenu" type="Control" unique_id=211196414]
 layout_mode = 3
