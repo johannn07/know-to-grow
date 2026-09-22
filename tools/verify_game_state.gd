@@ -97,6 +97,16 @@ func _initialize() -> void:
 	_state.load_progress()
 	_expect(not _state.finished_shown(), "and the cleared flag is what is saved")
 
+	# --- the hub remembers which plant stage it has already grown in ---
+	_expect(_state.plant_stage_shown() == 0, "a fresh start has shown only the seed")
+	_state.mark_plant_stage_shown(2)
+	_state.load_progress()
+	_expect(_state.plant_stage_shown() == 2, "the plant stage shown survives a reload")
+	_state.reset()
+	_expect(_state.plant_stage_shown() == 0, "a New Game puts it back to the seed")
+	_state.load_progress()
+	_expect(_state.plant_stage_shown() == 0, "and the seed is what is saved")
+
 	# --- nonsense is refused rather than filed ---
 	_state.reset()
 	_state.record_stage_cleared(&"", 1, 0)

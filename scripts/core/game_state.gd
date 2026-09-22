@@ -46,6 +46,11 @@ var _stars: Dictionary[String, int] = {}
 ## the fact has to outlive closing the game. See [method mark_finished_shown].
 var _finished_shown := false
 
+## The plant stage the hub last finished showing. When progress is ahead of it,
+## the hub grows the plant in rather than just drawing it grown, then records
+## the new stage here. See [method mark_plant_stage_shown].
+var _plant_stage_shown := 0
+
 
 func _ready() -> void:
 	load_progress()
@@ -142,11 +147,27 @@ func mark_finished_shown() -> void:
 	progress_changed.emit()
 
 
+## The plant stage the hub has already grown in on screen. 0 is the seed.
+func plant_stage_shown() -> int:
+	return _plant_stage_shown
+
+
+## Records that the hub has shown the plant growing into [param stage], so the
+## next visit draws it grown without growing it again.
+func mark_plant_stage_shown(stage: int) -> void:
+	if stage == _plant_stage_shown:
+		return
+	_plant_stage_shown = maxi(stage, 0)
+	save_progress()
+	progress_changed.emit()
+
+
 ## Wipes progress. For a "start over" control, and for tests that need a known
 ## state — call it before asserting anything about stars.
 func reset() -> void:
 	_stars.clear()
 	_finished_shown = false
+	_plant_stage_shown = 0
 	save_progress()
 	progress_changed.emit()
 
@@ -157,6 +178,8 @@ func save_progress() -> void:
 		file.set_value(SAVE_SECTION, key, _stars[key])
 	if _finished_shown:
 		file.set_value(FLAGS_SECTION, "finished_shown", true)
+	if _plant_stage_shown > 0:
+		file.set_value(FLAGS_SECTION, "plant_stage_shown", _plant_stage_shown)
 	var error := file.save(SAVE_PATH)
 	if error != OK:
 		push_warning("GameState: could not save to %s (error %d)" % [SAVE_PATH, error])
@@ -165,12 +188,15 @@ func save_progress() -> void:
 func load_progress() -> void:
 	_stars.clear()
 	_finished_shown = false
+	_plant_stage_shown = 0
 	var file := ConfigFile.new()
 	# A missing file is the normal first run, not a problem worth reporting. So
 	# is a file with no stars in it, which is what reset() leaves behind.
 	if file.load(SAVE_PATH) != OK:
 		return
 	_finished_shown = file.get_value(FLAGS_SECTION, "finished_shown", false) == true
+	var shown: Variant = file.get_value(FLAGS_SECTION, "plant_stage_shown", 0)
+	_plant_stage_shown = maxi(shown, 0) if shown is int else 0
 	if not file.has_section(SAVE_SECTION):
 		return
 	for key in file.get_section_keys(SAVE_SECTION):

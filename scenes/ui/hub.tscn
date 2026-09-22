@@ -27,6 +27,7 @@
 [ext_resource type="Texture2D" uid="uid://cu5h54w0w7qw5" path="res://assets/art/ui/hub/ui_tab_garden_locked.png" id="43_garden_locked"]
 [ext_resource type="Texture2D" uid="uid://dj28l2yuv1e33" path="res://assets/art/ui/hub/ui_tab_badges_locked.png" id="44_badges_locked"]
 [ext_resource type="Material" path="res://shaders/wind_sway.tres" id="90_sway"]
+[ext_resource type="Material" path="res://shaders/plant_grow.tres" id="92_grow"]
 [ext_resource type="PackedScene" path="res://scenes/components/falling_leaves.tscn" id="91_leaves"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d56r8"]
@@ -70,6 +71,7 @@ music_track = 1
 plant_stages = Array[Texture2D]([ExtResource("7_plant"), ExtResource("11_sprout"), ExtResource("13_leafy"), ExtResource("15_flower"), ExtResource("17_fruit")])
 plant_stage_names = Array[String](["SEED", "ROOT", "SPROUT", "FLOWER", "FRUIT"])
 growth_levels = Array[Resource]([ExtResource("12_level_1"), ExtResource("14_level_2"), ExtResource("16_level_3"), ExtResource("18_level_4")])
+grow_material = ExtResource("92_grow")
 level_scene_paths = Array[String](["res://scenes/ui/level_intro.tscn", "res://scenes/ui/level_intro_l2.tscn", "res://scenes/ui/level_intro_l3.tscn", "res://scenes/ui/level_intro_l4.tscn", "res://scenes/ui/level_intro_l4.tscn"])
 level_labels = Array[String](["Level 1: Grow a Seed", "Level 2: Help Your Plant", "Level 3: Identifying", "Level 4: Functions", "Level 4: Functions"])
 finished_overlay = ExtResource("19_finished")

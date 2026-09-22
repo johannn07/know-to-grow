@@ -325,6 +325,7 @@ func _initialize() -> void:
 	])
 	if state != null:
 		await _check_hub_grows_the_plant(state)
+		await _check_hub_grows_in(state)
 		await _check_finished_game(state)
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select.tscn", &"level_1")
 		await _check_progress_reaches_the_rows(state, "res://scenes/ui/stage_select_l2.tscn", &"level_2")
@@ -944,6 +945,50 @@ func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 	state.reset()
 
 
+## When progress is ahead of the plant the hub last showed, the plant grows in:
+## the new one drawn with the grow shader over a fading copy of the old, then
+## back to the sway, and the stage recorded so the next visit does not repeat it.
+func _check_hub_grows_in(state: GameStateStore) -> void:
+	state.reset()
+	for n in range(1, 5):
+		state.record_stage_cleared(&"level_1", n, 0)
+	var hub: Node = await _instantiate("res://scenes/ui/hub.tscn")
+	var plant: ArtSlot = hub.get_node("%Plant")
+	var resting: Material = hub.get_node("%Plant").material
+	_expect(hub.is_growing(), "grow in: Level 1 cleared grows the plant in")
+	_expect(plant.texture == hub.plant_stages[1], "grow in: the plant is already the new stage")
+	var before := plant.get_parent().get_node_or_null("PlantBefore") as ArtSlot
+	_expect(before != null and before.texture == hub.plant_stages[0],
+		"grow in: the seed is drawn behind it to fade out")
+	var grow := plant.material as ShaderMaterial
+	_expect(grow != null and grow.shader == (hub.grow_material as ShaderMaterial).shader,
+		"grow in: the plant draws with the grow shader meanwhile")
+	if hub.is_growing():
+		await hub.grow_finished
+	await process_frame
+	_expect(not hub.is_growing(), "grow in: it finishes")
+	_expect(plant.material != null and plant.material.resource_path.ends_with("wind_sway.tres"),
+		"grow in: the plant goes back to the sway afterwards")
+	_expect(plant.get_parent().get_node_or_null("PlantBefore") == null,
+		"grow in: the old plant is removed")
+	_expect(plant.scale.is_equal_approx(Vector2.ONE), "grow in: the bounce ends at full size")
+	_expect(state.plant_stage_shown() == 1, "grow in: the stage it grew into is saved")
+	hub.queue_free()
+	await process_frame
+
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	_expect(not hub.is_growing(), "grow in: a second visit does not grow it again")
+	hub.queue_free()
+	await process_frame
+
+	state.reset()
+	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	_expect(not hub.is_growing(), "grow in: the seed after a New Game does not grow")
+	hub.queue_free()
+	await process_frame
+	state.reset()
+
+
 ## The finished-game card comes up by itself the first time the hub shows the
 ## fully grown plant, and never again on that save. Continue Playing lifts it
 ## off; New Game has to be held, and a hold starts again from the seed.
@@ -965,6 +1010,12 @@ func _check_finished_game(state: GameStateStore) -> void:
 	# --- the first time the fruit shows, it comes up by itself ---
 	state.record_stage_cleared(&"level_4", 5, 0)
 	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	# The fruit grows in first, and the card waits for it.
+	_expect(hub.is_growing(), "finished card: the fruit grows in first")
+	_expect(hub.finished_card() == null, "finished card: waits for the plant to finish growing")
+	if hub.is_growing():
+		await hub.grow_finished
+	await process_frame
 	var card: GameCompleteOverlay = hub.finished_card()
 	_expect(card != null, "finished card: comes up by itself the first time the fruit shows")
 	_expect(state.finished_shown(), "finished card: having come up is saved")
@@ -1043,6 +1094,9 @@ func _check_finished_game(state: GameStateStore) -> void:
 		for n in range(1, level[1] + 1):
 			state.record_stage_cleared(level[0], n, 0)
 	hub = await _instantiate("res://scenes/ui/hub.tscn")
+	if hub.is_growing():
+		await hub.grow_finished
+	await process_frame
 	card = hub.finished_card()
 	new_game = card.get_node("%NewGameButton")
 	var cancelled := [false]

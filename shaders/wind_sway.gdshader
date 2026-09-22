@@ -7,17 +7,8 @@
 // low-end phone needs.
 shader_type canvas_item;
 
-// How far the top of the image travels either way, in the image's own pixels.
-uniform float sway_px = 12.0;
-// Cycles a second of the main sway, before the gusts are added.
-uniform float speed = 0.9;
-// Offset into the cycle, so two plants on one screen do not move in step.
-uniform float phase = 0.0;
+#include "res://shaders/wind_sway.gdshaderinc"
 
 void vertex() {
-	float t = TIME * speed * TAU + phase;
-	// A slow sway with a faster, weaker gust on top reads as wind rather than
-	// as a metronome.
-	float gust = sin(t) * 0.75 + sin(t * 2.3 + 1.1) * 0.25;
-	VERTEX.x += gust * sway_px * (1.0 - UV.y);
+	VERTEX.x += wind_offset(TIME, UV);
 }

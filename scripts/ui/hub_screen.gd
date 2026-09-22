@@ -18,8 +18,15 @@ extends SubScreen
 ## before it — the completed-level sign's Grow Now leads straight here, and the
 ## hub simply shows what the plant has become.
 ##
+## **When the plant has grown since the hub last showed it, it grows in on
+## screen**: the plant it was fades back while the new one rises out of the soil
+## behind a glowing, sparkling front, then gives a small bounce. Which stage the
+## hub last showed is saved in [GameStateStore], so it happens once per stage,
+## not on every visit — and a child who leaves mid-way sees it again next time.
+##
 ## **The first time it shows the plant fully grown, it brings up the finished-game
-## card by itself** — [member finished_overlay], over the garden. That is where
+## card by itself** — [member finished_overlay], over the garden, once the
+## plant has finished growing in. That is where
 ## Grow Now after the last level lands. Whether it has come up is saved, so it
 ## does not return on every visit; New Game on it starts again from the seed.
 ##
@@ -28,6 +35,9 @@ extends SubScreen
 ## the hub looks, not stop it working — an unresolved %UniqueName aborts _ready()
 ## partway through, which previously left the play button unconnected. The play
 ## button itself is required, because without it the screen has no exit.
+
+## Emitted when the plant has finished growing in.
+signal grow_finished
 
 @export_group("Destination")
 ## Where the play button leads at each stage of the plant, in the same order as
@@ -76,6 +86,12 @@ extends SubScreen
 ## stage; a level only counts once every level before it is cleared.
 @export var growth_levels: Array[LevelData] = []
 
+## The material the plant draws with while it grows in: shaders/plant_grow.tres.
+## Left empty, the plant just appears grown.
+@export var grow_material: ShaderMaterial
+## How long the new plant takes to rise out of the soil, in seconds.
+@export var grow_seconds: float = 1.4
+
 @export_group("Finished game")
 ## The "Hooray! You did it!" card, laid over the hub the first time every level
 ## in [member growth_levels] is cleared. See [GameCompleteOverlay].
@@ -100,6 +116,9 @@ var _badges_icon: Texture2D = null
 ## The finished-game card while it is up, else null.
 var _finished: GameCompleteOverlay = null
 
+## The growing-in animation while it runs, else null.
+var _grow_tween: Tween = null
+
 
 func _ready() -> void:
 	super()
@@ -112,6 +131,8 @@ func _ready() -> void:
 	_badges_button.pressed.connect(_go_to.bind(badges_scene_path))
 	_badges_icon = _drawn_icon(_badges_button)
 	_refresh()
+	if _grow_if_new():
+		await grow_finished
 	if is_fully_grown() and progress != null and not progress.finished_shown():
 		show_finished()
 
@@ -182,6 +203,76 @@ func _show_plant() -> void:
 	if stage < plant_stage_names.size():
 		label = plant_stage_names[stage]
 	_set_label_text("%PlantStageLabel", label)
+
+
+## True while the plant is growing in.
+func is_growing() -> bool:
+	return _grow_tween != null
+
+
+## Grows the plant in if progress is ahead of what the hub last showed. Returns
+## whether it started, so [method _ready] knows to wait before the finished card.
+func _grow_if_new() -> bool:
+	var stage := growth_stage()
+	if progress == null:
+		return false
+	var shown := progress.plant_stage_shown()
+	if stage <= shown:
+		# A New Game, or nothing new: just catch the record up.
+		if stage < shown:
+			progress.mark_plant_stage_shown(stage)
+		return false
+	var plant: ArtSlot = get_node_or_null("%Plant") as ArtSlot
+	if plant == null or grow_material == null or stage < 1 or stage > plant_stages.size() - 1:
+		progress.mark_plant_stage_shown(stage)
+		return false
+	# Only ever the last step. A save from before this existed would otherwise
+	# grow a seed straight into fruit.
+	_grow_plant(plant, plant_stages[stage - 1], stage)
+	return true
+
+
+func _grow_plant(plant: ArtSlot, before_texture: Texture2D, stage: int) -> void:
+	var resting_material := plant.material
+	var grow := grow_material.duplicate() as ShaderMaterial
+	grow.set_shader_parameter(&"reveal", 0.0)
+	plant.material = grow
+
+	# The plant as it was, drawn behind the new one and faded out. A copy of the
+	# slot, so it sits and sways exactly where the plant does.
+	var before := plant.duplicate(Node.DUPLICATE_SCRIPTS) as ArtSlot
+	before.name = "PlantBefore"
+	before.unique_name_in_owner = false
+	before.texture = before_texture
+	before.material = resting_material
+	plant.add_sibling(before)
+	plant.get_parent().move_child(before, plant.get_index())
+	_grow_tween = create_tween()
+	_grow_tween.tween_interval(0.35)
+	_grow_tween.tween_callback(func() -> void:
+		# Shrinks and bounces from the soil, not from the middle of the rect.
+		# Set here rather than above, once the layout has settled.
+		before.pivot_offset = Vector2(before.size.x * 0.5, before.size.y)
+		plant.pivot_offset = Vector2(plant.size.x * 0.5, plant.size.y)
+		if audio != null:
+			audio.play_correct()
+	)
+	_grow_tween.tween_property(before, "modulate:a", 0.0, 0.6)
+	_grow_tween.parallel().tween_property(before, "scale", Vector2(0.92, 0.92), 0.6)
+	_grow_tween.parallel().tween_method(
+		func(value: float) -> void: grow.set_shader_parameter(&"reveal", value),
+		0.0, 1.0, grow_seconds
+	).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	_grow_tween.tween_property(plant, "scale", Vector2(1.06, 1.06), 0.14) 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+	_grow_tween.tween_property(plant, "scale", Vector2.ONE, 0.3) 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	_grow_tween.tween_callback(func() -> void:
+		plant.material = resting_material
+		before.queue_free()
+		_grow_tween = null
+		if progress != null:
+			progress.mark_plant_stage_shown(stage)
+		grow_finished.emit()
+	)
 
 
 ## How many of [member growth_levels] are cleared, counting from the first and
