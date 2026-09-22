@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/icon_stem_l3.png-f3c1659cf6c54f3100bfbb1a7a0b
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

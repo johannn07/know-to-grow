@@ -48,6 +48,19 @@ When a level's art arrives, give it a `levels/level_N/` folder. Anything a
 second level reuses moves up to `items/` or `ui/` rather than being referenced
 across level folders.
 
+### Import policy — decided
+
+**Every image the game loads is imported Lossy, quality 0.9** —
+`compress/mode=1`, `compress/lossy_quality=0.9` in its `.import` file. That is
+WebP inside the exported texture, and it took the imported art from 127 MB to
+29 MB. Memory on the phone is unchanged; only the download shrinks. Checked
+1:1 against the PNGs on the smallest drawn words in the game — the fun-fact
+strips, the Level 4 cards, the badge captions — with no visible difference.
+
+A new image arrives Lossless, Godot's default: **switch it to Lossy 0.9 in the
+Import dock** when it lands. `ui/stage_select/source/` stays Lossless, since
+the game never loads it.
+
 ## Main menu — delivered
 
 All seven are in the repo and wired into `scenes/ui/main_menu.tscn`.

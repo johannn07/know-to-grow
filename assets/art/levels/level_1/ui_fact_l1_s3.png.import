@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/ui_fact_l1_s3.png-690af2e57695398ca3d07898e0c
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

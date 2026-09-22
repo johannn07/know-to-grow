@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/icon_sun.png-54ac60fd098f870d35a75a508f05e9fa
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.9
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

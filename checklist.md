@@ -493,9 +493,10 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
 - [x] ~~Fix `tools/export_vo_script.gd` to write under
       `res://assets/audio/vo/en/`~~ — done, along with the same stale path in
       `option_data.gd`'s doc comment
-- [ ] Decide an import policy — sources are up to 4096 × 2896 and the raw `.fig`
-      is 290 MB. Everything needs alpha-cropping and downscaling before it lands
-      in the repo, or the APK will be enormous
+- [x] **Import policy — decided: Lossy, quality 0.9**, for every image the game
+      loads. Imported art went from 127 MB to 29 MB with the drawn words
+      unchanged at 1:1. A new image has to be switched from Godot's Lossless
+      default when it lands — see `assets/art/MANIFEST.md`
 
 ## 7 · Android and release
 
