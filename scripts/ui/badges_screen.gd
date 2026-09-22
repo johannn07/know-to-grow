@@ -28,6 +28,9 @@ extends SubScreen
 @export var badge_levels: Array[LevelData] = []
 ## The plaque over the count.
 @export var sign_label: String = "My Badges"
+## The glint that sweeps across an earned badge, and across the one opened
+## large. Locked badges stay matte, so the difference shows at a glance.
+@export var shine_material: Material = preload("res://shaders/shine.tres")
 
 @onready var _sign: HeaderSign = %HeaderSign
 @onready var _view: Control = %BadgeView
@@ -49,6 +52,7 @@ func _ready() -> void:
 		var art: ArtSlot = cell.get_node_or_null("Badge%dArt" % (i + 1)) as ArtSlot
 		if art != null:
 			art.texture = _badge_art(i, earned)
+			art.material = shine_material if earned else null
 		cell.disabled = not earned
 		if earned:
 			cell.pressed.connect(open_badge.bind(i))
@@ -84,6 +88,7 @@ func open_badge(index: int) -> void:
 	if not is_earned(index):
 		return
 	_view_art.texture = badges[index]
+	_view_art.material = shine_material
 	_view.show()
 
 

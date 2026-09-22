@@ -28,6 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://dj28l2yuv1e33" path="res://assets/art/ui/hub/ui_tab_badges_locked.png" id="44_badges_locked"]
 [ext_resource type="Material" path="res://shaders/wind_sway.tres" id="90_sway"]
 [ext_resource type="Material" path="res://shaders/plant_grow.tres" id="92_grow"]
+[ext_resource type="Material" path="res://shaders/shine.tres" id="93_shine"]
 [ext_resource type="PackedScene" path="res://scenes/components/falling_leaves.tscn" id="91_leaves"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d56r8"]
@@ -191,6 +192,7 @@ offset_bottom = 39.0
 grow_vertical = 2
 rotation = 0.08726646
 mouse_filter = 2
+material = ExtResource("93_shine")
 script = ExtResource("2_slot")
 texture = ExtResource("6_star")
 slot_name = "ui_star"

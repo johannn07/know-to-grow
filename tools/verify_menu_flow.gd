@@ -571,8 +571,12 @@ func _check_progress_reaches_the_rows(
 			var star: ArtSlot = rows_art.get_node(
 				"Row%dArt/Row%dStar%d" % [stage_number, stage_number, slot_number + 1]
 			)
-			if screen.star_filled != null and star.texture == screen.star_filled:
+			var lit: bool = screen.star_filled != null and star.texture == screen.star_filled
+			if lit:
 				filled += 1
+			_expect((star.material == screen.shine_material) == lit and (lit or star.material == null),
+				"%s Row%d star %d %s" % [label, stage_number, slot_number + 1,
+					"shines" if lit else "stays matte"])
 		_expect(
 			filled == want,
 			"%s Row%d shows %d filled star(s) (got %d)" % [label, stage_number, want, filled]
@@ -860,6 +864,8 @@ func _check_badges(state: GameStateStore) -> void:
 		var want: Texture2D = screen.badges[i] if earned else screen.badges_locked[i]
 		_expect(art.texture == want,
 			"badges: Badge%d drawn %s" % [i + 1, "in colour" if earned else "grey"])
+		_expect((art.material != null) == earned and (not earned or art.material == screen.shine_material),
+			"badges: Badge%d %s" % [i + 1, "shines" if earned else "stays matte"])
 		_expect(cell.size.x >= 160.0 and cell.size.y >= 160.0,
 			"badges: Badge%d clears 160 px (is %dx%d)" % [i + 1, cell.size.x, cell.size.y])
 		_expect(cell.get_global_rect().end.y <= 1920.0, "badges: Badge%d is on screen" % (i + 1))
@@ -870,6 +876,7 @@ func _check_badges(state: GameStateStore) -> void:
 	(screen.get_node("%Badge2") as Button).pressed.emit()
 	var view_art: ArtSlot = screen.get_node("%BadgeViewArt")
 	_expect(view.visible and view_art.texture == screen.badges[1], "badges: tapping Plant Helper opens it")
+	_expect(view_art.material == screen.shine_material, "badges: the opened badge shines too")
 	_expect((screen.get_node("%TapToClose") as Label).text == "Tap to close", "badges: it says Tap to close")
 	_expect(_find_by_name(view, "ActionButton") == null and _find_by_name(view, "BannerArt") == null,
 		"badges: no Continue and no banner on it")

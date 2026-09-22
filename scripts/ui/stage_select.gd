@@ -75,6 +75,8 @@ extends SubScreen
 @export var row_art_locked: Array[Texture2D] = []
 ## Drawn over a row's empty star for each one earned.
 @export var star_filled: Texture2D
+## The glint that sweeps across an earned star. Empty stars stay matte.
+@export var shine_material: Material = preload("res://shaders/shine.tres")
 ## Drawn over the rest. Usually left empty, since the row art already has them.
 @export var star_empty: Texture2D
 
@@ -172,6 +174,7 @@ func _show_stars(stage_number: int) -> void:
 			push_warning("%s: no Row%dStar%d in this layout" % [name, stage_number, slot_number + 1])
 			continue
 		slot.texture = star_filled if slot_number < earned else star_empty
+		slot.material = shine_material if slot_number < earned else null
 
 
 ## The hotspot for one drawn row. The scene owns these, so a row that has been
