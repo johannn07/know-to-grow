@@ -167,6 +167,13 @@ low, `y 1000` measured from the bottom — and a stage picks the one away from i
 own highlight. Header, tap banner and card row sit identically in all five. The table in
 `assets/art/MANIFEST.md` says which stage uses which and why.
 
+**The web build keeps its portrait shape — decided.** `project.godot` sets
+`window/stretch/aspect.web="keep_width"`: on a screen wider than 9:16 — a
+computer, itch.io's fullscreen — the game stays portrait with black bars at
+the sides instead of spreading sideways, and on a taller one it still grows
+downward exactly like the phone. Android keeps `expand`. The bars are black
+because Godot draws them itself; the clear colour does not reach them.
+
 **A stage is laid out from both edges — decided.** Most phones are 20:9, about
 1080 x 2436, not the 1080 x 1920 the stages were drawn at, and the extra height
 arrives at the bottom. So the answers — cards, trays, Level 1's fun fact, a
