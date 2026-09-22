@@ -179,6 +179,8 @@ Android's back gesture goes.
 **The hub has the settings button too, and stage select does not — decided.**
 The hub carries the same `TopBar` with `show_back` off, 35 px lower, alone on
 its row; the greeting and star pills sit on the row below it, at `y 225`.
+The "My Plant" sign hangs off the screen's centre through `SignAnchor`, the
+same as the plant, so the two stay together on a 20:9 phone.
 
 Settings opens `settings_overlay.tscn`, a card over the stage: music and sound
 effects toggles and a Main Menu button, on its own drawn card with "Settings"
