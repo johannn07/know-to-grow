@@ -72,8 +72,22 @@ All seven are in the repo and wired into `scenes/ui/main_menu.tscn`.
 | `logo.png` | 1400 x 968 | 585 KB |
 | `mascot_sprout.png` | 660 x 832 | 446 KB |
 | `mascot_flower.png` | 760 x 991 | 731 KB |
-| `fx_leaves.png` | 1600 x 2166 | 336 KB |
+| `fx_leaves.png` | 1600 x 2166 | 336 KB — no longer drawn; the source of `fx_leaf_sheet.png` below |
 | `ui_button_primary.png` | 576 x 210 | 11 KB |
+
+### Falling leaves — `effects/`
+
+`fx_leaf_sheet.png`, **640 x 320**, 123 KB: eight leaves cut out of
+`fx_leaves.png`, each centred in a **160 x 160** cell, four across and two down.
+The cut skipped leaves touching the source's edges, since those are clipped.
+`scenes/components/falling_leaves.tscn` draws them tumbling down the main menu,
+the hub and the garden, behind the buttons, at 60–120 px. A new sheet must keep
+equal square cells; if the grid changes, set `sheet_columns` / `sheet_rows` on
+the component to match.
+
+Wind sway is `shaders/wind_sway.tres`, on the menu mascots and the hub and
+garden plant. It leans the image from its base rather than shifting pixels, so
+it needs no margin around the art.
 
 ### Exit card — `ui/screens/`
 

@@ -89,6 +89,7 @@ func _initialize() -> void:
 				slot.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 				"ArtSlot '%s' ignores input" % slot.name
 			)
+		_expect_falling_leaves(menu, "main_menu.tscn")
 
 		# --- With no save: no Continue, and New Game is a plain tap ---
 		_expect(not continue_button.visible, "no save: Continue is hidden")
@@ -148,6 +149,8 @@ func _initialize() -> void:
 				slot.mouse_filter == Control.MOUSE_FILTER_IGNORE,
 				"%s ArtSlot '%s' ignores input" % [path.get_file(), slot.name]
 			)
+		if path.get_file() in ["hub.tscn", "garden.tscn"]:
+			_expect_falling_leaves(screen, path.get_file())
 
 		# The hub is composed from separate art with live text over it, so the
 		# things that break quietly are the label lookups and the play target.
@@ -1103,6 +1106,18 @@ func _find_art_slots(from: Node) -> Array[ArtSlot]:
 			found.append(child)
 		found.append_array(_find_art_slots(child))
 	return found
+
+
+## Leaves fall over the screen's buttons' neighbours, so they must never take a
+## tap, and a missing sheet would leave the screen quietly still.
+func _expect_falling_leaves(screen: Node, label: String) -> void:
+	var leaves := screen.find_children("*", "FallingLeaves", true, false)
+	_expect(leaves.size() == 1, "%s has falling leaves" % label)
+	for node in leaves:
+		var fall := node as FallingLeaves
+		_expect(fall.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+			"%s falling leaves ignore input" % label)
+		_expect(fall.leaf_sheet != null, "%s falling leaves have their sheet" % label)
 
 
 func _expect_scene(path: String, label: String) -> void:

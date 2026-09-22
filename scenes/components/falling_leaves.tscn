@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/falling_leaves.gd" id="1_leaves"]
+[ext_resource type="Texture2D" path="res://assets/art/effects/fx_leaf_sheet.png" id="2_sheet"]
+
+[node name="FallingLeaves" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_leaves")
+leaf_sheet = ExtResource("2_sheet")

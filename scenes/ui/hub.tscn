@@ -26,6 +26,8 @@
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="42_artbtn"]
 [ext_resource type="Texture2D" uid="uid://cu5h54w0w7qw5" path="res://assets/art/ui/hub/ui_tab_garden_locked.png" id="43_garden_locked"]
 [ext_resource type="Texture2D" uid="uid://dj28l2yuv1e33" path="res://assets/art/ui/hub/ui_tab_badges_locked.png" id="44_badges_locked"]
+[ext_resource type="Material" path="res://shaders/wind_sway.tres" id="90_sway"]
+[ext_resource type="PackedScene" path="res://scenes/components/falling_leaves.tscn" id="91_leaves"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d56r8"]
 
@@ -96,6 +98,9 @@ texture = ExtResource("4_bg")
 fit = 2
 slot_name = "bg_garden_stump"
 placeholder_color = Color(0.56, 0.81, 0.35, 1)
+
+[node name="FallingLeaves" parent="." instance=ExtResource("91_leaves")]
+layout_mode = 1
 
 [node name="GreetingPill" type="Panel" parent="." unique_id=1483689016]
 layout_mode = 1
@@ -263,6 +268,7 @@ offset_bottom = 166.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+material = ExtResource("90_sway")
 script = ExtResource("2_slot")
 texture = ExtResource("7_plant")
 slot_name = "plant_seed_pot"
