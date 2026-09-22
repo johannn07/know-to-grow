@@ -78,6 +78,8 @@ func _check_tap_stage() -> void:
 	_tap(wrong)
 	await _settle()
 	_expect(overlay.visible, "a wrong tap shows the Oops card")
+	_expect(stage.find_children("*", "SparkleBurst", false, false).is_empty(),
+		"a wrong tap fires no sparkles")
 	_expect(
 		wrong.get_node("Art").visible and wrong.get_node("Spent").visible,
 		"the wrong card stays on screen, darkened where it stands"
@@ -95,6 +97,14 @@ func _check_tap_stage() -> void:
 	_tap(right)
 	await _settle()
 	_expect(overlay.visible, "the right tap shows the Correct card")
+	var bursts := stage.find_children("*", "SparkleBurst", false, false)
+	_expect(bursts.size() == 1, "the right tap fires one sparkle burst")
+	if bursts.size() == 1:
+		var burst := bursts[0] as SparkleBurst
+		_expect(burst.layer > 0, "the burst draws above the Correct card")
+		_expect(burst.is_bursting(), "the burst is in flight")
+		await create_timer(2.0).timeout
+		_expect(not is_instance_valid(burst), "the burst frees itself afterwards")
 	if _state != null:
 		_expect(
 			_state.stars_for(stage.level_id, stage.stage_number) > 0,

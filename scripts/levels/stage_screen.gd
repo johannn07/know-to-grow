@@ -122,6 +122,12 @@ const CONTINUE_BELOW_CARD_RECT := Rect2(0.265, 1.06, 0.47, 0.1707)
 ## Where [member choose_again_art] is drawn.
 @export var wrong_art_rect: Rect2 = CHOOSE_AGAIN_ART_RECT
 
+@export_group("Celebration")
+## Stars bursting out of the right card, over the Correct card. Every stage has
+## it by default, so none of the nineteen scenes needs to set it; clear it on a
+## stage that should not. See [SparkleBurst].
+@export var correct_burst: PackedScene = preload("res://scenes/components/sparkle_burst.tscn")
+
 @export_group("Flow")
 ## The next stage. Empty means this is the last one built.
 @export_file("*.tscn") var next_stage_path: String = ""
@@ -250,6 +256,7 @@ func _answer(card: OptionCard) -> void:
 		else:
 			push_warning("%s: no GameState, so this stage was not recorded" % name)
 		on_correct(card)
+		_burst_from(card)
 		_show_feedback(correct_card, correct_button_rect, continue_art, correct_art_rect)
 	else:
 		# Actually chosen, and wrong. The card goes back greyed out: still
@@ -262,6 +269,19 @@ func _answer(card: OptionCard) -> void:
 			audio.play_wrong()
 		on_wrong(card)
 		_show_feedback(wrong_card, wrong_button_rect, choose_again_art, wrong_art_rect)
+
+
+## Fires [member correct_burst] from the middle of the card that was right —
+## where it was dropped, or where it stands on a tap stage.
+func _burst_from(card: Control) -> void:
+	if correct_burst == null:
+		return
+	var burst := correct_burst.instantiate() as SparkleBurst
+	if burst == null:
+		push_warning("%s: correct_burst is not a SparkleBurst" % name)
+		return
+	add_child(burst)
+	burst.burst_at(card.get_global_rect().get_center())
 
 
 ## Writes this stage's question into its speech bubble. A stage without a
