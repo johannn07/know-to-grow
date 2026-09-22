@@ -26,7 +26,7 @@ extends Control
 ## Fall speed, in design pixels a second, picked between these two.
 @export var fall_speed_range: Vector2 = Vector2(70.0, 140.0)
 ## Steady sideways drift, in design pixels a second. Positive blows right.
-@export var wind: float = 30.0
+@export var wind: float = 15.0
 
 ## How far outside the rect a leaf travels before it is sent back to the top,
 ## so none pops in or out at the edge.
@@ -87,7 +87,7 @@ func _draw() -> void:
 		# The leaf rocks with its sway, and its width follows a slower cosine so
 		# it seems to turn over as it falls.
 		var turn := cos(wave * 0.6)
-		draw_set_transform(pos, sin(wave) * 0.6, Vector2(turn, 1.0))
+		draw_set_transform(pos, sin(wave) * 0.35, Vector2(turn, 1.0))
 		var half := _size[i] * 0.5
 		var column := _cell[i] % sheet_columns
 		var row := floori(_cell[i] / float(sheet_columns))
@@ -122,8 +122,8 @@ func _spawn(i: int, y: float) -> void:
 	# Bigger leaves fall a little faster, which reads as nearer the camera.
 	var near := inverse_lerp(leaf_size_range.x, leaf_size_range.y, _size[i])
 	_fall[i] = lerpf(fall_speed_range.x, fall_speed_range.y, near) * _rng.randf_range(0.85, 1.15)
-	_sway_px[i] = _rng.randf_range(30.0, 80.0)
-	_sway_rate[i] = _rng.randf_range(0.8, 1.6)
+	_sway_px[i] = _rng.randf_range(12.0, 35.0)
+	_sway_rate[i] = _rng.randf_range(0.5, 1.0)
 	_phase[i] = _rng.randf_range(0.0, TAU)
 	_cell[i] = _rng.randi_range(0, maxi(sheet_columns * sheet_rows, 1) - 1)
 

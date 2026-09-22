@@ -3,9 +3,9 @@
 // wind_sway.gdshader.
 
 // How far the top of the image travels either way, in the image's own pixels.
-uniform float sway_px = 12.0;
+uniform float sway_px = 5.0;
 // Cycles a second of the main sway, before the gusts are added.
-uniform float speed = 0.9;
+uniform float speed = 0.5;
 // Offset into the cycle, so two plants on one screen do not move in step.
 uniform float phase = 0.0;
 // How far the top rises on each breath, in the image's own pixels. The sides
@@ -16,9 +16,10 @@ uniform float breath_speed = 0.33;
 
 float wind_offset(float time, vec2 uv) {
 	float t = time * speed * TAU + phase;
-	// A slow sway with a faster, weaker gust on top reads as wind rather than
-	// as a metronome.
-	float gust = sin(t) * 0.75 + sin(t * 2.3 + 1.1) * 0.25;
+	// A slow sway with a faster, much weaker gust on top reads as a breeze
+	// rather than as a metronome. Kept small on purpose: with the breath, the
+	// leaves and everything else moving, a bigger lean was too much.
+	float gust = sin(t) * 0.85 + sin(t * 2.3 + 1.1) * 0.15;
 	return gust * sway_px * (1.0 - uv.y);
 }
 
