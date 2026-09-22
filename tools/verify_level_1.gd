@@ -107,7 +107,12 @@ func _play(scene_path: String) -> String:
 	# --- the stage is dressed ---
 	_expect(background.texture != null, "%s has a garden" % label)
 	_expect(stage.get_node("%Header").texture != null, "%s has its header" % label)
-	_expect(stage.get_node("%Prompt").texture != null, "%s has its prompt" % label)
+	var bubble: PromptBubble = stage.get_node_or_null("%PromptBubble") as PromptBubble
+	_expect(bubble != null, "%s has the shared prompt bubble" % label)
+	if bubble != null:
+		_expect(bubble.text == challenge.prompt_transcript,
+			"%s bubble says its prompt_transcript" % label)
+		_expect(bubble.text_fits(), "%s prompt fits its bubble" % label)
 	_expect(stage.correct_card != null, "%s has a Correct card" % label)
 	_expect(stage.wrong_card != null, "%s has an Oops card" % label)
 	_expect(
@@ -117,7 +122,7 @@ func _play(scene_path: String) -> String:
 	var tray: ArtSlot = stage.get_node("%Cards").get_parent().get_node("TrayArt")
 	_expect(tray.texture != null, "%s has its tool tray" % label)
 	_expect(stage.blank_tray, "%s is on the blank tray" % label)
-	_prompt_widths.append(stage.get_node("%Prompt").size.x)
+	_prompt_widths.append(stage.get_node("%PromptBubble").size.x)
 	_fact_widths.append(stage.get_node("%FunFact").size.x)
 	_expect(cards.size() >= 2, "%s has cards (%d)" % [label, cards.size()])
 	for card in cards:

@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://bkq2v8nxhm7cw" path="res://scenes/components/option_card.tscn" id="4_card"]
 [ext_resource type="Texture2D" uid="uid://cowbuyl1lm8os" path="res://assets/art/backgrounds/bg_bed_watered.png" id="5_bg"]
 [ext_resource type="Texture2D" uid="uid://dmf60nwddborb" path="res://assets/art/levels/level_1/ui_header_l1_s4.png" id="7_hdr"]
-[ext_resource type="Texture2D" uid="uid://dlqg11wht44bn" path="res://assets/art/levels/level_1/ui_prompt_l1_s4.png" id="8_prm"]
 [ext_resource type="Texture2D" uid="uid://d1h2lou6sg6gk" path="res://assets/art/levels/level_1/ui_correct_l1_s4.png" id="9_ok"]
 [ext_resource type="Texture2D" uid="uid://dd8gvmm3ibc2g" path="res://assets/art/levels/level_1/ui_oops_tool.png" id="10_oops"]
 [ext_resource type="Texture2D" uid="uid://c5rck1pxv0f6y" path="res://assets/art/ui/common/ui_tray_blank.png" id="11_tray"]
@@ -18,6 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://dg8cxhci5pokd" path="res://assets/art/ui/buttons/ui_button_choose_again.png" id="17_choose_again"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="18_artbtn"]
 [ext_resource type="PackedScene" path="res://scenes/components/top_bar.tscn" id="40_topbar"]
+[ext_resource type="PackedScene" path="res://scenes/components/prompt_bubble.tscn" id="90_bubble"]
+[ext_resource type="Resource" path="res://content/level_1_planting.tres" id="91_content"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -35,6 +36,7 @@ music_track = 2
 level_id = &"level_1"
 stage_number = 4
 challenge_id = &"l1_sun"
+level_content = ExtResource("91_content")
 correct_option_id = &"sun"
 blank_tray = true
 correct_card = ExtResource("9_ok")
@@ -78,22 +80,20 @@ texture = ExtResource("7_hdr")
 slot_name = "ui_header_l1_s4"
 placeholder_color = Color(0.72, 0.5, 0.26, 1)
 
-[node name="Prompt" type="Control" parent="." unique_id=716751219]
+[node name="PromptBubble" parent="." instance=ExtResource("90_bubble")]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
+anchor_top = 0.0
 anchor_right = 0.5
+anchor_bottom = 0.0
 offset_left = -475.0
-offset_top = 519.4
+offset_top = 480.0
 offset_right = 489.0
-offset_bottom = 966.7
+offset_bottom = 937.0
 grow_horizontal = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-texture = ExtResource("8_prm")
-slot_name = "ui_prompt_l1_s4"
-placeholder_color = Color(0.98, 0.96, 0.89, 1)
+grow_vertical = 1
 
 [node name="DropZone" type="Control" parent="." unique_id=1580335007]
 unique_name_in_owner = true

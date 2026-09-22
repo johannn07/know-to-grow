@@ -284,9 +284,8 @@ func _burst_from(card: Control) -> void:
 	burst.burst_at(card.get_global_rect().get_center())
 
 
-## Writes this stage's question into its speech bubble. A stage without a
-## %PromptBubble has its prompt drawn into the art instead — Level 1's four do —
-## and there is nothing to fill.
+## Writes this stage's question into its speech bubble. Every stage has one,
+## Levels 1 to 4; a stage without a %PromptBubble simply has nothing to fill.
 func _show_prompt() -> void:
 	var bubble: PromptBubble = get_node_or_null("%PromptBubble") as PromptBubble
 	if bubble == null:

@@ -175,7 +175,11 @@ func _check_every_header_fits(
 ## challenge that uses both.
 func _check_stage_fills_them(bubble_scene: PackedScene, header_scene: PackedScene) -> void:
 	var stage: StageScreen = (load(STAGE) as PackedScene).instantiate() as StageScreen
-	var bubble: PromptBubble = _adopt(stage, bubble_scene, "PromptBubble") as PromptBubble
+	# Level 1's stages carry the bubble themselves now; a rig without one gets it
+	# added, the way a stage scene would hold it.
+	var bubble: PromptBubble = stage.get_node_or_null("PromptBubble") as PromptBubble
+	if bubble == null:
+		bubble = _adopt(stage, bubble_scene, "PromptBubble") as PromptBubble
 	var header: HeaderSign = _adopt(stage, header_scene, "HeaderSign") as HeaderSign
 	var level: LevelData = load(LEVELS[1])
 	stage.level_content = level

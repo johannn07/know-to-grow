@@ -485,7 +485,8 @@ assets** — effectively the whole game. Inventory in `assets/art/MANIFEST.md`.
       for now
 - [ ] Feedback cards, completion badges, tool trays
 - [x] Fredoka One in `assets/fonts/`, wired once in `themes/ktg_theme.tres`
-- [ ] Prompts as live text on `ui_prompt_bubble.png`, Levels 1-4
+- [x] Prompts as live text on `ui_prompt_bubble.png`, Levels 1-4 — Level 1's
+      four drawn prompts moved to the bubble too, at Level 2's rect
 - [x] Headers as live text on the blank sign, Level 2 — the `HeaderSign`
       component, with `HeaderLabel` (58 px, white outlined) on the plaque and
       `HeaderTitle` (51 px, dark brown) on the banner. Filled by `StageScreen`
@@ -615,5 +616,7 @@ Collected from the **⚠** items above, because these block other people's work:
 5. "Seed" or "Seed Packet"? — blocks the icon brief and the voice-over script
 6. ~~Is Filipino shipping?~~ **Answered: no.** The artwork keeps its English
    text; `content/*.tres` holds transcripts and voice-over keys
-7. Level 1's four drawn prompts: keep them, or move them to the blank bubble
-   with live text like the other levels?
+7. ~~Level 1's four drawn prompts: keep them, or move them to the blank bubble
+   with live text like the other levels?~~ **Answered: moved to the bubble.**
+   The wording was already identical; the drawn green emphasis on "inside"
+   (Stage 2) and "light" (Stage 4) is lost with it

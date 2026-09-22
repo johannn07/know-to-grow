@@ -182,7 +182,7 @@ Wired into `scenes/levels/level_1/stage_1.tscn`. Nothing on this screen is a
 | `bg_bed_empty.png` | 852 x 1846 | 1.7 MB |
 | `bg_bed_hole.png` | 851 x 1849 | 1.7 MB |
 | `ui_header_l1_s1.png` | 900 x 367 | 342 KB |
-| `ui_prompt_l1_s1.png` | 1000 x 357 | 325 KB |
+| `ui_prompt_l1_s1.png` | 1000 x 357 | 325 KB — no longer drawn; the stage uses the shared bubble |
 | `icon_shovel.png` | 300 x 354 | 120 KB |
 | `icon_watering_can.png` | 300 x 334 | 121 KB |
 | `icon_flower.png` | 300 x 362 | 122 KB |
@@ -227,7 +227,7 @@ Notes:
 |---|---|---|
 | `bg_bed_seed.png` | 863 x 1822 | 1.8 MB |
 | `ui_header_l1_s2.png` | 900 x 458 | 359 KB |
-| `ui_prompt_l1_s2.png` | 1000 x 381 | 392 KB |
+| `ui_prompt_l1_s2.png` | 1000 x 381 | 392 KB — no longer drawn; the stage uses the shared bubble |
 | `icon_seed.png` | 300 x 303 | 109 KB |
 | `icon_rock.png` | 300 x 337 | 106 KB |
 | `icon_leaf.png` | 300 x 329 | 109 KB |
@@ -259,7 +259,7 @@ Notes:
 |---|---|---|
 | `bg_bed_watered.png` | 941 x 1672 | 1.8 MB |
 | `ui_header_l1_s3.png` | 900 x 442 | 365 KB |
-| `ui_prompt_l1_s3.png` | 1000 x 523 | 428 KB |
+| `ui_prompt_l1_s3.png` | 1000 x 523 | 428 KB — no longer drawn; the stage uses the shared bubble |
 | `icon_sun.png` | 300 x 284 | 113 KB |
 | `icon_gloves.png` | 300 x 315 | 114 KB |
 | `ui_correct_l1_s3.png` | 800 x 1016 | 1.1 MB |
@@ -287,7 +287,7 @@ Notes:
 |---|---|---|
 | `bg_bed_sprout.png` | 851 x 1849 | 2.2 MB |
 | `ui_header_l1_s4.png` | 900 x 426 | 373 KB |
-| `ui_prompt_l1_s4.png` | 1000 x 464 | 426 KB |
+| `ui_prompt_l1_s4.png` | 1000 x 464 | 426 KB — no longer drawn; the stage uses the shared bubble |
 | `icon_cloud.png` | 300 x 372 | 112 KB |
 | `icon_moon.png` | 300 x 353 | 114 KB |
 | `ui_correct_l1_s4.png` | 800 x 665 | 434 KB |
