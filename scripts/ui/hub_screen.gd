@@ -50,6 +50,10 @@ signal grow_finished
 ## rather than repeating "Start Game", which the main menu already says.
 @export var level_labels: Array[String] = ["Level 1: Grow a Seed"]
 
+## The glint that sweeps the play button every couple of seconds, pointing a
+## child who cannot read yet at the next thing to do.
+@export var next_step_material: ShaderMaterial = preload("res://shaders/next_step_glint.tres")
+
 @export_group("Tabs")
 ## Where Lessons leads at each stage of the plant, same order as [member
 ## plant_stages]: the stage select of the level that stage is waiting on. Past
@@ -124,6 +128,7 @@ func _ready() -> void:
 	super()
 	_set_label_text("%GreetingLabel", player_greeting)
 	_play_button.pressed.connect(_on_play_pressed)
+	_glint_play_button()
 	_lessons_button.pressed.connect(_on_lessons_pressed)
 	_garden_button.pressed.connect(_go_to.bind(garden_scene_path))
 	_lessons_icon = _drawn_icon(_lessons_button)
@@ -135,6 +140,20 @@ func _ready() -> void:
 		await grow_finished
 	if is_fully_grown() and progress != null and not progress.finished_shown():
 		show_finished()
+
+
+## Puts [member next_step_material] on the play button, in the button's own
+## space: its plate is a stretched nine-patch and its words are live text, so
+## the band has to cross the rect rather than any one texture.
+func _glint_play_button() -> void:
+	if next_step_material == null:
+		return
+	var glint := next_step_material.duplicate() as ShaderMaterial
+	glint.set_shader_parameter(&"local_space", true)
+	_play_button.material = glint
+	var fit := func() -> void: glint.set_shader_parameter(&"box_size", _play_button.size)
+	fit.call()
+	_play_button.resized.connect(fit)
 
 
 ## Everything on the hub that follows from progress.

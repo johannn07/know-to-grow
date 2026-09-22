@@ -557,6 +557,11 @@ func _check_progress_reaches_the_rows(
 		# tappable. A locked row with no drawing of its own draws nothing, so
 		# the locked row painted into the card shows through instead.
 		var slot: ArtSlot = rows_art.get_node("Row%dArt" % stage_number)
+		# Two stages are cleared, so the third is next — if it is built.
+		var next := stage_number == 3 and built
+		_expect((slot.material == screen.next_step_material) == next
+				and (next or slot.material == null),
+			"%s Row%d %s" % [label, stage_number, "glints as the next step" if next else "does not glint"])
 		var art := screen._row_art(stage_number, reached)
 		_expect(
 			slot.texture == art and (art != null or slot.hide_when_empty),
@@ -942,6 +947,11 @@ func _check_hub_grows_the_plant(state: GameStateStore) -> void:
 		# The play button moves on with the plant: once a level is done it names
 		# the next one and leads to that level's overlay, not back into the last.
 		var play: Button = hub.get_node("%PlayButton")
+		var glint := play.material as ShaderMaterial
+		_expect(glint != null and glint.shader == hub.next_step_material.shader
+				and glint.get_shader_parameter(&"local_space") == true
+				and (glint.get_shader_parameter(&"box_size") as Vector2).is_equal_approx(play.size),
+			"hub with %s: Play glints across its own rect" % cleared)
 		var want: Array = plays[want_stage]
 		_expect(
 			play.text == want[0] and hub.level_scene_path() == want[1],

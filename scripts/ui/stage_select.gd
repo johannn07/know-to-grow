@@ -75,6 +75,10 @@ extends SubScreen
 @export var row_art_locked: Array[Texture2D] = []
 ## Drawn over a row's empty star for each one earned.
 @export var star_filled: Texture2D
+## The glint on the next row to play — the first open one not yet cleared — so
+## a child who cannot read yet can see where to go. No row has it once the
+## level is done.
+@export var next_step_material: Material = preload("res://shaders/next_step_glint.tres")
 ## The glint that sweeps across an earned star. Empty stars stay matte.
 @export var shine_material: Material = preload("res://shaders/shine.tres")
 ## Drawn over the rest. Usually left empty, since the row art already has them.
@@ -122,6 +126,7 @@ func _ready() -> void:
 		push_warning("%s: %d rows but %d unlocked and %d locked row drawings"
 			% [name, row_rects.size(), row_art.size(), row_art_locked.size()])
 
+	var next_found := false
 	for i in row_rects.size():
 		var button := _row_button(i)
 		if button == null:
@@ -137,6 +142,11 @@ func _ready() -> void:
 			button.pressed.connect(_on_row_pressed.bind(path))
 		_show_row(stage_number, reached)
 		_show_stars(stage_number)
+		var next := live and not next_found 			and (progress == null or not progress.is_stage_cleared(level_id, stage_number))
+		next_found = next_found or next
+		var row_slot: ArtSlot = _rows_art.get_node_or_null("Row%dArt" % stage_number) as ArtSlot
+		if row_slot != null:
+			row_slot.material = next_step_material if next else null
 
 
 ## Draws the row in the state it has actually reached, over the one baked into
