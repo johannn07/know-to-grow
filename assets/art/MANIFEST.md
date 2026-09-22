@@ -486,11 +486,12 @@ select's.
 
 ## Badges — `scenes/ui/badges.tscn`
 
-A 3 x 3 `%Grid` of 300 x 370 cells from `y 450`, 30 px apart, under the header
-sign at `y 180` ("My Badges" / "N of 7"). The seven `ui_badge_*.png` fill cells
-1-7 in level order — Little Planter; Plant Helper, Green Thumb; Mystery Solver;
-Plant Power-Up, Super Grower, Know to Grow Star — and cells 8 and 9 are empty
-`badge_slot_8` / `badge_slot_9` slots for any badge added later. A tapped badge
+A 3 x 2 `%Grid` of 300 x 370 cells from `y 450`, 30 px apart, under the header
+sign at `y 180` ("My Badges" / "N of 7"), holding the first six `ui_badge_*.png`
+in level order — Little Planter; Plant Helper, Green Thumb; Mystery Solver;
+Plant Power-Up, Super Grower. Know to Grow Star, the last, is `%Badge7` on its
+own, 460 x 568, centred in the space between the grid and the bottom edge at
+any screen height. A tapped badge
 opens large in `%BadgeViewArt`, 860 x 1070, with live "Tap to close" under it.
 
 Each badge has a grey twin for before it is earned, made from it at half size

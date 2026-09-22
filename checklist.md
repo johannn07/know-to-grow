@@ -563,8 +563,9 @@ providing the art for all of them; nothing here starts before it arrives.
         the finished game's plant with a tomato, centred on the stump, "My
         Plant" / the stage on the sign. Swipe or arrows; like Lessons it stops
         at the stage the plant has reached, and opens on it
-  - [x] **Badges** is a 3 x 3 grid — decided, down from 3 x 4 so only two
-        cells are empty. Earned badges in colour, the rest grey; tapping an
+  - [x] **Badges** — the first six on a 3 x 2 grid, Know to Grow Star centred
+        and larger under it, since it is the last (was a 3 x 3 grid with two
+        empty cells). Earned badges in colour, the rest grey; tapping an
         earned one shows it large with "Tap to close" and no banner or
         Continue. Nothing to show before the first badge, which is why it opens
         with Level 1

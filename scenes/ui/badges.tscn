@@ -94,7 +94,7 @@ anchor_right = 0.5
 offset_left = -480.0
 offset_top = 450.0
 offset_right = 480.0
-offset_bottom = 1620.0
+offset_bottom = 1220.0
 grow_horizontal = 2
 mouse_filter = 2
 theme_override_constants/h_separation = 30
@@ -102,6 +102,7 @@ theme_override_constants/v_separation = 30
 columns = 3
 
 [node name="Badge1" type="Button" parent="Grid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 370)
 layout_mode = 2
 script = ExtResource("7_artbtn")
@@ -127,6 +128,7 @@ placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 
 [node name="Badge2" type="Button" parent="Grid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 370)
 layout_mode = 2
 script = ExtResource("7_artbtn")
@@ -152,6 +154,7 @@ placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 
 [node name="Badge3" type="Button" parent="Grid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 370)
 layout_mode = 2
 script = ExtResource("7_artbtn")
@@ -177,6 +180,7 @@ placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 
 [node name="Badge4" type="Button" parent="Grid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 370)
 layout_mode = 2
 script = ExtResource("7_artbtn")
@@ -202,6 +206,7 @@ placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 
 [node name="Badge5" type="Button" parent="Grid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 370)
 layout_mode = 2
 script = ExtResource("7_artbtn")
@@ -227,6 +232,7 @@ placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 
 [node name="Badge6" type="Button" parent="Grid"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 370)
 layout_mode = 2
 script = ExtResource("7_artbtn")
@@ -251,9 +257,20 @@ slot_name = "ui_badge_super_grower"
 placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 
-[node name="Badge7" type="Button" parent="Grid"]
-custom_minimum_size = Vector2(300, 370)
-layout_mode = 2
+[node name="Badge7" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = 326.0
+offset_right = 230.0
+offset_bottom = 894.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("7_artbtn")
 art_path = NodePath("Badge7Art")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
@@ -262,7 +279,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
 
-[node name="Badge7Art" type="Control" parent="Grid/Badge7"]
+[node name="Badge7Art" type="Control" parent="Badge7"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -273,54 +290,6 @@ mouse_filter = 2
 script = ExtResource("2_slot")
 texture = ExtResource("g_know_to_grow_star")
 slot_name = "ui_badge_know_to_grow_star"
-placeholder_color = Color(0.85, 0.85, 0.8, 1)
-hide_when_empty = true
-
-[node name="Badge8" type="Button" parent="Grid"]
-custom_minimum_size = Vector2(300, 370)
-layout_mode = 2
-script = ExtResource("7_artbtn")
-art_path = NodePath("Badge8Art")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
-
-[node name="Badge8Art" type="Control" parent="Grid/Badge8"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-slot_name = "badge_slot_8"
-placeholder_color = Color(0.85, 0.85, 0.8, 1)
-hide_when_empty = true
-
-[node name="Badge9" type="Button" parent="Grid"]
-custom_minimum_size = Vector2(300, 370)
-layout_mode = 2
-script = ExtResource("7_artbtn")
-art_path = NodePath("Badge9Art")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_hotspot")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_hotspot")
-
-[node name="Badge9Art" type="Control" parent="Grid/Badge9"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("2_slot")
-slot_name = "badge_slot_9"
 placeholder_color = Color(0.85, 0.85, 0.8, 1)
 hide_when_empty = true
 

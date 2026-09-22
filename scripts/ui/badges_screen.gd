@@ -1,7 +1,8 @@
 class_name BadgesScreen
 extends SubScreen
 
-## Badges: every badge in the game on a 3 x 3 grid, the ones earned in colour.
+## Badges: every badge in the game, the ones earned in colour — the first six on
+## a 3 x 2 grid, and the last, Know to Grow Star, on its own under it.
 ##
 ## **Badges are fixed per level**, so a badge is earned exactly when the level
 ## that awards it is cleared — [member badge_levels] says which. An earned badge
@@ -10,9 +11,10 @@ extends SubScreen
 ## and a tap anywhere does. One not yet earned is drawn in the locked rows' grey
 ## and does not answer.
 ##
-## The grid has nine cells for seven badges. The scene holds all nine as
-## %Grid/BadgeN with a BadgeNArt inside, so a badge added later is a texture to
-## fill in, not a cell to build; a cell with no badge draws nothing.
+## **The last badge stands apart — decided.** Know to Grow Star is for finishing
+## the game, so it is centred under the grid and drawn larger than the rest.
+## Every cell is a %BadgeN with a BadgeNArt inside, wherever it sits: six in
+## %Grid, the seventh on its own, so moving one does not touch the code.
 ##
 ## Android's back closes an open badge rather than leaving, the same as the
 ## Settings card.
@@ -27,7 +29,6 @@ extends SubScreen
 ## The plaque over the count.
 @export var sign_label: String = "My Badges"
 
-@onready var _grid: GridContainer = %Grid
 @onready var _sign: HeaderSign = %HeaderSign
 @onready var _view: Control = %BadgeView
 @onready var _view_art: ArtSlot = %BadgeViewArt
@@ -55,9 +56,9 @@ func _ready() -> void:
 	_sign.title_text = "%d of %d" % [earned_count(), badges.size()]
 
 
-## How many cells the grid has, badge or not.
+## How many badge cells the screen has.
 func cell_count() -> int:
-	return _grid.get_child_count()
+	return badges.size()
 
 
 ## Whether the badge in cell [param index] has been earned. A cell with no
@@ -100,9 +101,9 @@ func _badge_art(index: int, earned: bool) -> Texture2D:
 
 
 func _cell(index: int) -> Button:
-	var cell: Button = _grid.get_node_or_null("Badge%d" % (index + 1)) as Button
+	var cell: Button = get_node_or_null("%%Badge%d" % (index + 1)) as Button
 	if cell == null:
-		push_warning("Badges: no Badge%d in the grid" % (index + 1))
+		push_warning("Badges: no %%Badge%d in this layout" % (index + 1))
 	return cell
 
 

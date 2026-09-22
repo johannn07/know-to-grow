@@ -796,25 +796,29 @@ func _check_badges(state: GameStateStore) -> void:
 		state.reset()
 		return
 	var grid: GridContainer = screen.get_node("%Grid")
-	_expect(grid.columns == 3 and screen.cell_count() == 9,
-		"badges: a 3 x 3 grid (%d cells)" % screen.cell_count())
+	_expect(grid.columns == 3 and grid.get_child_count() == 6,
+		"badges: the first six on a 3 x 2 grid (%d)" % grid.get_child_count())
+	var star: Button = screen.get_node("%Badge7")
+	var star_rect := star.get_global_rect()
+	var first_rect := (screen.get_node("%Badge1") as Control).get_global_rect()
+	_expect(star.get_parent() != grid and is_equal_approx(star_rect.get_center().x, 540.0),
+		"badges: Know to Grow Star stands apart, centred (at x %d)" % star_rect.get_center().x)
+	_expect(star_rect.size.x > first_rect.size.x and star_rect.position.y > grid.get_global_rect().end.y,
+		"badges: and larger than the rest, under the grid")
 	_expect(screen.badges.size() == 7 and screen.badges_locked.size() == 7
 		and screen.badge_levels.size() == 7, "badges: seven badges, each with a grey one and a level")
 	var sign: HeaderSign = screen.get_node("%HeaderSign")
 	_expect(sign.title_text == "3 of 7", "badges: the sign counts 3 of 7 (is %s)" % sign.title_text)
 	_expect(sign.text_fits(), "badges: the sign text fits")
 	for i in screen.cell_count():
-		var cell: Button = grid.get_node("Badge%d" % (i + 1))
+		var cell: Button = screen.get_node("%%Badge%d" % (i + 1))
 		var art: ArtSlot = cell.get_node("Badge%dArt" % (i + 1))
 		var earned: bool = i < 3
 		_expect(cell.disabled == not earned,
 			"badges: Badge%d is %s" % [i + 1, "open" if earned else "closed"])
-		if i < 7:
-			var want: Texture2D = screen.badges[i] if earned else screen.badges_locked[i]
-			_expect(art.texture == want,
-				"badges: Badge%d drawn %s" % [i + 1, "in colour" if earned else "grey"])
-		else:
-			_expect(art.texture == null and art.hide_when_empty, "badges: Badge%d is an empty cell" % (i + 1))
+		var want: Texture2D = screen.badges[i] if earned else screen.badges_locked[i]
+		_expect(art.texture == want,
+			"badges: Badge%d drawn %s" % [i + 1, "in colour" if earned else "grey"])
 		_expect(cell.size.x >= 160.0 and cell.size.y >= 160.0,
 			"badges: Badge%d clears 160 px (is %dx%d)" % [i + 1, cell.size.x, cell.size.y])
 		_expect(cell.get_global_rect().end.y <= 1920.0, "badges: Badge%d is on screen" % (i + 1))
@@ -822,7 +826,7 @@ func _check_badges(state: GameStateStore) -> void:
 	_expect(not view.visible, "badges: no badge open at first")
 	screen.open_badge(4)
 	_expect(not view.visible, "badges: a badge not yet earned does not open")
-	(grid.get_node("Badge2") as Button).pressed.emit()
+	(screen.get_node("%Badge2") as Button).pressed.emit()
 	var view_art: ArtSlot = screen.get_node("%BadgeViewArt")
 	_expect(view.visible and view_art.texture == screen.badges[1], "badges: tapping Plant Helper opens it")
 	_expect((screen.get_node("%TapToClose") as Label).text == "Tap to close", "badges: it says Tap to close")

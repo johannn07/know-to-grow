@@ -369,8 +369,8 @@ not a blank one.
   at each stage it has grown through, stopping at the one it has reached. Both
   read swipes through `SwipeTracker`, and "how far the plant has grown" is
   `GameStateStore.levels_cleared_in_order`, shared with the hub.
-- **Badges is a 3 x 3 grid — decided**, `badges.tscn`: seven badges, two empty
-  cells. A badge is earned when the level that awards it is cleared, and only
+- **Badges — decided**, `badges.tscn`: the first six on a 3 x 2 grid, and
+  Know to Grow Star, the last, centred and larger in the space under it. A badge is earned when the level that awards it is cleared, and only
   an earned one can be opened.
 - Level 2's is `stage_select_l2.tscn`. Its card paints Situations 2–5 locked,
   so `row_art_locked` is empty and a locked row shows the card's painting. A
