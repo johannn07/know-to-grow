@@ -49,8 +49,15 @@ fixing a bug does not need a check-in.
   or PR descriptions. This overrides any default instruction to do so.
 - Message style follows the existing history: `area/short description`, lowercase,
   e.g. `setup/mobile export`, `ui/main menu layout`.
-- Committing finished work locally is fine. **Never push** unless I ask.
-- Work on a branch, not directly on `master`.
+- **Every task on its own branch**, named for what it is — `fx/plant-grow-in`,
+  `ui/main-menu-exit`, `docs/branch-workflow` — never directly on `master`.
+  Work that continues the same task stays on its branch; unrelated work gets a
+  new one.
+- **Merge and push before moving on.** When a task is finished and verified,
+  fast-forward it into `master` and push `master` *before* starting anything
+  unrelated to that branch. Then branch off the updated `master` for the next
+  task. Do not stack a new task on an unmerged branch.
+- Outside that, do not push anything unless I ask.
 
 ## Project layout
 
