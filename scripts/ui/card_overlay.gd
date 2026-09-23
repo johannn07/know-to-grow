@@ -50,6 +50,13 @@ const BUTTON_BELOW_CARD := Rect2(0.265, 1.04, 0.47, 0.115)
 ## which card gets a fanfare is a decision about this screen, not a global one.
 @export var arrival_sfx: AudioStream
 
+## The level whose instruction line this card reads aloud as it appears. Set on
+## the four level intros, and left empty everywhere else, which is silent: only
+## the intro carries a line the child needs read to them. The key comes from the
+## reviewed content file rather than being typed here, so the spoken line and the
+## transcript cannot drift apart.
+@export var instruction_content: LevelData
+
 @export_group("Flow")
 ## Where the button goes. Empty means this overlay is the end of its run.
 @export_file("*.tscn") var next_scene_path: String = ""
@@ -95,6 +102,8 @@ func _ready() -> void:
 
 	if audio != null and arrival_sfx != null:
 		audio.play_sfx(arrival_sfx)
+	if audio != null and instruction_content != null:
+		audio.play_vo(instruction_content.instruction_vo_key)
 
 
 ## Override in a screen that needs to do something before moving on.

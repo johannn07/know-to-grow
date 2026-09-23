@@ -276,12 +276,22 @@ Rules that follow from this:
   has them. Any other transcript in a `Label` is a bug.
 - **A transcript must match its artwork exactly.** If the art is re-rendered
   with different wording, update the transcript in the same change.
-- **Voice-over is planned**, so every spoken line has a `*_vo_key` and audio
-  lives at `res://assets/audio/vo/en/<key>.ogg`.
+- **Voice-over is recorded**, one file per line at
+  `res://assets/audio/vo/en/<key>.ogg`, named by the `*_vo_key` in the content
+  file. `AudioDirector.play_vo(key)` builds that path — the one place in the game
+  that turns a name into a path, because the alternative is exporting two dozen
+  streams by hand. A key with no file warns rather than failing.
+- **What is recorded, and what is not.** The four level instructions, all
+  nineteen stage prompts, and two praise lines, `praise_great_job` and
+  `praise_amazing`, which alternate on a correct answer. There is no recording
+  for Level 1's fun facts or for the level-complete lines, and none is planned —
+  so nothing asks for them.
 - `assets/audio/vo/en/SCRIPT.md` is **generated**, not written. Re-run
   `tools/export_vo_script.gd` after any content change.
-- Changing wording now means re-rendering art *and* re-recording a line. Get the
-  teaching-content reviewer through all 19 stages before commissioning voice-over.
+- Changing wording now means re-rendering art *and* re-recording a line.
+- `tools/verify_audio.gd` checks every prompt and instruction key in
+  content/*.tres has a file, and that the intro, a stage and a right answer each
+  speak.
 
 ## Headers are live text on a blank sign, Level 2 — decided
 
@@ -505,11 +515,14 @@ So do `verify_audio.gd`, which plays a stage to check the answer stings, and
 answer one. `verify_top_bar.gd` writes `user://settings.cfg` but puts back
 whatever was there.
 
-**Once music has played, every run ends with `1 resources still in use at exit`.**
-That is the audio server's playback object outliving the scene tree, not a leak
-in this project: stopping the players, clearing their streams and nulling the
-exports all leave it, and the same run with music never started exits clean.
-Ignore that one line; treat anything else on `--quit` as real.
+**Once music or a spoken line has played, a run ends with `N resources still in
+use at exit`**, naming the audio streams. That is the audio server's playback
+objects outliving the scene tree, not a leak in this project: stopping the
+players, clearing their streams and nulling the exports all leave it, and the
+same run with no sound started exits clean. Run with `--verbose` and the lines
+name the files — music was one on its own; a screen that also speaks a line adds
+that `.ogg` and its Ogg packet sequence. Ignore lines that name an audio file;
+treat anything else on `--quit` as real.
 
 Note that a `-s` tool script is compiled **before autoloads are registered**, so
 `GameState` as a bare identifier will not compile in one. Reach progress through

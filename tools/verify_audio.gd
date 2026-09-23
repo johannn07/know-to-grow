@@ -68,6 +68,14 @@ const LEVEL_SCREENS: Array[String] = [
 	"res://scenes/levels/level_1/stage_4.tscn",
 ]
 
+## The reviewed content, which is where the voice-over keys come from.
+const CONTENT: Array[String] = [
+	"res://content/level_1_planting.tres",
+	"res://content/level_2_monitoring.tres",
+	"res://content/level_3_identifying.tres",
+	"res://content/level_4_functions.tres",
+]
+
 var _failures := 0
 var _audio: AudioDirectorService = null
 
@@ -196,11 +204,103 @@ func _initialize() -> void:
 		complete.queue_free()
 		await process_frame
 
+	await _check_voice_over()
+
 	_audio.stop_music()
 	if state != null:
 		state.reset()
 	print("\n%s — %d failure(s)" % ["FAIL" if _failures > 0 else "PASS", _failures])
 	quit(1 if _failures > 0 else 0)
+
+
+## The spoken lines: that every line the game asks for has been recorded, and
+## that the three moments which speak one actually do.
+##
+## Headless hears nothing, so this asks the VO player which stream it was handed.
+func _check_voice_over() -> void:
+	print("\n--- voice-over ---")
+	var vo_player := _audio.get_node("Vo") as AudioStreamPlayer
+	_expect(vo_player != null, "the director has a Vo player")
+	if vo_player == null:
+		return
+	_expect(vo_player.bus == &"VO", "the voice plays on the VO bus")
+
+	for key in AudioDirectorService.PRAISE_KEYS:
+		_expect(_recorded(key), "the praise line '%s' is recorded" % key)
+
+	# Every prompt and instruction a screen will ask for, from the reviewed
+	# content rather than a list typed here: a new stage is covered by being in
+	# its level's content file.
+	for path in CONTENT:
+		var level: LevelData = load(path) as LevelData
+		_expect(level != null, "%s loads" % path.get_file())
+		if level == null:
+			continue
+		_expect(_recorded(level.instruction_vo_key),
+			"%s's instruction is recorded" % level.id)
+		for challenge in level.challenges:
+			_expect(_recorded(challenge.prompt_vo_key),
+				"%s is recorded" % challenge.prompt_vo_key)
+
+	# --- the intro reads its instruction out ---
+	vo_player.stop()
+	vo_player.stream = null
+	var intro: CardOverlay = await _spawn("res://scenes/ui/level_intro.tscn") as CardOverlay
+	if intro != null:
+		_expect(intro.instruction_content != null, "the level intro knows its content file")
+		_expect(_vo_holds(&"level_1_instruction"), "and reads the instruction out")
+		intro.queue_free()
+		await process_frame
+
+	# --- a stage speaks its own prompt as it opens ---
+	vo_player.stop()
+	vo_player.stream = null
+	var stage: StageScreen = await _spawn("res://scenes/levels/level_1/stage_1.tscn") as StageScreen
+	if stage == null:
+		return
+	_expect(_vo_holds(&"l1_dig_prompt"), "a stage speaks its prompt as it opens")
+
+	# --- and praises a right answer, alternating between the two lines ---
+	var right: OptionCard = null
+	for card in stage.cards():
+		if stage.is_correct(card.option_id):
+			right = card
+	# Which of the two comes first depends on how many right answers this run has
+	# already given, so this checks that one is spoken and the next is the other.
+	stage._on_card_dropped(right, stage._drop_zone.get_global_rect().get_center())
+	await process_frame
+	var spoken := _vo_key_playing()
+	_expect(spoken in AudioDirectorService.PRAISE_KEYS,
+		"a right answer is praised (heard '%s')" % spoken)
+	_audio.play_praise()
+	var next_line := _vo_key_playing()
+	_expect(
+		next_line in AudioDirectorService.PRAISE_KEYS and next_line != spoken,
+		"the next one is the other line ('%s' then '%s')" % [spoken, next_line]
+	)
+	stage.queue_free()
+	await process_frame
+
+
+func _recorded(key: StringName) -> bool:
+	return key != &"" and ResourceLoader.exists(_vo_path(key))
+
+
+func _vo_path(key: StringName) -> String:
+	return AudioDirectorService.VO_DIR + String(key) + AudioDirectorService.VO_EXT
+
+
+## The key of the line the VO player is holding, or "" if it has none.
+func _vo_key_playing() -> StringName:
+	var stream := (_audio.get_node("Vo") as AudioStreamPlayer).stream
+	if stream == null:
+		return &""
+	return StringName(stream.resource_path.get_file().get_basename())
+
+
+func _vo_holds(key: StringName) -> bool:
+	var stream := (_audio.get_node("Vo") as AudioStreamPlayer).stream
+	return stream != null and stream.resource_path == _vo_path(key)
 
 
 ## Clears every voice, so the next assertion is about what just happened rather

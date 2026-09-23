@@ -35,6 +35,21 @@ enum Track {
 ## top of a correct answer is normal, so one player is not enough.
 const SFX_VOICES := 4
 
+## Where a spoken line lives, named by the `*_vo_key` in content/*.tres:
+## `res://assets/audio/vo/en/<key>.ogg`. This is the one place in the game that
+## builds a path out of a name rather than taking a resource set in a scene. The
+## music and the stings are a handful of files a screen chooses between, so they
+## are exported and visible in the Inspector; the voice-over is one file per
+## reviewed line, and exporting two dozen of them by hand would only be a longer
+## way of writing this convention down. `SCRIPT.md`, which the recordings are
+## made from, states the same path.
+const VO_DIR := "res://assets/audio/vo/en/"
+const VO_EXT := ".ogg"
+
+## The two "if needed" praise lines, played in turn on a correct answer so the
+## same one is not heard twice running.
+const PRAISE_KEYS: Array[StringName] = [&"praise_great_job", &"praise_amazing"]
+
 ## The child's sound choices, kept apart from `user://progress.cfg` on purpose:
 ## New Game wipes progress, and it should not also turn the music back on.
 const SETTINGS_PATH := "user://settings.cfg"
@@ -60,11 +75,13 @@ signal sound_changed
 
 var _current := Track.NONE
 var _next_voice := 0
+var _next_praise := 0
 var _music_on := true
 var _sfx_on := true
 var _vo_on := true
 
 @onready var _music: AudioStreamPlayer = $Music
+@onready var _vo: AudioStreamPlayer = $Vo
 @onready var _voices: Array[AudioStreamPlayer] = []
 
 
@@ -105,6 +122,8 @@ func _exit_tree() -> void:
 	# started exits clean. Flagged in CLAUDE.md so it is not mistaken for one.
 	stop_music()
 	_music.stream = null
+	_vo.stop()
+	_vo.stream = null
 	for voice in _voices:
 		voice.stop()
 		voice.stream = null
@@ -135,6 +154,40 @@ func play_sfx(stream: AudioStream) -> void:
 	_next_voice = (_next_voice + 1) % _voices.size()
 	voice.stream = stream
 	voice.play()
+
+
+## Speaks the line filed under [param key] — a `*_vo_key` from content/*.tres.
+##
+## One line at a time: a new one cuts the last off, because a prompt arriving
+## while the previous stage's prompt is still talking means the child has moved
+## on. A key with no recording is a mistake rather than a silence, so it says so;
+## lines that were never recorded are simply never asked for.
+func play_vo(key: StringName) -> void:
+	if key == &"":
+		return
+	var path := VO_DIR + String(key) + VO_EXT
+	if not ResourceLoader.exists(path):
+		push_warning("AudioDirector: no recording for '%s' (looked for %s)" % [key, path])
+		return
+	_vo.stop()
+	_vo.stream = load(path) as AudioStream
+	_vo.play()
+
+
+## One of the two praise lines, on a correct answer. They alternate rather than
+## being picked at random so a child cannot hear the same one three times over.
+func play_praise() -> void:
+	play_vo(PRAISE_KEYS[_next_praise])
+	_next_praise = (_next_praise + 1) % PRAISE_KEYS.size()
+
+
+func stop_vo() -> void:
+	_vo.stop()
+
+
+## Whether a line is being spoken now. What ducks the music under it.
+func is_vo_playing() -> bool:
+	return _vo.playing
 
 
 func play_tap() -> void:

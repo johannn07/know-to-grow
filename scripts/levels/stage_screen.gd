@@ -173,6 +173,7 @@ func _ready() -> void:
 		push_warning("%s: no %%DropZone, so a dragged card has nowhere to land" % name)
 	_show_prompt()
 	_show_header()
+	_speak_prompt()
 
 
 ## The stage's option cards, in scene order — which is the content file's order,
@@ -251,6 +252,8 @@ func _answer(card: OptionCard) -> void:
 		card.freeze()
 		if audio != null:
 			audio.play_correct()
+			# "Great job!" over the sting, on its own bus so it is heard through it.
+			audio.play_praise()
 		if progress != null:
 			progress.record_stage_cleared(level_id, stage_number, _wrong_attempts)
 		else:
@@ -294,6 +297,19 @@ func _show_prompt() -> void:
 	if challenge != null:
 		bubble.text = challenge.prompt_transcript
 	bubble.pulse()
+
+
+## Reads this stage's question aloud as it opens, from the same challenge the
+## bubble takes its words from — so the child who cannot yet read the bubble
+## hears exactly what is written in it.
+##
+## A stage with no level_content stays silent rather than guessing a key.
+func _speak_prompt() -> void:
+	if audio == null or level_content == null:
+		return
+	var challenge: ChallengeData = level_content.get_challenge(challenge_id)
+	if challenge != null:
+		audio.play_vo(challenge.prompt_vo_key)
 
 
 ## Writes the plaque and banner onto a blank header sign. A stage without a

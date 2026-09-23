@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://c7amd24ped5i0" path="res://assets/art/ui/screens/ui_level_intro_l4.png" id="5_card"]
 [ext_resource type="Texture2D" uid="uid://dt5ho0eb6q8tq" path="res://assets/art/ui/buttons/ui_button_continue.png" id="6_continue"]
 [ext_resource type="Script" uid="uid://brakli37rohw8" path="res://scripts/ui/art_button.gd" id="7_artbtn"]
+[ext_resource type="Resource" path="res://content/level_4_functions.tres" id="8_content"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hotspot"]
 
@@ -24,6 +25,7 @@ back_scene_path = "res://scenes/ui/hub.tscn"
 card_art = ExtResource("5_card")
 button_art = ExtResource("6_continue")
 button_rect = Rect2(0.265, 1.0405, 0.47, 0.1149)
+instruction_content = ExtResource("8_content")
 next_scene_path = "res://scenes/ui/stage_select_l4.tscn"
 
 [node name="Background" type="Control" parent="."]

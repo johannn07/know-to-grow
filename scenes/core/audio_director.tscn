@@ -27,6 +27,9 @@ wrong_answer = ExtResource("6_wrong")
 [node name="Music" type="AudioStreamPlayer" parent="."]
 bus = &"Music"
 
+[node name="Vo" type="AudioStreamPlayer" parent="."]
+bus = &"VO"
+
 [node name="Sfx" type="Node" parent="."]
 
 [node name="Voice1" type="AudioStreamPlayer" parent="Sfx"]
