@@ -84,6 +84,20 @@ func _on_any_button_down() -> void:
 		audio.play_tap()
 
 
+## A spoken line belongs to the screen that started it, so it stops when that
+## screen goes. The music does not — it is the autoload's whole point — but a
+## voice is about what is on screen now.
+##
+## A stage used to get this by accident: the next stage's prompt cut the last
+## one off as it arrived. The level intro had nothing after it to do the cutting,
+## so its instruction carried on talking over the stage select. Doing it here
+## covers every screen and every way of leaving one — Continue, back, the
+## Android gesture, Main Menu from the settings card.
+func _exit_tree() -> void:
+	if audio != null:
+		audio.stop_vo()
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		# With the settings card up, the gesture means "close this", not "leave".

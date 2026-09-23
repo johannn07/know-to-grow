@@ -101,7 +101,9 @@ func _ready() -> void:
 	_action_button.pressed.connect(_on_action_pressed)
 
 	if audio != null and arrival_sfx != null:
-		audio.play_sfx(arrival_sfx)
+		# The fanfare is the moment this screen exists for, so the music gets out
+		# of its way rather than playing over it at full volume.
+		audio.play_sfx(arrival_sfx, true)
 	if audio != null and instruction_content != null:
 		audio.play_vo(instruction_content.instruction_vo_key)
 

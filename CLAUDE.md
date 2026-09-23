@@ -289,9 +289,21 @@ Rules that follow from this:
 - `assets/audio/vo/en/SCRIPT.md` is **generated**, not written. Re-run
   `tools/export_vo_script.gd` after any content change.
 - Changing wording now means re-rendering art *and* re-recording a line.
+- **A line belongs to the screen that started it**, and `SubScreen._exit_tree`
+  stops it. Before that, a stage's prompt was only cut off by the next stage's
+  prompt arriving, and the level intro — with nothing after it to do the cutting
+  — carried on talking over the stage select.
+- **The music gets out of the way — decided.** It drops 12 dB while a line is
+  spoken, while the level-complete fanfare rings, and while the plant grows in
+  on the hub, then comes back over 0.7 s. `AudioDirector.duck_music()` /
+  `release_music()` count holds, so two overlapping ones do not uncover the music
+  between them. Taps and the answer stings do **not** duck: they are meant to sit
+  inside the music.
 - `tools/verify_audio.gd` checks every prompt and instruction key in
-  content/*.tres has a file, and that the intro, a stage and a right answer each
-  speak.
+  content/*.tres has a file, that the intro, a stage and a right answer each
+  speak, and that the music ducks and recovers. Its ducking section runs first,
+  because a fanfare holds the music down for its own length and would otherwise
+  still be holding it when the check runs.
 
 ## Headers are live text on a blank sign, Level 2 — decided
 

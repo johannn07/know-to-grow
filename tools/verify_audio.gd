@@ -134,6 +134,10 @@ func _initialize() -> void:
 		"there are %d SFX voices, so effects can overlap (found %d)"
 			% [AudioDirectorService.SFX_VOICES, voices])
 
+	# Before anything else has played: a fanfare holds the music down for as long
+	# as it lasts, so a check of the resting state has to come first.
+	await _check_ducking()
+
 	# --- every screen names a track ---
 	for path in MENU_SCREENS:
 		await _expect_track(path, AudioDirectorService.Track.MENU, "menu")
@@ -280,6 +284,45 @@ func _check_voice_over() -> void:
 	)
 	stage.queue_free()
 	await process_frame
+
+
+## The music getting out of the way: held down while a line is spoken and while
+## the level-complete fanfare rings, and back up once they are done.
+##
+## Headless cannot hear the volume, so this asks whether the music is being held
+## down rather than how loud it is.
+func _check_ducking() -> void:
+	print("\n--- the music makes room ---")
+	_audio.play_music(AudioDirectorService.Track.LEVEL_1)
+	_audio.stop_vo()
+	_expect(not _audio.is_music_ducked(), "the music starts at full volume")
+
+	_audio.play_vo(AudioDirectorService.PRAISE_KEYS[0])
+	_expect(_audio.is_music_ducked(), "a spoken line holds the music down")
+	_audio.play_vo(AudioDirectorService.PRAISE_KEYS[1])
+	_audio.stop_vo()
+	_expect(
+		not _audio.is_music_ducked(),
+		"one line replacing another is still only one hold, released once"
+	)
+
+	# --- a screen leaving takes its line with it ---
+	var intro: CardOverlay = await _spawn("res://scenes/ui/level_intro.tscn") as CardOverlay
+	if intro != null:
+		var vo_player := _audio.get_node("Vo") as AudioStreamPlayer
+		_expect(vo_player.stream != null, "the intro starts its instruction")
+		intro.queue_free()
+		await process_frame
+		_expect(not vo_player.playing, "and Continue stops it rather than talking over the next screen")
+		_expect(not _audio.is_music_ducked(), "the music comes back up with it")
+
+	# --- and the level-complete fanfare gets the same room ---
+	var complete: CardOverlay = await _spawn("res://scenes/ui/level_complete.tscn") as CardOverlay
+	if complete != null:
+		_expect(_audio.is_music_ducked(), "the level-complete fanfare holds the music down")
+		complete.queue_free()
+		await process_frame
+	_audio.stop_vo()
 
 
 func _recorded(key: StringName) -> bool:

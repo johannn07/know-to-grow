@@ -274,7 +274,9 @@ func _grow_plant(plant: ArtSlot, before_texture: Texture2D, stage: int) -> void:
 		before.pivot_offset = Vector2(before.size.x * 0.5, before.size.y)
 		plant.pivot_offset = Vector2(plant.size.x * 0.5, plant.size.y)
 		if audio != null:
-			audio.play_correct()
+			# Over the music: the plant rising out of the soil is the one thing
+			# happening on the hub at that moment.
+			audio.play_correct(true)
 	)
 	_grow_tween.tween_property(before, "modulate:a", 0.0, 0.6)
 	_grow_tween.parallel().tween_property(before, "scale", Vector2(0.92, 0.92), 0.6)

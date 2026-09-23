@@ -50,6 +50,15 @@ const VO_EXT := ".ogg"
 ## same one is not heard twice running.
 const PRAISE_KEYS: Array[StringName] = [&"praise_great_job", &"praise_amazing"]
 
+## How far the music drops while something is being said or played over it. The
+## music is written to sit under a child's attention, not under a voice, and at
+## full volume it covers both the spoken lines and the level-complete fanfare.
+const DUCK_DB := -12.0
+## Quick down so the first word is not lost, slow back up so the return is not
+## a noticeable swell.
+const DUCK_IN := 0.15
+const DUCK_OUT := 0.7
+
 ## The child's sound choices, kept apart from `user://progress.cfg` on purpose:
 ## New Game wipes progress, and it should not also turn the music back on.
 const SETTINGS_PATH := "user://settings.cfg"
@@ -80,6 +89,15 @@ var _music_on := true
 var _sfx_on := true
 var _vo_on := true
 
+## How many things are talking over the music. The music comes back up when the
+## last of them finishes, so a fanfare and a spoken line that overlap do not
+## uncover the music between them.
+var _ducks := 0
+## True while the line being spoken is the thing holding the music down, so that
+## replacing one line with another does not stack a second hold.
+var _vo_ducking := false
+var _duck_tween: Tween = null
+
 @onready var _music: AudioStreamPlayer = $Music
 @onready var _vo: AudioStreamPlayer = $Vo
 @onready var _voices: Array[AudioStreamPlayer] = []
@@ -91,6 +109,7 @@ func _ready() -> void:
 			_voices.append(child)
 	if _voices.is_empty():
 		push_warning("AudioDirector: no SFX players in the scene, so effects are silent")
+	_vo.finished.connect(_on_vo_finished)
 	_load_settings()
 
 
@@ -147,13 +166,31 @@ func current_track() -> Track:
 
 ## Plays an effect on the next free voice, round-robin, so effects that land on
 ## top of each other both get heard.
-func play_sfx(stream: AudioStream) -> void:
+##
+## [param over_music] holds the music down for as long as the effect lasts. It is
+## for the two that are the moment rather than a detail of it — the level-complete
+## fanfare and the plant growing in — not for taps and answer stings, which are
+## meant to sit inside the music.
+func play_sfx(stream: AudioStream, over_music: bool = false) -> void:
 	if stream == null or _voices.is_empty():
 		return
 	var voice := _voices[_next_voice]
 	_next_voice = (_next_voice + 1) % _voices.size()
 	voice.stream = stream
 	voice.play()
+	if over_music:
+		_duck_for(stream.get_length())
+
+
+## Holds the music down for [param seconds], for something that has no "finished"
+## to wait on — an effect on a shared voice, which the next effect may cut off.
+func _duck_for(seconds: float) -> void:
+	if seconds <= 0.0:
+		return
+	duck_music()
+	# Always, so a card that pauses the tree behind it still lets the music up.
+	var timer := get_tree().create_timer(seconds, true, false, true)
+	timer.timeout.connect(release_music)
 
 
 ## Speaks the line filed under [param key] — a `*_vo_key` from content/*.tres.
@@ -169,9 +206,14 @@ func play_vo(key: StringName) -> void:
 	if not ResourceLoader.exists(path):
 		push_warning("AudioDirector: no recording for '%s' (looked for %s)" % [key, path])
 		return
+	# Replacing a line keeps the hold it already has, rather than stacking a
+	# second one — stop() does not report itself finished.
 	_vo.stop()
 	_vo.stream = load(path) as AudioStream
 	_vo.play()
+	if not _vo_ducking:
+		_vo_ducking = true
+		duck_music()
 
 
 ## One of the two praise lines, on a correct answer. They alternate rather than
@@ -181,8 +223,46 @@ func play_praise() -> void:
 	_next_praise = (_next_praise + 1) % PRAISE_KEYS.size()
 
 
+## Stops the line being spoken and lets the music back up. Called by a screen as
+## it leaves, so a line started on one screen does not carry into the next.
 func stop_vo() -> void:
 	_vo.stop()
+	_on_vo_finished()
+
+
+func _on_vo_finished() -> void:
+	if not _vo_ducking:
+		return
+	_vo_ducking = false
+	release_music()
+
+
+## Holds the music down until the matching [method release_music]. Nestable: two
+## holds need two releases, so whichever finishes second is the one that brings
+## the music back.
+func duck_music() -> void:
+	_ducks += 1
+	if _ducks == 1:
+		_tween_music_volume(DUCK_DB, DUCK_IN)
+
+
+func release_music() -> void:
+	_ducks = maxi(0, _ducks - 1)
+	if _ducks == 0:
+		_tween_music_volume(0.0, DUCK_OUT)
+
+
+## Whether the music is being held down right now. For the smoke tests, which
+## cannot hear it.
+func is_music_ducked() -> bool:
+	return _ducks > 0
+
+
+func _tween_music_volume(to_db: float, seconds: float) -> void:
+	if _duck_tween != null:
+		_duck_tween.kill()
+	_duck_tween = create_tween()
+	_duck_tween.tween_property(_music, "volume_db", to_db, seconds)
 
 
 ## Whether a line is being spoken now. What ducks the music under it.
@@ -194,8 +274,10 @@ func play_tap() -> void:
 	play_sfx(tap)
 
 
-func play_correct() -> void:
-	play_sfx(correct_answer)
+## [param over_music] for the plant growing in on the hub, which borrows this
+## sting and is the whole screen for a moment.
+func play_correct(over_music: bool = false) -> void:
+	play_sfx(correct_answer, over_music)
 
 
 func play_wrong() -> void:
