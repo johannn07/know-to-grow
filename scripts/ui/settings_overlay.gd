@@ -3,9 +3,10 @@ extends Control
 
 ## The Settings card, opened from the settings button on a stage's [TopBar].
 ##
-## Music and sound effects switch on and off here, and Main Menu leaves the
-## level. The two toggles talk to the [AudioDirectorService] directly, which
-## saves the choice, so nothing about them passes through the screen.
+## Music, sound effects and the spoken lines switch on and off here, in one row
+## of three, and Main Menu leaves the level. The toggles talk to the
+## [AudioDirectorService] directly, which saves the choice, so nothing about them
+## passes through the screen.
 ##
 ## Credits sits above Main Menu, but only once the game has been finished
 ## through to the end — before that the button is hidden and Main Menu takes the
@@ -30,11 +31,13 @@ const OFF_TINT := Color(0.45, 0.45, 0.45, 1.0)
 @onready var _close_button: ArtButton = %CloseButton
 @onready var _music_button: ArtButton = %MusicButton
 @onready var _sfx_button: ArtButton = %SfxButton
+@onready var _vo_button: ArtButton = %VoButton
 @onready var _main_menu_button: Button = %MainMenuButton
 @onready var _credits_button: Button = %CreditsButton
 @onready var _credits: CreditsOverlay = %Credits
 @onready var _music_art: ArtSlot = %MusicArt
 @onready var _sfx_art: ArtSlot = %SfxArt
+@onready var _vo_art: ArtSlot = %VoArt
 
 ## Fetched rather than named: see [GameStateStore] for why.
 @onready var _audio: AudioDirectorService = (
@@ -64,6 +67,7 @@ func _ready() -> void:
 	_close_button.pressed.connect(close)
 	_music_button.pressed.connect(_on_music_pressed)
 	_sfx_button.pressed.connect(_on_sfx_pressed)
+	_vo_button.pressed.connect(_on_vo_pressed)
 	_main_menu_button.pressed.connect(_on_main_menu_pressed)
 	_credits_button.pressed.connect(_credits.open)
 	_menu_slot = Vector2(_main_menu_button.offset_top, _main_menu_button.offset_bottom)
@@ -89,7 +93,7 @@ func close() -> void:
 		_credits.close()
 		return
 	# A press cut short by the card vanishing must not leave its art dark.
-	for button: ArtButton in [_close_button, _music_button, _sfx_button]:
+	for button: ArtButton in [_close_button, _music_button, _sfx_button, _vo_button]:
 		button.clear_tint()
 	_credits.close()
 	hide()
@@ -125,6 +129,11 @@ func _on_sfx_pressed() -> void:
 		_audio.set_sfx_on(not _audio.is_sfx_on())
 
 
+func _on_vo_pressed() -> void:
+	if _audio != null:
+		_audio.set_vo_on(not _audio.is_vo_on())
+
+
 func _on_main_menu_pressed() -> void:
 	if main_menu_path.is_empty() or not ResourceLoader.exists(main_menu_path):
 		push_warning("SettingsOverlay: main menu scene is unset or missing: '%s'" % main_menu_path)
@@ -140,6 +149,8 @@ func _refresh() -> void:
 	_main_menu_button.offset_bottom = slot.y
 	var music_on := _audio == null or _audio.is_music_on()
 	var sfx_on := _audio == null or _audio.is_sfx_on()
+	var vo_on := _audio == null or _audio.is_vo_on()
 	# self_modulate, because [ArtButton] owns `modulate` for its press tint.
 	_music_art.self_modulate = Color.WHITE if music_on else OFF_TINT
 	_sfx_art.self_modulate = Color.WHITE if sfx_on else OFF_TINT
+	_vo_art.self_modulate = Color.WHITE if vo_on else OFF_TINT

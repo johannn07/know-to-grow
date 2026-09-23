@@ -196,13 +196,18 @@ its row; the greeting and star pills sit on the row below it, at `y 225`.
 The "My Plant" sign hangs off the screen's centre through `SignAnchor`, the
 same as the plant, so the two stay together on a 20:9 phone.
 
-Settings opens `settings_overlay.tscn`, a card over the stage: music and sound
-effects toggles and a Main Menu button, on its own drawn card with "Settings"
-live on the plank. It closes by the X on its corner, a tap on the dim, or
-Android's back, which closes the card rather than leaving
-the stage. The toggles mute the `Music` and `SFX` buses — never `VO` — draw
-their own art darker when off, and are saved to `user://settings.cfg`, apart
-from progress so New Game does not reset them.
+Settings opens `settings_overlay.tscn`, a card over the stage: one row of three
+toggles — music, sound effects, voice-over — and a Main Menu button, on its own
+drawn card with "Settings" live on the plank. It closes by the X on its corner,
+a tap on the dim, or Android's back, which closes the card rather than leaving
+the stage. Each toggle mutes its own bus — `Music`, `SFX`, `VO` — draws its art
+darker when off, and is saved to `user://settings.cfg`, apart from progress so
+New Game does not reset them. The three sit in 200 x 208 slots, 30 px apart:
+the old two were 240 x 248, and three of those do not fit the card.
+
+**Credits is on the card once the game has been finished**, above Main Menu,
+gated on the same flag the hub uses to decide it has shown the finished-game
+card. Before that it is hidden and Main Menu takes the space.
 
 **Level 3 taps instead of dragging.** A stage sets `tap_to_answer` and its
 cards answer where they stand: no `%DropZone`, no slide home, and the press is

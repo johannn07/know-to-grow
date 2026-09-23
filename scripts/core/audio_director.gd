@@ -62,6 +62,7 @@ var _current := Track.NONE
 var _next_voice := 0
 var _music_on := true
 var _sfx_on := true
+var _vo_on := true
 
 @onready var _music: AudioStreamPlayer = $Music
 @onready var _voices: Array[AudioStreamPlayer] = []
@@ -156,9 +157,17 @@ func is_music_on() -> bool:
 
 
 ## Whether effects are heard: taps and the answer stings. Voice-over has its own
-## bus and is left alone, since it carries the prompt.
+## bus and its own switch, so turning the stings off never takes the prompt away
+## with them.
 func is_sfx_on() -> bool:
 	return _sfx_on
+
+
+## Whether the spoken lines are heard. Off mutes the VO bus, which is separate
+## from music and effects on purpose: a child who can read may not want the voice,
+## and a child who cannot read needs it whatever else is switched off.
+func is_vo_on() -> bool:
+	return _vo_on
 
 
 func set_music_on(on: bool) -> void:
@@ -175,9 +184,17 @@ func set_sfx_on(on: bool) -> void:
 	sound_changed.emit()
 
 
+func set_vo_on(on: bool) -> void:
+	_vo_on = on
+	_apply_mutes()
+	_save_settings()
+	sound_changed.emit()
+
+
 func _apply_mutes() -> void:
 	_mute_bus(&"Music", not _music_on)
 	_mute_bus(&"SFX", not _sfx_on)
+	_mute_bus(&"VO", not _vo_on)
 
 
 func _mute_bus(bus_name: StringName, mute: bool) -> void:
@@ -194,6 +211,7 @@ func _load_settings() -> void:
 	if file.load(SETTINGS_PATH) == OK:
 		_music_on = bool(file.get_value(SETTINGS_SECTION, "music_on", true))
 		_sfx_on = bool(file.get_value(SETTINGS_SECTION, "sfx_on", true))
+		_vo_on = bool(file.get_value(SETTINGS_SECTION, "vo_on", true))
 	_apply_mutes()
 
 
@@ -201,6 +219,7 @@ func _save_settings() -> void:
 	var file := ConfigFile.new()
 	file.set_value(SETTINGS_SECTION, "music_on", _music_on)
 	file.set_value(SETTINGS_SECTION, "sfx_on", _sfx_on)
+	file.set_value(SETTINGS_SECTION, "vo_on", _vo_on)
 	var error := file.save(SETTINGS_PATH)
 	if error != OK:
 		push_warning("AudioDirector: could not save to %s (error %d)" % [SETTINGS_PATH, error])

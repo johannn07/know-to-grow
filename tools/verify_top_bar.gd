@@ -134,6 +134,7 @@ func _check_toggles() -> void:
 		return
 	audio.set_music_on(true)
 	audio.set_sfx_on(true)
+	audio.set_vo_on(true)
 
 	var stage: StageScreen = (load("res://scenes/levels/level_2/stage_1.tscn") as PackedScene).instantiate()
 	root.add_child(stage)
@@ -149,7 +150,7 @@ func _check_toggles() -> void:
 		card.get_global_rect().size.is_equal_approx(stage.get_viewport_rect().size),
 		"the card's dim covers the whole screen (is %s)" % card.get_global_rect().size
 	)
-	for button_name in ["%CloseButton", "%MusicButton", "%SfxButton", "%MainMenuButton"]:
+	for button_name in ["%CloseButton", "%MusicButton", "%SfxButton", "%VoButton", "%MainMenuButton"]:
 		var button: BaseButton = card.get_node(button_name)
 		var rect := button.get_global_rect()
 		_expect(
@@ -187,6 +188,39 @@ func _check_toggles() -> void:
 	_expect(AudioServer.is_bus_mute(sfx_bus), "SFX bus is muted")
 	_expect(not AudioServer.is_bus_mute(vo_bus), "voice-over is never muted by it")
 	_expect(sfx_art.self_modulate.v < 0.6, "effects art is drawn darker")
+
+	# --- the third toggle: the spoken lines ---
+	var vo_art: ArtSlot = card.get_node("%VoArt")
+	_expect(vo_art.texture != null, "the voice-over toggle has its art")
+	_expect(vo_art.self_modulate == Color.WHITE, "voice-over starts on, at full brightness")
+	var row: Array[Control] = [
+		card.get_node("%MusicArt") as Control,
+		card.get_node("%SfxArt") as Control,
+		card.get_node("%VoArt") as Control,
+	]
+	var card_rect := (card.get_node("%CardArt") as Control).get_global_rect()
+	for slot in row:
+		_expect(card_rect.encloses(slot.get_global_rect()), "%s sits on the card" % slot.name)
+	_expect(
+		is_equal_approx(row[0].get_global_rect().position.y, row[1].get_global_rect().position.y)
+			and is_equal_approx(
+				row[1].get_global_rect().position.y, row[2].get_global_rect().position.y
+			),
+		"all three toggles share one row"
+	)
+	_expect(
+		row[0].get_global_rect().end.x <= row[1].get_global_rect().position.x
+			and row[1].get_global_rect().end.x <= row[2].get_global_rect().position.x,
+		"music, effects and voice-over do not overlap"
+	)
+
+	(card.get_node("%VoButton") as ArtButton).pressed.emit()
+	_expect(not audio.is_vo_on(), "voice-over button switches the voice off")
+	_expect(AudioServer.is_bus_mute(vo_bus), "VO bus is muted")
+	_expect(vo_art.self_modulate.v < 0.6, "voice-over art is drawn darker")
+	(card.get_node("%VoButton") as ArtButton).pressed.emit()
+	_expect(audio.is_vo_on(), "pressing again switches the voice back on")
+	_expect(not AudioServer.is_bus_mute(vo_bus), "VO bus is heard again")
 
 	var file := ConfigFile.new()
 	_expect(file.load(SETTINGS) == OK, "the choice is saved")

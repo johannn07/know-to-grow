@@ -493,8 +493,15 @@ taken to 430 to match the others.
 |---|---|---|---|
 | `ui_button_nav_back.png` | 426 x 443 | 243 KB | `%BackArt`, 132 x 136 at 30, 28 |
 | `ui_button_settings.png` | 430 x 430 | 235 KB | `%SettingsArt`, 136 x 136, right, 28 px in; on the hub the row sits 35 px lower |
-| `ui_button_music.png` | 422 x 444 | 249 KB | the card's `%MusicArt`, 240 x 248 |
-| `ui_button_sfx.png` | 426 x 443 | 258 KB | the card's `%SfxArt`, 240 x 248 |
+| `ui_button_music.png` | 422 x 444 | 249 KB | the card's `%MusicArt`, 200 x 208 |
+| `ui_button_sfx.png` | 426 x 443 | 258 KB | the card's `%SfxArt`, 200 x 208 |
+| `ui_button_vo.png` | 430 x 439 | 243 KB | the card's `%VoArt`, 200 x 208 |
+
+The card's three toggles — music, effects, voice-over — are one row of 200 x 208
+slots, 30 px apart, centred on the card. They were 240 x 248 in a row of two;
+three at that size do not fit the card's cream area, which is 694 px wide.
+`ui_button_vo.png` was delivered on white at 1535 x 1024 and cut out to 430 wide
+to match the other two.
 
 The row's two sit in 160 x 160 hotspots 16 px in from the top and side edges.
 `ui_button_nav_back.png` is not `ui_button_back.png`, which is How To Play's X.
